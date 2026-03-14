@@ -758,9 +758,9 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 ---
 
-![Ganttov diagram](https://teaching.lavbic.net/plantuml/svg/dPBFJy8m5CVl_IjUzA1o4MQMS2060V7YmOCtmk51txQoqfBs3LmC_xlTc8jCkPWcxVfjFz_tenjxHiSf6cQuUgaMkmUfC7MulH9YvBdKz2Zg2xEJ39y2WDMMj39KRm1Um-VKQklWEecgKQjpQ_Ya1guCqh4YqUSDDS5rdZfR6DcmD4pYH7OTu_ba-3njS7JE7dv7FRkpLPeyspQx_yHPQ-j9NZBuiqYjqepRIezYTDzqJ_XScHrMlLjrdDYXyU6838jCIOB4MbxP3w7Hf0Mc15uBiNDsGsk6-h4yS4OGzJa3cy2SLgv0LmOXYeL7Bfp4qeS-KLE3y25QHnABNk_DxH4mPxKtrdEl1xU3FaYZxfQ07XPFWoLez25S9GU-OcQkI3jG_9E9MWOEH3cWaTz98zUUDnx8oChhtH5lkXcSkJsqRZ6SAhXa9yPXhd_IBm00 "Ganttov diagram")
+![Ganttov diagram](./gradivo/img/gantt.png "Ganttov diagram")
 
-**Ganttov diagram** (izvorna koda [PlantUML](./gradivo/plantuml/Gantt.puml))
+**Ganttov diagram** (izvorna koda [PlantUML](./gradivo/plantuml/Ganttov_diagram.puml))
 
 ![PERT diagram](https://teaching.lavbic.net/plantuml/svg/bL9DJyCm3BtdLrZR3MsmTUeqGLN1O9mu8DXjx90rRYdD4kHcV8Zjl-Eq7LJJE718ujX-x_b5kIoT9BTPQ-ZSpnxce7APaLntX2YBtBnAZc4bao8Zkp7gscfBu4YQaajedD2OEd0MAC-U7QC94vTRm_14QeJ1wKI8g7IV6cF1KWvlQW7u4W2IoBvN4S1TRh2cNsdMuznEx4Hqrc1RupnwcWerFHYiYvCqJ9MlM598JJQydKvcrypM8b6OoersS_nmLphFp9hDGC8RagW7XKwKUFovabGGglYUtYJ8mkLlnfOkEgkgSGTa2LT3wAOfZd5yeTd77WBd43NvNdF6Mu3X0BRWbm-UpDRRRwVs-ZUqoLgAjL9GaTP6UytfII5iq30CQzRg4bHR-4jwO6fEw5x-j3NwXwtXpm11kBSrQAU4M9mieR_eDZIzbTLgsO_vzGG_ODz7GHKTQHa9TkvRc4FmN4TwV4LSeb7ycxy1 "PERT diagram")
 
