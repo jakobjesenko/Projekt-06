@@ -810,6 +810,23 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
   - Znanje SQL/MongoDB je neposredno uporabno pri modeliranju uporabnikov, interesov, razpoložljivosti in rezultatov ujamanja.
   - Izkušnje z Node.js za razvoj backenda.
   - Znanje o razvoju algoritmov je uporabno za implementacijo ključnih funkcionalnosti (algoritem za razporejanje).
+ 
+**Leja Petrič**
+
+- **Izkušnje s podatkovnimi bazami**:
+  - Dobro poznavanje podatkovnih baz MongoDB in MySQL.
+  - Praktične izkušnje z načrtovanjem in uporabo podatkovnih baz pri projektih spletnih aplikacij.
+
+- **Razvoj programske opreme**:
+  - Razvoj spletne aplikacije spletne trgovine v PHP z uporabo REST API.
+  - Razvoj mobilne aplikacije v Java v okolju Android Studio.
+  - Izkušnje z razvojem spletnih aplikacij s tehnologijama Node.js in Angular (fakultetni projekt in samostojni projekt).
+  - Razvoj spletne strani v okviru fakultetnega projekta.
+
+- **Relevantnost za ta projekt**:
+  - Znanje MongoDB in MySQL je uporabno pri načrtovanju in implementaciji podatkovne baze sistema.
+  - Izkušnje z REST API pomagajo pri razvoju komunikacije med frontend in backend delom aplikacije.
+  - Poznavanje Node.js in Angular omogoča sodelovanje pri razvoju spletnega vmesnika in strežniške logike.
 
 
 **Skupno predznanje ekipe:**
