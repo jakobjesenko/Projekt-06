@@ -762,9 +762,9 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 **Ganttov diagram** (izvorna koda [PlantUML](./gradivo/plantuml/Ganttov_diagram.puml))
 
-![PERT diagram](https://teaching.lavbic.net/plantuml/svg/bL9DJyCm3BtdLrZR3MsmTUeqGLN1O9mu8DXjx90rRYdD4kHcV8Zjl-Eq7LJJE718ujX-x_b5kIoT9BTPQ-ZSpnxce7APaLntX2YBtBnAZc4bao8Zkp7gscfBu4YQaajedD2OEd0MAC-U7QC94vTRm_14QeJ1wKI8g7IV6cF1KWvlQW7u4W2IoBvN4S1TRh2cNsdMuznEx4Hqrc1RupnwcWerFHYiYvCqJ9MlM598JJQydKvcrypM8b6OoersS_nmLphFp9hDGC8RagW7XKwKUFovabGGglYUtYJ8mkLlnfOkEgkgSGTa2LT3wAOfZd5yeTd77WBd43NvNdF6Mu3X0BRWbm-UpDRRRwVs-ZUqoLgAjL9GaTP6UytfII5iq30CQzRg4bHR-4jwO6fEw5x-j3NwXwtXpm11kBSrQAU4M9mieR_eDZIzbTLgsO_vzGG_ODz7GHKTQHa9TkvRc4FmN4TwV4LSeb7ycxy1 "PERT diagram")
+![PERT diagram](./gradivo/img/PERT.png "PERT diagram")
 
-**Graf PERT** (izvorna koda [PlantUML](./gradivo/plantuml/PERT.puml))
+**Graf PERT** (izvorna koda [PlantUML](./gradivo/plantuml/PERT_diagra_odvisnosti.puml))
 
 ### 6.3 Finančni načrt
 
