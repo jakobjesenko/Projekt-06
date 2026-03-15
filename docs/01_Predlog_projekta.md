@@ -930,8 +930,6 @@ Ker je `B - 1,01 = 0,2`:
 Za študente (v mesecih): `9,14 mesecev × 1,2` (faktor neučinkovitosti) = **~11 mesecev**
 Za študente (v tednih): `11 mesecev × 4,3 tedna/mesec = **~47,3 tednov**`
 
-**Opomba:** Kljub večjemu številu ur na dan (4 namesto 3) in petim članom ekipe se koledarski čas ne skrajša sorazmerno, ker koordinacija, čakanje in odvisnosti med nalogami omejujejo učinek vzporednega dela. Več članov in več ur na dan pomenita manjšo obremenitev na posameznega študenta (približno 134 dni na študenta), vendar se projekt v koledarskem času še vedno raztegne na približno 11 mesecev zaradi nelinearnosti vzporednega razvoja.
-
 ### 6.4 Končni rezultati
 
 | Parameter | Vrednost |
