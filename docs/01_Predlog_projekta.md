@@ -768,7 +768,156 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 ### 6.3 Finančni načrt
 
-- Finančni načrt projekta po metodi COCOMO II.
+Dekompozicija na funkcijske točke
+
+Na podlagi specifikacije (8 zaslonskih mask + administratorski vmesnik) identificiram funkcionalnosti:
+
+| Vrsta FP | Ime funkcionalnosti | Objekt | Določitev obsega | Utež |
+| :--- | :--- | :--- | :--- | :--- |
+| **EI (External Input)** | | | | |
+| EI1 | Registracija (3 koraki) | zaslon | AVG (3-koračni obrazec) | 4 |
+| EI2 | Prijava v sistem | zaslon | LOW (enostaven vnos) | 3 |
+| EI3 | Urejanje profila (interesi) | zaslon | AVG (mreža kartic) | 4 |
+| EI4 | Urejanje profila (lokacija) | zaslon | AVG (integracija z zemljevidom) | 4 |
+| EI5 | Urejanje profila (čas. razpoložljivost) | zaslon | HIGH (kompleksen koledar) | 6 |
+| EI6 | Aktivacija iskanja (gumb) | zaslon | LOW (en gumb) | 3 |
+| EI7 | Sprejem/zavrnitev skupine | zaslon | LOW (dva gumba) | 3 |
+| EI8 | Oddajanje ocene po srečanju | zaslon | AVG (ocene in komentar) | 4 |
+| EI9 | Administratorski vnos (interesi) | zaslon | LOW | 3 |
+| **EQ (External Query)** | | | | |
+| EQ1 | Osnovna stran (prijavljen uporabnik) | zaslon | AVG (agregacija podatkov) | 4 |
+| EQ2 | Prikaz predlagane skupine | zaslon | AVG (prikaz profilov) | 4 |
+| EQ3 | Prikaz profila (lastni pregled) | zaslon | LOW | 3 |
+| EQ4 | Prikaz potrjenih/preteklih srečanj | poročilo | AVG (seznam s filtri) | 4 |
+| **EO (External Output)** | | | | |
+| EO1 | Prikaz lokacije na zemljevidu | izhod | AVG (integracija z API) | 5 |
+| EO2 | Administrativno poročilo (statistika) | poročilo | AVG (grafi, števci) | 5 |
+| **ILF (Internal Logical File)** | | | | |
+| ILF1 | Uporabnik (in povezane tabele) | baza | AVG (> 5 tabel) | 10 |
+| ILF2 | Srečanje (in članstva, lokacije) | baza | AVG (> 5 tabel) | 10 |
+| ILF3 | Ocene | baza | LOW | 7 |
+| **EIF (External Interface File)** | | | | |
+| EIF1 | Zemljevid (Google Maps / OpenStreetMap) | zunanji sistem | AVG | 7 |
+
+Izračun funkcijskih točk (FP)
+
+Seštevek uteži:
+
+| Kategorija | Vsota uteži |
+| :--- | :--- |
+| EI (9 funkcionalnosti) | 4+3+4+4+6+3+3+4+3 = 34 |
+| EQ (4 funkcionalnosti) | 4+4+3+4 = 15 |
+| EO (2 funkcionalnosti) | 5+5 = 10 |
+| ILF (3 tabele) | 10+10+7 = 27 |
+| EIF (1 zunanji sistem) | 7 |
+| **SKUPAJ FP** | **93** |
+
+Skupno število funkcijskih točk = **93**.
+
+Pretvorba v vrstice kode (SLOC) za JavaScript
+
+Po tabeli QSM 2014 za JavaScript: `1 FP = 47 SLOC` (povprečje).
+
+`size = FP × SLOC_JavaScript = 93 × 47 = 4.371 SLOC`
+
+`size_KSLOC = 4.371 / 1000 = **4,37 KSLOC**`
+
+Izračun parametra B (Eksponent)
+
+Na podlagi ocene projektne skupine (upoštevajoč, da gre za študentski projekt):
+
+| Dejavnik | Opis | Vrednost | Utež (wᵢ) |
+| :--- | :--- | :--- | :--- |
+| PREC (Precedenčnost) | Nizka (Nov projekt, nekaj izkušenj) | Nizka | 4 |
+| FLEX (Fleksibilnost) | Visoka (Študenti lahko prilagajajo) | Visoka | 2 |
+| RESL (Obvladovanje tveganj) | Nizka (Omejene izkušnje s tveganji) | Nizka | 4 |
+| TEAM (Uigranost skupine) | Zelo nizka (Nova, neuigrana skupina) | Zelo nizka | 5 |
+| PMAT (Zrelost procesa) | Zelo nizka (CMM Level 1) | Zelo nizka | 5 |
+| **SKUPAJ** | | | **20** |
+
+Formula: `B = 1.01 + 0.01 × ∑wi`
+
+`B = 1.01 + 0.01 × 20 = 1.01 + 0,20 = **1,21**`
+
+Izračun parametra M (Množitelji napora)
+
+Realna ocena za študentski projekt z uporabo JavaScript/Node.js:
+
+| Dejavnik | Opis | Ocena | Utež | Obrazložitev |
+| :--- | :--- | :--- | :--- | :--- |
+| PERS | Sposobnost osebja | Nizka | 1,12* | Študenti, omejene izkušnje |
+| PREX | Izkušnje s platformo | Nizka | 1,10* | Omejene izkušnje z JS ekosistemom |
+| RCPX | Zanesljivost in kompleksnost | Nominalna | 1,00 | Srednje kompleksen projekt |
+| RUSE | Zahteve za ponovno uporabo | Zelo nizka | 0,91* | Koda se ne bo ponovno uporabljala |
+| PDIF | Težavnost platforme | Nominalna | 1,00 | Standardni JS/Node.js |
+| SCED | Časovni pritisk | Nominalna | 1,00 | Privzeto |
+| FCIL | Orodja in komunikacija | Visoka | 0,90* | Sodobna orodja, GitHub, Discord |
+
+Izračun M:
+
+`M = 1,12 × 1,10 × 1,00 × 0,91 × 1,00 × 1,00 × 0,90 = **1,01**`
+
+Končni izračun časovne zahtevnosti
+
+Formula: `effort_PM = A × size^B × M`, kjer je `A = 2,94`.
+
+Izračun potence `size^B`:
+- `size_KSLOC = 4,37`
+- `ln(4,37) = 1,474`
+- `1,474 × B (1,21) = 1,784`
+- `e^1,784 = 5,95`
+- `size^B = 5,95`
+
+Vstavimo v formulo:
+
+`effort_PM = 2,94 × 5,95 × 1,01 = **17,66 PM**`
+
+Preračun v študentske dni in koledarski čas
+
+**Predpostavke:**
+- 1 človek-mesec (PM) = 152 ur (standard)
+- Študentski delovni dan = 4 ure (popravljeno)
+- Število študentov = 4 (predpostavka za projekt TPO)
+
+**Izračun:**
+- Skupne ure: `17,66 PM × 152 ur = 2.684,32 ur`
+- Študentski dnevi (ŠČD): `2.684,32 ur / 4 ure/dan = **671,08 ŠČD**`
+- Študentski dnevi na študenta: `671,08 ŠČD / 4 študenti = **167,77 ŠČD/študenta**`
+- Tednov na študenta: `167,77 dni / 5 dni/teden = **33,55 tednov**`
+
+**Koledarski čas:**
+Ker 4 študenti delajo vzporedno, je teoretični koledarski čas enak času enega študenta (~34 tednov). Vendar zaradi koordinacije, čakanja in odvisnosti med nalogami (zakon vpadljivosti) to ni linearno. Realna ocena je višja. Uporabimo korekcijski faktor.
+
+**Korekcija s časovnim razporedom (SCED):**
+Uporabimo COCOMO II formulo za čas razvoja (ne le napor). Približna formula za čas je:
+
+`TDEV = 3,67 × (effort_PM)^(0,28 + 0,2 × (B - 1,01))`
+
+Ker je `B - 1,01 = 0,2`:
+- `TDEV = 3,67 × (17,66)^(0,28 + 0,2 × 0,2)`
+- `TDEV = 3,67 × (17,66)^(0,28 + 0,04)`
+- `TDEV = 3,67 × (17,66)^(0,32)`
+- `TDEV = 3,67 × 2,49 = **9,14 mesecev**` (nominalni čas za profesionalni team)
+
+Za študente (v mesecih): `9,14 mesecev × 1,2` (faktor neučinkovitosti) = **~11 mesecev**
+Za študente (v tednih): `11 mesecev × 4,3 tedna/mesec = **~47,3 tednov**`
+
+**Opomba:** Kljub večjemu številu ur na dan (4 namesto 3) se koledarski čas ni bistveno spremenil, ker je faktor neučinkovitosti (koordinacija, čakanje, odvisnosti) tisti, ki omejuje skrajšanje časa. Več ur na dan pomeni manjšo obremenitev na študenta (168 namesto 224 dni), vendar se projekt v koledarskem času še vedno raztezne na ~11 mesecev zaradi nelinearnosti vzporednega dela.
+
+## 6.8. Končni rezultati
+
+| Parameter | Vrednost |
+| :--- | :--- |
+| Funkcijske točke (FP) | 93 |
+| Ocenjeno število vrstic kode (SLOC) | 4.371 |
+| Velikost v KSLOC | 4,37 KSLOC |
+| Eksponent B | 1,21 |
+| Množitelji napora M | 1,01 |
+| Človek-meseci (profesionalni) | 17,66 PM |
+| Študentski dnevi (skupaj za 4 študente) | ~671 ŠČD |
+| Študentski dnevi na študenta | ~168 ŠČD/študenta |
+| Predviden koledarski čas (realno) | ~45-50 tednov |
+| Predviden koledarski čas (v mesecih) | ~10-12 mesecev |
 
 ![COCOMO II ocena](./gradivo/img/cocomo-ii-ocena.png)
 
@@ -810,6 +959,23 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
   - Znanje SQL/MongoDB je neposredno uporabno pri modeliranju uporabnikov, interesov, razpoložljivosti in rezultatov ujamanja.
   - Izkušnje z Node.js za razvoj backenda.
   - Znanje o razvoju algoritmov je uporabno za implementacijo ključnih funkcionalnosti (algoritem za razporejanje).
+ 
+**Leja Petrič**
+
+- **Izkušnje s podatkovnimi bazami**:
+  - Dobro poznavanje podatkovnih baz MongoDB in MySQL.
+  - Praktične izkušnje z načrtovanjem in uporabo podatkovnih baz pri projektih spletnih aplikacij.
+
+- **Razvoj programske opreme**:
+  - Razvoj spletne aplikacije spletne trgovine v PHP z uporabo REST API.
+  - Razvoj mobilne aplikacije v Java v okolju Android Studio.
+  - Izkušnje z razvojem spletnih aplikacij s tehnologijama Node.js in Angular (fakultetni projekt in samostojni projekt).
+  - Razvoj spletne strani v okviru fakultetnega projekta.
+
+- **Relevantnost za ta projekt**:
+  - Znanje MongoDB in MySQL je uporabno pri načrtovanju in implementaciji podatkovne baze sistema.
+  - Izkušnje z REST API pomagajo pri razvoju komunikacije med frontend in backend delom aplikacije.
+  - Poznavanje Node.js in Angular omogoča sodelovanje pri razvoju spletnega vmesnika in strežniške logike.
 
 **Tim Pezdirc**
 
