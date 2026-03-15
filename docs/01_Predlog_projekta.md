@@ -433,54 +433,82 @@ _to je osnutek za delovanje sistema, platforme, orodja, strategije testiranja (d
 Sistem deluje v naslednjih korakih:
 
 1. **Registracija in vnos podatkov**:
+  Uporabnik ustvari profil in vnese osnovne podatke, svoje interese, približno lokacijo ter časovno razpoložljivost. Sistem ob tem preveri, ali so obvezna polja pravilno izpolnjena, in podatke shrani v podatkovno bazo.
 
 2. **Iskanje skupin**:
+  Ko je profil pripravljen, uporabnik sproži iskanje skupin. Sistem iz baze pridobi kandidate, ki so glede na lokacijo, interese in proste termine potencialno primerni za ujemanje.
 
 3. **Oblikovanje skupin**:
+  Algoritem za oblikovanje skupin izračuna stopnjo kompatibilnosti med uporabniki na podlagi podobnosti interesov, geografske bližine in časovnega prekrivanja. Na tej podlagi sestavi manjše skupine z najvišjo skupno oceno ujemanja.
 
 4. **Prikaz predlogov**:
+  Sistem uporabniku prikaže enega ali več predlogov skupin skupaj z osnovnimi informacijami o skupnih interesih, predlaganem terminu in okvirni lokaciji srečanja.
 
 5. **Potrditev skupine**:
+  Uporabnik lahko predlagano skupino potrdi ali zavrne. Ob potrditvi se status skupine posodobi, drugi člani pa prejmejo informacijo o oblikovani skupini oziroma o nadaljnjem usklajevanju.
 
 6. **Srečanje ter ocena in povratna informacija**:
+  Po izvedenem srečanju sistem uporabnike pozove k oddaji kratke povratne informacije. Zbrane ocene se uporabijo za analizo kakovosti predlogov in za nadaljnje izboljšave algoritma.
 
 
 ### 5.2 Platforme, orodja in knjižnice
 
 **Backend:**
 - **Node.js** in **MongoDB**
+- REST API za upravljanje uporabnikov, profilov, predlogov skupin in povratnih informacij
 
 **Algoritem za oblikovanje skupin:**
+- izračun podobnosti interesov z metrikami, kot sta **Cosine Similarity** in po potrebi **Jaccard Index**
+- modul za geografsko razdaljo in modul za časovno prekrivanje terminov
+- utežen scoring pristop za končno razvrščanje kandidatov v skupine
 
 **Frontend:**
 - **Angular**
+- spletni uporabniški vmesnik za registracijo, urejanje profila, pregled predlogov skupin in oddajo povratnih informacij
 
 **Zunanje storitve:**
+- geokodiranje oziroma kartografska podpora z uporabo **OpenStreetMap** ali podobne storitve
+- po potrebi email obvestila za potrditve skupin in povratne informacije
 
 
 **Deployment:**
 - lokalno **Docker**
-- v oblaku ...
+- v oblaku, **Azure**, **Render** ali podobna storitev za gostovanje prototipa
 
 
 ### 5.3 Strategija testiranja
 
 **Enote testiranja (Unit tests):**
+- testiranje posameznih modulov algoritma (podobnost interesov, razdalja, časovno prekrivanje) ter ključnih backend funkcij
 
 **Integracijski testi:**
+- preverjanje komunikacije med Angular odjemalcem, REST API-jem in podatkovno bazo
 
 **Funkcionalni testi:**
+- preverjanje glavnih uporabniških tokov: registracija, urejanje profila, iskanje skupin, potrditev skupine in oddaja povratne informacije
 
 **End-to-end testi:**
+- preverjanje celotnega poteka od registracije do prikaza predloga skupine in zaključka srečanja
 
 **Testiranje z realnimi uporabniki:**
+- testiranje prototipa na manjši skupini uporabnikov z namenom zbiranja kvalitativnih in kvantitativnih povratnih informacij
 
 **Ovrednotenje strategije testiranja:**
 
 | **Tip testiranja** | **Kritična področja** | **Pričakovan rezultat** | **Orodje** |
+|---------------------|-----------------------|--------------------------|------------|
+| Unit tests | algoritmi za ujemanje, validacija vhodov, poslovna logika API-ja | pravilni izračuni in stabilno delovanje posameznih modulov | Jest |
+| Integracijski testi | povezava frontend-backend-baza | pravilna izmenjava podatkov brez napak pri klicih | Postman, Jest |
+| Funkcionalni testi | registracija, urejanje profila, iskanje skupin | glavni uporabniški scenariji delujejo skladno z zahtevami | ročno testiranje |
+| End-to-end testi | celoten uporabniški tok | uporabnik uspešno pride od vnosa podatkov do predloga skupine | Cypress ali ročno testiranje |
+| Testiranje z uporabniki | zadovoljstvo uporabnikov, kakovost predlogov | zbrane povratne informacije za ovrednotenje MVP | vprašalnik, analiza uporabe |
 
 
 **Metrike kakovosti:**
+- povprečna ocena predlagane skupine
+- delež potrjenih predlogov skupin
+- delež dejansko izvedenih srečanj
+- čas od registracije do prvega predloga skupine
 
 
 ## 6 Vodenje projekta
@@ -746,13 +774,13 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 | **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
 |:---:|:---:|:---:|:---:|:---:|
-| A10 | 23. 5. 2026 | 25. 5. 2026 | 4 delovnih dni |  Da |
+| A10 | 20. 5. 2026 | 25. 5. 2026 | 4 delovnih dni |  Da |
 
 - **Ime**: Optimizacija, dokumentacija in predstavitev projekta
 - **Opis**: Implementacija prioritetnih izboljšav na podlagi beta testiranja, poliranje UI, odpravljanje preostalih napak, priprava celovite končne dokumentacije (arhitekturni načrt, opis algoritma, tehnično poročilo) in priprava zaključne predstavitve.
 - **Obseg aktivnosti**: Implementacija vsaj 3 prioritetnih izboljšav iz beta testiranja; poliranje UI; finalna dokumentacija sistema; analiza in sinteza rezultatov evalvacijske študije; zaključna predstavitev.
 - **Cilji aktivnosti**: Finalna, stabilna verzija sistema z dokumentacijo; uspešna zaključna predstavitev projekta.
-- **Odvisnost od ostalih aktivnosti**: A9 (rezultati beta testiranja).
+- **Odvisnost od ostalih aktivnosti**: A9; aktivnost se v zaključnem delu lahko delno izvaja vzporedno z zadnjimi dnevi beta testiranja.
 - **Omejitve**: Časovna omejitev 2 tedna; prioritizacija izboljšav glede na razpoložljiv čas.
 - **Rezultati**: Finalna verzija sistema, celovito končno poročilo, zaključna predstavitev projekta.
 
@@ -764,7 +792,7 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 ![PERT diagram](./gradivo/img/PERT.png "PERT diagram")
 
-**Graf PERT** (izvorna koda [PlantUML](./gradivo/plantuml/PERT_diagra_odvisnosti.puml))
+**Graf PERT** (izvorna koda [PlantUML](./gradivo/plantuml/PERT_diagram_odvisnosti.puml))
 
 ### 6.3 Finančni načrt
 
@@ -877,16 +905,16 @@ Preračun v študentske dni in koledarski čas
 **Predpostavke:**
 - 1 človek-mesec (PM) = 152 ur (standard)
 - Študentski delovni dan = 4 ure (popravljeno)
-- Število študentov = 4 (predpostavka za projekt TPO)
+- Število študentov = 5 (predpostavka za projekt TPO)
 
 **Izračun:**
 - Skupne ure: `17,66 PM × 152 ur = 2.684,32 ur`
 - Študentski dnevi (ŠČD): `2.684,32 ur / 4 ure/dan = **671,08 ŠČD**`
-- Študentski dnevi na študenta: `671,08 ŠČD / 4 študenti = **167,77 ŠČD/študenta**`
-- Tednov na študenta: `167,77 dni / 5 dni/teden = **33,55 tednov**`
+- Študentski dnevi na študenta: `671,08 ŠČD / 5 študentov = **134,22 ŠČD/študenta**`
+- Tednov na študenta: `134,22 dni / 5 dni/teden = **26,84 tednov**`
 
 **Koledarski čas:**
-Ker 4 študenti delajo vzporedno, je teoretični koledarski čas enak času enega študenta (~34 tednov). Vendar zaradi koordinacije, čakanja in odvisnosti med nalogami (zakon vpadljivosti) to ni linearno. Realna ocena je višja. Uporabimo korekcijski faktor.
+Ker 5 študentov delajo vzporedno, je teoretični koledarski čas enak času enega študenta (~27 tednov). Vendar zaradi koordinacije, čakanja in odvisnosti med nalogami to ni linearno. Realna ocena je višja. Uporabimo korekcijski faktor.
 
 **Korekcija s časovnim razporedom (SCED):**
 Uporabimo COCOMO II formulo za čas razvoja (ne le napor). Približna formula za čas je:
@@ -902,9 +930,9 @@ Ker je `B - 1,01 = 0,2`:
 Za študente (v mesecih): `9,14 mesecev × 1,2` (faktor neučinkovitosti) = **~11 mesecev**
 Za študente (v tednih): `11 mesecev × 4,3 tedna/mesec = **~47,3 tednov**`
 
-**Opomba:** Kljub večjemu številu ur na dan (4 namesto 3) se koledarski čas ni bistveno spremenil, ker je faktor neučinkovitosti (koordinacija, čakanje, odvisnosti) tisti, ki omejuje skrajšanje časa. Več ur na dan pomeni manjšo obremenitev na študenta (168 namesto 224 dni), vendar se projekt v koledarskem času še vedno raztezne na ~11 mesecev zaradi nelinearnosti vzporednega dela.
+**Opomba:** Kljub večjemu številu ur na dan (4 namesto 3) in petim članom ekipe se koledarski čas ne skrajša sorazmerno, ker koordinacija, čakanje in odvisnosti med nalogami omejujejo učinek vzporednega dela. Več članov in več ur na dan pomenita manjšo obremenitev na posameznega študenta (približno 134 dni na študenta), vendar se projekt v koledarskem času še vedno raztegne na približno 11 mesecev zaradi nelinearnosti vzporednega razvoja.
 
-## 6.8. Končni rezultati
+### 6.4 Končni rezultati
 
 | Parameter | Vrednost |
 | :--- | :--- |
@@ -914,8 +942,8 @@ Za študente (v tednih): `11 mesecev × 4,3 tedna/mesec = **~47,3 tednov**`
 | Eksponent B | 1,21 |
 | Množitelji napora M | 1,01 |
 | Človek-meseci (profesionalni) | 17,66 PM |
-| Študentski dnevi (skupaj za 4 študente) | ~671 ŠČD |
-| Študentski dnevi na študenta | ~168 ŠČD/študenta |
+| Študentski dnevi (skupaj za 5 študentov) | ~671 ŠČD |
+| Študentski dnevi na študenta | ~134 ŠČD/študenta |
 | Predviden koledarski čas (realno) | ~45-50 tednov |
 | Predviden koledarski čas (v mesecih) | ~10-12 mesecev |
 
@@ -1010,22 +1038,19 @@ Za študente (v tednih): `11 mesecev × 4,3 tedna/mesec = **~47,3 tednov**`
   - Znanje Angularja omogoča razvoj odzivnega uporabniškega vmesnika. 
 
 **Skupno predznanje ekipe:**
-- **Programski jeziki**: [JavaScript, Java, C, C++, PHP ...]
-- **Frameworks**: [Angular]
-- **Orodja**: [Git, Docker, Postman]
-- **Metodologije**: [MVC arhitektura]
+- **Programski jeziki**: JavaScript, Java, C, C++, PHP
+- **Frameworks**: Angular
+- **Orodja**: Git, Docker, Postman
+- **Metodologije**: MVC arhitektura
 
 **Nova področja za ekipo:**
 - Algoritmi za oblikovanje skupin (recommendation systems)
 - Vektorska podobnost in metrike podobnosti (Cosine Similarity, Jaccard Index)
-- [dodaj tle še če rabi]
 
-**Ali je član ekipe že razvil kaj podobnega?**
-- napisi tle notri če si kej delu
+**V smislu podobnosti smo člani ekipe razvijali spletno aplikacijo, konkretno ravno take aplikacije za združevanje ljudi pa ne**.
 
-**Ali so orodja ekipi znana ali nova?**
-- **Znana orodja**: [Git, Github, Node.js, Angular, MongoDB]
-- **Nova orodja**: [dodaj notri ce je kaj novega]
+- **Znana orodja**: Git, Github, Node.js, Angular, MongoDB
+- **Nova orodja**: /
 
 ### 7.2 Vloge
 
