@@ -637,12 +637,12 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 | A3 | 9. 3. 2026 | 16. 3. 2026 | 6 delovnih dni |  Da |
 
 - **Ime**: Načrt sistema in projektno vodenje
-@@- **Opis**: Oblikovanje arhitekture sistema, izbira tehnologij (Node.js, MongoDB, Angular), določitev projektnega pristopa, vodenja in komunikacije; priprava Ganttovega diagrama in PERT grafa; COCOMO II finančna ocena; definicija vlog in odgovornosti. **Vse mora biti zaključeno do 16. 3. 2026 (oddaja predloga projekta).**
-@@- **Obseg aktivnosti**: Blokovni diagram sistema; definicija tehnologij, orodij in knjižnic; terminski načrt (Gantt.puml – vključno s točnimi datumi); PERT graf za analizo kritične poti (PERT.puml); COCOMO II ocena stroškov; definicija vlog in odgovornosti ter projektnega pristopa; finalizacija celotnega predloga projekta.
-@@- **Cilji aktivnosti**: Celoten predlog projekta z dokumentiranim načrtom implementacije, terminskim načrtom in finančno oceno, oddan 16. 3. 2026.
-@@- **Odvisnost od ostalih aktivnosti**: A1, A2.
-@@- **Omejitve**: Vsi diagrami (Gantt, PERT, COCOMO II) morajo biti dokončani pred oddajo 16. 3.; znanje ekipe o razpoložljivih tehnologijah in razvojnih pristopih.
-@@- **Rezultati**: Celoten predlog projekta (ta dokument), Ganttov diagram (Gantt.puml), PERT graf (PERT.puml), COCOMO II ocena.
+- **Opis**: Oblikovanje arhitekture sistema, izbira tehnologij (Node.js, MongoDB, Angular), določitev projektnega pristopa, vodenja in komunikacije; priprava Ganttovega diagrama in PERT grafa; COCOMO II finančna ocena; definicija vlog in odgovornosti. **Vse mora biti zaključeno do 16. 3. 2026 (oddaja predloga projekta).**
+- **Obseg aktivnosti**: Blokovni diagram sistema; definicija tehnologij, orodij in knjižnic; terminski načrt (Gantt.puml – vključno s točnimi datumi); PERT graf za analizo kritične poti (PERT.puml); COCOMO II ocena stroškov; definicija vlog in odgovornosti ter projektnega pristopa; finalizacija celotnega predloga projekta.
+- **Cilji aktivnosti**: Celoten predlog projekta z dokumentiranim načrtom implementacije, terminskim načrtom in finančno oceno, oddan 16. 3. 2026.
+- **Odvisnost od ostalih aktivnosti**: A1, A2.
+- **Omejitve**: Vsi diagrami (Gantt, PERT, COCOMO II) morajo biti dokončani pred oddajo 16. 3.; znanje ekipe o razpoložljivih tehnologijah in razvojnih pristopih.
+- **Rezultati**: Celoten predlog projekta (ta dokument), Ganttov diagram (Gantt.puml), PERT graf (PERT.puml), COCOMO II ocena.
 
 ---
 
@@ -702,7 +702,7 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 - **Ime**: Razvoj uporabniškega vmesnika (Angular)
 - **Opis**: Razvoj Angular spletne aplikacije s ključnimi maskami: registracija, prijava, upravljanje profila (interesi, lokacija, časovna razpoložljivost), prikaz predlaganih skupin in oddaja povratnih informacij. Integracija z backend API.
-- **Obseg aktivnosti**: Angular aplikacija z vsaj 6 ekrani; integracija z REST API; responziven dizajn; osnovno testiranje UI komponent.
+- **Obseg aktivnosti**: Angular aplikacija z vsaj 6 maskami; integracija z REST API; responziven dizajn; osnovno testiranje UI komponent.
 - **Cilji aktivnosti**: Intuitiven UI, ki omogoča registracijo in prejem predlogov skupin v manj kot 5 minutah (cilj C4).
 - **Odvisnost od ostalih aktivnosti**: A4, A5 (API mora biti vsaj delno funkcionalen).
 - **Omejitve**: Časovna omejitev 3 tedne; zahteva izkušnje z Angular-jem; UX mora biti intuitiven in enostaven.
@@ -797,10 +797,10 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 
 **Skupno predznanje ekipe:**
-- **Programski jeziki**: [JavaScript, Java, C, C++ ...]
+- **Programski jeziki**: [JavaScript, Java, C, C++, PHP ...]
 - **Frameworks**: [Angular]
 - **Orodja**: [Git, Docker, Postman]
-- **Metodologije**: []
+- **Metodologije**: [MVC arhitektura]
 
 **Nova področja za ekipo:**
 - Algoritmi za oblikovanje skupin (recommendation systems)
@@ -820,11 +820,11 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 | **Ime člana** | **Glavna vloga** | **Odgovornosti** | **Sekundarne vloge** |
 |---------------|------------------|------------------|----------------------|
-| [Ime 1] | **Backend Developer** | Razvoj REST API, integracija s podatkovno bazo, implementacija poslovne logike, sodelovanje pri dokumentaciji | Code reviews, testiranje |
-| [Ime 2] | **Algorithm Engineer** | Razvoj in optimizacija algoritma za oblikovanje skupin, evalvacija kakovosti, sodelovanje pri dokumentaciji | Backend podpora, testiranje |
-| [Ime 3] | **Frontend Developer** | Razvoj uporabniškega vmesnika (Angular), UX/UI design, integracija z API-jem, sodelovanje pri dokumentaciji | Testiranje, dokumentacija |
-| [Ime 4] | **DevOps / Tester** | Postavitev CI/CD, testiranje (unit, integration, E2E), deployment, sodelovanje pri dokumentaciji | Backend podpora, dokumentacija |
-| [Ime 5] | **Project Manager** | Vodenje projekta, usklajevanje ekipe, spremljanje napredka, priprava dokumentacije | Frontend/Backend podpora |
+| [Miha Fabčič] | **Backend Developer** | Razvoj REST API, integracija s podatkovno bazo, implementacija poslovne logike, sodelovanje pri dokumentaciji | Code reviews, testiranje |
+| [Aleks Gogić] | **Algorithm Engineer** | Razvoj in optimizacija algoritma za oblikovanje skupin, evalvacija kakovosti, sodelovanje pri dokumentaciji | Backend podpora, testiranje |
+| [JAKOB JESENKO] | **Frontend Developer** | Razvoj uporabniškega vmesnika (Angular), UX/UI design, integracija z API-jem, sodelovanje pri dokumentaciji | Testiranje, dokumentacija |
+| [Leja Petrič] | **DevOps / Tester** | Postavitev CI/CD, testiranje (unit, integration, E2E), deployment, sodelovanje pri dokumentaciji | Backend podpora, dokumentacija |
+| [Tim Pezdirc] | **Project Manager** | Vodenje projekta, usklajevanje ekipe, spremljanje napredka, priprava dokumentacije | Frontend/Backend podpora |
 
 **Opomba**: Vloge so lahko fleksibilne in se prekrivajo. Vsak član lahko prispeva k različnim področjem glede na potrebe projekta.
 
