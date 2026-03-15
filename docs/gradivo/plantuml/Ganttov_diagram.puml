@@ -31,6 +31,7 @@ language sl
 project starts the 23rd of February 2026
 saturdays are closed
 sundays are closed
+2026-04-06 is closed
 2026-04-27 is closed
 2026-05-01 is closed
 2026-05-02 is closed
@@ -54,6 +55,7 @@ sundays are closed
 2026-04-05 is colored in #f2f2f2
 
 2026-04-06 to 2026-05-03 is colored in #D9FFB3
+2026-04-06 is colored in #f2f2f2
 2026-04-11 is colored in #f2f2f2
 2026-04-12 is colored in #f2f2f2
 2026-04-18 is colored in #f2f2f2
@@ -73,7 +75,7 @@ sundays are closed
 2026-05-23 is colored in #f2f2f2
 2026-05-24 is colored in #f2f2f2
 
-[Projektno vodenje] as [I0A0] starts 23rd of February 2026 and lasts 64 days
+[Projektno vodenje] as [I0A0] starts 23rd of February 2026 and lasts 62 days
 
 -- 1. Iteracija --
 [Pregled obstoječih rešitev] as [I1A1] starts 23rd of February 2026 and lasts 3 days and is colored in #E4242C
@@ -108,7 +110,7 @@ sundays are closed
 
 -- 3. Iteracija --
 
-[3. Iteracija] as [I3A1] starts at [I2A1]'s end and lasts 18 days
+[3. Iteracija] as [I3A1] starts at [I2A1]'s end and lasts 17 days
 [Konec 3. Iteracije] as [M3] happens 4rd of May 2026
 
 -- 4. Iteracija --

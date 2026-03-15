@@ -811,6 +811,21 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
   - Izkušnje z Node.js za razvoj backenda.
   - Znanje o razvoju algoritmov je uporabno za implementacijo ključnih funkcionalnosti (algoritem za razporejanje).
 
+**Tim Pezdirc**
+
+- **Izkušnje s podatkovnimi bazami**:
+  - Poznavanje relacijskih in nerelacijskih podatkovnih baz
+  - Izkušnje z bazami SQL in MongoDB na projektih in seminarskih nalogah
+
+- **Razvoj programske opreme**:
+  - Backend razvoj z uporabo Node.js in C# (.NET)
+  - Razvoj REST API-jev za spletne aplikacije in implementacija komunikacije med storitvami z uporabo gRPC
+  - Frontend razvoj z uporabo ogrodja Angular
+
+- **Relevantnost za ta projekt**:
+  - Znanje SQL in MongoDB je uporabno za načrtovanje in implementacijo podatkovnega modela
+  - Izkušnje z Node.js in C# so uporabne pri razvoju backend storitev in REST API-ja
+  - Znanje Angularja omogoča razvoj sodobnega uporabniškega vmesnika
 
 **Skupno predznanje ekipe:**
 - **Programski jeziki**: [JavaScript, Java, C, C++ ...]
