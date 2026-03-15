@@ -993,6 +993,22 @@ Za študente (v tednih): `11 mesecev × 4,3 tedna/mesec = **~47,3 tednov**`
   - Izkušnje z Node.js in C# so uporabne pri razvoju backend storitev in REST API-ja
   - Znanje Angularja omogoča razvoj sodobnega uporabniškega vmesnika
 
+**Miha Fabčič**
+
+- **Izkušnje s podatkovnimi bazami**:
+  - Dobro poznavanje podatkovnih baz MongoDB in PostgreSQL.
+  - Praktične izkušnje z načrtovanjem in uporabo podatkovnih baz pri razvoju spletnih aplikacij.
+
+- **Razvoj programske opreme**:
+  - Backend razvoj z uporabo Node.js in Java (Spring Boot).
+  - Razvoj REST API storitev z uporabo Node.js in Spring Boot ter implementacija komunikacije med storitvami z uporabo gRPC.
+  - Razvoj frontend aplikacij z uporabo ogrodja Angular.
+
+- **Relevantnost za ta projekt**:
+  - Znanje PostgreSQL in MongoDB omogoča učinkovito načrtovanje in implementacijo podatkovnega modela.
+  - Izkušnje z Node.js in Spring Boot so uporabne za razvoj zanesljivih backend storitev in API-jev.
+  - Znanje Angularja omogoča razvoj odzivnega uporabniškega vmesnika. 
+
 **Skupno predznanje ekipe:**
 - **Programski jeziki**: [JavaScript, Java, C, C++ ...]
 - **Frameworks**: [Angular]
