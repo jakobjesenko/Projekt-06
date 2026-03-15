@@ -768,7 +768,7 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 ### 6.3 Finančni načrt
 
-## 6.1. Dekompozicija na funkcijske točke
+Dekompozicija na funkcijske točke
 
 Na podlagi specifikacije (8 zaslonskih mask + administratorski vmesnik) identificiram funkcionalnosti:
 
@@ -799,7 +799,7 @@ Na podlagi specifikacije (8 zaslonskih mask + administratorski vmesnik) identifi
 | **EIF (External Interface File)** | | | | |
 | EIF1 | Zemljevid (Google Maps / OpenStreetMap) | zunanji sistem | AVG | 7 |
 
-## 6.2. Izračun funkcijskih točk (FP)
+Izračun funkcijskih točk (FP)
 
 Seštevek uteži:
 
@@ -814,7 +814,7 @@ Seštevek uteži:
 
 Skupno število funkcijskih točk = **93**.
 
-## 6.3. Pretvorba v vrstice kode (SLOC) za JavaScript
+Pretvorba v vrstice kode (SLOC) za JavaScript
 
 Po tabeli QSM 2014 za JavaScript: `1 FP = 47 SLOC` (povprečje).
 
@@ -822,7 +822,7 @@ Po tabeli QSM 2014 za JavaScript: `1 FP = 47 SLOC` (povprečje).
 
 `size_KSLOC = 4.371 / 1000 = **4,37 KSLOC**`
 
-## 6.4. Izračun parametra B (Eksponent)
+Izračun parametra B (Eksponent)
 
 Na podlagi ocene projektne skupine (upoštevajoč, da gre za študentski projekt):
 
@@ -839,7 +839,7 @@ Formula: `B = 1.01 + 0.01 × ∑wi`
 
 `B = 1.01 + 0.01 × 20 = 1.01 + 0,20 = **1,21**`
 
-## 6.5. Izračun parametra M (Množitelji napora)
+Izračun parametra M (Množitelji napora)
 
 Realna ocena za študentski projekt z uporabo JavaScript/Node.js:
 
@@ -857,7 +857,7 @@ Izračun M:
 
 `M = 1,12 × 1,10 × 1,00 × 0,91 × 1,00 × 1,00 × 0,90 = **1,01**`
 
-## 6.6. Končni izračun časovne zahtevnosti
+Končni izračun časovne zahtevnosti
 
 Formula: `effort_PM = A × size^B × M`, kjer je `A = 2,94`.
 
@@ -872,7 +872,7 @@ Vstavimo v formulo:
 
 `effort_PM = 2,94 × 5,95 × 1,01 = **17,66 PM**`
 
-## 6.7. Preračun v študentske dni in koledarski čas
+Preračun v študentske dni in koledarski čas
 
 **Predpostavke:**
 - 1 človek-mesec (PM) = 152 ur (standard)
