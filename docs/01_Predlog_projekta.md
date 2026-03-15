@@ -795,6 +795,22 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
   - Izkušnje z Node.js in Angularjem omogočajo hitrejšo izdelavo MVP (API + spletni vmesnik).
   - Poznavanje vektorskih pristopov pomaga pri delu s podobnostjo interesov in pripravi podatkov za pametno komponento.
 
+**Jakob Jesenko**
+
+- **Izkušnje s podatkovnimi bazami**:
+  - Znanje o relacijskih in nerelacijskih podatkovnih bazah.
+  - Praktične izkušnje z bazami MongoDB in SQL.
+
+- **Razvoj programske opreme**:
+  - Backend razvoj v okolju Node.js.
+  - Praktične izkušnje na skupinskem projektu s skladom MEAN.
+  - Znanje o razvoju in testiranju algoritmov.
+
+- **Relevantnost za ta projekt**:
+  - Znanje SQL/MongoDB je neposredno uporabno pri modeliranju uporabnikov, interesov, razpoložljivosti in rezultatov ujamanja.
+  - Izkušnje z Node.js za razvoj backenda.
+  - Znanje o razvoju algoritmov je uporabno za implementacijo ključnih funkcionalnosti (algoritem za razporejanje).
+
 
 **Skupno predznanje ekipe:**
 - **Programski jeziki**: [JavaScript, Java, C, C++ ...]
