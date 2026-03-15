@@ -1,0 +1,55 @@
+@startuml "PERT diagram"
+
+skinparam backgroundColor transparent
+left to right direction
+
+state "Pregled obstoječih rešitev" AS A1 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 0 | 3 |\n| 0 | 3 |
+state "Definicija problemske domene" AS A2 : <#e8f5fd,#e8f5fd>| 0 | 2 |\n| 1 | 3 |
+state "Opredelitev motivacije in namena" AS A3 : <#e8f5fd,#e8f5fd>| 2 | 4 |\n| 3 | 5 |
+state "Identifikacija ciljne skupine" AS A4 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 3 | 5 |\n| 3 | 5 |
+state "Identifikacija deležnikov" AS A5 : <#e8f5fd,#e8f5fd>| 5 | 6 |\n| 6 | 8 |
+state "Opredelitev uporabniških zgodb" AS A6 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 5 | 8 |\n| 5 | 8 |
+state "Definicija merljivih ciljev" AS A7 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 5 | 8 |\n| 5 | 8 |
+state "Validacija ideje z naročnikom" AS A8 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 8 | 10 |\n| 8 | 10 |
+state "Blokovni diagram in arhitektura" AS A9 : <#e8f5fd,#e8f5fd>| 10 | 12 |\n| 10 | 12 |
+state "Izbira tehnologij in orodij" AS A10 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 10 | 12 |\n| 10 | 12 |
+state "Terminski plan in PERT graf" AS A11 : <#e8f5fd,#e8f5fd>| 12 | 14 |\n| 12 | 14 |
+state "COCOMO II ocena stroškov" AS A12 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 12 | 14 |\n| 12 | 14 |
+state "Definicija vlog in finalizacija predlogov" AS A13 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 14 | 15 |\n| 14 | 15 |
+
+state "2. Iteracija" AS A14 : <#e8f5fd,#e8f5fd>| 15 | 30 |\n| 15 | 30 |
+state "3. Iteracija" AS A15 : <#e8f5fd,#e8f5fd>| 30 | 48 |\n| 30 | 48 |
+state "4. Iteracija" AS A16 : <#e8f5fd,#e8f5fd>| 48 | 62 |\n| 48 | 62 |
+
+state "Projektno vodenje" AS A17 : <#e8f5fd,#e8f5fd>| 0 | 62 |\n| 0 | 62 |
+
+[*] --> A1
+[*]--> A2
+A2 --> A3
+A1 --> A4
+A3 --> A5
+A3 --> A6
+A3 --> A7
+A4 --> A5
+A4 --> A6
+A4 --> A7
+A5 --> A8
+A6 --> A8
+A7 --> A8
+A8 --> A9
+A8 --> A10
+A9 --> A11
+A9 --> A12
+A10 --> A11
+A10 --> A12
+A11 --> A13
+A12 --> A13
+A13 --> A14
+A14 --> A15
+A15 --> A16
+A16 --> [*]
+[*] --> A17
+A17 --> [*]
+
+
+@enduml
