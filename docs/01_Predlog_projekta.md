@@ -1,8 +1,8 @@
-# Predlog projekta
+# :yellow_square: Predlog projekta
 
-| Prejšnji dokument |          Trenutni dokument           | Naslednji dokument [Naprej](02_Osnutek_sistema_1_porocilo_o_stanju.md) |
+| Prejšnji dokument |          Trenutni dokument           | Naslednji dokument [:arrow_forward:](02_Osnutek_sistema_1_porocilo_o_stanju.md) |
 | :---------------- | :----------------------------------: | ------------------------------------------------------------------------------: |
-|                   | **Predlog projekta** |                   **Osnutek sistema**<br>(1. poročilo o stanju) |
+|                   | :yellow_square: **Predlog projekta** |                   :orange_square: **Osnutek sistema**<br>(1. poročilo o stanju) |
 
 ![Terminski načrt](https://teaching.lavbic.net/plantuml/svg/dPRFJkCm4CRlVWeB3h2LKXhdpw9LXH2mI6XN0gtsHCLXshZ1JMfNjbkMhdW4tee7st6QXZOD3LhrqauztpVpct6KSsD1snIajVJWDzTJ8Kqcg8ItLsqF2EaR-vppCrASk1AGQfZIluHIAwOy5v8NFoZzYLylLQuqFHmpzocYrqhQLHJpdZ7quZB1P6NM1OooLAkvJCfSVZgEnabTCRg-EFr-MQQ3rkffrtNhp5Jat5XLLVS_FgDS6Pvy9D3OP2xIHrjr-aBw9oKzWapb31oxOKt9Qf06_-BIagD7aN0wLieErH-IWqpda79gSZBJGbepWfpJ9ywp_1abmSvr0iy8X9V54eEosn7MOx7N2xrUJ8Mf1zdNdM3azVoc8Di8bj70yrUYhWya9IGzJ7eSniEwwqS7K3TiES2Y3mwGEwqcV6HfiS26hX8OraJ8e5yaVAlcSNQF-ymjpwXOBc02SW9qXe9JRe4U-t6NTR_qJugaimVw2BCPbuQ2tL8zsb5jCEfqVi4omPjX-O8kgCdcCzolJWTTgEK9bni-OEZWod-WEHXi8A8uEjCeURCS2WrO-r8iO8yMszAY89Cr7Mp5MHqPoYKEqFEetwLOeuQHG1QUXz0wdJj4agiKqI3Qp3ghifgYaEF0sKfHjmtMjlwgXnrZveoB01dS9WcKzD4AAgzj9nn9i7SaRld8u1vIjS1BjAEsgko-1dUdi62J26iWSclatAsD4SRowMU1H1MGiCLtZGEdCLDQlRsA7AXoP-LalkqLTyEzHDnjUoVIA5XIOIrKeaqgGGELc-K2UK_4ekHInn8sOuahBASjnciih1rBs8tsOd7Fc7SiR0-Me0LBl8abRC3oGyctL-dkgIl-axlYixRR4zUfP8KFT-jUzR9bnQ9MA2nwXzAWLo89Mv3uh6Ao-zn277pK-C0Dkl7Uyjpz9kGSTOlNZdy0 "Terminski načrt")
 
@@ -12,9 +12,9 @@ V 5. tednu ekipe predstavijo svoj predlog na zagovoru. Povratna informacija poma
 
 Predlog projekta in poročila o stanju se nadgrajujejo v celovito končno poročilo. Vsa poročila imajo v osnovi enake odstavke. V predlogu sta poudarjena odseka [**2 Potrebe naročnika**](#2-potrebe-naročnika) in [**3 Cilji projekta**](#3-cilji-projekta). Gradivo iz teh odsekov se lahko uporabi v kasnejših poročilih.
 
-## Sistem za spontana družabna srečanja – združi ljudi s skupnimi interesi v tvoji bližini
+## :page_with_curl: Sistem za spontana družabna srečanja – združi ljudi s skupnimi interesi v tvoji bližini
 
-## Ime ekipe: 06. skupina | Člani ekipe: Miha Fabčič, Aleks Gogić, JAKOB JESENKO, Leja Petrič, Tim Pezdirc
+## :information_desk_person: Ime ekipe: 06. skupina | Člani ekipe: Miha Fabčič, Aleks Gogić, JAKOB JESENKO, Leja Petrič, Tim Pezdirc
 
 ## 0 Projektna ideja
 
@@ -210,7 +210,7 @@ Kot **prijavljen uporabnik z izpolnjenim profilom** želim **prejeti predloge ma
 Kot **uporabnik, ki je prejel predlog skupine** želim **potrditi ali zavrniti udeležbo v predlagani skupini**.
 
 *Testi sprejemljivosti:*
-- Glede **na to, da sem prejel predlog skupine**, ko **potrdi mojo udeležbo**, potem **drugi člani skupine prejmejo obvestilo**.
+- Glede **na to, da sem prejel predlog skupine**, ko **potrdim ali zavrnem udeležbo**, potem **se moj status v skupini posodobi in je ostalim članom prikazan z barvnim indikatorjem (zeleno/rdeče)**.
 
 ---
 
@@ -534,6 +534,8 @@ Ekipa ne uporablja strogega Scrum procesa, ker bi vsakodnevna formalna srečanja
 | 1. 3. 2026 | Začetek projekta, definicija predloga | Zahteva predmeta TPO | Osnovna struktura projekta postavljena |
 | 10. 3. 2026 | Dopolnitev poglavij 0-3 | Uskladitev z navodili predmeta in povratno informacijo | Jasneje definirani deležniki, zahteve in merila uspeha |
 | 13. 3. 2026 | Prilagoditev poglavja 6 in načina dela ekipe | Potreba po realnem procesu dela ekipe | Uveden tedenski iterativni pristop z usklajevanjem prek Discorda |
+| 27. 3. 2026 | Prilagoditev COCOMO finančne in časovne ocene na MVP | Povratne informacije iz zagovora (realnejši načrt in jasnost obsega) | Finančna in časovna ocena usklajeni z dejanskim rokom projekta (62 dni) |
+| 30. 3. 2026 | Dopolnitev opisa pametne komponente in administratorskega nadzora | Dodatna zahteva po spremljanju učinkovitosti matching algoritma | Jasneje opredeljene metrike kakovosti in operativno ukrepanje ob poslabšanju |
 
 *(Za vsak vnos vključite datum, opis, motivacijo in posledico spremembe)*
 
@@ -927,8 +929,15 @@ Ker je `B - 1,01 = 0,2`:
 - `TDEV = 3,67 × (17,66)^(0,32)`
 - `TDEV = 3,67 × 2,49 = **9,14 mesecev**` (nominalni čas za profesionalni team)
 
-Za študente (v mesecih): `9,14 mesecev × 1,2` (faktor neučinkovitosti) = **~11 mesecev**
-Za študente (v tednih): `11 mesecev × 4,3 tedna/mesec = **~47,3 tednov**`
+Ta rezultat predstavlja referenčno oceno za poln obseg produkta in ni skladen z omejitvijo predmeta.
+
+Za ta projekt uporabimo omejitev izvedbe semestra in MVP obsega:
+- pogodbeni/učni rok projekta: **62 koledarskih dni**,
+- razvojni obseg je namerno omejen na MVP (jedrni tokovi iz poglavij 2 in 3),
+- COCOMO rezultat uporabimo kot orientacijo za obseg tveganja, ne kot dejanski terminski cilj.
+
+Zato je načrtovani koledarski čas izvedbe v tem projektu:
+- **62 koledarskih dni** (približno **8,9 tedna**).
 
 ### 6.4 Končni rezultati
 
@@ -939,11 +948,11 @@ Za študente (v tednih): `11 mesecev × 4,3 tedna/mesec = **~47,3 tednov**`
 | Velikost v KSLOC | 4,37 KSLOC |
 | Eksponent B | 1,21 |
 | Množitelji napora M | 1,01 |
-| Človek-meseci (profesionalni) | 17,66 PM |
+| Človek-meseci (profesionalni, referenčna COCOMO ocena) | 17,66 PM |
 | Študentski dnevi (skupaj za 5 študentov) | ~671 ŠČD |
 | Študentski dnevi na študenta | ~134 ŠČD/študenta |
-| Predviden koledarski čas (realno) | ~45-50 tednov |
-| Predviden koledarski čas (v mesecih) | ~10-12 mesecev |
+| Načrtovani koledarski čas projekta (MVP, dejanski rok) | 62 koledarskih dni |
+| Načrtovani koledarski čas projekta (v tednih) | ~8,9 tedna |
 
 ![COCOMO II ocena](./gradivo/img/cocomo-ii-ocena.png)
 
