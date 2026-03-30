@@ -450,6 +450,38 @@ Sistem deluje v naslednjih korakih:
 6. **Srečanje ter ocena in povratna informacija**:
   Po izvedenem srečanju sistem uporabnike pozove k oddaji kratke povratne informacije. Zbrane ocene se uporabijo za analizo kakovosti predlogov in za nadaljnje izboljšave algoritma.
 
+#### 5.1.1 Podrobnejši opis pametne komponente
+
+Pametna komponenta je jedro sistema za oblikovanje skupin in je sestavljena iz treh glavnih delov: ujemanje interesov, geografska bližina in časovno prekrivanje razpoložljivosti.
+
+**Vhodi pametne komponente:**
+- profil uporabnika (interesi, okvirna lokacija, časovna razpoložljivost),
+- profili kandidatov, ki izpolnjujejo osnovne pogoje za ujemanje,
+- konfiguracija uteži modela (`w1`, `w2`, `w3`).
+
+**Koraki obdelave:**
+1. Predizbor kandidatov:
+  - Sistem iz množice uporabnikov izbere kandidate z ustrezno razpoložljivostjo in osnovno geografsko bližino.
+2. Izračun delnih metrik:
+  - `similarity` (ujemanje interesov),
+  - `distance` (geografska bližina),
+  - `time_overlap` (časovno prekrivanje).
+3. Izračun skupne ocene:
+  - `score = w1 * similarity + w2 * distance + w3 * time_overlap`.
+4. Razvrščanje in sestava predlogov skupin:
+  - kandidati se razvrstijo po oceni,
+  - sistem pripravi predloge manjših skupin (3-5 oseb) z najvišjo skupno kompatibilnostjo.
+
+**Izhodi pametne komponente:**
+- seznam predlogov skupin,
+- ključni razlogi za ujemanje (interesi, lokacija, čas),
+- metapodatki za nadaljnjo analitiko kakovosti.
+
+**Spremljanje kakovosti in upravljanje:**
+- spremljamo metrike, kot so delež potrjenih predlogov, povprečna ocena skupine in delež izvedenih srečanj,
+- administratorski modul omogoča pregled metrik in primerjavo stanja pred/po spremembi uteži,
+- pragovi opozoril in postopek odobritve sprememb parametrov ostanejo predmet naslednje iteracije.
+
 
 ### 5.2 Platforme, orodja in knjižnice
 
