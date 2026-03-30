@@ -1,0 +1,35 @@
+{
+  "name": "projekt-06",
+  "version": "1.0.0",
+  "description": "|             Dokumentacija              |          Izvorna koda          |           Testni primeri           |\r | :------------------------------------: | :----------------------------: | :--------------------------------: |\r | [:page_with_curl:<br>**`docs`**](docs) | [:computer:<br>**`src`**](src) | [:microscope:<br>**`test`**](test) |",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,html,css,json,md}": [
+      "prettier --write"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TPO-2025-2026/Projekt-06.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TPO-2025-2026/Projekt-06/issues"
+  },
+  "homepage": "https://github.com/TPO-2025-2026/Projekt-06#readme",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1"
+  }
+}
