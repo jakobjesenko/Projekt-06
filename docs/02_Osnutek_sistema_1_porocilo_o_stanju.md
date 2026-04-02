@@ -1,4 +1,4 @@
-# :orange_square: Osnutek sistema (1. poročilo o stanju)
+﻿# :orange_square: Osnutek sistema (1. poročilo o stanju)
 
 | [:arrow_backward:](01_Predlog_projekta.md) Prejšnji dokument |                       Trenutni dokument                       | Naslednji dokument [:arrow_forward:](03_Izvedljiv_sistem_2_porocilo_o_stanju.md) |
 | :----------------------------------------------------------- | :-----------------------------------------------------------: | -------------------------------------------------------------------------------: |
@@ -25,72 +25,46 @@ Za izdelavo diagramov uporabite orodje [**PlantUML**](https://plantuml.com/) in 
 
 ## 1 Uvod
 
-V prvi iteraciji je ekipa pripravila predlog projekta in validirala osnovno smer razvoja sistema za samodejno oblikovanje manjših skupin uporabnikov (3-5 oseb) na podlagi interesov, lokacije in časovne razpoložljivosti.
+To poročilo predstavlja osnutek sistema za rešitev, ki povezuje uporabnike v manjše skupine za spontana družabna srečanja na podlagi interesov, lokacije in časovne razpoložljivosti. Dokument je namenjen prehodu iz konceptualnega predloga v izvedljivo specifikacijo za nadaljnji razvoj MVP. V njem so sistematično opredeljene potrebe naročnika, cilji projekta, ključni vmesniki in primeri uporabe, ki služijo kot osnova za implementacijo backend storitev, uporabniškega vmesnika ter pametne komponente za oblikovanje skupin. Poseben poudarek je na uporabniškem toku od prvega stika z aplikacijo (gost) do registracije, prijave, iskanja skupin, pregleda članov predloga, potrditve ali zavrnitve udeležbe, komunikacije v skupinskem chatu ter oddaje povratnih informacij. Hkrati dokument zajema tudi administratorski pogled za upravljanje uporabnikov, obvestil, skupin in spremljanje kakovosti algoritma. Namen te iteracije je bil uskladiti zasnovo s povratnimi informacijami zagovora, izboljšati strukturo zahtev in pripraviti enotno, berljivo podlago za naslednjo razvojno iteracijo. Ekipa je v tej iteraciji dosegla natančnejšo razdelavo uporabniških in administratorskih tokov, vključila vlogo gosta, jasneje opredelila hitri pregled članov predlagane skupine ter dopolnila moderatorske in nadzorne funkcionalnosti. Glavne spremembe vključujejo preoblikovan tok uporabniških mask, bolj dosledno opredeljene funkcionalne in nefunkcionalne zahteve ter izboljšano specifikacijo primerov uporabe s poudarkom na alternativnih in napakarskih tokovih.
 
-V tej iteraciji je cilj priprava osnutka sistema, ki je vsebinsko usklajen s povratnimi informacijami iz zagovora ter pripravi dovolj natančno podlago za implementacijo in podrobno specifikacijo primerov uporabe v nadaljevanju.
+### 1.1 Namen iteracije
 
-### 1.2 Poudarki
+Namen iteracije je priprava osnutka sistema, ki je usklajen s povratnimi informacijami zagovora in dovolj podroben za prehod v izvedbo MVP.
 
-V nadaljevanju so povzeti ključni poudarki te iteracije, od načrtovanih aktivnosti do dejansko doseženih rezultatov.
+### 1.2 Dosežki iteracije
 
-- Kakšen je bil načrt za to iteracijo?
-  - Nadgraditi predlog projekta v osnutek sistema za poglavja 1-3.
-  - Uskladiti besedilo s povratnimi informacijami iz zagovora.
-  - Jasneje povezati potrebe naročnika s cilji projekta.
-  - Pripraviti podlago za podrobno razdelavo poglavja 3.1 (primeri uporabe).
-  - V specifikacijo vključiti dogovore glede uporabniških mask in funkcionalnosti (chat, prikaz članov skupine, lokacijska pomoč).
-  - Dodati nadzor kakovosti delovanja pametne komponente preko administratorskega pogleda in uporabniških ocen.
+- pripravljena je bila pregledna specifikacija uporabniških in administratorskih tokov;
+- razširjen je bil opis uporabniških mask, zunanjih API vmesnikov in vlog v sistemu;
+- dopolnjeni so bili primeri uporabe, vključno s pregledom članov predloga skupine;
+- vključena je bila vloga gosta z jasno omejenim naborom dovoljenih aktivnosti.
 
-Pred zaključkom poglavja spodaj povzemamo še, kaj je ekipa v tej iteraciji dejansko dosegla.
+### 1.3 Glavne spremembe iteracije
 
-- Kaj je ekipa dosegla?
-  - Pripravljen je osnutek uvodnih vsebin in usmeritev za nadaljnjo specifikacijo.
-  - Potrebe naročnika so bolj jasno povzete v obliki želene uporabniške izkušnje.
-  - Cilji projekta so zapisani tako, da neposredno naslavljajo težave naročnika.
-  - Evidentirane so ključne spremembe po zagovoru, ki bodo odražene tudi v predlogu projekta.
-  - Dopolnjene so funkcionalne zahteve za pregled članov predlagane skupine in integriran chat po potrditvi skupine.
-  - Dodane so zahteve za spremljanje kakovosti algoritma (administratorski nadzor + uporabniška povratna informacija).
-  - Dopolnjen je tok registracije v treh korakih in potrditvi računa prek e-pošte.
-  - Dopolnjen je opis administratorske nadzorne plošče (uporabniki, obvestila, skupine, pametna komponenta).
-
-### 1.3 Spremembe
-
-V tej iteraciji smo povzeli večje spremembe in usmeritve glede na predlog projekta:
-
-| Datum | Motivacija | Opis spremembe | Posledica |
-|-------|------------|----------------|-----------|
-| 27. 3. 2026 | Povratne informacije iz zagovora (realnejši načrt in jasnost obsega) | V osnutku smo označili, da bo COCOMO načrt v predlogu projekta prilagojen. | Finančna in časovna ocena bo v predlogu projekta bolj realna in usklajena z MVP. |
-| 27. 3. 2026 | Potreba po bolj natančni razlagi jedrne inovacije sistema | V osnutku smo označili, da bo v predlogu projekta dodatno izboljšan opis pametne komponente za oblikovanje skupin. | V naslednji verziji predloga bo jasneje, kako sistem uporablja kriterije interesov, lokacije in časovne razpoložljivosti. |
-| 27. 3. 2026 | Potreba po konsistentni projektni dokumentaciji | Evidentirali smo, da bomo dnevnik sprememb in seznam tveganj v predlogu projekta dopolnili po zaključku trenutnega osnutka. | Dokumentacija bo poenotena med predlogom projekta in poročili o stanju. |
-| 30. 3. 2026 | Dodatna povratna informacija profesorja na predlagane funkcionalnosti | V osnutek smo vključili odločitev, da je integriran chat po potrditvi skupine prednostna funkcionalnost, ter da uporabnik vidi člane predlagane skupine pred potrditvijo. | Uporabniški tok je bolj skladen s pričakovano izkušnjo in zmanjša potrebo po zunanjih kanalih komunikacije. |
-| 30. 3. 2026 | Dodatna zahteva po spremljanju učinkovitosti pametne komponente | Dopolnili smo administratorske funkcije z nadzorno ploščo za kakovost matching algoritma in z možnostjo operativnega ukrepanja ob poslabšanju metrik. | Kakovost delovanja pametne komponente je merljiva in obvladljiva tudi po uvedbi sistema. |
+- izboljšana je bila struktura in berljivost zahtev;
+- natančneje je bil opredeljen tok med predlogi skupin in skupinskim chatom;
+- razširjene so bile administratorske funkcije (opozorila, statusni pregled in nadzor kakovosti);
+- poenotena je bila terminologija med vlogami, maskami in primeri uporabe.
 
 ## 2 Potrebe naročnika
 
-Primarni naročnik so končni uporabniki (mladi odrasli v urbanih okoljih), ki želijo hitro in enostavno najti manjšo skupino ljudi za spontano druženje brez dolgotrajnega ročnega usklajevanja.
+Primarni naročnik so končni uporabniki (mladi odrasli v urbanih okoljih), ki želijo hitro in varno najti manjšo skupino za spontano druženje. Sekundarni deležniki (lokalna skupnost in ponudniki prostorov za srečanja) pričakujejo večjo socialno povezanost in strukturiran način organizacije srečanj. Operativni naročnik (administrator sistema) pričakuje nadzor nad varnostjo, uporabniki in kakovostjo delovanja pametne komponente.
 
-V nadaljevanju je povzeta želena splošna izkušnja naročnika, ki predstavlja temelj funkcionalnih in nefunkcionalnih zahtev sistema.
+### 2.1 Funkcionalne zahteve
 
-- da uporabnik z minimalnim vložkom (interesi, približna lokacija, razpoložljivost) hitro dobi kakovostne predloge skupin;
-- da so predlogi smiselni, ker upoštevajo ujemanje interesov, geografsko bližino in časovno usklajenost;
-- da je postopek pregleden in varen, brez razkrivanja nepotrebnih osebnih podatkov;
-- da lahko uporabnik enostavno potrdi ali zavrne predlog in sistem prilagodi svoje naslednje predloge;
-- da sistem po aktivnosti omogoča kratko povratno informacijo, s katero se izboljšuje kakovost prihodnjih predlogov.
-- da uporabnik pred potrditvijo vidi osnovni pregled članov predlagane skupine;
-- da je komunikacija po potrditvi skupine podprta z integriranim chatom znotraj aplikacije.
-- da ima uporabnik po prijavi enotno nadzorno ploščo (profil, status iskanja, predlogi skupin, pretekla srečanja);
-- da je postopek registracije razdeljen na 3 jasne korake in potrjen prek e-poštnega verifikacijskega linka.
+Sistem mora podpirati celoten uporabniški tok od prvega obiska do zaključka srečanja. Gost mora imeti dostop do začetne strani, informacijskih vsebin v nogi ter možnosti registracije, prijave in začetka ponastavitve gesla. Registracija mora potekati v treh jasnih korakih (osnovni podatki, interesi v obliki "tagov", lokacija z opcijo autocomplete in časovna razpoložljivost), po oddaji pa mora sistem poslati verifikacijsko povezavo za aktivacijo računa. Prijavljen uporabnik mora lahko urejati profil, sprožiti iskanje skupin, pregledati predloge in za vsak predlog odpreti hiter pregled članov skupine pred odločitvijo.
 
-Odprte odločitve za naslednjo iteracijo (označeno za uskladitev):
-- Interese bomo v MVP modelirali kot: `oznake (tagi)` ali `drevesna struktura (kategorije-podkategorije)`.
-- Lokacijski vnos bo v MVP vključeval: `ročni vnos + autocomplete` ali le `ročni vnos`; geolokacija/reverse geocoding ostane potencialna nadgradnja.
+Pri upravljanju predlogov mora sistem omogočiti potrditev ali zavrnitev udeležbe in dosledno beležiti status odziva. Status mora biti viden tudi ostalim članom skupine. Vsakemu uporabniku dodeljenemu v neko skupino mora biti v vidu te skupine omogočen dostop do skupinskega chata za usklajevanje podrobnosti srečanja. Po srečanju mora sistem podpreti oddajo kratke povratne informacije (ocena in komentar) ter shranjevanje podatkov za nadaljnjo analizo kakovosti predlogov. Sistem mora uporabniku omogočiti oddajo prijave neprimernega vedenja ter potrditi prejem prijave.
 
-Sekundarni deležniki (lokalna skupnost in ponudniki prostorov za srečanja) pričakujejo predvsem večjo socialno povezanost in strukturiran, varen način organizacije srečanj.
+Administratorski del mora omogočati pregled in obravnavo prijav neprimernega vedenja, upravljanje uporabnikov (blokada/deblokada, aktivacija/deaktivacija, opozorilo), pregled obvestil in kontaktnih obrazcev uporabnikov, pregled skupin in moderatorski vpogled v chat. Pri uporabnikih z aktivnim opozorilom mora biti v seznamu prisotna rumena vizualna oznaka. Administrator mora imeti tudi vpogled v ključne metrike kakovosti ujemanja, možnost označitve poslabšanja ter upravljanje osnovnih parametrov algoritma v skladu z internim postopkom.
 
-Administratorski naročnik (operativni vidik) pričakuje:
-- centraliziran pregled uporabnikov, obvestil in generiranih skupin;
-- možnost ukrepanja nad uporabniškimi računi (blokada/deblokada, aktivacija/deaktivacija);
-- spremljanje kakovosti delovanja pametne komponente in pravočasno ukrepanje ob poslabšanju.
+### 2.2 Nefunkcionalne zahteve
+
+Sistem mora biti uporaben, varen, zanesljiv in pripravljen za nadgradnje. Ključni tok od registracije do prvega predloga skupine mora biti praviloma izvedljiv v manj kot petih minutah, uporabniški vmesnik pa mora omogočati intuitivno uporabo brez dodatnega usposabljanja. Varnostni minimum vključuje zaščiten dostop do računov, varno shranjevanje gesel s kriptografskim hash algoritmom, uporabo HTTPS ter obdelavo osebnih podatkov po načelu minimizacije.
+
+Sistem mora zagotavljati zanesljivo shranjevanje ključnih dogodkov (posodobitve profila, odzivi na predloge, povratne informacije) in ciljno uspešnost zaključevanja ključnih tokov brez napak na ravni 99%. Arhitekturno mora rešitev omogočati iterativni razvoj, spremljanje napak z logiranjem in spremljanje kakovosti matching algoritma skozi čas. Ciljna vrednost osnovnega kazalnika kakovosti algoritma (npr. delež potrjenih predlogov) je najmanj 60%.
+
+Razpoložljivost sistema mora biti 24/7, razen v času načrtovanega vzdrževanja, pri čemer največji mesečni čas načrtovanih izpadov ne sme presegati enega dne. Rešitev mora podpirati nadaljnje razširitve brez popolne prenove (npr. novi kriteriji ujemanja) ter integracijo z zunanjimi storitvami za geokodiranje in obveščanje. Celoten sistem mora ostati skladen z GDPR.
+
 
 ## 3 Cilji projekta
 
@@ -113,188 +87,17 @@ Spodaj so povzete ključne koristi, ki jih bo projekt prinesel naročniku in kon
 
 ### 3.1 Primeri uporabe
 
-V tem poglavju so po vrsti predstavljene funkcionalne zahteve, nefunkcionalne zahteve, specifikacija vmesnikov, slovar pojmov, uporabniške vloge in opisi primerov uporabe, ki neposredno podpirajo nadaljnjo analizo ter pripravo diagrama primerov uporabe v naslednji iteraciji.
+V tem poglavju so predstavljeni specifikacija vmesnikov, slovar pojmov, vloge in formalizirani primeri uporabe, ki podpirajo implementacijo sistema.
 
-#### 3.1.1 Funkcionalne zahteve
-
-Funkcionalne zahteve so razdeljene glede na uporabniške vloge in ključne procese, ki so opredeljeni v predlogu projekta ter uporabniških zgodbah.
-
-##### 3.1.1.1 Funkcionalne zahteve za uporabnika
-
-Za primarnega uporabnika sistem podpira celoten tok od ustvarjanja profila do povratne informacije po srečanju.
-
-###### 3.1.1.1.1 Avtentikacija in profil
-
-  1. Sistem mora omogočiti registracijo novega uporabnika.
-  2. Registracija mora biti izvedena v treh korakih (osnovni podatki -> interesi -> lokacija in čas).
-  3. Sistem mora po registraciji poslati povezavo za potrditev računa na e-poštni naslov.
-  4. Sistem mora omogočiti prijavo uporabnika.
-  5. Sistem mora omogočiti posodabljanje profila (osebni podatki, interesi, lokacija, časovna razpoložljivost).
-  6. Sistem mora omogočiti zahtevo za ponastavitev gesla (pozabljeno geslo) prek e-pošte.
-  7. Sistem mora omogočiti nastavitev novega gesla prek veljavnega enkratnega povezovalnega žetona.
-  8. Sistem mora omogočiti odjavo uporabnika.
-
-###### 3.1.1.1.2 Iskanje in prikaz predlogov skupin
-
-  1. Sistem mora omogočiti, da prijavljen uporabnik eksplicitno sproži iskanje skupine.
-  2. Sistem mora na zahtevo uporabnika izračunati in prikazati predloge skupin.
-  3. Sistem mora prikazati ključne podatke predloga (skupni interesi, okvirna lokacija, predlagan termin).
-  4. Sistem mora uporabniku omogočiti pregled članov posamezne predlagane skupine pred potrditvijo.
-
-###### 3.1.1.1.3 Upravljanje udeležbe
-
-  1. Sistem mora omogočiti potrditev udeležbe v predlagani skupini.
-  2. Sistem mora omogočiti zavrnitev predloga skupine.
-  3. Ob potrditvi mora sistem obvestiti ostale člane predlagane skupine (obvestilo je v vidu oznake barve člana v skupini zelena/rdeča).
-  4. Po potrditvi skupine mora sistem odpreti skupinski komunikacijski kanal (integriran chat).
-  5. Ob zavrnitvi predlog ne izgine, temveč ostane na seznamu in ga je mogoče kasneje ponovno potrditi.
-  6. Sistem mora uporabniku omogočiti vstop v chat predlagane skupine in pošiljanje sporočil.
-
-###### 3.1.1.1.4 Povratne informacije
-
-  1. Sistem mora po srečanju omogočiti oddajo kratke ocene in komentarja.
-  2. Sistem mora shraniti povratne informacije za nadaljnjo analizo kakovosti predlogov.
-
-###### 3.1.1.1.5 Varnost in prijava neprimernega vedenja
-
-  1. Sistem mora omogočiti oddajo prijave neprimernega vedenja.
-  2. Sistem mora potrditi prejem prijave.
-
-###### 3.1.1.1.6 Informacijske strani in kontakt
-
-  1. Sistem mora iz noge strani (footer) omogočiti dostop do strani: pogoji uporabe, GDPR, pogosta vprašanja, kontakt.
-  2. Sistem mora omogočiti oddajo kontaktnega sporočila prek strani "Kontakt".
-
-##### 3.1.1.2 Funkcionalne zahteve za administratorja
-
-Administratorska vloga pokriva upravljanje varnosti in osnovni nadzor nad stanjem sistema.
-
-###### 3.1.1.2.1 Upravljanje prijav neprimernega vedenja
-
-  1. Administrator mora imeti pregled nad oddanimi prijavami.
-  2. Administrator mora imeti možnost označiti prijavo kot obravnavano.
-  3. Administrator mora imeti možnost izvesti ukrep (opozorilo, začasna omejitev, odstranitev uporabnika).
-
-###### 3.1.1.2.2 Osnovni pregled delovanja sistema
-
-  1. Administrator mora imeti vpogled v osnovne podatke o uporabi sistema (predlagane skupine, potrjene skupine, oddane povratne informacije).
-
-###### 3.1.1.2.3 Upravljanje uporabnikov
-
-  1. Administrator mora imeti seznam uporabnikov s paginacijo.
-  2. Administrator mora videti osnovne podatke uporabnika (ime, priimek, uporabniško ime, e-pošta).
-  3. Administrator mora imeti možnost blokirati/deblokirati uporabnika.
-  4. Administrator mora imeti možnost aktivirati/deaktivirati uporabnika.
-
-###### 3.1.1.2.4 Obvestila in vprašanja uporabnikov
-
-  1. Administrator mora imeti pregled vseh obvestil (prijave, vprašanja, povratna sporočila) s podatkom pošiljatelja.
-  2. Administrator mora imeti možnost odpreti podrobnosti posameznega obvestila.
-
-###### 3.1.1.2.5 Pregled generiranih skupin
-
-  1. Administrator mora imeti pregled vseh ustvarjenih skupin in članov skupine.
-  2. Administrator mora videti stanje odzivov (potrjeno/zavrnjeno) za posamezno skupino.
-  3. Administrator mora imeti razdelitev skupin na izvedene in neizvedene.
-  4. **[TODO]** Določiti natančno poslovno pravilo, kdaj se skupina označi kot izvedena (trenutni predlog: vsaj 2 potrditvi do časa srečanja).
-  5. Administrator mora imeti moderatorski vpogled v vsebino chata posamezne skupine.
-
-###### 3.1.1.2.6 Nadzor kakovosti pametne komponente
-
-  1. Administrator mora imeti vpogled v ključne metrike kakovosti ujemanja (npr. delež potrjenih predlogov, povprečna ocena predlaganih skupin, delež izvedenih srečanj).
-  2. Administrator mora imeti možnost označiti poslabšanje kakovosti in sprožiti operativni pregled algoritma.
-  3. Administrator mora imeti možnost upravljati osnovne parametre algoritma (uteži `w1`, `w2`, `w3`) skladno z dogovorjenim postopkom ekipe.
-  4. Sistem mora omogočiti primerjavo metrik pred in po spremembi parametrov.
-  5. **[TODO]** Določiti nabor metrik, pragove opozoril in postopek odobritve sprememb parametrov.
-
-###### 3.1.1.2.7 Administratorski dostop
-
-  1. Administratorski račun je inicialno ustvarjen neposredno v bazi podatkov in nima registracijskega toka.
-
-##### 3.1.1.3 Funkcionalne zahteve za pametno komponento
-
-Pametna komponenta predstavlja jedro MVP in mora zagotavljati ponovljiv, razložljiv izračun predlogov.
-
-1. Sistem mora izračunati ujemanje interesov med uporabniki.
-2. Sistem mora upoštevati geografsko bližino uporabnikov.
-3. Sistem mora upoštevati časovno prekrivanje razpoložljivosti.
-4. Sistem mora izračunati skupno oceno kompatibilnosti in razvrstiti kandidate.
-5. Sistem mora vrniti vsaj en predlog skupine, kadar obstajajo kandidati, ki izpolnjujejo minimalne pogoje.
-6. Sistem mora shraniti podatke o kakovosti predlaganih skupin (odziv uporabnikov in povratne ocene) za nadaljnje izboljševanje modela.
-7. Sistem mora omogočiti razlago ključnih faktorjev ujemanja na ravni predloga skupine (interesi, lokacija, čas).
-
-#### 3.1.2 Nefunkcionalne zahteve
-
-Nefunkcionalne zahteve so razdeljene na zahteve izdelka, organizacijske zahteve in zunanje zahteve ter so vezane na metrike uporabnosti, varnosti, zanesljivosti, izvedbe, razpoložljivosti in razširljivosti.
-
-##### 3.1.2.1 Zahteve izdelka
-
-Zahteve izdelka določajo kakovost delovanja aplikacije z vidika uporabnika in tehnične izvedbe.
-
-###### 3.1.2.1.1 Uporabnost
-
-  1. Učinkovitost: uporabnik mora od registracije do prvega predloga skupine praviloma priti v manj kot 5 minutah.
-  2. Intuitivnost: ključni tokovi (registracija, urejanje profila, iskanje skupin, potrditev udeležbe) morajo biti razumljivi brez dodatnega usposabljanja.
-  3. Zaznana delovna obremenitev: za oddajo zahteve za predlog skupine naj bo potrebnih čim manj korakov in vnosov.
-
-###### 3.1.2.1.2 Varnost
-
-  1. Dostop do računa mora biti zaščiten z e-naslovom in geslom.
-  2. Gesla morajo biti shranjena s kriptografsko varnim hash algoritmom.
-  3. Prenos podatkov mora potekati prek HTTPS.
-  4. Obdelava osebnih podatkov mora biti skladna z načeli minimizacije podatkov.
-
-###### 3.1.2.1.3 Zanesljivost
-
-  1. Sistem mora zanesljivo shraniti spremembe profila, potrditev udeležbe in povratne informacije brez izgube podatkov.
-  2. Ciljna vrednost uspešnih zaključkov ključnih tokov brez napak: 99%.
-
-###### 3.1.2.1.4 Izvedba in vzdrževanje
-
-  1. Arhitektura mora omogočati nadaljnje nadgradnje pametne komponente.
-  2. Sistem mora omogočati diagnostično spremljanje napak (logiranje).
-  3. Sistem mora omogočati spremljanje kakovosti delovanja matching algoritma skozi čas.
-  4. Ciljne vrednosti metrik kakovosti algoritma (npr. minimalni delež potrjenih predlogov): 60%.
-
-###### 3.1.2.1.5 Razpoložljivost
-
-  1. Sistem mora biti dostopen 24/7, razen v času načrtovanih vzdrževalnih del.
-  2. Maksimalni mesečni čas načrtovanega vzdrževanja: 1 dan.
-
-###### 3.1.2.1.6 Razširljivost
-
-  1. Sistem mora omogočati dodajanje novih kriterijev ujemanja brez popolne prenove celotne aplikacije.
-
-##### 3.1.2.2 Organizacijske zahteve
-
-Organizacijske zahteve opredeljujejo razvojni in operativni okvir projekta.
-
-###### 3.1.2.2.1 Razvojni okvir
-
-1. Sistem mora biti razvit kot spletna aplikacija z ločenim odjemalcem in strežnikom.
-2. Rešitev mora podpirati iterativni razvoj in postopno razširjanje funkcionalnosti.
-3. Koda mora biti strukturirana tako, da omogoča skupinsko delo, pregled kode in testiranje ključnih modulov.
-4. Uporabljene tehnologije morajo biti skladne z odločitvami ekipe (Node.js, MongoDB, Angular).
-
-##### 3.1.2.3 Zunanje zahteve
-
-Zunanje zahteve zajemajo omejitve in pričakovanja, ki izhajajo iz okolja sistema in zunanjih deležnikov.
-
-###### 3.1.2.3.1 Integracije in skladnost
-
-1. Sistem mora omogočati integracijo z zunanjimi storitvami za geokodiranje oziroma obdelavo lokacijskih podatkov.
-2. Sistem mora omogočati integracijo z mehanizmom za obvestila (npr. e-pošta).
-3. Sistem mora biti skladen z veljavno zakonodajo o varstvu osebnih podatkov (GDPR).
-
-#### 3.1.3 Specifikacija vmesnikov
+#### 3.1.1 Specifikacija vmesnikov
 
 V tem delu so po vrsti opisani zunanji vmesniki in maske spletne aplikacije, ki jih uporabnik in administrator uporabljata v ključnih tokovih sistema.
 
-##### 3.1.3.1 Vmesniki do zunanjih sistemov
+##### 3.1.1.1 Vmesniki do zunanjih sistemov
 
 Spodaj so opisani ključni zunanji API vmesniki, ki jih sistem uporablja ali jih predvideva v MVP.
 
-###### 3.1.3.1.1 Geokodiranje lokacije prek zunanjega sistema
+###### 3.1.1.1.1 Geokodiranje lokacije prek zunanjega sistema
 
 Sistem mora omogočiti pretvorbo uporabniško podane lokacije v standardizirano obliko za namen primerjave geografske bližine.
 
@@ -329,11 +132,11 @@ Primer odgovora:
   - ob neuspehu uporabniku prikaže opozorilo in možnost ponovnega vnosa.
 
 
-##### 3.1.3.2 Spletni vmesnik aplikacije (forme)
+##### 3.1.1.2 Spletni vmesnik aplikacije (forme)
 
 Spletni uporabniški vmesnik je strukturiran po maskah, ki sledijo osnovnemu toku uporabe: javna stran, registracija, prijava, ponastavitev gesla, uporabniška nadzorna plošča, skupinski chat, urejanje profila, administratorska nadzorna plošča in informacijske strani.
 
-###### 3.1.3.2.1 Maska začetne strani
+###### 3.1.1.2.1 Maska začetne strani
 
 Maska začetne strani uporabniku predstavi namen sistema in vstopne možnosti.
 
@@ -342,7 +145,7 @@ Maska začetne strani uporabniku predstavi namen sistema in vstopne možnosti.
 3. Noga strani vsebuje povezave do pogostih vprašanj, kontakta, pogojev uporabe in GDPR.
 4. Vsaka povezava v nogi vodi na ustrezno informacijsko masko.
 
-###### 3.1.3.2.2 Maska za registracijo
+###### 3.1.1.2.2 Maska za registracijo
 
 Maska registracije omogoča prvi vnos podatkov, potrebnih za ustvarjanje računa.
 
@@ -363,7 +166,7 @@ Maska registracije omogoča prvi vnos podatkov, potrebnih za ustvarjanje računa
 4. Uporabnik lahko račun uporablja šele po uspešni potrditvi e-pošte.
 5. Maska vedno vsebuje tudi povezavo za skok na prijavo.
 
-###### 3.1.3.2.3 Maska za prijavo
+###### 3.1.1.2.3 Maska za prijavo
 
 Maska prijave omogoča avtentikacijo obstoječega uporabnika.
 
@@ -375,7 +178,7 @@ Maska prijave omogoča avtentikacijo obstoječega uporabnika.
 4. Maska vsebuje povezavo "Pozabljeno geslo", ki vodi na obrazec za zahtevo ponastavitve gesla.
 5. Maska vsebuje tudi povezavo za skok na registracijo za uporabnike brez računa.
 
-###### 3.1.3.2.4 Maska za zahtevo ponastavitve gesla
+###### 3.1.1.2.4 Maska za zahtevo ponastavitve gesla
 
 Maska omogoča začetek postopka obnovitve dostopa do računa.
 
@@ -384,7 +187,7 @@ Maska omogoča začetek postopka obnovitve dostopa do računa.
 3. Sistem prikaže generično potrditev zahteve in ne razkrije, ali račun obstaja.
 4. Po uspešni oddaji se uporabnik lahko vrne na prijavo.
 
-###### 3.1.3.2.5 Maska za nastavitev novega gesla
+###### 3.1.1.2.5 Maska za nastavitev novega gesla
 
 Maska omogoča zaključek ponastavitve gesla prek e-poštne povezave.
 
@@ -393,7 +196,7 @@ Maska omogoča zaključek ponastavitve gesla prek e-poštne povezave.
 3. Sistem preveri veljavnost žetona in skladnost gesel.
 4. Sistem shrani novo geslo in uporabnika preusmeri na masko za prijavo.
 
-###### 3.1.3.2.6 Maska uporabniške nadzorne plošče
+###### 3.1.1.2.6 Maska uporabniške nadzorne plošče
 
 Maska združuje ključne funkcije uporabnika po prijavi.
 
@@ -402,7 +205,7 @@ Maska združuje ključne funkcije uporabnika po prijavi.
 3. Prikazana so pretekla srečanja z osnovnimi podatki in dostopom do preteklih chatov.
 4. Sredinski del prikazuje predlagane skupine in akcije potrdi, zavrni in chat.
 
-###### 3.1.3.2.7 Maska za predloge skupin
+###### 3.1.1.2.7 Maska za predloge skupin
 
 Maska prikazuje predlagane skupine in omogoča hiter pregled članov pred potrditvijo.
 
@@ -412,7 +215,7 @@ Maska prikazuje predlagane skupine in omogoča hiter pregled članov pred potrdi
 4. Uporabnik lahko iz predloga nadaljuje na potrditev, zavrnitev ali dostop do chata.
 5. Hiter pregled članov je ločen od skupinskega chata in v njem ni pošiljanja sporočil.
 
-###### 3.1.3.2.8 Maska skupinskega chata
+###### 3.1.1.2.8 Maska skupinskega chata
 
 Maska prikazuje komunikacijo skupine.
 
@@ -421,7 +224,7 @@ Maska prikazuje komunikacijo skupine.
 3. Uporabnik lahko pošilja nova sporočila.
 4. Seznam članov je prikazan informativno, brez potrebe po odpiranju njihovih podrobnosti iz chata.
 
-###### 3.1.3.2.9 Maska za urejanje profila
+###### 3.1.1.2.9 Maska za urejanje profila
 
 Maska profila omogoča upravljanje preferenc za delovanje algoritma.
 
@@ -430,17 +233,15 @@ Maska profila omogoča upravljanje preferenc za delovanje algoritma.
   b. približno lokacijo,
   c. časovno razpoložljivost.
 2. Sistem spremembe validira in shrani.
-3. **[TODO]** Končni model interesa v obrazcu: `tagi` ali `kategorije-podkategorije`.
-4. **[TODO]** Dodatne lokacijske izboljšave (autocomplete, geolokacija) opredeliti glede na obseg MVP.
 
-###### 3.1.3.2.10 Maska za povratno informacijo
+###### 3.1.1.2.10 Maska za povratno informacijo
 
 Maska povratne informacije omogoča oddajo ocene po srečanju.
 
 1. Uporabnik poda oceno in kratek komentar.
 2. Sistem shrani odgovor in potrdi uspešen vnos.
 
-###### 3.1.3.2.11 Maska administratorske nadzorne plošče
+###### 3.1.1.2.11 Maska administratorske nadzorne plošče
 
 Maska omogoča operativni nadzor sistema.
 
@@ -452,7 +253,7 @@ Maska omogoča operativni nadzor sistema.
 6. Sekcija Skupine vsebuje pregled vseh ustvarjenih skupin, statusov, članov in dostop do skupinskega chata.
 7. Sekcija Pametna komponenta vsebuje metrike kakovosti in nastavitve parametrov algoritma.
 
-###### 3.1.3.2.12 Maska informacijskih strani in kontakta
+###### 3.1.1.2.12 Maska informacijskih strani in kontakta
 
 Maske pokrivajo strani, dostopne iz noge strani (footer).
 
@@ -462,294 +263,305 @@ Maske pokrivajo strani, dostopne iz noge strani (footer).
 4. Maska kontakta omogoča oddajo sporočila z osnovnimi podatki, kot so ime, priimek, e-naslov, zadeva in sporočilo.
 5. Sistem po oddaji kontakta prikaže potrditev prejema sporočila.
 
-#### 3.1.4 Slovar pojmov
+#### 3.1.2 Slovar pojmov
 
 V nadaljevanju je slovar ključnih izrazov, ki se uporabljajo v predlogu projekta in tem poročilu.
 
-##### 3.1.4.1 Uporabnik
+##### 3.1.2.1 Uporabnik
 
 Registriran končni uporabnik aplikacije, ki upravlja svoj profil, išče skupine, sprejema ali zavrača predloge, uporablja skupinski chat ter oddaja povratne informacije.
 
-##### 3.1.4.2 Primarni naročnik
+##### 3.1.2.2 Primarni naročnik
 
 Skupina končnih uporabnikov (mladi odrasli v urbanih okoljih), za katero se sistem razvija in katere potrebe so osnova funkcionalnih zahtev.
 
-##### 3.1.4.3 Sekundarni deležniki
+##### 3.1.2.3 Sekundarni deležniki
 
 Zunanji deležniki, ki od sistema nimajo neposredne operativne vloge, imajo pa posredne koristi (npr. lokalna skupnost, ponudniki prostorov).
 
-##### 3.1.4.4 Administrator sistema
+##### 3.1.2.4 Administrator sistema
 
 Vloga z razširjenimi pravicami za obravnavo prijav, upravljanje uporabnikov, moderatorski vpogled v skupine/chat in spremljanje kakovosti delovanja sistema.
 
-##### 3.1.4.5 Uporabniški profil
+##### 3.1.2.5 Uporabniški profil
 
 Strukturiran zapis o uporabniku, ki vključuje podatke za delovanje sistema (interesi, lokacija, časovna razpoložljivost) in se uporablja pri izračunu predlogov skupin.
 
-##### 3.1.4.6 Interesi
+##### 3.1.2.6 Interesi
 
 Seznam aktivnosti oziroma tem, ki predstavljajo enega ključnih vhodov za izračun podobnosti med uporabniki.
 
-##### 3.1.4.7 Časovna razpoložljivost
+##### 3.1.2.7 Časovna razpoložljivost
 
 Podatki o prostih terminih uporabnika, uporabljeni za izračun časovnega prekrivanja med potencialnimi člani skupine.
 
-##### 3.1.4.8 Geografska bližina
+##### 3.1.2.8 Geografska bližina
 
 Mera prostorske oddaljenosti med uporabniki oziroma njihovimi približnimi lokacijami, uporabljena kot kriterij pri razvrščanju predlogov.
 
-##### 3.1.4.9 Kompatibilnost skupine
+##### 3.1.2.9 Kompatibilnost skupine
 
 Skupna ocena ujemanja članov skupine glede na izbrane kriterije (interesi, lokacija, časovna razpoložljivost).
 
-##### 3.1.4.10 Predlog skupine
+##### 3.1.2.10 Predlog skupine
 
 Rezultat delovanja pametne komponente, ki vsebuje seznam potencialnih članov, predlagan termin, okvirno lokacijo in ključne razloge za ujemanje.
 
-##### 3.1.4.11 Potrditev udeležbe
+##### 3.1.2.11 Potrditev udeležbe
 
 Odločitev uporabnika, da sprejme predlog skupine in sodeluje pri srečanju; odločitev je vidna ostalim članom preko statusnega indikatorja.
 
-##### 3.1.4.12 Zavrnitev predloga
+##### 3.1.2.12 Zavrnitev predloga
 
 Odločitev uporabnika, da predloga skupine ne sprejme; status predloga se posodobi brez odstranitve predloga iz zgodovine.
 
-##### 3.1.4.13 Povratna informacija
+##### 3.1.2.13 Povratna informacija
 
 Ocena in morebitni komentar uporabnika po srečanju, namenjena merjenju kakovosti predlogov in iterativnemu izboljševanju sistema.
 
-##### 3.1.4.14 Prijava neprimernega vedenja
+##### 3.1.2.14 Prijava neprimernega vedenja
 
 Funkcionalnost, s katero uporabnik odda prijavo neprimernega ravnanja ali vsebine v obravnavo administratorju.
 
-##### 3.1.4.15 Pametna komponenta
+##### 3.1.2.15 Pametna komponenta
 
 Notranja komponenta sistema, ki izvaja izračun kompatibilnosti in oblikovanje predlogov skupin; v kontekstu primerov uporabe ni zunanji akter.
 
-##### 3.1.4.16 Scoring model
+##### 3.1.2.16 Scoring model
 
 Ocenjevalni model, ki združuje več kriterijev ujemanja v enotno numerično oceno za razvrščanje kandidatov in predlogov skupin.
 
-##### 3.1.4.17 MVP
+##### 3.1.2.17 MVP
 
 Minimalni delujoči produkt z osnovnimi funkcionalnostmi, potrebnimi za validacijo ideje in preverjanje ključnih predpostavk.
 
-##### 3.1.4.18 REST API
+##### 3.1.2.18 REST API
 
 Slog komunikacije med odjemalcem, strežnikom in zunanjimi sistemi prek HTTP protokola.
 
-##### 3.1.4.19 JSON
+##### 3.1.2.19 JSON
 
 Format za strukturirano izmenjavo podatkov med sistemi in komponentami aplikacije.
 
-##### 3.1.4.20 GDPR
+##### 3.1.2.20 GDPR
 
 Pravni okvir varstva osebnih podatkov, ki določa pravila obdelave, hrambe in zaščite osebnih podatkov uporabnikov.
 
-##### 3.1.4.21 Razpoložljivost sistema
+##### 3.1.2.21 Razpoložljivost sistema
 
 Stopnja dostopnosti sistema uporabnikom v določenem časovnem obdobju, izražena z dogovorjenimi ciljnimi metrikami.
 
-##### 3.1.4.22 Razširljivost sistema
+##### 3.1.2.22 Razširljivost sistema
 
 Sposobnost sistema, da podpira nove funkcionalnosti in večji obseg uporabe brez večje prenove arhitekture.
 
-##### 3.1.4.23 Skupinski chat
+##### 3.1.2.23 Skupinski chat
 
 Komunikacijski kanal znotraj aplikacije, ki je na voljo članom predlagane skupine za usklajevanje podrobnosti srečanja.
 
-##### 3.1.4.24 Verifikacijska povezava
+##### 3.1.2.24 Verifikacijska povezava
 
 Časovno omejena povezava, poslana na e-pošto ob registraciji, s katero uporabnik potrdi lastništvo e-naslova in aktivira račun.
 
-##### 3.1.4.25 Ponastavitveni žeton
+##### 3.1.2.25 Ponastavitveni žeton
 
 Enkratno uporaben, časovno omejen žeton za varno nastavitev novega gesla v postopku "Pozabljeno geslo".
 
-##### 3.1.4.26 Status odziva
+##### 3.1.2.26 Status odziva
 
 Prikaz odločitve uporabnika glede predloga skupine (potrjeno/zavrnjeno), vizualno označen z barvnim indikatorjem.
 
-#### 3.1.5 Uporabniške vloge in zunanji akterji
+#### 3.1.3 Uporabniške vloge in zunanji akterji
 
 Spodaj so opredeljene vloge, ki sodelujejo v primerih uporabe, skupaj z njihovo naravo (vloga ali zunanji sistem). Akter v primeru uporabe je vedno zunanja entiteta glede na obravnavani sistem.
 
-##### 3.1.5.1 Uporabnik (vloga)
+##### 3.1.3.1 Uporabnik (vloga)
 
 Uporabnik je primarni poslovni akter sistema.
 Njegova vloga je vnos in vzdrževanje profila, sprožanje iskanja skupin, odločanje o predlogih (potrditev/zavrnitev), uporaba skupinskega chata ter oddaja povratnih informacij in prijav neprimernega vedenja.
 
-##### 3.1.5.2 Gost (vloga)
+##### 3.1.3.2 Gost (vloga)
 
 Gost je neprijavljen uporabnik sistema.
 Njegova vloga je dostop do začetne strani ter informacijskih strani v nogi, možnost registracije, prijave in zahtevka za ponastavitev gesla.
 
-##### 3.1.5.3 Administrator (vloga)
+##### 3.1.3.3 Administrator (vloga)
 
 Administrator je operativni in nadzorni akter sistema.
 Njegova vloga je obravnava prijav, upravljanje uporabniških računov, pregled skupin in moderatorski vpogled v chat ter spremljanje metrik kakovosti pametne komponente.
 
-##### 3.1.5.4 Geokodirni API (zunanji sistem)
+##### 3.1.3.4 Geokodirni API (zunanji sistem)
 
 Geokodirni API je podporni zunanji sistem.
 Njegova vloga je pretvorba uporabniško vnesene lokacije v standardizirano obliko in koordinate, ki jih sistem uporabi za ocenjevanje geografske bližine.
 
-##### 3.1.5.5 E-poštni servis (zunanji sistem)
+##### 3.1.3.5 E-poštni servis (zunanji sistem)
 
 E-poštni servis je komunikacijski zunanji sistem.
 Njegova vloga je pošiljanje verifikacijskih povezav ob registraciji in povezav/obvestil za ponastavitev gesla ter komunikacije z uporabniki.
 
-##### 3.1.5.6 Pametna komponenta (notranja komponenta sistema)
+##### 3.1.3.6 Pametna komponenta (notranja komponenta sistema)
 
 Pametna komponenta je notranji del sistema in se v strogi UML razlagi ne šteje kot zunanji akter.
 V dokumentu je navedena zaradi preglednosti odgovornosti znotraj primerov uporabe, kjer izvaja izračun ujemanja in pripravo predlogov skupin.
 
-#### 3.1.6 Opisi primerov uporabe
+#### 3.1.4 Opisi primerov uporabe
 
 V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primerov uporabe po enotni strukturi.
 
-##### 3.1.6.1 Registrirati se
+##### 3.1.4.1 Registrirati se
 
 1. **Naslov**: Registrirati se
-2. **Akterji**:
-  - Gost (vloga)
-  - Uporabnik (vloga)
-3. **Povzetek funkcionalnosti**:
-  - Nov uporabnik opravi registracijo v treh korakih in potrdi račun prek e-poštne povezave.
+2. **Akterji**: Gost (vloga), Uporabnik (vloga)
+3. **Povzetek funkcionalnosti**: Nov uporabnik opravi registracijo v treh korakih in aktivira račun prek e-pošte.
 4. **Osnovni tok**:
-  1. Uporabnik odpre masko za registracijo.
-  2. Uporabnik izpolni korake 1/3, 2/3 in 3/3.
-  3. Sistem ustvari račun v stanju "nepotrjen" in pošlje verifikacijski e-poštni link.
-  4. Uporabnik potrdi e-poštni naslov.
-  5. Sistem aktivira račun.
+  1. Gost odpre masko za registracijo.
+  2. Izpolni korake 1/3, 2/3 in 3/3.
+  3. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
+  4. Gost odpre verifikacijsko povezavo.
+  5. Sistem aktivira račun in zaključi primer uporabe.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik se med registracijo premika med koraki 1/3, 2/3 in 3/3 (naprej in nazaj) ter pred oddajo popravi podatke.
-      1. Uporabnik izpolni korak 1/3 in nadaljuje na 2/3.
-      2. Uporabnik izpolni korak 2/3 in nadaljuje na 3/3.
-      3. Uporabnik se vrne na 2/3 ali 1/3, popravi podatke in ponovno nadaljuje do 3/3.
-      4. Sistem ohrani že vnesene veljavne podatke med koraki.
-      5. Uporabnik odda registracijo in nadaljuje osnovni tok.
-  - A2: Uporabnik začasno prekine registracijo in jo nadaljuje v isti seji.
-      1. Uporabnik zapre registracijsko masko po delnem vnosu.
-      2. Uporabnik se vrne na registracijo.
-      3. Sistem ponudi nadaljevanje od zadnjega uspešno zaključenega koraka.
-  - A3: Uporabnik uspešno registrira račun, vendar e-pošto potrdi kasneje.
-      1. Sistem račun ohrani v stanju "nepotrjen".
-      2. Uporabnik kasneje odpre verifikacijsko povezavo.
-      3. Sistem aktivira račun.
-  - E1: E-naslov je že zaseden; sistem zahteva drug e-naslov.
-  - E2: Gesli se ne ujemata; sistem zahteva ponovni vnos.
-  - E3: Obvezna polja niso izpolnjena; sistem ne dovoli nadaljevanja.
-  - E4: Uporabnik vnese prešibko geslo; sistem zavrne in prikaže pravila kompleksnosti.
-  - E5: Verifikacijska povezava je neveljavna ali potekla; sistem omogoči ponovno pošiljanje.
-  - E6: Napaka pri pošiljanju verifikacijskega e-sporočila; sistem omogoči ponovni poskus.
-6. **Predpogoj**:
-  - Uporabnik še nima računa v sistemu.
-7. **Popogoj, posledice in učinki**:
-  - Uspeh: ustvarjen in aktiviran je nov uporabniški račun.
-  - Neuspeh: račun ni ustvarjen ali ostane neaktiven.
-8. **Posebne zahteve**:
-  - Validacija obveznih polj in varna obravnava gesla.
-9. **Prioriteta (MoSCoW)**:
-  - Must
+  - A1: Gost popravi vnos v prejšnjem koraku.
+    1. Gost odpre masko za registracijo.
+    2. Izpolni korake 1/3, 2/3 in 3/3.
+    3. Gost v tretjem koraku ugotovi, da je treba dopolniti prejšnji vnos.
+    4. Gost se vrne na 2/3 ali 1/3 in popravi podatke.
+    5. Sistem ohrani že veljavne podatke, da jih ni treba ponovno vpisovati.
+    6. Gost znova nadaljuje do 3/3 in odda registracijo.
+    7. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
+    8. Gost odpre verifikacijsko povezavo.
+    9. Sistem aktivira račun in zaključi primer uporabe.
+  - E1: E-naslov je že registriran.
+    1. Gost odpre masko za registracijo.
+    2. Izpolni korake 1/3, 2/3 in 3/3.
+    3. Gost pri oddaji vnese e-naslov, ki že obstaja v sistemu.
+    4. Sistem zavrne registracijo in prikaže napako o že uporabljenem e-naslovu.
+    5. Gost vnese drug e-naslov in ponovno odda obrazec.
+    6. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
+    7. Gost odpre verifikacijsko povezavo.
+    8. Sistem aktivira račun in zaključi primer uporabe.
+  - E2: Verifikacijska povezava je potekla.
+    1. Gost odpre masko za registracijo.
+    2. Izpolni korake 1/3, 2/3 in 3/3.
+    3. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
+    4. Gost odpre povezavo za potrditev računa po pretečenem roku.
+    5. Sistem zavrne aktivacijo in prikaže obvestilo o neveljavni povezavi.
+    6. Gost zahteva novo verifikacijsko povezavo.
+    7. Sistem pošlje novo povezavo.
+    8. Gost odpre novo verifikacijsko povezavo.
+    9. Sistem aktivira račun in zaključi primer uporabe.
+6. **Predpogoj**: Gost še nima računa v sistemu.
+7. **Popogoj, posledice in učinki**: Uspeh: račun je aktiviran. Neuspeh: račun ostane neaktiven.
+8. **Posebne zahteve**: Varna obravnava gesla in validacija obveznih polj.
+9. **Prioriteta (MoSCoW)**: Must
 10. **Sprejemni testi**:
 
 | Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
 |---|---|---|---|---|
-| Registrirati se | Registracija uporabnika | Uporabnik ni registriran | Veljavni podatki registracije | Ustvarjen nepotrjen račun in poslan verifikacijski e-poštni link |
-| Registrirati se | Preverjanje enoličnosti e-naslova | E-naslov že obstaja | Podan obstoječ e-naslov | Obvestilo o napaki, registracija ni zaključena |
+| Registrirati se | Registracija uporabnika | Gost nima računa | Veljavni podatki registracije | Ustvarjen nepotrjen račun in poslana verifikacija |
 
-11. **Razširitev - pogostost uporabe in triggerji**:
-  - Pogostost: nizka (praviloma enkrat na uporabnika).
-  - Trigger: uporabnik izbere možnost registracije.
+11. **Razširitev - pogostost uporabe in triggerji**: Pogostost: nizka. Trigger: klik na registracijo.
 
-##### 3.1.6.2 Prijaviti se
+##### 3.1.4.2 Prijaviti se
 
 1. **Naslov**: Prijaviti se
-2. **Akterji**:
-  - Gost (vloga)
-  - Uporabnik (vloga)
-  - Administrator (vloga)
-3. **Povzetek funkcionalnosti**:
-  - Uporabnik ali administrator se avtenticira in je preusmerjen na ustrezno nadzorno ploščo.
+2. **Akterji**: Gost (vloga), Uporabnik (vloga), Administrator (vloga)
+3. **Povzetek funkcionalnosti**: Akter se avtenticira in je preusmerjen na ustrezen pogled.
 4. **Osnovni tok**:
-  1. Uporabnik vnese e-naslov in geslo.
-  2. Sistem preveri podatke in vlogo.
-  3. Sistem preusmeri na uporabniško ali administratorsko nadzorno ploščo.
+  1. Gost odpre masko za prijavo.
+  2. Vnese e-naslov in geslo.
+  3. Sistem preveri poverilnice in vlogo.
+  4. Sistem vzpostavi sejo.
+  5. Sistem preusmeri na uporabniško ali administratorsko nadzorno ploščo.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik po neuspešni prijavi ponovi vnos in uspešno nadaljuje.
-  - A2: Uporabnik preklopi iz registracije na prijavo in uspešno nadaljuje osnovni tok.
-  - A3: Administrator se prijavi in je preusmerjen na administratorsko nadzorno ploščo.
-  - A4: Uporabnik se prijavi z že aktivno sejo na drugi napravi; sistem dovoli prijavo in zabeleži nov dostop.
+  - A1: Prijava administratorja.
+    1. Gost odpre masko za prijavo.
+    2. Vnese e-naslov in geslo za administratorski račun.
+    3. Sistem preveri poverilnice in vlogo.
+    4. Sistem prepozna administratorsko vlogo.
+    5. Sistem vzpostavi sejo.
+    6. Sistem preusmeri na administratorsko nadzorno ploščo.
   - E1: Napačno geslo.
-  - E2: Neobstoječ račun.
-  - E3: Račun je blokiran/deaktiviran.
-  - E4: Račun ni verificiran; sistem prijavo zavrne in ponudi ponovno pošiljanje verifikacije.
-  - E5: Preveč zaporednih neuspešnih poskusov; sistem začasno zaklene prijavo.
-  - E6: Seja ni uspešno vzpostavljena zaradi sistemske napake; sistem prikaže obvestilo in ponovni poskus.
-6. **Predpogoj**:
-  - Uporabnik ima ustvarjen in verificiran račun.
-7. **Popogoj, posledice in učinki**:
-  - Uspeh: uporabnik je prijavljen.
-  - Neuspeh: uporabnik ostane neprijavljen.
-8. **Posebne zahteve**:
-  - Varna seja in zaščita prijavnega toka.
-9. **Prioriteta (MoSCoW)**:
-  - Must
+    1. Gost odpre masko za prijavo.
+    2. Vnese e-naslov in napačno geslo.
+    3. Sistem preveri poverilnice in zavrne prijavo.
+    4. Sistem poveča števec neuspelih poskusov in prikaže napako.
+    5. Gost popravi geslo in ponovno odda prijavo.
+    6. Sistem preveri poverilnice in vlogo.
+    7. Sistem vzpostavi sejo.
+    8. Sistem preusmeri na ustrezno nadzorno ploščo.
+  - E2: Račun ni verificiran.
+    1. Gost odpre masko za prijavo.
+    2. Vnese e-naslov in geslo neverificiranega računa.
+    3. Sistem preveri poverilnice in ugotovi, da račun ni verificiran.
+    4. Sistem zavrne prijavo in ponudi ponovno pošiljanje verifikacije.
+    5. Gost potrdi e-poštni naslov preko nove verifikacijske povezave.
+    6. Gost ponovno odpre prijavno masko in vnese e-naslov ter geslo.
+    7. Sistem preveri poverilnice in vlogo.
+    8. Sistem vzpostavi sejo in preusmeri na ustrezno nadzorno ploščo.
+6. **Predpogoj**: Račun obstaja.
+7. **Popogoj, posledice in učinki**: Uspeh: aktivna seja. Neuspeh: seja ni vzpostavljena.
+8. **Posebne zahteve**: Zaščita prijavnega toka in varna seja.
+9. **Prioriteta (MoSCoW)**: Must
 10. **Sprejemni testi**:
 
 | Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
 |---|---|---|---|---|
 | Prijaviti se | Avtentikacija uporabnika | Uporabnik ima račun | Veljaven e-naslov in geslo | Uspešna prijava in preusmeritev |
-| Prijaviti se | Avtentikacija uporabnika | Uporabnik ima račun | Napačno geslo | Obvestilo o napaki in brez prijave |
 
-11. **Razširitev - pogostost uporabe in triggerji**:
-  - Pogostost: visoka.
-  - Trigger: uporabnik izbere možnost prijave.
+11. **Razširitev - pogostost uporabe in triggerji**: Pogostost: visoka. Trigger: klik na prijavo.
 
-##### 3.1.6.3 Ponastaviti geslo
+##### 3.1.4.3 Ponastaviti geslo
 
 1. **Naslov**: Ponastaviti geslo
-2. **Akterji**:
-  - Gost (vloga)
-  - Uporabnik (vloga)
-3. **Povzetek funkcionalnosti**:
-  - Uporabnik prek funkcionalnosti "Pozabljeno geslo" zahteva povezavo za ponastavitev, nastavi novo geslo in se nato prijavi.
+2. **Akterji**: Gost (vloga), Uporabnik (vloga)
+3. **Povzetek funkcionalnosti**: Uporabnik zahteva povezavo za ponastavitev in nastavi novo geslo.
 4. **Osnovni tok**:
-  1. Uporabnik klikne "Pozabljeno geslo".
-  2. Uporabnik vnese e-naslov, sistem pošlje povezavo za ponastavitev.
-  3. Uporabnik odpre povezavo in vnese novo geslo 2x.
-  4. Sistem shrani novo geslo in preusmeri na prijavo.
-  5. Uporabnik se prijavi.
+  1. Gost klikne možnost "Pozabljeno geslo".
+  2. Vnese e-naslov računa.
+  3. Sistem pošlje ponastavitveno povezavo.
+  4. Gost odpre povezavo, vnese novo geslo in potrditev gesla.
+  5. Sistem shrani geslo in preusmeri na prijavo.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik zahteva novo povezavo za ponastavitev, ker je prejšnja potekla.
-  - A2: Uporabnik po uspešni spremembi gesla takoj nadaljuje prijavo in uspešno dostopa do sistema.
+  - A1: Takojšnja prijava po spremembi gesla.
+    1. Gost klikne možnost "Pozabljeno geslo".
+    2. Vnese e-naslov računa.
+    3. Sistem pošlje ponastavitveno povezavo.
+    4. Gost odpre povezavo, vnese novo geslo in potrditev gesla.
+    5. Sistem shrani geslo in preusmeri na prijavo.
+    6. Uporabnik takoj vnese nove poverilnice in odda prijavo.
+    7. Sistem uspešno vzpostavi sejo.
   - E1: Povezava je neveljavna ali potekla.
+    1. Gost klikne možnost "Pozabljeno geslo".
+    2. Vnese e-naslov računa.
+    3. Sistem pošlje ponastavitveno povezavo.
+    4. Uporabnik odpre neveljavno ali poteklo povezavo za ponastavitev.
+    5. Sistem zavrne spremembo in ponudi novo zahtevo.
+    6. Uporabnik zahteva novo povezavo.
+    7. Sistem pošlje novo povezavo.
+    8. Uporabnik odpre novo povezavo, vnese novo geslo in potrditev gesla.
+    9. Sistem shrani geslo in preusmeri na prijavo.
   - E2: Gesli se ne ujemata.
-  - E3: Novo geslo ne izpolnjuje varnostnih pravil; sistem zahteva močnejše geslo.
-  - E4: E-sporočilo za ponastavitev ni dostavljeno; sistem omogoči ponovno pošiljanje.
-  - E5: Žeton za ponastavitev je že uporabljen; sistem zahteva nov postopek ponastavitve.
-6. **Predpogoj**:
-  - Uporabnik ima ustvarjen račun.
-7. **Popogoj, posledice in učinki**:
-  - Uspeh: geslo je uspešno spremenjeno.
-  - Neuspeh: geslo ostane nespremenjeno.
-8. **Posebne zahteve**:
-  - Ponastavitvena povezava mora biti časovno omejena in enkratno uporabna.
-9. **Prioriteta (MoSCoW)**:
-  - Must
+    1. Gost klikne možnost "Pozabljeno geslo".
+    2. Vnese e-naslov računa.
+    3. Sistem pošlje ponastavitveno povezavo.
+    4. Gost odpre povezavo in vnese novo geslo ter potrditev gesla.
+    5. Sistem zazna neujemanje gesel in zavrne oddajo.
+    6. Uporabnik popravi vnos in znova odda obrazec.
+    7. Sistem shrani geslo in preusmeri na prijavo.
+6. **Predpogoj**: Uporabnik ima ustvarjen račun.
+7. **Popogoj, posledice in učinki**: Uspeh: geslo je spremenjeno. Neuspeh: geslo ostane nespremenjeno.
+8. **Posebne zahteve**: Časovna omejenost in enkratna uporaba žetona.
+9. **Prioriteta (MoSCoW)**: Must
 10. **Sprejemni testi**:
 
 | Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
 |---|---|---|---|---|
-| Ponastaviti geslo | Obnovitev dostopa | Uporabnik ima račun | Veljaven e-naslov in veljavna povezava | Geslo uspešno spremenjeno in preusmeritev na prijavo |
-| Ponastaviti geslo | Obnovitev dostopa | Povezava je potekla | Poskus vnosa novega gesla | Sprememba zavrnjena, zahteva za novo ponastavitev |
+| Ponastaviti geslo | Obnovitev dostopa | Uporabnik ima račun | Veljavna povezava in novo geslo | Geslo uspešno spremenjeno |
 
-11. **Razširitev - pogostost uporabe in triggerji**:
-  - Pogostost: nizka.
-  - Trigger: uporabnik klikne možnost "Pozabljeno geslo".
+11. **Razširitev - pogostost uporabe in triggerji**: Pogostost: nizka. Trigger: klik na "Pozabljeno geslo".
 
-##### 3.1.6.4 Odjaviti se
+##### 3.1.4.4 Odjaviti se
 
 1. **Naslov**: Odjaviti se
 2. **Akterji**:
@@ -762,10 +574,17 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   2. Sistem prekine aktivno sejo.
   3. Sistem uporabnika preusmeri na začetno/prijavno stran.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik se odjavi zaradi časovne neaktivnosti; sistem samodejno zaključi sejo.
-  - A2: Uporabnik se odjavi iz vseh aktivnih sej (če bo podprto).
-  - E1: Seja je že potekla; sistem vseeno preusmeri na prijavo.
-  - E2: Napaka pri validaciji seje na strežniku; sistem opozori uporabnika in ga vseeno preusmeri.
+  - A1: Samodejna odjava zaradi neaktivnosti.
+    1. Akter je prijavljen in uporablja aplikacijo.
+    2. Sistem zazna presežen čas neaktivnosti.
+    3. Sistem opozori akterja o bližnjem izteku seje.
+    4. Po izteku sistem invalidira sejo.
+    5. Sistem akterja preusmeri na začetno/prijavno stran.
+  - E1: Seja je že potekla.
+    1. Akter izbere možnost "Odjava".
+    2. Sistem preveri aktivno sejo in ugotovi, da je ta že potekla.
+    3. Sistem ne izvaja dodatnega zaključevanja seje.
+    4. Sistem vseeno izvede preusmeritev na začetno/prijavno stran.
 6. **Predpogoj**:
   - Akter je prijavljen.
 7. **Popogoj, posledice in učinki**:
@@ -786,7 +605,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: visoka.
   - Trigger: uporabnik/administrator izbere možnost odjave.
 
-##### 3.1.6.5 Posodobiti profil
+##### 3.1.4.5 Posodobiti profil
 
 1. **Naslov**: Posodobiti profil
 2. **Akterji**:
@@ -798,13 +617,24 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   2. Uporabnik spremeni želene podatke.
   3. Sistem validira in shrani spremembe.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik posodobi samo en podatek (npr. interesi) in uspešno shrani.
-  - A2: Uporabnik posodobi več sklopov hkrati (interesi, lokacija, razpoložljivost).
-  - A3: Uporabnik prekliče spremembe pred shranjevanjem; sistem ohrani obstoječe stanje.
-  - E1: Neveljaven format podatkov; shranjevanje je zavrnjeno.
-  - E2: Napaka pri shranjevanju.
-  - E3: Konflikt sočasne posodobitve (več odprtih sej); sistem zahteva osvežitev podatkov.
-  - E4: Lokacijski podatek ni prepoznan; sistem predlaga popravek vnosa.
+  - A1: Posodobitev samo enega sklopa.
+    1. Uporabnik odpre profil.
+    2. Uporabnik spremeni le en sklop podatkov (npr. interese).
+    3. Sistem validira spremenjeni sklop.
+    4. Sistem shrani spremembo.
+    5. Sistem potrdi uspeh in ostale podatke pusti nespremenjene.
+  - E1: Neveljaven format podatkov.
+    1. Uporabnik odpre profil in spremeni želene podatke.
+    2. Uporabnik odda neveljaven podatek v enem od polj.
+    3. Sistem zavrne shranjevanje in označi napačno polje.
+    4. Uporabnik popravi podatek in ponovno odda spremembe.
+    5. Sistem validira in shrani spremembe.
+  - E2: Konflikt sočasnih sprememb.
+    1. Uporabnik odpre profil in spremeni želene podatke.
+    2. Uporabnik odda spremembe na zastarelem stanju profila.
+    3. Sistem zazna konflikt in zahteva osvežitev.
+    4. Uporabnik osveži podatke, ponovno uredi profil in odda spremembe.
+    5. Sistem validira in shrani novo stanje profila.
 6. **Predpogoj**:
   - Uporabnik je prijavljen.
 7. **Popogoj, posledice in učinki**:
@@ -825,7 +655,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: srednja.
   - Trigger: uporabnik spremeni preference ali profilne podatke.
 
-##### 3.1.6.6 Iskati skupine
+##### 3.1.4.6 Iskati skupine
 
 1. **Naslov**: Iskati skupine
 2. **Akterji**:
@@ -838,12 +668,31 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   3. Sistem sproži izračun predlogov.
   4. Sistem pripravi seznam predlogov za prikaz.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik sproži novo iskanje po posodobitvi profila in prejme osvežene predloge.
-  - A2: Uporabnik ponovi iskanje po preteku časa in dobi drugačen nabor.
-  - E1: Profil ni dovolj izpolnjen; sistem zahteva dopolnitev profila.
-  - E2: Trenutno ni dovolj kandidatov.
-  - E3: Pametna komponenta je začasno nedosegljiva; sistem prikaže obvestilo in omogoči ponovni poskus.
-  - E4: Prekoračen čas obdelave; sistem prekine iskanje in predlaga nov poskus.
+  - A1: Ponovitev iskanja po posodobitvi profila.
+    1. Uporabnik odpre nadzorno ploščo.
+    2. Uporabnik izbere akcijo "Išči skupino".
+    3. Sistem preveri profil in uporabnik ugotovi, da želi posodobiti preference.
+    4. Uporabnik posodobi profil z novimi interesi, lokacijo ali razpoložljivostjo.
+    5. Uporabnik ponovno izbere akcijo "Išči skupino".
+    6. Sistem preveri, da je profil ustrezno izpolnjen.
+    7. Sistem sproži izračun predlogov.
+    8. Sistem pripravi in prikaže osvežen nabor predlogov.
+  - E1: Profil ni dovolj izpolnjen.
+    1. Uporabnik odpre nadzorno ploščo in izbere akcijo "Išči skupino".
+    2. Sistem preveri profil in ugotovi manjkajoče podatke.
+    3. Sistem zavrne iskanje in navede manjkajoča polja.
+    4. Uporabnik dopolni profil in ponovno izbere akcijo "Išči skupino".
+    5. Sistem ponovno preveri profil.
+    6. Sistem sproži izračun predlogov.
+    7. Sistem pripravi seznam predlogov za prikaz.
+  - E2: Pametna komponenta je začasno nedosegljiva.
+    1. Uporabnik izbere akcijo "Išči skupino".
+    2. Sistem preveri profil in sproži izračun predlogov.
+    3. Klic pametne komponente ne uspe.
+    4. Sistem prikaže obvestilo in možnost ponovnega poskusa.
+    5. Uporabnik ponovi zahtevo.
+    6. Sistem ponovno sproži izračun predlogov.
+    7. Sistem pripravi seznam predlogov za prikaz.
 6. **Predpogoj**:
   - Uporabnik je prijavljen.
 7. **Popogoj, posledice in učinki**:
@@ -864,30 +713,51 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: srednja do visoka.
   - Trigger: uporabnik izbere akcijo za iskanje skupine.
 
-##### 3.1.6.7 Prejeti predlog skupine
+##### 3.1.4.7 Prejeti predlog skupine
 
 1. **Naslov**: Prejeti predlog skupine
-2. **Akterji**:
-  - Uporabnik (vloga)
-  - Pametna komponenta (notranja komponenta sistema)
-3. **Povzetek funkcionalnosti**:
-  - Sistem prikaže izračunane predloge skupin.
+2. **Akterji**: Uporabnik (vloga), Pametna komponenta (notranja komponenta sistema)
+3. **Povzetek funkcionalnosti**: Sistem prikaže izračunane predloge skupin.
 4. **Osnovni tok**:
   1. Sistem pridobi kandidate iz baze.
   2. Pametna komponenta izračuna ocene ujemanja.
-  3. Sistem razvrsti predloge in jih prikaže uporabniku.
-  4. Uporabnik lahko za posamezen predlog odpre hiter pregled članov skupine.
+  3. Sistem razvrsti predloge po kompatibilnosti.
+  4. Sistem prikaže predloge z osnovnimi razlogi ujemanja.
 5. **Alternativni tokovi in napake**:
-  - A1: Sistem vrne več predlogov, uporabnik jih primerja.
-  - A2: Sistem vrne točno en predlog, ki izpolnjuje minimalne kriterije.
-  - A3: Sistem vrne predloge po več straneh (paginacija).
-  - A4: Uporabnik odpre hiter pregled članov predlagane skupine brez potrditve ali dostopa do chata.
+  - A1: Več predlogov in primerjava.
+    1. Sistem pridobi kandidate iz baze.
+    2. Pametna komponenta izračuna ocene ujemanja.
+    3. Sistem razvrsti predloge po kompatibilnosti in prikaže več predlogov.
+    4. Uporabnik primerja predloge.
+    5. Uporabnik izbere en predlog in nadaljuje na pregled članov.
   - E1: Ni dovolj kandidatov.
-  - E2: Napaka pri izračunu.
-  - E3: Del podatkov za prikaz predloga manjka; sistem predlog označi kot nepopoln in ga ne ponudi za odločitev.
-  - E4: Predlog je med prikazom postal neveljaven; sistem ga odstrani s seznama in osveži rezultate.
+    1. Sistem pridobi kandidate iz baze.
+    2. Pametna komponenta izračuna ocene ujemanja in ne najde veljavne kombinacije.
+    3. Sistem prikaže obvestilo "Trenutno ni dovolj kandidatov".
+    4. Sistem ponudi ponovni poskus kasneje.
+    5. Uporabnik ponovno sproži iskanje.
+    6. Sistem pridobi nove kandidate, izračuna ocene in prikaže predloge ob uspehu.
+  - E2: Predlog med prikazom postane neveljaven.
+    1. Sistem pridobi kandidate iz baze.
+    2. Pametna komponenta izračuna ocene ujemanja.
+    3. Sistem razvrsti predloge in začne prikazovati seznam.
+    4. Eden od predlogov med prikazom postane neveljaven.
+    5. Sistem odstrani neveljaven predlog in osveži seznam.
+    6. Uporabnik izbere veljaven predlog iz osveženega seznama.
+    7. Uporabnik odpre hiter pregled članov izbranega predloga.
+6. **Predpogoj**: Iskanje skupin je uspešno sproženo.
+7. **Popogoj, posledice in učinki**: Uspeh: prikazan je veljaven predlog ali obvestilo o odsotnosti predlogov. Neuspeh: prikaz predlogov ne uspe.
+8. **Posebne zahteve**: Jasna razlaga razlogov ujemanja.
+9. **Prioriteta (MoSCoW)**: Must
+10. **Sprejemni testi**:
 
-##### 3.1.6.8 Pregledati člane predlagane skupine
+| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
+|---|---|---|---|---|
+| Prejeti predlog skupine | Modul predlogov | Iskanje je sproženo | Veljavni kandidati | Prikazan seznam predlogov skupin |
+
+11. **Razširitev - pogostost uporabe in triggerji**: Pogostost: srednja. Trigger: uspešen zaključek iskanja.
+
+##### 3.1.4.8 Pregledati člane predlagane skupine
 
 1. **Naslov**: Pregledati člane predlagane skupine
 2. **Akterji**:
@@ -899,9 +769,22 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   2. Sistem prikaže seznam članov predlagane skupine.
   3. Uporabnik pregleda osnovne podatke članov.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik pregled zapre in se vrne na seznam predlogov.
-  - E1: Podatki članov niso dosegljivi; sistem prikaže opozorilo.
-  - E2: Predlog med pregledom postane neveljaven; sistem osveži pogled.
+  - A1: Nadaljevanje na odločitev po pregledu.
+    1. Uporabnik pri predlogu odpre pregled članov skupine.
+    2. Sistem prikaže seznam članov predlagane skupine.
+    3. Uporabnik pregleda osnovne podatke članov.
+    4. Uporabnik zapre pregled članov in se vrne na predlog.
+    5. Uporabnik izbere potrditev ali zavrnitev predloga.
+    6. Sistem prikaže akciji "Potrdi" in "Zavrni".
+    7. Uporabnik izbere eno od akcij.
+    8. Sistem zabeleži odločitev o udeležbi.
+  - E1: Podatki članov niso dosegljivi.
+    1. Uporabnik pri predlogu odpre pregled članov skupine.
+    2. Sistem poskuša prikazati seznam članov, vendar nalaganje ne uspe.
+    3. Sistem prikaže opozorilo in možnost ponovnega nalaganja.
+    4. Uporabnik ponovi nalaganje.
+    5. Sistem prikaže seznam članov predlagane skupine.
+    6. Uporabnik pregleda osnovne podatke članov.
 6. **Predpogoj**:
   - Uporabnik je prijavljen in vidi vsaj en predlog skupine.
 7. **Popogoj, posledice in učinki**:
@@ -922,7 +805,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: srednja.
   - Trigger: uporabnik odpre hiter pregled članov pri predlogu.
 
-##### 3.1.6.9 Potrditi ali zavrniti udeležbo
+##### 3.1.4.9 Potrditi ali zavrniti udeležbo
 
 1. **Naslov**: Potrditi ali zavrniti udeležbo
 2. **Akterji**:
@@ -935,11 +818,28 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   3. Uporabnik izbere potrditev ali zavrnitev.
   4. Sistem zabeleži odločitev.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik predlog zavrne; predlog ostane na seznamu za kasnejšo ponovno odločitev.
-  - A2: Uporabnik potrdi udeležbo in nadaljuje v skupinski chat.
-  - A3: Uporabnik pred potrditvijo ponovno odpre hiter pregled članov.
+  - A1: Zavrnitev predloga.
+    1. Uporabnik odpre podrobnosti predloga.
+    2. Uporabnik pregleda člane predlagane skupine.
+    3. Uporabnik izbere akcijo "Zavrni".
+    4. Sistem zabeleži odločitev in status "zavrnjeno".
+    5. Sistem prikaže posodobljen status in zaključi tok.
+  - A2: Potrditev in prehod v chat.
+    1. Uporabnik odpre podrobnosti predloga.
+    2. Uporabnik pregleda člane predlagane skupine.
+    3. Uporabnik izbere akcijo "Potrdi".
+    4. Sistem zabeleži odločitev in status "potrjeno".
+    5. Sistem omogoči prehod v skupinski chat in zaključi primer uporabe.
   - E1: Predlog ni več aktiven.
-  - E2: Uporabnik se je že odločil o tem predlogu; sistem zavrne podvojeno akcijo.
+    1. Uporabnik odpre podrobnosti predloga.
+    2. Uporabnik pregleda člane predlagane skupine.
+    3. Uporabnik izbere potrditev ali zavrnitev.
+    4. Sistem zazna, da predlog ni več veljaven.
+    5. Sistem zavrne akcijo in osveži seznam predlogov.
+    6. Uporabnik izbere drug veljaven predlog.
+    7. Uporabnik pregleda člane izbranega predloga.
+    8. Uporabnik izbere potrditev ali zavrnitev.
+    9. Sistem zabeleži odločitev.
 6. **Predpogoj**:
   - Uporabnik ima prikazan veljaven predlog skupine.
 7. **Popogoj, posledice in učinki**:
@@ -960,7 +860,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: srednja.
   - Trigger: uporabnik izbere akcijo na predlogu.
 
-##### 3.1.6.10 Dostopati do skupinskega chata (uporabnik)
+##### 3.1.4.10 Dostopati do skupinskega chata (uporabnik)
 
 1. **Naslov**: Dostopati do skupinskega chata (uporabnik)
 2. **Akterji**:
@@ -973,12 +873,26 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   3. Uporabnik pošlje sporočilo.
   4. Sistem sporočilo shrani in prikaže članom skupine.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik bere zgodovino sporočil brez pošiljanja novega vnosa.
-  - A2: Uporabnik pošlje več zaporednih sporočil in sistem jih pravilno časovno razvrsti.
-  - E1: Uporabnik ni član predlagane skupine; dostop je zavrnjen.
-  - E2: Sporočilo presega dovoljeno dolžino; sistem zahteva skrajšanje.
-  - E3: Začasna izguba povezave; sistem označi sporočilo kot neposlano in omogoči ponovni poizkus.
-  - E4: Skupina je zaprta/arhivirana; sistem onemogoči nova sporočila.
+  - A1: Branje brez pošiljanja.
+    1. Uporabnik odpre skupino.
+    2. Sistem omogoči dostop do chata.
+    3. Sistem naloži zgodovino sporočil.
+    4. Uporabnik pregleda vsebino in chat zapre brez novega vnosa.
+    5. Sistem ohrani stanje pogovora nespremenjeno.
+  - E1: Uporabnik ni član skupine.
+    1. Uporabnik odpre skupino ali povezavo do chata.
+    2. Sistem preveri članstvo in ugotovi, da uporabnik ni del skupine.
+    3. Sistem zavrne dostop do chata.
+    4. Sistem uporabnika preusmeri na seznam predlogov.
+    5. Uporabnik lahko odpre drug veljaven predlog.
+  - E2: Izguba povezave med pošiljanjem.
+    1. Uporabnik odpre skupino.
+    2. Sistem omogoči dostop do chata.
+    3. Uporabnik sestavi sporočilo in ga pošlje.
+    4. Sistem zazna prekinitev povezave.
+    5. Sistem označi sporočilo kot neposlano.
+    6. Uporabnik ponovi pošiljanje.
+    7. Sistem ob uspehu shrani sporočilo in ga prikaže članom skupine.
 6. **Predpogoj**:
   - Uporabnik je prijavljen in je član predlagane skupine.
 7. **Popogoj, posledice in učinki**:
@@ -999,7 +913,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: srednja.
   - Trigger: uporabnik odpre chat predlagane skupine.
 
-##### 3.1.6.11 Oddati povratno informacijo
+##### 3.1.4.11 Oddati povratno informacijo
 
 1. **Naslov**: Oddati povratno informacijo
 2. **Akterji**:
@@ -1011,11 +925,24 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   2. Uporabnik vnese oceno in komentar.
   3. Sistem preveri veljavnost in shrani povratno informacijo.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik odda le oceno brez komentarja.
-  - A2: Uporabnik oddajo odloži in se vrne kasneje (znotraj dovoljenega časovnega okna).
-  - E1: Obvezni podatki manjkajo.
-  - E2: Uporabnik je že oddal povratno informacijo za isti dogodek; sistem zavrne podvojitev.
-  - E3: Napaka pri shranjevanju; sistem uporabniku prikaže obvestilo in omogoči ponovni poskus.
+  - A1: Oddaja samo ocene.
+    1. Sistem prikaže poziv za oddajo povratne informacije.
+    2. Uporabnik vnese oceno in pusti komentar prazen.
+    3. Sistem preveri veljavnost in sprejme oddajo.
+    4. Sistem shrani povratno informacijo in potrdi uspeh.
+  - E1: Uporabnik je že oddal povratno informacijo.
+    1. Sistem prikaže poziv za oddajo povratne informacije.
+    2. Uporabnik vnese oceno in komentar za isti dogodek, za katerega je že oddal odgovor.
+    3. Sistem zazna podvojitev in zavrne oddajo.
+    4. Sistem prikaže obvestilo o obstoječi oddaji.
+    5. Uporabnik obrazec zapre ali preide na drug dogodek.
+  - E2: Napaka pri shranjevanju.
+    1. Sistem prikaže poziv za oddajo povratne informacije.
+    2. Uporabnik vnese oceno in komentar.
+    3. Sistem preveri veljavnost, vendar ne uspe shraniti podatkov.
+    4. Sistem ponudi ponovni poskus.
+    5. Uporabnik ponovi oddajo.
+    6. Sistem uspešno shrani povratno informacijo in potrdi uspeh.
 6. **Predpogoj**:
   - Uporabnik je sodeloval v srečanju.
 7. **Popogoj, posledice in učinki**:
@@ -1036,7 +963,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: srednja.
   - Trigger: sistem po srečanju pošlje poziv za oddajo ocene.
 
-##### 3.1.6.12 Prijaviti neprimerno vedenje
+##### 3.1.4.12 Prijaviti neprimerno vedenje
 
 1. **Naslov**: Prijaviti neprimerno vedenje
 2. **Akterji**:
@@ -1049,10 +976,20 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   2. Sistem potrdi prejem prijave.
   3. Administrator prijavo pregleda in označi kot obravnavano.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik odda prijavo z minimalnim opisom; administrator zahteva dopolnitev.
-  - A2: Uporabnik odda prijavo neposredno iz pogleda skupine ali chata.
-  - E1: Prijava nima dovolj podatkov; sistem zahteva dopolnitev.
-  - E2: Napaka pri shranjevanju prijave; sistem uporabniku prikaže obvestilo in ponovni poskus.
+  - A1: Dopolnitev prijave na zahtevo administratorja.
+    1. Uporabnik odda prijavo.
+    2. Sistem potrdi prejem prijave.
+    3. Administrator prijavo pregleda in zahteva dopolnitev.
+    4. Sistem obvesti uporabnika, da prijavo dopolni.
+    5. Uporabnik dopolni opis in ponovno odda prijavo.
+    6. Administrator nadaljuje obravnavo prijave in jo zaključi.
+  - E1: Prijava nima dovolj podatkov.
+    1. Uporabnik odda prijavo.
+    2. Sistem pri validaciji ugotovi, da obrazec nima dovolj podatkov.
+    3. Sistem zavrne oddajo in označi manjkajoča polja.
+    4. Uporabnik dopolni podatke in ponovno odda prijavo.
+    5. Sistem potrdi prejem prijave.
+    6. Administrator prijavo pregleda in označi kot obravnavano.
 6. **Predpogoj**:
   - Uporabnik je prijavljen.
 7. **Popogoj, posledice in učinki**:
@@ -1073,7 +1010,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: nizka.
   - Trigger: uporabnik zazna neprimerno vedenje.
 
-##### 3.1.6.13 Dostopati do informacijskih strani in kontakta
+##### 3.1.4.13 Dostopati do informacijskih strani in kontakta
 
 1. **Naslov**: Dostopati do informacijskih strani in kontakta
 2. **Akterji**:
@@ -1086,11 +1023,17 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   2. Uporabnik na strani "Kontakt" odda sporočilo.
   3. Sistem potrdi prejem sporočila.
 5. **Alternativni tokovi in napake**:
-  - A1: Uporabnik le pregleda informacijske strani brez oddaje kontakta.
-  - A2: Uporabnik odda kontaktno sporočilo in prejme potrditev na e-pošto (če bo podprto).
-  - E1: Oddaja kontakta ne uspe.
-  - E2: Kontaktni obrazec ni veljavno izpolnjen; sistem označi napake v poljih.
-  - E3: Informacijska stran je začasno nedosegljiva; sistem prikaže obvestilo in ponovni poskus.
+  - A1: Branje informacij brez oddaje kontakta.
+    1. Gost ali uporabnik v footerju odpre izbrano informacijsko stran.
+    2. Pregleda vsebino ene ali več informacijskih strani.
+    3. Ne odpre kontaktne strani oziroma ne odda sporočila.
+    4. Tok se zaključi brez oddaje kontaktnega obrazca.
+  - E1: Neveljavno izpolnjen kontaktni obrazec.
+    1. Uporabnik v footerju odpre izbrano informacijsko stran in nato stran "Kontakt".
+    2. Uporabnik odda obrazec z manjkajočimi ali napačnimi podatki.
+    3. Sistem zavrne oddajo in označi napake v poljih.
+    4. Uporabnik popravi obrazec in ponovno odda sporočilo.
+    5. Sistem potrdi prejem sporočila.
 6. **Predpogoj**:
   - Gost ali uporabnik ima dostop do spletnega vmesnika.
 7. **Popogoj, posledice in učinki**:
@@ -1111,7 +1054,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: nizka.
   - Trigger: uporabnik klikne povezavo v footerju.
 
-##### 3.1.6.14 Upravljati uporabnike (administrator)
+##### 3.1.4.14 Upravljati uporabnike (administrator)
 
 1. **Naslov**: Upravljati uporabnike
 2. **Akterji**:
@@ -1123,11 +1066,26 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   2. Sistem prikaže paginiran seznam uporabnikov.
   3. Administrator izvede akcijo blokiraj/deblokiraj/aktiviraj/deaktiviraj/opozori.
 5. **Alternativni tokovi in napake**:
-  - A1: Administrator uporabi filtriranje/iskanje uporabnikov in nato izvede akcijo.
-  - A2: Administrator izvede serijsko akcijo nad več uporabniki (če bo podprto).
+  - A1: Opozorilo uporabniku.
+    1. Administrator odpre sekcijo Uporabniki.
+    2. Sistem prikaže paginiran seznam uporabnikov.
+    3. Administrator odpre izbranega uporabnika in izbere akcijo "Opozori".
+    4. Sistem shrani opozorilo.
+    5. Sistem uporabnika označi z rumeno vizualno oznako.
   - E1: Administrator nima ustreznih pravic.
-  - E2: Uporabnik medtem ne obstaja več ali je bil že spremenjen; sistem osveži seznam.
-  - E3: Akcija ni dovoljena za izbran status računa; sistem zavrne spremembo in poda razlog.
+    1. Administrator odpre sekcijo Uporabniki.
+    2. Sistem prikaže seznam uporabnikov.
+    3. Administrator sproži administrativno akcijo na uporabniku.
+    4. Sistem preveri pravice in akcijo zavrne.
+    5. Sistem prikaže razlog zavrnitve.
+    6. Seznam uporabnikov ostane nespremenjen.
+  - E2: Konflikt stanja računa.
+    1. Administrator odpre sekcijo Uporabniki.
+    2. Sistem prikaže paginiran seznam uporabnikov.
+    3. Administrator izvede akcijo nad uporabnikom.
+    4. Sistem zazna konflikt stanja v drugi seji.
+    5. Sistem osveži seznam uporabnikov.
+    6. Administrator ponovi akcijo na osveženih podatkih.
 6. **Predpogoj**:
   - Administrator je prijavljen.
 7. **Popogoj, posledice in učinki**:
@@ -1149,7 +1107,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: srednja.
   - Trigger: administrator odpre sekcijo Uporabniki.
 
-##### 3.1.6.15 Pregledati obvestila in prijave (administrator)
+##### 3.1.4.15 Pregledati obvestila in prijave (administrator)
 
 1. **Naslov**: Pregledati obvestila in prijave
 2. **Akterji**:
@@ -1161,11 +1119,22 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   2. Sistem prikaže seznam obvestil.
   3. Administrator odpre podrobnosti in označi obvestilo kot obdelano.
 5. **Alternativni tokovi in napake**:
-  - A1: Administrator obvestilo označi kot obdelano brez nadaljnjih ukrepov.
-  - A2: Administrator obvestilo eskalira v dodatno obravnavo.
+  - A1: Eskalacija obvestila.
+    1. Administrator odpre sekcijo Obvestila.
+    2. Sistem prikaže seznam obvestil.
+    3. Administrator odpre obvestilo visoke prioritete.
+    4. Administrator izbere možnost eskalacije.
+    5. Sistem označi obvestilo kot eskalirano in ga posreduje v nadaljnjo obravnavo.
+    6. Seznam obvestil se osveži s posodobljenim statusom.
   - E1: Podrobnosti obvestila niso dosegljive.
-  - E2: Obvestilo je medtem že obdelano v drugi administratorski seji; sistem osveži status.
-  - E3: Napaka pri shranjevanju spremembe statusa obvestila.
+    1. Administrator odpre sekcijo Obvestila.
+    2. Sistem prikaže seznam obvestil.
+    3. Administrator odpre obvestilo.
+    4. Sistem ne naloži podrobnosti.
+    5. Sistem prikaže opozorilo in možnost ponovnega nalaganja.
+    6. Administrator ponovi zahtevo.
+    7. Sistem naloži podrobnosti obvestila.
+    8. Administrator obvestilo označi kot obdelano.
 6. **Predpogoj**:
   - Administrator je prijavljen.
 7. **Popogoj, posledice in učinki**:
@@ -1186,7 +1155,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: srednja.
   - Trigger: administrator odpre sekcijo Obvestila.
 
-##### 3.1.6.16 Pregledati skupine in chat (administrator)
+##### 3.1.4.16 Pregledati skupine in chat (administrator)
 
 1. **Naslov**: Pregledati skupine in chat
 2. **Akterji**:
@@ -1198,11 +1167,19 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   2. Sistem prikaže seznam vseh ustvarjenih skupin.
   3. Administrator odpre izbrano skupino in pregled chata.
 5. **Alternativni tokovi in napake**:
-  - A1: Administrator filtrira skupine po statusu, obdobju ali številu članov.
-  - A2: Administrator odpre samo pregled članov brez vpogleda v chat.
-  - E1: Podatki chata začasno niso dosegljivi.
-  - E2: Skupina je med ogledom arhivirana/izbrisana; sistem zapre podrobnosti in osveži seznam.
-  - E3: Administrator nima pravice za vpogled v chat določene skupine; sistem dostop zavrne.
+  - A1: Filtriranje pred vpogledom.
+    1. Administrator odpre sekcijo Skupine.
+    2. Sistem prikaže seznam vseh ustvarjenih skupin.
+    3. Administrator nastavi filtre (status, obdobje, št. članov).
+    4. Sistem osveži seznam skupin.
+    5. Administrator odpre izbrano skupino in nadaljuje na pregled chata.
+  - E1: Podatki chata niso dosegljivi.
+    1. Administrator odpre sekcijo Skupine.
+    2. Sistem prikaže seznam vseh ustvarjenih skupin.
+    3. Administrator odpre izbrano skupino in pregled chata.
+    4. Sistem ne uspe naložiti podatkov chata.
+    5. Sistem prikaže opozorilo in možnost ponovnega poskusa.
+    6. Administrator ponovi nalaganje in sistem prikaže chat.
 6. **Predpogoj**:
   - Administrator je prijavljen.
 7. **Popogoj, posledice in učinki**:
@@ -1223,7 +1200,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: srednja.
   - Trigger: administrator odpre sekcijo Skupine.
 
-##### 3.1.6.17 Spremljati kakovost pametne komponente (administrator)
+##### 3.1.4.17 Spremljati kakovost pametne komponente (administrator)
 
 1. **Naslov**: Spremljati kakovost pametne komponente
 2. **Akterji**:
@@ -1237,12 +1214,26 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   3. Administrator po potrebi spremeni parametre algoritma.
   4. Sistem zabeleži spremembo in prikaže primerjavo metrik pred/po spremembi.
 5. **Alternativni tokovi in napake**:
-  - A1: Administrator samo spremlja metrike brez spremembe parametrov.
-  - A2: Administrator spremeni parametre in nato izvede primerjavo pred/po na izbranem obdobju.
+  - A1: Spremljanje brez spremembe parametrov.
+    1. Administrator odpre sekcijo Pametna komponenta.
+    2. Sistem prikaže ključne metrike kakovosti.
+    3. Administrator pregleda trend po obdobjih.
+    4. Administrator ne spremeni parametrov in zapre pogled.
+    5. Sistem ne zabeleži spremembe nastavitev.
   - E1: Parametri so izven dovoljenih mej.
-  - E2: Metrike niso na voljo.
-  - E3: Sprememba parametrov ni odobrena po internem postopku; sistem spremembo zavrne.
-  - E4: Konflikt sočasnih sprememb parametrov; sistem zahteva ponovni pregled zadnje verzije.
+    1. Administrator odpre sekcijo Pametna komponenta.
+    2. Sistem prikaže ključne metrike kakovosti.
+    3. Administrator spremeni parameter algoritma z neveljavno vrednostjo.
+    4. Sistem zavrne spremembo in prikaže dovoljene meje.
+    5. Administrator vnese veljavno vrednost.
+    6. Sistem zabeleži spremembo in prikaže primerjavo metrik pred/po.
+  - E2: Konflikt sočasnih sprememb.
+    1. Administrator odpre sekcijo Pametna komponenta.
+    2. Sistem prikaže ključne metrike kakovosti in trenutne parametre.
+    3. Administrator spremeni parameter, medtem ko drug administrator sočasno ureja isti parameter.
+    4. Sistem pri shranjevanju zazna konflikt.
+    5. Sistem zahteva osvežitev zadnje verzije.
+    6. Administrator osveži podatke, ponovno odda spremembo in sistem jo zabeleži.
 6. **Predpogoj**:
   - Administrator je prijavljen in ima pravice za upravljanje parametrov.
 7. **Popogoj, posledice in učinki**:
@@ -1263,16 +1254,6 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
   - Pogostost: srednja.
   - Trigger: administrator odpre sekcijo Pametna komponenta.
 
-#### 3.1.7 Odprta mesta za dopolnitev
-
-Spodnja mesta so namerno puščena odprta, ker v trenutni fazi še niso dokončno določena in jih je treba dopolniti v naslednji iteraciji.
-
-1. Natančni pragovi metrik zanesljivosti, razpoložljivosti in vzdrževanja.
-2. Končne specifikacije zunanjih API (točni endpointi, avtentikacija, omejitve klicev).
-3. Končni nabor administratorskih analitičnih pregledov.
-4. Končno pravilo za status "izvedeno srečanje".
-5. Pravila moderatorskega vpogleda administratorja v skupinske chate (namen vpogleda, hramba logov, obveščanje uporabnikov).
-6. Končna odločitev o obsegu filtrov na seznamu predlaganih skupin v MVP.
 
 ## 4 Opis sistema
 
