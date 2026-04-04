@@ -4,7 +4,7 @@
 | :----------------------------------------------------------- | :-----------------------------------------------------------: | -------------------------------------------------------------------------------: |
 | :yellow_square: **Predlog projekta**                         | :orange_square: **Osnutek sistema**<br>(1. poročilo o stanju) |                    :green_square: **Izvedljiv sistem**<br>(2. poročilo o stanju) |
 
-![Terminski načrt](https://teaching.lavbic.net/plantuml/svg/dPRFJkCm4CRlVWeB3h2LKXhdpw9LXH2mI6XN0gtsHCLXshZ1JMfNjbkMhdW4tee7st6QXZOD3LhrqauztpVpct6KSsD1snIajVJWDzTJ8Kqcg8ItLsqF2EaR-vppCrASk1AGQfZIluHIAwOy5v8NFoZzYLylLQuqFHmpzocYrqhQLHJpdZ7quZB1P6NM1OooLAkvJCfSVZgEnabTCRg-EFr-MQQ3rkffrtNhp5Jat5XLLVS_FgDS6Pvy9D3OP2xIHrjr-aBw9oKzWapb31oxOKt9Qf06_-BIagD7aN0wLieErH-IWqpda79gSZBJGbepWfpJ9ywp_1abmSvr0iy8X9V54eEosn7MOx7N2xrUJ8Mf1zdNdM3azVoc8Di8bj70yrUYhWya9IGzJ7eSniEwwqS7K3TiES2Y3mwGEwqcV6HfiS26hX8OraJ8e5yaVAlcSNQF-ymjpwXOBc02SW9qXe9JRe4U-t6NTR_qJugaimVw2BCPbuQ2tL8zsb5jCEfqVi4omPjX-O8kgCdcCzolJWTTgEK9bni-OEZWod-WEHXi8A8uEjCeURCS2WrO-r8iO8yMszAY89Cr7Mp5MHqPoYKEqFEetwLOeuQHG1QUXz0wdJj4agiKqI3Qp3ghifgYaEF0sKfHjmtMjlwgXnrZveoB01dS9WcKzD4AAgzj9nn9i7SaRld8u1vIjS1BjAEsgko-1dUdi62J26iWSclatAsD4SRowMU1H1MGiCLtZGEdCLDQlRsA7AXoP-LalkqLTyEzHDnjUoVIA5XIOIrKeaqgGGELc-K2UK_4ekHInn8sOuahBASjnciih1rBs8tsOd7Fc7SiR0-Me0LBl8abRC3oGyctL-dkgIl-axlYixRR4zUfP8KFT-jUzR9bnQ9MA2nwXzAWLo89Mv3uh6Ao-zn277pK-C0Dkl7Uyjpz9kGSTOlNZdy0 "Terminski načrt")
+![Terminski načrt](https://teaching.lavbic.net/plantuml/svg/dPRFJkCm4CRlVWeB3h2LKXhdpw9LXH2mI6XN0gtsHCLXshZ1JMfNjbkMhdW4tee7st6QXZOD3LhrqauztpVpct6KSsD1snIajVJWDzTJ8Kqcg8ItLsqF2EaR-vppCrASk1AGQfZIluHIAwOy5v8NFoZzYLylLQuqFHmpzocYrqhQLHJpdZ7quZB1P6NM1OooLAkvJCfSVZgEnabTCRg-EFr-MQQ3rkffrtNhp5Jat5XLLVS_FgDS6Pvy9D3OP2xIHrjr-aBw9oKzWapb31oxOKt9Qf06_-BIagD7aN0wLieErH-IWqpda79gSZBJGbepWfpJ9ywp_1abmSvr0iy8X9V54eEosn7MOx7N2xrUJ8Mf1zdNdM3azVoc8Di8bj70yrUYhWya9IGzJ7eSniEwwqS7K3TiES2Y3mwGEwqcV6HfiS26hX8OraJ8e5yaVAlcSNQF-ymjpwXOBc02SW9qXe9JRe4U-t6NTR_qJugaimVw2BCPbuQ2tL8zsb5jCEfqVi4omPjX-O8kgCdcCzolJWTTgEK9bni-OEZWod-WEHXi8A8uEjCeURCS2WrO-r8iO8yMszAY89Cr7Mp5MHqPoYKEqFEetwLOeuQHG1QUXz0wdJj4agiKqI3Qp3ghifgYaEF0sKfHjmtMjlwgXnrZveoB01dS9WcKzD4AAgzj9nn9i7SaRld8u1vIjS1BjAEsgko-1dUdi62J26iWSclatAsD4SRowMU1H1MGiCLtZGEdCLDQlRsA7AXoP-LalkqLTyEzHDnjUoVIA5XIOIrKeaqgGGELc-K2UK_4ekHInn8sOuahBASjnciih1rBs8tsOd7Fc7SiR0-Me0LBl8abRC3oGyctL-dkgIl-axlYixRR4zUfP8KFT-jUzR9bnQ9MA2nwXzAWLo89Mv3uh6Ao-zn277pK-C0Dkl7Uyjpz9kGSTOlNZdy0 'Terminski načrt')
 
 Namen 1. poročila o stanju je dvojni:
 
@@ -65,7 +65,6 @@ Sistem mora zagotavljati zanesljivo shranjevanje ključnih dogodkov (posodobitve
 
 Razpoložljivost sistema mora biti 24/7, razen v času načrtovanega vzdrževanja, pri čemer največji mesečni čas načrtovanih izpadov ne sme presegati enega dne. Rešitev mora podpirati nadaljnje razširitve brez popolne prenove (npr. novi kriteriji ujemanja) ter integracijo z zunanjimi storitvami za geokodiranje in obveščanje. Celoten sistem mora ostati skladen z GDPR.
 
-
 ## 3 Cilji projekta
 
 Projekt naslavlja naslednje ključne težave naročnika:
@@ -83,7 +82,6 @@ Spodaj so povzete ključne koristi, ki jih bo projekt prinesel naročniku in kon
 - podlaga za merjenje kakovosti predlogov in iterativno izboljševanje sistema.
 - enotno komunikacijsko okolje po potrditvi skupine (integriran chat);
 - operativni nadzor nad kakovostjo pametne komponente preko administratorskih metrik in opozoril.
-
 
 ### 3.1 Primeri uporabe
 
@@ -104,14 +102,14 @@ Sistem mora omogočiti pretvorbo uporabniško podane lokacije v standardizirano 
 1. Uporabnik v profilu vnese lokacijo (npr. mesto ali območje).
 2. Sistem pripravi zahtevo za zunanji geokodirni API.
 3. Zahteva vsebuje:
-  a. besedilni niz lokacije,
-  b. jezikovne nastavitve (če so na voljo),
-  c. identifikator zahteve.
+   a. besedilni niz lokacije,
+   b. jezikovne nastavitve (če so na voljo),
+   c. identifikator zahteve.
 4. Zunanji sistem vrne odgovor preko API.
 5. Odgovor vsebuje:
-  a. standardizirano ime lokacije,
-  b. geografske koordinate,
-  c. oznako uspešnosti obdelave.
+   a. standardizirano ime lokacije,
+   b. geografske koordinate,
+   c. oznako uspešnosti obdelave.
 6. Odgovor je v obliki JSON.
 
 Primer odgovora:
@@ -128,9 +126,9 @@ Primer odgovora:
 ```
 
 7. Sistem na podlagi odgovora:
-  - ob uspehu shrani normalizirano lokacijo,
-  - ob neuspehu uporabniku prikaže opozorilo in možnost ponovnega vnosa.
 
+- ob uspehu shrani normalizirano lokacijo,
+- ob neuspehu uporabniku prikaže opozorilo in možnost ponovnega vnosa.
 
 ##### 3.1.1.2 Spletni vmesnik aplikacije (forme)
 
@@ -150,18 +148,18 @@ Maska začetne strani uporabniku predstavi namen sistema in vstopne možnosti.
 Maska registracije omogoča prvi vnos podatkov, potrebnih za ustvarjanje računa.
 
 1. Sistem zahteva:
-  a. ime,
-  b. priimek,
-  c. uporabniško ime,
-  d. starost,
-  e. e-naslov,
-  f. geslo,
-  g. potrditev gesla,
-  h. potrditveno kljukico za pogoje uporabe.
+   a. ime,
+   b. priimek,
+   c. uporabniško ime,
+   d. starost,
+   e. e-naslov,
+   f. geslo,
+   g. potrditev gesla,
+   h. potrditveno kljukico za pogoje uporabe.
 2. Registracija se izvaja v treh korakih in uporabniku prikazuje napredek 1/3, 2/3, 3/3:
-  a. osnovni podatki,
-  b. interesi,
-  c. lokacija in časovna razpoložljivost.
+   a. osnovni podatki,
+   b. interesi,
+   c. lokacija in časovna razpoložljivost.
 3. Po uspešni oddaji sistem pošlje povezavo za potrditev računa na e-naslov.
 4. Uporabnik lahko račun uporablja šele po uspešni potrditvi e-pošte.
 5. Maska vedno vsebuje tudi povezavo za skok na prijavo.
@@ -171,8 +169,8 @@ Maska registracije omogoča prvi vnos podatkov, potrebnih za ustvarjanje računa
 Maska prijave omogoča avtentikacijo obstoječega uporabnika.
 
 1. Sistem zahteva:
-  a. e-naslov,
-  b. geslo.
+   a. e-naslov,
+   b. geslo.
 2. Ob uspešni prijavi sistem preusmeri uporabnika na ustrezno nadzorno ploščo glede na vlogo.
 3. Administrator je po prijavi takoj preusmerjen na administratorsko nadzorno ploščo.
 4. Maska vsebuje povezavo "Pozabljeno geslo", ki vodi na obrazec za zahtevo ponastavitve gesla.
@@ -229,9 +227,9 @@ Maska prikazuje komunikacijo skupine.
 Maska profila omogoča upravljanje preferenc za delovanje algoritma.
 
 1. Uporabnik lahko ureja:
-  a. interese,
-  b. približno lokacijo,
-  c. časovno razpoložljivost.
+   a. interese,
+   b. približno lokacijo,
+   c. časovno razpoložljivost.
 2. Sistem spremembe validira in shrani.
 
 ###### 3.1.1.2.10 Maska za povratno informacijo
@@ -409,851 +407,862 @@ V dokumentu je navedena zaradi preglednosti odgovornosti znotraj primerov uporab
 
 V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primerov uporabe po enotni strukturi.
 
-##### 3.1.4.1 Registrirati se
+##### 3.1.4.1 Registracija
 
-1. **Naslov**: Registrirati se
+1. **Naslov**: Registracija
 2. **Akterji**: Gost (vloga), Uporabnik (vloga)
 3. **Povzetek funkcionalnosti**: Nov uporabnik opravi registracijo v treh korakih in aktivira račun prek e-pošte.
 4. **Osnovni tok**:
-      1. Gost odpre masko za registracijo.
-      2. Izpolni korake 1/3, 2/3 in 3/3.
-      3. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
-      4. Gost odpre verifikacijsko povezavo.
-      5. Sistem aktivira račun in zaključi primer uporabe.
+   1. Gost odpre masko za registracijo.
+   2. Izpolni korake 1/3, 2/3 in 3/3.
+   3. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
+   4. Gost odpre verifikacijsko povezavo.
+   5. Sistem aktivira račun in zaključi primer uporabe.
 5. **Alternativni tokovi in napake**:
-    - A1: Gost popravi vnos v prejšnjem koraku.
-      1. Gost odpre masko za registracijo.
-      2. Izpolni korake 1/3, 2/3 in 3/3.
-      3. Gost v tretjem koraku ugotovi, da je treba dopolniti prejšnji vnos.
-      4. Gost se vrne na 2/3 ali 1/3 in popravi podatke.
-      5. Sistem ohrani že veljavne podatke, da jih ni treba ponovno vpisovati.
-      6. Gost znova nadaljuje do 3/3 in odda registracijo.
-      7. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
-      8. Gost odpre verifikacijsko povezavo.
-      9. Sistem aktivira račun in zaključi primer uporabe.
-    - E1: E-naslov je že registriran.
-      1. Gost odpre masko za registracijo.
-      2. Izpolni korake 1/3, 2/3 in 3/3.
-      3. Gost pri oddaji vnese e-naslov, ki že obstaja v sistemu.
-      4. Sistem zavrne registracijo in prikaže napako o že uporabljenem e-naslovu.
-      5. Gost vnese drug e-naslov in ponovno odda obrazec.
-      6. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
-      7. Gost odpre verifikacijsko povezavo.
-      8. Sistem aktivira račun in zaključi primer uporabe.
-    - E2: Verifikacijska povezava je potekla.
-      1. Gost odpre masko za registracijo.
-      2. Izpolni korake 1/3, 2/3 in 3/3.
-      3. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
-      4. Gost odpre povezavo za potrditev računa po pretečenem roku.
-      5. Sistem zavrne aktivacijo in prikaže obvestilo o neveljavni povezavi.
-      6. Gost zahteva novo verifikacijsko povezavo.
-      7. Sistem pošlje novo povezavo.
-      8. Gost odpre novo verifikacijsko povezavo.
-      9. Sistem aktivira račun in zaključi primer uporabe.
+   - A1: Gost popravi vnos v prejšnjem koraku.
+     1. Gost odpre masko za registracijo.
+     2. Izpolni korake 1/3, 2/3 in 3/3.
+     3. Gost v tretjem koraku ugotovi, da je treba dopolniti prejšnji vnos.
+     4. Gost se vrne na 2/3 ali 1/3 in popravi podatke.
+     5. Sistem ohrani že veljavne podatke, da jih ni treba ponovno vpisovati.
+     6. Gost znova nadaljuje do 3/3 in odda registracijo.
+     7. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
+     8. Gost odpre verifikacijsko povezavo.
+     9. Sistem aktivira račun in zaključi primer uporabe.
+   - E1: E-naslov je že registriran.
+     1. Gost odpre masko za registracijo.
+     2. Izpolni korake 1/3, 2/3 in 3/3.
+     3. Gost pri oddaji vnese e-naslov, ki že obstaja v sistemu.
+     4. Sistem zavrne registracijo in prikaže napako o že uporabljenem e-naslovu.
+     5. Gost vnese drug e-naslov in ponovno odda obrazec.
+     6. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
+     7. Gost odpre verifikacijsko povezavo.
+     8. Sistem aktivira račun in zaključi primer uporabe.
+   - E2: Verifikacijska povezava je potekla.
+     1. Gost odpre masko za registracijo.
+     2. Izpolni korake 1/3, 2/3 in 3/3.
+     3. Sistem validira podatke, ustvari račun v stanju "nepotrjen" in pošlje verifikacijsko povezavo.
+     4. Gost odpre povezavo za potrditev računa po pretečenem roku.
+     5. Sistem zavrne aktivacijo in prikaže obvestilo o neveljavni povezavi.
+     6. Gost zahteva novo verifikacijsko povezavo.
+     7. Sistem pošlje novo povezavo.
+     8. Gost odpre novo verifikacijsko povezavo.
+     9. Sistem aktivira račun in zaključi primer uporabe.
 6. **Predpogoj**: Gost še nima računa v sistemu.
 7. **Popogoj, posledice in učinki**: Uspeh: račun je aktiviran. Neuspeh: račun ostane neaktiven.
 8. **Posebne zahteve**: Varna obravnava gesla in validacija obveznih polj.
 9. **Prioriteta (MoSCoW)**: Must
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
+| Primer uporabe  | Funkcijski sistem       | Začetno stanje   | Vhod                          | Pričakovan izhod                                  |
+| --------------- | ----------------------- | ---------------- | ----------------------------- | ------------------------------------------------- |
 | Registrirati se | Registracija uporabnika | Gost nima računa | Veljavni podatki registracije | Ustvarjen nepotrjen račun in poslana verifikacija |
 
 11. **Razširitev - pogostost uporabe in triggerji**: Pogostost: nizka. Trigger: klik na registracijo.
 
-##### 3.1.4.2 Prijaviti se
+##### 3.1.4.2 Prijava
 
-1. **Naslov**: Prijaviti se
+1. **Naslov**: Prijava
 2. **Akterji**: Gost (vloga), Uporabnik (vloga), Administrator (vloga)
 3. **Povzetek funkcionalnosti**: Akter se avtenticira in je preusmerjen na ustrezen pogled.
 4. **Osnovni tok**:
-      1. Gost odpre masko za prijavo.
-      2. Vnese e-naslov in geslo.
-      3. Sistem preveri poverilnice in vlogo.
-      4. Sistem vzpostavi sejo.
-      5. Sistem preusmeri na uporabniško ali administratorsko nadzorno ploščo.
+   1. Gost odpre masko za prijavo.
+   2. Vnese e-naslov in geslo.
+   3. Sistem preveri poverilnice in vlogo.
+   4. Sistem vzpostavi sejo.
+   5. Sistem preusmeri na uporabniško ali administratorsko nadzorno ploščo.
 5. **Alternativni tokovi in napake**:
-    - A1: Prijava administratorja.
-      1. Gost odpre masko za prijavo.
-      2. Vnese e-naslov in geslo za administratorski račun.
-      3. Sistem preveri poverilnice in vlogo.
-      4. Sistem prepozna administratorsko vlogo.
-      5. Sistem vzpostavi sejo.
-      6. Sistem preusmeri na administratorsko nadzorno ploščo.
-    - E1: Napačno geslo.
-      1. Gost odpre masko za prijavo.
-      2. Vnese e-naslov in napačno geslo.
-      3. Sistem preveri poverilnice in zavrne prijavo.
-      4. Sistem poveča števec neuspelih poskusov in prikaže napako.
-      5. Gost popravi geslo in ponovno odda prijavo.
-      6. Sistem preveri poverilnice in vlogo.
-      7. Sistem vzpostavi sejo.
-      8. Sistem preusmeri na ustrezno nadzorno ploščo.
-    - E2: Račun ni verificiran.
-      1. Gost odpre masko za prijavo.
-      2. Vnese e-naslov in geslo neverificiranega računa.
-      3. Sistem preveri poverilnice in ugotovi, da račun ni verificiran.
-      4. Sistem zavrne prijavo in ponudi ponovno pošiljanje verifikacije.
-      5. Gost potrdi e-poštni naslov preko nove verifikacijske povezave.
-      6. Gost ponovno odpre prijavno masko in vnese e-naslov ter geslo.
-      7. Sistem preveri poverilnice in vlogo.
-      8. Sistem vzpostavi sejo in preusmeri na ustrezno nadzorno ploščo.
+   - A1: Prijava administratorja.
+     1. Gost odpre masko za prijavo.
+     2. Vnese e-naslov in geslo za administratorski račun.
+     3. Sistem preveri poverilnice in vlogo.
+     4. Sistem prepozna administratorsko vlogo.
+     5. Sistem vzpostavi sejo.
+     6. Sistem preusmeri na administratorsko nadzorno ploščo.
+   - E1: Napačno geslo.
+     1. Gost odpre masko za prijavo.
+     2. Vnese e-naslov in napačno geslo.
+     3. Sistem preveri poverilnice in zavrne prijavo.
+     4. Sistem poveča števec neuspelih poskusov in prikaže napako.
+     5. Gost popravi geslo in ponovno odda prijavo.
+     6. Sistem preveri poverilnice in vlogo.
+     7. Sistem vzpostavi sejo.
+     8. Sistem preusmeri na ustrezno nadzorno ploščo.
+   - E2: Račun ni verificiran.
+     1. Gost odpre masko za prijavo.
+     2. Vnese e-naslov in geslo neverificiranega računa.
+     3. Sistem preveri poverilnice in ugotovi, da račun ni verificiran.
+     4. Sistem zavrne prijavo in ponudi ponovno pošiljanje verifikacije.
+     5. Gost potrdi e-poštni naslov preko nove verifikacijske povezave.
+     6. Gost ponovno odpre prijavno masko in vnese e-naslov ter geslo.
+     7. Sistem preveri poverilnice in vlogo.
+     8. Sistem vzpostavi sejo in preusmeri na ustrezno nadzorno ploščo.
 6. **Predpogoj**: Račun obstaja.
 7. **Popogoj, posledice in učinki**: Uspeh: aktivna seja. Neuspeh: seja ni vzpostavljena.
 8. **Posebne zahteve**: Zaščita prijavnega toka in varna seja.
 9. **Prioriteta (MoSCoW)**: Must
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Prijaviti se | Avtentikacija uporabnika | Uporabnik ima račun | Veljaven e-naslov in geslo | Uspešna prijava in preusmeritev |
+| Primer uporabe | Funkcijski sistem        | Začetno stanje      | Vhod                       | Pričakovan izhod                |
+| -------------- | ------------------------ | ------------------- | -------------------------- | ------------------------------- |
+| Prijaviti se   | Avtentikacija uporabnika | Uporabnik ima račun | Veljaven e-naslov in geslo | Uspešna prijava in preusmeritev |
 
 11. **Razširitev - pogostost uporabe in triggerji**: Pogostost: visoka. Trigger: klik na prijavo.
 
-##### 3.1.4.3 Ponastaviti geslo
+##### 3.1.4.3 Ponastavitev gesla
 
-1. **Naslov**: Ponastaviti geslo
+1. **Naslov**: Ponastavitev gesla
 2. **Akterji**: Gost (vloga), Uporabnik (vloga)
 3. **Povzetek funkcionalnosti**: Uporabnik zahteva povezavo za ponastavitev in nastavi novo geslo.
 4. **Osnovni tok**:
-      1. Gost klikne možnost "Pozabljeno geslo".
-      2. Vnese e-naslov računa.
-      3. Sistem pošlje ponastavitveno povezavo.
-      4. Gost odpre povezavo, vnese novo geslo in potrditev gesla.
-      5. Sistem shrani geslo in preusmeri na prijavo.
+   1. Gost klikne možnost "Pozabljeno geslo".
+   2. Vnese e-naslov računa.
+   3. Sistem pošlje ponastavitveno povezavo.
+   4. Gost odpre povezavo, vnese novo geslo in potrditev gesla.
+   5. Sistem shrani geslo in preusmeri na prijavo.
 5. **Alternativni tokovi in napake**:
-    - A1: Takojšnja prijava po spremembi gesla.
-      1. Gost klikne možnost "Pozabljeno geslo".
-      2. Vnese e-naslov računa.
-      3. Sistem pošlje ponastavitveno povezavo.
-      4. Gost odpre povezavo, vnese novo geslo in potrditev gesla.
-      5. Sistem shrani geslo in preusmeri na prijavo.
-      6. Uporabnik takoj vnese nove poverilnice in odda prijavo.
-      7. Sistem uspešno vzpostavi sejo.
-    - E1: Povezava je neveljavna ali potekla.
-      1. Gost klikne možnost "Pozabljeno geslo".
-      2. Vnese e-naslov računa.
-      3. Sistem pošlje ponastavitveno povezavo.
-      4. Uporabnik odpre neveljavno ali poteklo povezavo za ponastavitev.
-      5. Sistem zavrne spremembo in ponudi novo zahtevo.
-      6. Uporabnik zahteva novo povezavo.
-      7. Sistem pošlje novo povezavo.
-      8. Uporabnik odpre novo povezavo, vnese novo geslo in potrditev gesla.
-      9. Sistem shrani geslo in preusmeri na prijavo.
-    - E2: Gesli se ne ujemata.
-      1. Gost klikne možnost "Pozabljeno geslo".
-      2. Vnese e-naslov računa.
-      3. Sistem pošlje ponastavitveno povezavo.
-      4. Gost odpre povezavo in vnese novo geslo ter potrditev gesla.
-      5. Sistem zazna neujemanje gesel in zavrne oddajo.
-      6. Uporabnik popravi vnos in znova odda obrazec.
-      7. Sistem shrani geslo in preusmeri na prijavo.
+   - A1: Takojšnja prijava po spremembi gesla.
+     1. Gost klikne možnost "Pozabljeno geslo".
+     2. Vnese e-naslov računa.
+     3. Sistem pošlje ponastavitveno povezavo.
+     4. Gost odpre povezavo, vnese novo geslo in potrditev gesla.
+     5. Sistem shrani geslo in preusmeri na prijavo.
+     6. Uporabnik takoj vnese nove poverilnice in odda prijavo.
+     7. Sistem uspešno vzpostavi sejo.
+   - E1: Povezava je neveljavna ali potekla.
+     1. Gost klikne možnost "Pozabljeno geslo".
+     2. Vnese e-naslov računa.
+     3. Sistem pošlje ponastavitveno povezavo.
+     4. Uporabnik odpre neveljavno ali poteklo povezavo za ponastavitev.
+     5. Sistem zavrne spremembo in ponudi novo zahtevo.
+     6. Uporabnik zahteva novo povezavo.
+     7. Sistem pošlje novo povezavo.
+     8. Uporabnik odpre novo povezavo, vnese novo geslo in potrditev gesla.
+     9. Sistem shrani geslo in preusmeri na prijavo.
+   - E2: Gesli se ne ujemata.
+     1. Gost klikne možnost "Pozabljeno geslo".
+     2. Vnese e-naslov računa.
+     3. Sistem pošlje ponastavitveno povezavo.
+     4. Gost odpre povezavo in vnese novo geslo ter potrditev gesla.
+     5. Sistem zazna neujemanje gesel in zavrne oddajo.
+     6. Uporabnik popravi vnos in znova odda obrazec.
+     7. Sistem shrani geslo in preusmeri na prijavo.
 6. **Predpogoj**: Uporabnik ima ustvarjen račun.
 7. **Popogoj, posledice in učinki**: Uspeh: geslo je spremenjeno. Neuspeh: geslo ostane nespremenjeno.
 8. **Posebne zahteve**: Časovna omejenost in enkratna uporaba žetona.
 9. **Prioriteta (MoSCoW)**: Must
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
+| Primer uporabe    | Funkcijski sistem | Začetno stanje      | Vhod                            | Pričakovan izhod          |
+| ----------------- | ----------------- | ------------------- | ------------------------------- | ------------------------- |
 | Ponastaviti geslo | Obnovitev dostopa | Uporabnik ima račun | Veljavna povezava in novo geslo | Geslo uspešno spremenjeno |
 
 11. **Razširitev - pogostost uporabe in triggerji**: Pogostost: nizka. Trigger: klik na "Pozabljeno geslo".
 
-##### 3.1.4.4 Odjaviti se
+##### 3.1.4.4 Odjava
 
-1. **Naslov**: Odjaviti se
+1. **Naslov**: Odjava
 2. **Akterji**:
-    - Uporabnik (vloga)
-    - Administrator (vloga)
+   - Uporabnik (vloga)
+   - Administrator (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Prijavljen uporabnik ali administrator zaključi sejo in se vrne na javni del aplikacije.
+   - Prijavljen uporabnik ali administrator zaključi sejo in se vrne na javni del aplikacije.
 4. **Osnovni tok**:
-      1. Akter izbere možnost "Odjava".
-      2. Sistem prekine aktivno sejo.
-      3. Sistem uporabnika preusmeri na začetno/prijavno stran.
+   1. Akter izbere možnost "Odjava".
+   2. Sistem prekine aktivno sejo.
+   3. Sistem uporabnika preusmeri na začetno/prijavno stran.
 5. **Alternativni tokovi in napake**:
-    - A1: Samodejna odjava zaradi neaktivnosti.
-      1. Akter je prijavljen in uporablja aplikacijo.
-      2. Sistem zazna presežen čas neaktivnosti.
-      3. Sistem opozori akterja o bližnjem izteku seje.
-      4. Po izteku sistem invalidira sejo.
-      5. Sistem akterja preusmeri na začetno/prijavno stran.
-    - E1: Seja je že potekla.
-      1. Akter izbere možnost "Odjava".
-      2. Sistem preveri aktivno sejo in ugotovi, da je ta že potekla.
-      3. Sistem ne izvaja dodatnega zaključevanja seje.
-      4. Sistem vseeno izvede preusmeritev na začetno/prijavno stran.
+   - A1: Samodejna odjava zaradi neaktivnosti.
+     1. Akter je prijavljen in uporablja aplikacijo.
+     2. Sistem zazna presežen čas neaktivnosti.
+     3. Sistem opozori akterja o bližnjem izteku seje.
+     4. Po izteku sistem invalidira sejo.
+     5. Sistem akterja preusmeri na začetno/prijavno stran.
+   - E1: Seja je že potekla.
+     1. Akter izbere možnost "Odjava".
+     2. Sistem preveri aktivno sejo in ugotovi, da je ta že potekla.
+     3. Sistem ne izvaja dodatnega zaključevanja seje.
+     4. Sistem vseeno izvede preusmeritev na začetno/prijavno stran.
 6. **Predpogoj**:
-    - Akter je prijavljen.
+   - Akter je prijavljen.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: seja je zaključena.
-    - Neuspeh: seja ostane aktivna in sistem prikaže obvestilo.
+   - Uspeh: seja je zaključena.
+   - Neuspeh: seja ostane aktivna in sistem prikaže obvestilo.
 8. **Posebne zahteve**:
-    - Brisanje/invalidacija sejne identitete (token/cookie).
+   - Brisanje/invalidacija sejne identitete (token/cookie).
 9. **Prioriteta (MoSCoW)**:
-    - Must
+   - Must
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Odjaviti se | Upravljanje seje | Uporabnik je prijavljen | Klik na odjava | Seja zaključena, preusmeritev na prijavo |
-| Odjaviti se | Upravljanje seje | Seja je že potekla | Klik na odjava | Preusmeritev na prijavo brez napake |
+| Primer uporabe | Funkcijski sistem | Začetno stanje          | Vhod           | Pričakovan izhod                         |
+| -------------- | ----------------- | ----------------------- | -------------- | ---------------------------------------- |
+| Odjaviti se    | Upravljanje seje  | Uporabnik je prijavljen | Klik na odjava | Seja zaključena, preusmeritev na prijavo |
+| Odjaviti se    | Upravljanje seje  | Seja je že potekla      | Klik na odjava | Preusmeritev na prijavo brez napake      |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: visoka.
     - Trigger: uporabnik/administrator izbere možnost odjave.
 
-##### 3.1.4.5 Posodobiti profil
+##### 3.1.4.5 Urejanje profila
 
-1. **Naslov**: Posodobiti profil
+1. **Naslov**: Urejanje profila
 2. **Akterji**:
-    - Uporabnik (vloga)
+   - Uporabnik (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Uporabnik posodobi preference in/ali osnovne podatke profila.
+   - Uporabnik posodobi preference in/ali osnovne podatke profila.
 4. **Osnovni tok**:
-      1. Uporabnik odpre profil.
-      2. Uporabnik spremeni želene podatke.
-      3. Sistem validira in shrani spremembe.
+   1. Uporabnik odpre profil.
+   2. Uporabnik spremeni želene podatke.
+   3. Sistem validira in shrani spremembe.
 5. **Alternativni tokovi in napake**:
-    - A1: Posodobitev samo enega sklopa.
-      1. Uporabnik odpre profil.
-      2. Uporabnik spremeni le en sklop podatkov (npr. interese).
-      3. Sistem validira spremenjeni sklop.
-      4. Sistem shrani spremembo.
-      5. Sistem potrdi uspeh in ostale podatke pusti nespremenjene.
-    - E1: Neveljaven format podatkov.
-      1. Uporabnik odpre profil in spremeni želene podatke.
-      2. Uporabnik odda neveljaven podatek v enem od polj.
-      3. Sistem zavrne shranjevanje in označi napačno polje.
-      4. Uporabnik popravi podatek in ponovno odda spremembe.
-      5. Sistem validira in shrani spremembe.
-    - E2: Konflikt sočasnih sprememb.
-      1. Uporabnik odpre profil in spremeni želene podatke.
-      2. Uporabnik odda spremembe na zastarelem stanju profila.
-      3. Sistem zazna konflikt in zahteva osvežitev.
-      4. Uporabnik osveži podatke, ponovno uredi profil in odda spremembe.
-      5. Sistem validira in shrani novo stanje profila.
+   - A1: Posodobitev samo enega sklopa.
+     1. Uporabnik odpre profil.
+     2. Uporabnik spremeni le en sklop podatkov (npr. interese).
+     3. Sistem validira spremenjeni sklop.
+     4. Sistem shrani spremembo.
+     5. Sistem potrdi uspeh in ostale podatke pusti nespremenjene.
+   - E1: Neveljaven format podatkov.
+     1. Uporabnik odpre profil in spremeni želene podatke.
+     2. Uporabnik odda neveljaven podatek v enem od polj.
+     3. Sistem zavrne shranjevanje in označi napačno polje.
+     4. Uporabnik popravi podatek in ponovno odda spremembe.
+     5. Sistem validira in shrani spremembe.
+   - E2: Konflikt sočasnih sprememb.
+     1. Uporabnik odpre profil in spremeni želene podatke.
+     2. Uporabnik odda spremembe na zastarelem stanju profila.
+     3. Sistem zazna konflikt in zahteva osvežitev.
+     4. Uporabnik osveži podatke, ponovno uredi profil in odda spremembe.
+     5. Sistem validira in shrani novo stanje profila.
 6. **Predpogoj**:
-    - Uporabnik je prijavljen.
+   - Uporabnik je prijavljen.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: profil je posodobljen.
-    - Neuspeh: ostanejo prejšnji podatki.
+   - Uspeh: profil je posodobljen.
+   - Neuspeh: ostanejo prejšnji podatki.
 8. **Posebne zahteve**:
-    - Validacija obveznih profilnih podatkov.
+   - Validacija obveznih profilnih podatkov.
 9. **Prioriteta (MoSCoW)**:
-    - Must
+   - Must
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Posodobiti profil | Upravljanje profila | Uporabnik je prijavljen | Novi podatki profila | Podatki so uspešno shranjeni |
-| Posodobiti profil | Upravljanje profila | Uporabnik je prijavljen | Neveljavni podatki | Shranjevanje zavrnjeno in prikazana napaka |
+| Primer uporabe    | Funkcijski sistem   | Začetno stanje          | Vhod                 | Pričakovan izhod                           |
+| ----------------- | ------------------- | ----------------------- | -------------------- | ------------------------------------------ |
+| Posodobiti profil | Upravljanje profila | Uporabnik je prijavljen | Novi podatki profila | Podatki so uspešno shranjeni               |
+| Posodobiti profil | Upravljanje profila | Uporabnik je prijavljen | Neveljavni podatki   | Shranjevanje zavrnjeno in prikazana napaka |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: srednja.
     - Trigger: uporabnik spremeni preference ali profilne podatke.
 
-##### 3.1.4.6 Iskati skupine
+##### 3.1.4.6 Iskanje skupin
 
-1. **Naslov**: Iskati skupine
+1. **Naslov**: Iskanje skupin
 2. **Akterji**:
-    - Uporabnik (vloga)
+   - Uporabnik (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Prijavljen uporabnik sproži iskanje skupine; sistem zažene izračun predlogov.
+   - Prijavljen uporabnik sproži iskanje skupine; sistem zažene izračun predlogov.
 4. **Osnovni tok**:
-      1. Uporabnik na nadzorni plošči izbere akcijo "Išči skupino".
-      2. Sistem preveri, da je profil ustrezno izpolnjen.
-      3. Sistem sproži izračun predlogov.
-      4. Sistem pripravi seznam predlogov za prikaz.
+   1. Uporabnik na nadzorni plošči izbere akcijo "Išči skupino".
+   2. Sistem preveri, da je profil ustrezno izpolnjen.
+   3. Sistem sproži izračun predlogov.
+   4. Sistem pripravi seznam predlogov za prikaz.
 5. **Alternativni tokovi in napake**:
-    - A1: Ponovitev iskanja po posodobitvi profila.
-      1. Uporabnik odpre nadzorno ploščo.
-      2. Uporabnik izbere akcijo "Išči skupino".
-      3. Sistem preveri profil in uporabnik ugotovi, da želi posodobiti preference.
-      4. Uporabnik posodobi profil z novimi interesi, lokacijo ali razpoložljivostjo.
-      5. Uporabnik ponovno izbere akcijo "Išči skupino".
-      6. Sistem preveri, da je profil ustrezno izpolnjen.
-      7. Sistem sproži izračun predlogov.
-      8. Sistem pripravi in prikaže osvežen nabor predlogov.
-    - E1: Profil ni dovolj izpolnjen.
-      1. Uporabnik odpre nadzorno ploščo in izbere akcijo "Išči skupino".
-      2. Sistem preveri profil in ugotovi manjkajoče podatke.
-      3. Sistem zavrne iskanje in navede manjkajoča polja.
-      4. Uporabnik dopolni profil in ponovno izbere akcijo "Išči skupino".
-      5. Sistem ponovno preveri profil.
-      6. Sistem sproži izračun predlogov.
-      7. Sistem pripravi seznam predlogov za prikaz.
-    - E2: Pametna komponenta je začasno nedosegljiva.
-      1. Uporabnik izbere akcijo "Išči skupino".
-      2. Sistem preveri profil in sproži izračun predlogov.
-      3. Klic pametne komponente ne uspe.
-      4. Sistem prikaže obvestilo in možnost ponovnega poskusa.
-      5. Uporabnik ponovi zahtevo.
-      6. Sistem ponovno sproži izračun predlogov.
-      7. Sistem pripravi seznam predlogov za prikaz.
+   - A1: Ponovitev iskanja po posodobitvi profila.
+     1. Uporabnik odpre nadzorno ploščo.
+     2. Uporabnik izbere akcijo "Išči skupino".
+     3. Sistem preveri profil in uporabnik ugotovi, da želi posodobiti preference.
+     4. Uporabnik posodobi profil z novimi interesi, lokacijo ali razpoložljivostjo.
+     5. Uporabnik ponovno izbere akcijo "Išči skupino".
+     6. Sistem preveri, da je profil ustrezno izpolnjen.
+     7. Sistem sproži izračun predlogov.
+     8. Sistem pripravi in prikaže osvežen nabor predlogov.
+   - E1: Profil ni dovolj izpolnjen.
+     1. Uporabnik odpre nadzorno ploščo in izbere akcijo "Išči skupino".
+     2. Sistem preveri profil in ugotovi manjkajoče podatke.
+     3. Sistem zavrne iskanje in navede manjkajoča polja.
+     4. Uporabnik dopolni profil in ponovno izbere akcijo "Išči skupino".
+     5. Sistem ponovno preveri profil.
+     6. Sistem sproži izračun predlogov.
+     7. Sistem pripravi seznam predlogov za prikaz.
+   - E2: Pametna komponenta je začasno nedosegljiva.
+     1. Uporabnik izbere akcijo "Išči skupino".
+     2. Sistem preveri profil in sproži izračun predlogov.
+     3. Klic pametne komponente ne uspe.
+     4. Sistem prikaže obvestilo in možnost ponovnega poskusa.
+     5. Uporabnik ponovi zahtevo.
+     6. Sistem ponovno sproži izračun predlogov.
+     7. Sistem pripravi seznam predlogov za prikaz.
 6. **Predpogoj**:
-    - Uporabnik je prijavljen.
+   - Uporabnik je prijavljen.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: uporabnik lahko dostopa do predlogov skupin.
-    - Neuspeh: predlogi niso pripravljeni in sistem poda razlog.
+   - Uspeh: uporabnik lahko dostopa do predlogov skupin.
+   - Neuspeh: predlogi niso pripravljeni in sistem poda razlog.
 8. **Posebne zahteve**:
-    - Sistem mora jasno prikazati stanje iskanja (v teku/uspeh/napaka).
+   - Sistem mora jasno prikazati stanje iskanja (v teku/uspeh/napaka).
 9. **Prioriteta (MoSCoW)**:
-    - Must
+   - Must
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
+| Primer uporabe | Funkcijski sistem  | Začetno stanje                              | Vhod                   | Pričakovan izhod                          |
+| -------------- | ------------------ | ------------------------------------------- | ---------------------- | ----------------------------------------- |
 | Iskati skupine | Iskalni tok skupin | Uporabnik je prijavljen in profil izpolnjen | Klik na "Išči skupino" | Iskanje sproženo in pripravljeni predlogi |
-| Iskati skupine | Iskalni tok skupin | Profil ni izpolnjen | Klik na "Išči skupino" | Poziv k dopolnitvi profila |
+| Iskati skupine | Iskalni tok skupin | Profil ni izpolnjen                         | Klik na "Išči skupino" | Poziv k dopolnitvi profila                |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: srednja do visoka.
     - Trigger: uporabnik izbere akcijo za iskanje skupine.
 
-##### 3.1.4.7 Prejeti predlog skupine
+##### 3.1.4.7 Pregled skupin in chata
 
-1. **Naslov**: Prejeti predlog skupine
-2. **Akterji**: Uporabnik (vloga), Pametna komponenta (notranja komponenta sistema)
-3. **Povzetek funkcionalnosti**: Sistem prikaže izračunane predloge skupin.
-4. **Osnovni tok**:
-      1. Sistem pridobi kandidate iz baze.
-      2. Pametna komponenta izračuna ocene ujemanja.
-      3. Sistem razvrsti predloge po kompatibilnosti.
-      4. Sistem prikaže predloge z osnovnimi razlogi ujemanja.
-5. **Alternativni tokovi in napake**:
-    - A1: Več predlogov in primerjava.
-      1. Sistem pridobi kandidate iz baze.
-      2. Pametna komponenta izračuna ocene ujemanja.
-      3. Sistem razvrsti predloge po kompatibilnosti in prikaže več predlogov.
-      4. Uporabnik primerja predloge.
-      5. Uporabnik izbere en predlog in nadaljuje na pregled članov.
-    - E1: Ni dovolj kandidatov.
-      1. Sistem pridobi kandidate iz baze.
-      2. Pametna komponenta izračuna ocene ujemanja in ne najde veljavne kombinacije.
-      3. Sistem prikaže obvestilo "Trenutno ni dovolj kandidatov".
-      4. Sistem ponudi ponovni poskus kasneje.
-      5. Uporabnik ponovno sproži iskanje.
-      6. Sistem pridobi nove kandidate, izračuna ocene in prikaže predloge ob uspehu.
-    - E2: Predlog med prikazom postane neveljaven.
-      1. Sistem pridobi kandidate iz baze.
-      2. Pametna komponenta izračuna ocene ujemanja.
-      3. Sistem razvrsti predloge in začne prikazovati seznam.
-      4. Eden od predlogov med prikazom postane neveljaven.
-      5. Sistem odstrani neveljaven predlog in osveži seznam.
-      6. Uporabnik izbere veljaven predlog iz osveženega seznama.
-      7. Uporabnik odpre hiter pregled članov izbranega predloga.
-6. **Predpogoj**: Iskanje skupin je uspešno sproženo.
-7. **Popogoj, posledice in učinki**: Uspeh: prikazan je veljaven predlog ali obvestilo o odsotnosti predlogov. Neuspeh: prikaz predlogov ne uspe.
-8. **Posebne zahteve**: Jasna razlaga razlogov ujemanja.
-9. **Prioriteta (MoSCoW)**: Must
-10. **Sprejemni testi**:
-
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Prejeti predlog skupine | Modul predlogov | Iskanje je sproženo | Veljavni kandidati | Prikazan seznam predlogov skupin |
-
-11. **Razširitev - pogostost uporabe in triggerji**: Pogostost: srednja. Trigger: uspešen zaključek iskanja.
-
-##### 3.1.4.8 Pregledati člane predlagane skupine
-
-1. **Naslov**: Pregledati člane predlagane skupine
+1. **Naslov**: Pregled skupin in chata
 2. **Akterji**:
-    - Uporabnik (vloga)
+   - Uporabnik (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Uporabnik odpre hiter pregled članov posamezne predlagane skupine.
+   - Uporabnik odpre izbrano predlagano skupino in na istem mestu pregleda osnovne podatke skupine, člane ter skupinski chat.
 4. **Osnovni tok**:
-      1. Uporabnik pri predlogu odpre pregled članov skupine.
-      2. Sistem prikaže seznam članov predlagane skupine.
-      3. Uporabnik pregleda osnovne podatke članov.
+   1. Uporabnik iz seznama predlogov odpre izbrano skupino.
+   2. Sistem prikaže čas srečanja, približno lokacijo in ključne razloge ujemanja.
+   3. Sistem prikaže ikone oziroma kratke kartice članov skupine.
+   4. Uporabnik odpre kratek pregled profila posameznega člana.
+   5. Sistem prikaže osnovne podatke izbranega člana.
+   6. Uporabnik odpre skupinski chat iste skupine.
+   7. Sistem prikaže zgodovino sporočil in omogoči nadaljnjo komunikacijo.
 5. **Alternativni tokovi in napake**:
-    - A1: Nadaljevanje na odločitev po pregledu.
-      1. Uporabnik pri predlogu odpre pregled članov skupine.
-      2. Sistem prikaže seznam članov predlagane skupine.
-      3. Uporabnik pregleda osnovne podatke članov.
-      4. Uporabnik zapre pregled članov in se vrne na predlog.
-      5. Uporabnik izbere potrditev ali zavrnitev predloga.
-      6. Sistem prikaže akciji "Potrdi" in "Zavrni".
-      7. Uporabnik izbere eno od akcij.
-      8. Sistem zabeleži odločitev o udeležbi.
-    - E1: Podatki članov niso dosegljivi.
-      1. Uporabnik pri predlogu odpre pregled članov skupine.
-      2. Sistem poskuša prikazati seznam članov, vendar nalaganje ne uspe.
-      3. Sistem prikaže opozorilo in možnost ponovnega nalaganja.
-      4. Uporabnik ponovi nalaganje.
-      5. Sistem prikaže seznam članov predlagane skupine.
-      6. Uporabnik pregleda osnovne podatke članov.
+   - A1: Pregled posameznega člana.
+     1. Uporabnik iz seznama predlogov odpre izbrano skupino.
+     2. Sistem prikaže čas srečanja, približno lokacijo in ključne razloge ujemanja.
+     3. Uporabnik klikne ikono člana.
+     4. Sistem odpre kratek profil člana.
+     5. Uporabnik zapre kratek profil in se vrne na pregled skupine.
+   - A2: Branje skupinskega chata brez pošiljanja sporočila.
+     1. Uporabnik iz seznama predlogov odpre izbrano skupino.
+     2. Sistem prikaže osnovne podatke skupine in člane.
+     3. Uporabnik odpre skupinski chat.
+     4. Sistem naloži zgodovino sporočil.
+     5. Uporabnik pregleda vsebino in chat zapre brez novega vnosa.
+     6. Sistem ohrani stanje pogovora nespremenjeno.
+   - E1: Podatki skupine ali članov niso dosegljivi.
+     1. Uporabnik iz seznama predlogov odpre izbrano skupino.
+     2. Sistem poskuša prikazati podatke skupine in članov, vendar nalaganje ne uspe.
+     3. Sistem prikaže opozorilo in možnost ponovnega nalaganja.
+     4. Uporabnik ponovi nalaganje.
+     5. Sistem prikaže podatke skupine in članov.
+   - E2: Skupina med prikazom postane neveljavna.
+     1. Uporabnik iz seznama predlogov odpre izbrano skupino.
+     2. Sistem prikaže osnovne podatke skupine.
+     3. Sistem zazna, da je skupina med prikazom postala neveljavna.
+     4. Sistem zapre pregled skupine in osveži seznam predlogov.
+     5. Uporabnik izbere drugo veljavno skupino.
 6. **Predpogoj**:
-    - Uporabnik je prijavljen in vidi vsaj en predlog skupine.
+   - Uporabnik je prijavljen in vidi vsaj en predlog skupine.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: uporabnik vidi osnovne podatke članov predlagane skupine.
-    - Neuspeh: pregled članov ni prikazan.
+   - Uspeh: uporabnik vidi podatke skupine, člane in po potrebi chat.
+   - Neuspeh: pregled skupine ni prikazan.
 8. **Posebne zahteve**:
-    - Pregled članov mora biti neposredno dostopen iz posameznega predloga.
+   - Pregled mora vključevati čas, lokacijo, razloge ujemanja in neposreden dostop do kratkih profilov članov ter chata.
 9. **Prioriteta (MoSCoW)**:
-    - Must
+   - Must
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Pregledati člane predlagane skupine | Predlog skupine | Uporabnik vidi predlog | Odprtje pregleda članov | Prikazan seznam članov predlagane skupine |
-| Pregledati člane predlagane skupine | Predlog skupine | Predlog ni več veljaven | Odprtje pregleda članov | Prikazano opozorilo in osvežen seznam |
+| Primer uporabe             | Funkcijski sistem | Začetno stanje                  | Vhod                       | Pričakovan izhod                                   |
+| -------------------------- | ----------------- | ------------------------------- | -------------------------- | -------------------------------------------------- |
+| Pregledati skupino in chat | Predlog skupine   | Uporabnik vidi predlog          | Odprtje predlagane skupine | Prikazani podatki skupine, člani in chat           |
+| Pregledati skupino in chat | Predlog skupine   | Podatki skupine niso dosegljivi | Odprtje predlagane skupine | Prikazano opozorilo in možnost ponovnega nalaganja |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: srednja.
-    - Trigger: uporabnik odpre hiter pregled članov pri predlogu.
+    - Trigger: uporabnik odpre predlagano skupino iz seznama predlogov.
 
-##### 3.1.4.9 Potrditi ali zavrniti udeležbo
+##### 3.1.4.8 Odločitev o udeležbi
 
-1. **Naslov**: Potrditi ali zavrniti udeležbo
+1. **Naslov**: Odločitev o udeležbi
 2. **Akterji**:
-    - Uporabnik (vloga)
+   - Uporabnik (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Uporabnik potrdi ali zavrne predlog skupine po pregledu članov.
+   - Uporabnik po pregledu skupine potrdi ali zavrne predlog in sistem posodobi status odziva.
 4. **Osnovni tok**:
-      1. Uporabnik odpre podrobnosti predloga.
-      2. Uporabnik pregleda člane predlagane skupine.
-      3. Uporabnik izbere potrditev ali zavrnitev.
-      4. Sistem zabeleži odločitev.
+   1. Uporabnik iz pregleda skupine izbere potrditev ali zavrnitev.
+   2. Sistem preveri, ali je skupina še veljavna.
+   3. Sistem zabeleži odločitev.
+   4. Sistem posodobi status odziva in ga prikaže ostalim članom.
 5. **Alternativni tokovi in napake**:
-    - A1: Zavrnitev predloga.
-      1. Uporabnik odpre podrobnosti predloga.
-      2. Uporabnik pregleda člane predlagane skupine.
-      3. Uporabnik izbere akcijo "Zavrni".
-      4. Sistem zabeleži odločitev in status "zavrnjeno".
-      5. Sistem prikaže posodobljen status in zaključi tok.
-    - A2: Potrditev in prehod v chat.
-      1. Uporabnik odpre podrobnosti predloga.
-      2. Uporabnik pregleda člane predlagane skupine.
-      3. Uporabnik izbere akcijo "Potrdi".
-      4. Sistem zabeleži odločitev in status "potrjeno".
-      5. Sistem omogoči prehod v skupinski chat in zaključi primer uporabe.
-    - E1: Predlog ni več aktiven.
-      1. Uporabnik odpre podrobnosti predloga.
-      2. Uporabnik pregleda člane predlagane skupine.
-      3. Uporabnik izbere potrditev ali zavrnitev.
-      4. Sistem zazna, da predlog ni več veljaven.
-      5. Sistem zavrne akcijo in osveži seznam predlogov.
-      6. Uporabnik izbere drug veljaven predlog.
-      7. Uporabnik pregleda člane izbranega predloga.
-      8. Uporabnik izbere potrditev ali zavrnitev.
-      9. Sistem zabeleži odločitev.
+   - A1: Potrditev udeležbe.
+     1. Uporabnik iz pregleda skupine izbere potrditev.
+     2. Sistem preveri, ali je skupina še veljavna.
+     3. Sistem zabeleži status "potrjeno".
+     4. Sistem posodobi status odziva in potrdi uspeh.
+   - A2: Zavrnitev predloga.
+     1. Uporabnik iz pregleda skupine izbere zavrnitev.
+     2. Sistem preveri, ali je skupina še veljavna.
+     3. Sistem zabeleži status "zavrnjeno".
+     4. Sistem posodobi status odziva in potrdi uspeh.
+   - E1: Predlog ni več aktiven.
+     1. Uporabnik iz pregleda skupine izbere potrditev ali zavrnitev.
+     2. Sistem zazna, da predlog ni več veljaven.
+     3. Sistem zavrne akcijo in osveži seznam predlogov.
+     4. Uporabnik izbere drug veljaven predlog.
+     5. Uporabnik ponovno odpre pregled skupine.
 6. **Predpogoj**:
-    - Uporabnik ima prikazan veljaven predlog skupine.
+   - Uporabnik ima prikazan veljaven predlog skupine.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: status predloga je posodobljen.
-    - Neuspeh: status ostane nespremenjen.
+   - Uspeh: status predloga je posodobljen.
+   - Neuspeh: status ostane nespremenjen.
 8. **Posebne zahteve**:
-    - Dosledno beleženje sprememb statusa in barvno označevanje odziva.
+   - Dosledno beleženje sprememb statusa in barvno označevanje odziva.
 9. **Prioriteta (MoSCoW)**:
-    - Must
+   - Must
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Potrditi ali zavrniti udeležbo | Upravljanje predlogov skupin | Prikazan je aktiven predlog | Potrditev udeležbe | Status predloga posodobljen, oznaka ostalim članom |
-| Potrditi ali zavrniti udeležbo | Upravljanje predlogov skupin | Predlog ni več aktiven | Potrditev ali zavrnitev | Sistem zahtevo zavrne in prikaže obvestilo |
+| Primer uporabe                 | Funkcijski sistem            | Začetno stanje              | Vhod               | Pričakovan izhod                                          |
+| ------------------------------ | ---------------------------- | --------------------------- | ------------------ | --------------------------------------------------------- |
+| Potrditi ali zavrniti udeležbo | Upravljanje predlogov skupin | Prikazan je aktiven predlog | Potrditev udeležbe | Status predloga posodobljen, oznaka ostalim članom        |
+| Potrditi ali zavrniti udeležbo | Upravljanje predlogov skupin | Prikazan je aktiven predlog | Zavrnitev predloga | Status predloga posodobljen in predlog ostane v zgodovini |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: srednja.
-    - Trigger: uporabnik izbere akcijo na predlogu.
+    - Trigger: uporabnik izbere akcijo na predlogu po pregledu skupine.
 
-##### 3.1.4.10 Dostopati do skupinskega chata (uporabnik)
+##### 3.1.4.9 Oddaja povratne informacije
 
-1. **Naslov**: Dostopati do skupinskega chata (uporabnik)
+1. **Naslov**: Oddaja povratne informacije
 2. **Akterji**:
-    - Uporabnik (vloga)
+   - Uporabnik (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Uporabnik po potrditvi udeležbe dostopa do chata in pošilja sporočila.
+   - Uporabnik po srečanju odda oceno in komentar za izbrano skupino.
 4. **Osnovni tok**:
-      1. Uporabnik odpre skupino.
-      2. Sistem omogoči dostop do chata.
-      3. Uporabnik pošlje sporočilo.
-      4. Sistem sporočilo shrani in prikaže članom skupine.
+   1. Sistem prikaže poziv za oddajo povratne informacije.
+   2. Uporabnik vnese oceno in komentar.
+   3. Sistem preveri veljavnost in shrani povratno informacijo.
 5. **Alternativni tokovi in napake**:
-    - A1: Branje brez pošiljanja.
-      1. Uporabnik odpre skupino.
-      2. Sistem omogoči dostop do chata.
-      3. Sistem naloži zgodovino sporočil.
-      4. Uporabnik pregleda vsebino in chat zapre brez novega vnosa.
-      5. Sistem ohrani stanje pogovora nespremenjeno.
-    - E1: Uporabnik ni član skupine.
-      1. Uporabnik odpre skupino ali povezavo do chata.
-      2. Sistem preveri članstvo in ugotovi, da uporabnik ni del skupine.
-      3. Sistem zavrne dostop do chata.
-      4. Sistem uporabnika preusmeri na seznam predlogov.
-      5. Uporabnik lahko odpre drug veljaven predlog.
-    - E2: Izguba povezave med pošiljanjem.
-      1. Uporabnik odpre skupino.
-      2. Sistem omogoči dostop do chata.
-      3. Uporabnik sestavi sporočilo in ga pošlje.
-      4. Sistem zazna prekinitev povezave.
-      5. Sistem označi sporočilo kot neposlano.
-      6. Uporabnik ponovi pošiljanje.
-      7. Sistem ob uspehu shrani sporočilo in ga prikaže članom skupine.
+   - A1: Oddaja samo ocene.
+     1. Sistem prikaže poziv za oddajo povratne informacije.
+     2. Uporabnik vnese oceno in pusti komentar prazen.
+     3. Sistem preveri veljavnost in sprejme oddajo.
+     4. Sistem shrani povratno informacijo in potrdi uspeh.
+   - E1: Uporabnik je že oddal povratno informacijo.
+     1. Sistem prikaže poziv za oddajo povratne informacije.
+     2. Uporabnik vnese oceno in komentar za isti dogodek, za katerega je že oddal odgovor.
+     3. Sistem zazna podvojitev in zavrne oddajo.
+     4. Sistem prikaže obvestilo o obstoječi oddaji.
+     5. Uporabnik obrazec zapre ali preide na drug dogodek.
+   - E2: Napaka pri shranjevanju.
+     1. Sistem prikaže poziv za oddajo povratne informacije.
+     2. Uporabnik vnese oceno in komentar.
+     3. Sistem preveri veljavnost, vendar ne uspe shraniti podatkov.
+     4. Sistem ponudi ponovni poskus.
+     5. Uporabnik ponovi oddajo.
+     6. Sistem uspešno shrani povratno informacijo in potrdi uspeh.
 6. **Predpogoj**:
-    - Uporabnik je prijavljen in je član predlagane skupine.
+   - Uporabnik je sodeloval v srečanju.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: sporočilo je uspešno poslano.
-    - Neuspeh: sporočilo ni poslano.
+   - Uspeh: povratna informacija je shranjena.
+   - Neuspeh: povratna informacija ni shranjena.
 8. **Posebne zahteve**:
-    - Prikaz časa in avtorja sporočila.
+   - Vprašalnik mora biti kratek.
 9. **Prioriteta (MoSCoW)**:
-    - Must
+   - Should
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Dostopati do skupinskega chata (uporabnik) | Komunikacijski modul | Uporabnik je član predlagane skupine | Vnos in pošiljanje sporočila | Sporočilo je shranjeno in prikazano članom |
-| Dostopati do skupinskega chata (uporabnik) | Komunikacijski modul | Uporabnik ni član skupine | Poskus dostopa do chata | Dostop zavrnjen |
-
-11. **Razširitev - pogostost uporabe in triggerji**:
-    - Pogostost: srednja.
-    - Trigger: uporabnik odpre chat predlagane skupine.
-
-##### 3.1.4.11 Oddati povratno informacijo
-
-1. **Naslov**: Oddati povratno informacijo
-2. **Akterji**:
-    - Uporabnik (vloga)
-3. **Povzetek funkcionalnosti**:
-    - Uporabnik po srečanju odda oceno in komentar.
-4. **Osnovni tok**:
-      1. Sistem prikaže poziv za oddajo povratne informacije.
-      2. Uporabnik vnese oceno in komentar.
-      3. Sistem preveri veljavnost in shrani povratno informacijo.
-5. **Alternativni tokovi in napake**:
-    - A1: Oddaja samo ocene.
-      1. Sistem prikaže poziv za oddajo povratne informacije.
-      2. Uporabnik vnese oceno in pusti komentar prazen.
-      3. Sistem preveri veljavnost in sprejme oddajo.
-      4. Sistem shrani povratno informacijo in potrdi uspeh.
-    - E1: Uporabnik je že oddal povratno informacijo.
-      1. Sistem prikaže poziv za oddajo povratne informacije.
-      2. Uporabnik vnese oceno in komentar za isti dogodek, za katerega je že oddal odgovor.
-      3. Sistem zazna podvojitev in zavrne oddajo.
-      4. Sistem prikaže obvestilo o obstoječi oddaji.
-      5. Uporabnik obrazec zapre ali preide na drug dogodek.
-    - E2: Napaka pri shranjevanju.
-      1. Sistem prikaže poziv za oddajo povratne informacije.
-      2. Uporabnik vnese oceno in komentar.
-      3. Sistem preveri veljavnost, vendar ne uspe shraniti podatkov.
-      4. Sistem ponudi ponovni poskus.
-      5. Uporabnik ponovi oddajo.
-      6. Sistem uspešno shrani povratno informacijo in potrdi uspeh.
-6. **Predpogoj**:
-    - Uporabnik je sodeloval v srečanju.
-7. **Popogoj, posledice in učinki**:
-    - Uspeh: povratna informacija je shranjena.
-    - Neuspeh: povratna informacija ni shranjena.
-8. **Posebne zahteve**:
-    - Vprašalnik mora biti kratek.
-9. **Prioriteta (MoSCoW)**:
-    - Should
-10. **Sprejemni testi**:
-
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Oddati povratno informacijo | Modul povratnih informacij | Uporabnik ima zaključen dogodek | Ocena in komentar | Podatki so shranjeni in potrjeni |
+| Primer uporabe              | Funkcijski sistem          | Začetno stanje                  | Vhod                       | Pričakovan izhod                           |
+| --------------------------- | -------------------------- | ------------------------------- | -------------------------- | ------------------------------------------ |
+| Oddati povratno informacijo | Modul povratnih informacij | Uporabnik ima zaključen dogodek | Ocena in komentar          | Podatki so shranjeni in potrjeni           |
 | Oddati povratno informacijo | Modul povratnih informacij | Uporabnik ima zaključen dogodek | Manjkajoči obvezni podatki | Shranjevanje zavrnjeno in prikazana napaka |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: srednja.
     - Trigger: sistem po srečanju pošlje poziv za oddajo ocene.
 
-##### 3.1.4.12 Prijaviti neprimerno vedenje
+##### 3.1.4.10 Prijava neprimernega vedenja
 
 1. **Naslov**: Prijaviti neprimerno vedenje
 2. **Akterji**:
-    - Uporabnik (vloga)
-    - Administrator (vloga)
+   - Uporabnik (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Uporabnik odda prijavo incidenta, administrator jo obravnava.
+   - Uporabnik odda prijavo za neprimerno vedenje uporabnika znotraj gruppe.
 4. **Osnovni tok**:
-      1. Uporabnik odda prijavo.
-      2. Sistem potrdi prejem prijave.
-      3. Administrator prijavo pregleda in označi kot obravnavano.
+   1. Uporabnik odpre skupino in izbere uporabnika, ki se je neprimerno vedel.
+   2. Uporabnik izbere možnost "Prijavi neprimerno vedenje".
+   3. Sistem prikaže obrazec za prijavo.
+   4. Uporabnik vnese opis incidenta in oddaja prijavo.
+   5. Sistem preveri veljavnost podatkov.
+   6. Sistem shrani prijavo in potrdi prejem.
 5. **Alternativni tokovi in napake**:
-    - A1: Dopolnitev prijave na zahtevo administratorja.
-      1. Uporabnik odda prijavo.
-      2. Sistem potrdi prejem prijave.
-      3. Administrator prijavo pregleda in zahteva dopolnitev.
-      4. Sistem obvesti uporabnika, da prijavo dopolni.
-      5. Uporabnik dopolni opis in ponovno odda prijavo.
-      6. Administrator nadaljuje obravnavo prijave in jo zaključi.
-    - E1: Prijava nima dovolj podatkov.
-      1. Uporabnik odda prijavo.
-      2. Sistem pri validaciji ugotovi, da obrazec nima dovolj podatkov.
-      3. Sistem zavrne oddajo in označi manjkajoča polja.
-      4. Uporabnik dopolni podatke in ponovno odda prijavo.
-      5. Sistem potrdi prejem prijave.
-      6. Administrator prijavo pregleda in označi kot obravnavano.
+   - A1: Dopolnitev prijave.
+     1. Uporabnik odda prijavo.
+     2. Sistem potrdi prejem prijave.
+     3. Uporabnik se lahko vrne in dopolni opis, če je potrebno.
+     4. Sistem shrani spremembo.
+   - E1: Neprimerno izpolnjena prijava.
+     1. Uporabnik odpre obrazec za prijavo.
+     2. Uporabnik vpiše podatke, ki ne izpolnjujejo zahtev.
+     3. Sistem zavrne oddajo in označi obavezna polja.
+     4. Uporabnik popravi podatke in ponovno odda prijavo.
+     5. Sistem shrani prijavo in potrdi prejem.
 6. **Predpogoj**:
-    - Uporabnik je prijavljen.
+   - Uporabnik je prijavljen in je član aktivne skupine.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: prijava je obravnavana.
-    - Neuspeh: prijava ostane odprta.
+   - Uspeh: prijava je shranjena in potrjena.
+   - Neuspeh: prijava ni shranjena.
 8. **Posebne zahteve**:
-    - Zaupna obravnava prijav.
+   - Zaupna obravnava prijav.
 9. **Prioriteta (MoSCoW)**:
-    - Should
+   - Should
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Prijaviti neprimerno vedenje | Varnostni modul | Uporabnik je prijavljen | Oddaja prijave incidenta | Prijava shranjena in potrjena |
-| Prijaviti neprimerno vedenje | Varnostni modul | Prijava je oddana | Administratorska obravnava | Prijava obravnavana, status posodobljen |
+| Primer uporabe               | Funkcijski sistem | Začetno stanje       | Vhod                    | Pričakovan izhod                       |
+| ---------------------------- | ----------------- | -------------------- | ----------------------- | -------------------------------------- |
+| Prijaviti neprimerno vedenje | Varnostni modul   | Uporabnik je v grupi | Oddaja veljavne prijave | Prijava shranjena in potrjena          |
+| Prijaviti neprimerno vedenje | Varnostni modul   | Obrazec je prazan    | Oddaja praznega obrazca | Prikazana napaka, zahtevana izpolnitev |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: nizka.
-    - Trigger: uporabnik zazna neprimerno vedenje.
+    - Trigger: uporabnik zazna neprimerno vedenje znotraj skupine.
 
-##### 3.1.4.13 Dostopati do informacijskih strani in kontakta
+##### 3.1.4.11 Pregled informacij
 
-1. **Naslov**: Dostopati do informacijskih strani in kontakta
+1. **Naslov**: Pregled informacij
 2. **Akterji**:
-    - Gost (vloga)
-    - Uporabnik (vloga)
+   - Gost (vloga)
+   - Uporabnik (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Gost ali uporabnik prek footer povezav dostopa do pogojev uporabe, GDPR, pogostih vprašanj ter odda kontaktno sporočilo.
+   - Gost ali uporabnik prek footer povezav dostopa do pogojev uporabe, GDPR in pogostih vprašanj.
 4. **Osnovni tok**:
-      1. Uporabnik v footerju odpre izbrano informacijsko stran.
-      2. Uporabnik na strani "Kontakt" odda sporočilo.
-      3. Sistem potrdi prejem sporočila.
+   1. Gost ali uporabnik v footerju odpre izbrano informacijsko stran.
+   2. Sistem prikaže vsebino izbrane strani.
+   3. Uporabnik po potrebi odpre še drugo informacijsko stran.
 5. **Alternativni tokovi in napake**:
-    - A1: Branje informacij brez oddaje kontakta.
-      1. Gost ali uporabnik v footerju odpre izbrano informacijsko stran.
-      2. Pregleda vsebino ene ali več informacijskih strani.
-      3. Ne odpre kontaktne strani oziroma ne odda sporočila.
-      4. Tok se zaključi brez oddaje kontaktnega obrazca.
-    - E1: Neveljavno izpolnjen kontaktni obrazec.
-      1. Uporabnik v footerju odpre izbrano informacijsko stran in nato stran "Kontakt".
-      2. Uporabnik odda obrazec z manjkajočimi ali napačnimi podatki.
-      3. Sistem zavrne oddajo in označi napake v poljih.
-      4. Uporabnik popravi obrazec in ponovno odda sporočilo.
-      5. Sistem potrdi prejem sporočila.
+   - A1: Branje več informacijskih strani.
+     1. Gost ali uporabnik v footerju odpre prvo informacijsko stran.
+     2. Sistem prikaže vsebino strani.
+     3. Gost ali uporabnik odpre dodatno informacijsko stran.
+     4. Sistem prikaže njeno vsebino.
+     5. Uporabnik zapre informacijske strani brez nadaljnjih dejanj.
+   - E1: Informacijska stran ni dosegljiva.
+     1. Gost ali uporabnik v footerju odpre izbrano informacijsko stran.
+     2. Sistem poskuša naložiti vsebino, vendar nalaganje ne uspe.
+     3. Sistem prikaže opozorilo in možnost ponovnega nalaganja.
+     4. Uporabnik ponovi zahtevo.
+     5. Sistem prikaže vsebino strani.
 6. **Predpogoj**:
-    - Gost ali uporabnik ima dostop do spletnega vmesnika.
+   - Gost ali uporabnik ima dostop do spletnega vmesnika.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: informacije so prikazane oziroma kontakt je oddan.
-    - Neuspeh: kontakt ni oddan.
+   - Uspeh: informacije so prikazane.
+   - Neuspeh: izbrana stran ni prikazana.
 8. **Posebne zahteve**:
-    - Strani morajo biti dostopne tudi brez prijave.
+   - Strani morajo biti dostopne tudi brez prijave.
 9. **Prioriteta (MoSCoW)**:
-    - Should
+   - Should
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Dostopati do informacijskih strani in kontakta | Informacijski modul | Uporabnik je na aplikaciji | Klik na povezavo v footerju | Odprta ustrezna informacijska stran |
-| Dostopati do informacijskih strani in kontakta | Kontaktni modul | Uporabnik odpre kontakt | Oddano kontaktno sporočilo | Potrditev prejema sporočila |
+| Primer uporabe                     | Funkcijski sistem   | Začetno stanje              | Vhod                        | Pričakovan izhod                                   |
+| ---------------------------------- | ------------------- | --------------------------- | --------------------------- | -------------------------------------------------- |
+| Dostopati do informacijskih strani | Informacijski modul | Uporabnik je na aplikaciji  | Klik na povezavo v footerju | Odprta ustrezna informacijska stran                |
+| Dostopati do informacijskih strani | Informacijski modul | Stran začasno ni dosegljiva | Poskus odpiranja strani     | Prikazano opozorilo in možnost ponovnega nalaganja |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: nizka.
     - Trigger: uporabnik klikne povezavo v footerju.
 
-##### 3.1.4.14 Upravljati uporabnike (administrator)
+##### 3.1.4.12 Kontaktni obrazec
 
-1. **Naslov**: Upravljati uporabnike
+1. **Naslov**: Kontaktni obrazec
 2. **Akterji**:
-    - Administrator (vloga)
+   - Gost (vloga)
+   - Uporabnik (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Administrator pregleduje seznam uporabnikov in izvaja ukrepe nad računi, vključno z opozorilom uporabniku.
+   - Gost ali uporabnik prek kontaktnega obrazca pošlje sporočilo sistemu.
 4. **Osnovni tok**:
-      1. Administrator odpre sekcijo Uporabniki.
-      2. Sistem prikaže paginiran seznam uporabnikov.
-      3. Administrator izvede akcijo blokiraj/deblokiraj/aktiviraj/deaktiviraj/opozori.
+   1. Gost ali uporabnik v footerju odpre stran "Kontakt".
+   2. Vpiše ime, priimek, e-naslov, zadevo in sporočilo.
+   3. Sistem preveri veljavnost podatkov.
+   4. Sistem shrani sporočilo in potrdi prejem.
 5. **Alternativni tokovi in napake**:
-    - A1: Opozorilo uporabniku.
-      1. Administrator odpre sekcijo Uporabniki.
-      2. Sistem prikaže paginiran seznam uporabnikov.
-      3. Administrator odpre izbranega uporabnika in izbere akcijo "Opozori".
-      4. Sistem shrani opozorilo.
-      5. Sistem uporabnika označi z rumeno vizualno oznako.
-    - E1: Administrator nima ustreznih pravic.
-      1. Administrator odpre sekcijo Uporabniki.
-      2. Sistem prikaže seznam uporabnikov.
-      3. Administrator sproži administrativno akcijo na uporabniku.
-      4. Sistem preveri pravice in akcijo zavrne.
-      5. Sistem prikaže razlog zavrnitve.
-      6. Seznam uporabnikov ostane nespremenjen.
-    - E2: Konflikt stanja računa.
-      1. Administrator odpre sekcijo Uporabniki.
-      2. Sistem prikaže paginiran seznam uporabnikov.
-      3. Administrator izvede akcijo nad uporabnikom.
-      4. Sistem zazna konflikt stanja v drugi seji.
-      5. Sistem osveži seznam uporabnikov.
-      6. Administrator ponovi akcijo na osveženih podatkih.
+   - A1: Dopolnitev obrazca pred oddajo.
+     1. Gost ali uporabnik v footerju odpre stran "Kontakt".
+     2. Vpiše del obrazca, nato opazi manjkajoče podatke.
+     3. Dopolni obvezna polja in ponovno odda obrazec.
+     4. Sistem preveri veljavnost podatkov.
+     5. Sistem shrani sporočilo in potrdi prejem.
+   - E1: Neveljavno izpolnjen kontaktni obrazec.
+     1. Gost ali uporabnik v footerju odpre stran "Kontakt".
+     2. Uporabnik odda obrazec z manjkajočimi ali napačnimi podatki.
+     3. Sistem zavrne oddajo in označi napake v poljih.
+     4. Uporabnik popravi obrazec in ponovno odda sporočilo.
+     5. Sistem shrani sporočilo in potrdi prejem.
 6. **Predpogoj**:
-    - Administrator je prijavljen.
+   - Gost ali uporabnik ima dostop do spletnega vmesnika.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: status uporabnika je posodobljen.
-    - Neuspeh: status ostane nespremenjen.
+   - Uspeh: kontaktno sporočilo je oddano in potrjeno.
+   - Neuspeh: sporočilo ni oddano.
 8. **Posebne zahteve**:
-    - Revizijska sled administrativnih akcij.
-    - Uporabnik z opozorilom je v seznamu vizualno označen z rumeno.
+   - Sistem mora potrditi prejem, ne glede na to, ali je vprašanje vsebinsko že obravnavano.
 9. **Prioriteta (MoSCoW)**:
-    - Must
+   - Should
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
+| Primer uporabe             | Funkcijski sistem | Začetno stanje          | Vhod                        | Pričakovan izhod                              |
+| -------------------------- | ----------------- | ----------------------- | --------------------------- | --------------------------------------------- |
+| Oddati kontaktno sporočilo | Kontaktni modul   | Uporabnik odpre kontakt | Oddano kontaktno sporočilo  | Potrditev prejema sporočila                   |
+| Oddati kontaktno sporočilo | Kontaktni modul   | Obrazec vsebuje napake  | Oddaja neveljavnega obrazca | Prikazane napake v poljih in zavrnjena oddaja |
+
+11. **Razširitev - pogostost uporabe in triggerji**:
+    - Pogostost: nizka.
+    - Trigger: uporabnik klikne povezavo v footerju in odpre kontaktni obrazec.
+
+##### 3.1.4.13 Upravljanje uporabnikov (administrator)
+
+1. **Naslov**: Upravljanje uporabnikov
+2. **Akterji**:
+   - Administrator (vloga)
+3. **Povzetek funkcionalnosti**:
+   - Administrator pregleduje seznam uporabnikov in izvaja ukrepe nad računi, vključno z opozorilom uporabniku.
+4. **Osnovni tok**:
+   1. Administrator odpre sekcijo Uporabniki.
+   2. Sistem prikaže paginiran seznam uporabnikov.
+   3. Administrator izvede akcijo blokiraj/deblokiraj/aktiviraj/deaktiviraj/opozori.
+5. **Alternativni tokovi in napake**:
+   - A1: Opozorilo uporabniku.
+     1. Administrator odpre sekcijo Uporabniki.
+     2. Sistem prikaže paginiran seznam uporabnikov.
+     3. Administrator odpre izbranega uporabnika in izbere akcijo "Opozori".
+     4. Sistem shrani opozorilo.
+     5. Sistem uporabnika označi z rumeno vizualno oznako.
+   - E1: Administrator nima ustreznih pravic.
+     1. Administrator odpre sekcijo Uporabniki.
+     2. Sistem prikaže seznam uporabnikov.
+     3. Administrator sproži administrativno akcijo na uporabniku.
+     4. Sistem preveri pravice in akcijo zavrne.
+     5. Sistem prikaže razlog zavrnitve.
+     6. Seznam uporabnikov ostane nespremenjen.
+   - E2: Konflikt stanja računa.
+     1. Administrator odpre sekcijo Uporabniki.
+     2. Sistem prikaže paginiran seznam uporabnikov.
+     3. Administrator izvede akcijo nad uporabnikom.
+     4. Sistem zazna konflikt stanja v drugi seji.
+     5. Sistem osveži seznam uporabnikov.
+     6. Administrator ponovi akcijo na osveženih podatkih.
+6. **Predpogoj**:
+   - Administrator je prijavljen.
+7. **Popogoj, posledice in učinki**:
+   - Uspeh: status uporabnika je posodobljen.
+   - Neuspeh: status ostane nespremenjen.
+8. **Posebne zahteve**:
+   - Revizijska sled administrativnih akcij.
+   - Uporabnik z opozorilom je v seznamu vizualno označen z rumeno.
+9. **Prioriteta (MoSCoW)**:
+   - Must
+10. **Sprejemni testi**:
+
+| Primer uporabe        | Funkcijski sistem                  | Začetno stanje              | Vhod                                             | Pričakovan izhod                      |
+| --------------------- | ---------------------------------- | --------------------------- | ------------------------------------------------ | ------------------------------------- |
 | Upravljati uporabnike | Administratorski modul uporabnikov | Administrator je prijavljen | Akcija blokiraj/deblokiraj/aktiviraj/deaktiviraj | Status uporabnika uspešno posodobljen |
-| Upravljati uporabnike | Administratorski modul uporabnikov | Administrator brez pravic | Poskus akcije | Akcija zavrnjena |
+| Upravljati uporabnike | Administratorski modul uporabnikov | Administrator brez pravic   | Poskus akcije                                    | Akcija zavrnjena                      |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Uporabniki.
 
-##### 3.1.4.15 Pregledati obvestila in prijave (administrator)
+##### 3.1.4.14 Pregled kontaktnih obrazcev in prijav neprimernega vedenja (administrator)
 
-1. **Naslov**: Pregledati obvestila in prijave
+1. **Naslov**: Pregled kontaktnih obrazcev in prijav neprimernega vedenja
 2. **Akterji**:
-    - Administrator (vloga)
+   - Administrator (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Administrator pregleda prijave, vprašanja in povratna sporočila uporabnikov.
+   - Administrator pregleda prijave, vprašanja in povratna sporočila uporabnikov.
 4. **Osnovni tok**:
-      1. Administrator odpre sekcijo Obvestila.
-      2. Sistem prikaže seznam obvestil.
-      3. Administrator odpre podrobnosti in označi obvestilo kot obdelano.
+   1. Administrator odpre sekcijo Obvestila.
+   2. Sistem prikaže seznam obvestil.
+   3. Administrator odpre podrobnosti in označi obvestilo kot obdelano.
 5. **Alternativni tokovi in napake**:
-    - A1: Eskalacija obvestila.
-      1. Administrator odpre sekcijo Obvestila.
-      2. Sistem prikaže seznam obvestil.
-      3. Administrator odpre obvestilo visoke prioritete.
-      4. Administrator izbere možnost eskalacije.
-      5. Sistem označi obvestilo kot eskalirano in ga posreduje v nadaljnjo obravnavo.
-      6. Seznam obvestil se osveži s posodobljenim statusom.
-    - E1: Podrobnosti obvestila niso dosegljive.
-      1. Administrator odpre sekcijo Obvestila.
-      2. Sistem prikaže seznam obvestil.
-      3. Administrator odpre obvestilo.
-      4. Sistem ne naloži podrobnosti.
-      5. Sistem prikaže opozorilo in možnost ponovnega nalaganja.
-      6. Administrator ponovi zahtevo.
-      7. Sistem naloži podrobnosti obvestila.
-      8. Administrator obvestilo označi kot obdelano.
+   - A1: Eskalacija obvestila.
+     1. Administrator odpre sekcijo Obvestila.
+     2. Sistem prikaže seznam obvestil.
+     3. Administrator odpre obvestilo visoke prioritete.
+     4. Administrator izbere možnost eskalacije.
+     5. Sistem označi obvestilo kot eskalirano in ga posreduje v nadaljnjo obravnavo.
+     6. Seznam obvestil se osveži s posodobljenim statusom.
+   - A2: Eskalacija na upravljanje uporabnika.
+     1. Administrator odpre sekcijo Obvestila.
+     2. Sistem prikaže seznam obvestil in prijav.
+     3. Administrator odpre prijavo ali kontaktni obrazec.
+     4. Administrator ugotovi, da je potrebna administrativna akcija (npr. opozorilo, blokiranje ali deaktivacija uporabnika).
+     5. Administrator izbere možnost "Upravljaj uporabnika".
+     6. Sistem ga preusmeri na sekcijo Upravljati uporabnike s podatki relevantnega uporabnika.
+     7. Administrator izvede ustrezno akcijo (blokiraj, deblokiraj, aktiviraj, deaktiviraj, opozori).
+     8. Sistem zabeleži akcijo in posodobi status v obvestilih.
+   - E1: Podrobnosti obvestila niso dosegljive.
+     1. Administrator odpre sekcijo Obvestila.
+     2. Sistem prikaže seznam obvestil.
+     3. Administrator odpre obvestilo.
+     4. Sistem ne naloži podrobnosti.
+     5. Sistem prikaže opozorilo in možnost ponovnega nalaganja.
+     6. Administrator ponovi zahtevo.
+     7. Sistem naloži podrobnosti obvestila.
+     8. Administrator obvestilo označi kot obdelano.
 6. **Predpogoj**:
-    - Administrator je prijavljen.
+   - Administrator je prijavljen.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: obvestilo je obravnavano.
-    - Neuspeh: obvestilo ostane odprto.
+   - Uspeh: obvestilo je obravnavano.
+   - Neuspeh: obvestilo ostane odprto.
 8. **Posebne zahteve**:
-    - Zaupna obravnava občutljivih vsebin.
+   - Zaupna obravnava občutljivih vsebin.
 9. **Prioriteta (MoSCoW)**:
-    - Should
+   - Should
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Pregledati obvestila in prijave (administrator) | Administratorski modul obvestil | Administrator je prijavljen | Odprtje obvestila | Prikazane podrobnosti obvestila |
-| Pregledati obvestila in prijave (administrator) | Administratorski modul obvestil | Administrator je prijavljen | Označitev obvestila kot obdelano | Status obvestila posodobljen |
+| Primer uporabe                                  | Funkcijski sistem               | Začetno stanje              | Vhod                             | Pričakovan izhod                |
+| ----------------------------------------------- | ------------------------------- | --------------------------- | -------------------------------- | ------------------------------- |
+| Pregledati obvestila in prijave (administrator) | Administratorski modul obvestil | Administrator je prijavljen | Odprtje obvestila                | Prikazane podrobnosti obvestila |
+| Pregledati obvestila in prijave (administrator) | Administratorski modul obvestil | Administrator je prijavljen | Označitev obvestila kot obdelano | Status obvestila posodobljen    |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Obvestila.
 
-##### 3.1.4.16 Pregledati skupine in chat (administrator)
+##### 3.1.4.15 Pregledati skupine in chat (administrator)
 
 1. **Naslov**: Pregledati skupine in chat
 2. **Akterji**:
-    - Administrator (vloga)
+   - Administrator (vloga)
 3. **Povzetek funkcionalnosti**:
-    - Administrator ima vpogled v vse ustvarjene skupine, njihove člane in vsebino skupinskega chata.
+   - Administrator ima vpogled v vse ustvarjene skupine, njihove člane in vsebino skupinskega chata.
 4. **Osnovni tok**:
-      1. Administrator odpre sekcijo Skupine.
-      2. Sistem prikaže seznam vseh ustvarjenih skupin.
-      3. Administrator odpre izbrano skupino in pregled chata.
+   1. Administrator odpre sekcijo Skupine.
+   2. Sistem prikaže seznam vseh ustvarjenih skupin.
+   3. Administrator odpre izbrano skupino in pregled chata.
 5. **Alternativni tokovi in napake**:
-    - A1: Filtriranje pred vpogledom.
-      1. Administrator odpre sekcijo Skupine.
-      2. Sistem prikaže seznam vseh ustvarjenih skupin.
-      3. Administrator nastavi filtre (status, obdobje, št. članov).
-      4. Sistem osveži seznam skupin.
-      5. Administrator odpre izbrano skupino in nadaljuje na pregled chata.
-    - E1: Podatki chata niso dosegljivi.
-      1. Administrator odpre sekcijo Skupine.
-      2. Sistem prikaže seznam vseh ustvarjenih skupin.
-      3. Administrator odpre izbrano skupino in pregled chata.
-      4. Sistem ne uspe naložiti podatkov chata.
-      5. Sistem prikaže opozorilo in možnost ponovnega poskusa.
-      6. Administrator ponovi nalaganje in sistem prikaže chat.
+   - A1: Filtriranje pred vpogledom.
+     1. Administrator odpre sekcijo Skupine.
+     2. Sistem prikaže seznam vseh ustvarjenih skupin.
+     3. Administrator nastavi filtre (status, obdobje, št. članov).
+     4. Sistem osveži seznam skupin.
+     5. Administrator odpre izbrano skupino in nadaljuje na pregled chata.
+   - E1: Podatki chata niso dosegljivi.
+     1. Administrator odpre sekcijo Skupine.
+     2. Sistem prikaže seznam vseh ustvarjenih skupin.
+     3. Administrator odpre izbrano skupino in pregled chata.
+     4. Sistem ne uspe naložiti podatkov chata.
+     5. Sistem prikaže opozorilo in možnost ponovnega poskusa.
+     6. Administrator ponovi nalaganje in sistem prikaže chat.
 6. **Predpogoj**:
-    - Administrator je prijavljen.
+   - Administrator je prijavljen.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: vpogled je uspešno izveden.
-    - Neuspeh: vpogled ni izveden.
+   - Uspeh: vpogled je uspešno izveden.
+   - Neuspeh: vpogled ni izveden.
 8. **Posebne zahteve**:
-    - Revizijska sled vpogledov administratorja v chat.
+   - Revizijska sled vpogledov administratorja v chat.
 9. **Prioriteta (MoSCoW)**:
-    - Must
+   - Must
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Pregledati skupine in chat | Administratorski modul skupin | Administrator je prijavljen | Odprtje izbrane skupine | Prikazani člani, statusi in chat |
+| Primer uporabe             | Funkcijski sistem             | Začetno stanje              | Vhod                              | Pričakovan izhod                                 |
+| -------------------------- | ----------------------------- | --------------------------- | --------------------------------- | ------------------------------------------------ |
+| Pregledati skupine in chat | Administratorski modul skupin | Administrator je prijavljen | Odprtje izbrane skupine           | Prikazani člani, statusi in chat                 |
 | Pregledati skupine in chat | Administratorski modul skupin | Administrator je prijavljen | Chat podatki začasno nedosegljivi | Prikazano opozorilo in možnost ponovnega poskusa |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Skupine.
 
-##### 3.1.4.17 Spremljati kakovost pametne komponente (administrator)
+##### 3.1.4.16 Pregled povratnih informacij (administrator)
+
+1. **Naslov**: Pregled povratnih informacij
+2. **Akterji**:
+   - Administrator (vloga)
+3. **Povzetek funkcionalnosti**:
+   - Administrator pregleda povratne informacije, ki so jih člani oddali za posamezno skupino.
+4. **Osnovni tok**:
+   1. Administrator odpre sekcijo Skupine.
+   2. Sistem prikaže seznam vseh ustvarjenih skupin.
+   3. Administrator odpre izbrano skupino.
+   4. Sistem prikaže povprečno oceno, število oddanih ocen in seznam komentarjev.
+5. **Alternativni tokovi in napake**:
+   - A1: Filtriranje povratnih informacij po skupini.
+     1. Administrator odpre sekcijo Skupine.
+     2. Sistem prikaže seznam vseh ustvarjenih skupin.
+     3. Administrator uporabi filtre za določeno skupino ali obdobje.
+     4. Sistem osveži prikaz povratnih informacij.
+     5. Administrator pregleda podatke za izbrano skupino.
+   - E1: Povratne informacije za skupino niso dosegljive.
+     1. Administrator odpre sekcijo Skupine.
+     2. Sistem prikaže seznam vseh ustvarjenih skupin.
+     3. Administrator odpre izbrano skupino.
+     4. Sistem ne naloži povratnih informacij.
+     5. Sistem prikaže opozorilo in možnost ponovnega nalaganja.
+     6. Administrator ponovi nalaganje.
+     7. Sistem prikaže razpoložljive povratne informacije.
+6. **Predpogoj**:
+   - Administrator je prijavljen.
+7. **Popogoj, posledice in učinki**:
+   - Uspeh: povratne informacije za izbrano skupino so prikazane.
+   - Neuspeh: podatki o povratnih informacijah niso prikazani.
+8. **Posebne zahteve**:
+   - Prikaz mora ločiti povprečne ocene od posameznih komentarjev.
+9. **Prioriteta (MoSCoW)**:
+   - Should
+10. **Sprejemni testi**:
+
+| Primer uporabe                          | Funkcijski sistem             | Začetno stanje              | Vhod                                  | Pričakovan izhod                                   |
+| --------------------------------------- | ----------------------------- | --------------------------- | ------------------------------------- | -------------------------------------------------- |
+| Pregledati povratne informacije skupine | Administratorski modul skupin | Administrator je prijavljen | Odprtje izbrane skupine               | Prikazane povprečne ocene in komentarji            |
+| Pregledati povratne informacije skupine | Administratorski modul skupin | Podatki niso dosegljivi     | Poskus odpiranja povratnih informacij | Prikazano opozorilo in možnost ponovnega nalaganja |
+
+11. **Razširitev - pogostost uporabe in triggerji**:
+    - Pogostost: srednja.
+    - Trigger: administrator odpre izbrano skupino v sekciji Skupine.
+
+##### 3.1.4.17 Upravljanje pametne komponente (administrator)
 
 1. **Naslov**: Spremljati kakovost pametne komponente
 2. **Akterji**:
-    - Administrator (vloga)
-    - Pametna komponenta (notranja komponenta sistema)
+   - Administrator (vloga)
+   - Pametna komponenta (notranja komponenta sistema)
 3. **Povzetek funkcionalnosti**:
-    - Administrator spremlja metrike kakovosti matching algoritma in po potrebi prilagodi parametre.
+   - Administrator spremlja metrike kakovosti matching algoritma in po potrebi prilagodi parametre.
 4. **Osnovni tok**:
-      1. Administrator odpre sekcijo Pametna komponenta.
-      2. Sistem prikaže ključne metrike kakovosti.
-      3. Administrator po potrebi spremeni parametre algoritma.
-      4. Sistem zabeleži spremembo in prikaže primerjavo metrik pred/po spremembi.
+   1. Administrator odpre sekcijo Pametna komponenta.
+   2. Sistem prikaže ključne metrike kakovosti.
+   3. Administrator po potrebi spremeni parametre algoritma.
+   4. Sistem zabeleži spremembo in prikaže primerjavo metrik pred/po spremembi.
 5. **Alternativni tokovi in napake**:
-    - A1: Spremljanje brez spremembe parametrov.
-      1. Administrator odpre sekcijo Pametna komponenta.
-      2. Sistem prikaže ključne metrike kakovosti.
-      3. Administrator pregleda trend po obdobjih.
-      4. Administrator ne spremeni parametrov in zapre pogled.
-      5. Sistem ne zabeleži spremembe nastavitev.
-    - E1: Parametri so izven dovoljenih mej.
-      1. Administrator odpre sekcijo Pametna komponenta.
-      2. Sistem prikaže ključne metrike kakovosti.
-      3. Administrator spremeni parameter algoritma z neveljavno vrednostjo.
-      4. Sistem zavrne spremembo in prikaže dovoljene meje.
-      5. Administrator vnese veljavno vrednost.
-      6. Sistem zabeleži spremembo in prikaže primerjavo metrik pred/po.
-    - E2: Konflikt sočasnih sprememb.
-      1. Administrator odpre sekcijo Pametna komponenta.
-      2. Sistem prikaže ključne metrike kakovosti in trenutne parametre.
-      3. Administrator spremeni parameter, medtem ko drug administrator sočasno ureja isti parameter.
-      4. Sistem pri shranjevanju zazna konflikt.
-      5. Sistem zahteva osvežitev zadnje verzije.
-      6. Administrator osveži podatke, ponovno odda spremembo in sistem jo zabeleži.
+   - A1: Spremljanje brez spremembe parametrov.
+     1. Administrator odpre sekcijo Pametna komponenta.
+     2. Sistem prikaže ključne metrike kakovosti.
+     3. Administrator pregleda trend po obdobjih.
+     4. Administrator ne spremeni parametrov in zapre pogled.
+     5. Sistem ne zabeleži spremembe nastavitev.
+   - E1: Parametri so izven dovoljenih mej.
+     1. Administrator odpre sekcijo Pametna komponenta.
+     2. Sistem prikaže ključne metrike kakovosti.
+     3. Administrator spremeni parameter algoritma z neveljavno vrednostjo.
+     4. Sistem zavrne spremembo in prikaže dovoljene meje.
+     5. Administrator vnese veljavno vrednost.
+     6. Sistem zabeleži spremembo in prikaže primerjavo metrik pred/po.
+   - E2: Konflikt sočasnih sprememb.
+     1. Administrator odpre sekcijo Pametna komponenta.
+     2. Sistem prikaže ključne metrike kakovosti in trenutne parametre.
+     3. Administrator spremeni parameter, medtem ko drug administrator sočasno ureja isti parameter.
+     4. Sistem pri shranjevanju zazna konflikt.
+     5. Sistem zahteva osvežitev zadnje verzije.
+     6. Administrator osveži podatke, ponovno odda spremembo in sistem jo zabeleži.
 6. **Predpogoj**:
-    - Administrator je prijavljen in ima pravice za upravljanje parametrov.
+   - Administrator je prijavljen in ima pravice za upravljanje parametrov.
 7. **Popogoj, posledice in učinki**:
-    - Uspeh: sprememba je zabeležena in uporabljena v nadaljnjih izračunih.
-    - Neuspeh: parametri ostanejo nespremenjeni.
+   - Uspeh: sprememba je zabeležena in uporabljena v nadaljnjih izračunih.
+   - Neuspeh: parametri ostanejo nespremenjeni.
 8. **Posebne zahteve**:
-    - Sistem vodi zgodovino sprememb parametrov.
+   - Sistem vodi zgodovino sprememb parametrov.
 9. **Prioriteta (MoSCoW)**:
-    - Should
+   - Should
 10. **Sprejemni testi**:
 
-| Primer uporabe | Funkcijski sistem | Začetno stanje | Vhod | Pričakovan izhod |
-|---|---|---|---|---|
-| Spremljati kakovost pametne komponente (administrator) | Administratorski modul pametne komponente | Administrator je prijavljen | Pregled metrik | Prikazane aktualne metrike kakovosti |
+| Primer uporabe                                         | Funkcijski sistem                         | Začetno stanje              | Vhod                                    | Pričakovan izhod                                   |
+| ------------------------------------------------------ | ----------------------------------------- | --------------------------- | --------------------------------------- | -------------------------------------------------- |
+| Spremljati kakovost pametne komponente (administrator) | Administratorski modul pametne komponente | Administrator je prijavljen | Pregled metrik                          | Prikazane aktualne metrike kakovosti               |
 | Spremljati kakovost pametne komponente (administrator) | Administratorski modul pametne komponente | Administrator je prijavljen | Sprememba parametrov v dovoljenih mejah | Sprememba zabeležena, prikazana primerjava pred/po |
 
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Pametna komponenta.
-
 
 ## 4 Opis sistema
 
