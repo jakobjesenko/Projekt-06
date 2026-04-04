@@ -520,6 +520,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
    3. Sistem pošlje ponastavitveno povezavo.
    4. Gost odpre povezavo, vnese novo geslo in potrditev gesla.
    5. Sistem shrani geslo in preusmeri na prijavo.
+      Razširitev: Neposredna prijava po ponastavitvi gesla : Geslo je uspešno ponastavljeno : Prijava.
 5. **Alternativni tokovi in napake**:
    - A1: Takojšnja prijava po spremembi gesla.
      1. Gost klikne možnost "Pozabljeno geslo".
@@ -527,6 +528,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
      3. Sistem pošlje ponastavitveno povezavo.
      4. Gost odpre povezavo, vnese novo geslo in potrditev gesla.
      5. Sistem shrani geslo in preusmeri na prijavo.
+        Razširitev: Neposredna prijava po ponastavitvi gesla : Geslo je uspešno ponastavljeno : Prijava.
      6. Uporabnik takoj vnese nove poverilnice in odda prijavo.
      7. Sistem uspešno vzpostavi sejo.
    - E1: Povezava je neveljavna ali potekla.
@@ -539,6 +541,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
      7. Sistem pošlje novo povezavo.
      8. Uporabnik odpre novo povezavo, vnese novo geslo in potrditev gesla.
      9. Sistem shrani geslo in preusmeri na prijavo.
+        Razširitev: Neposredna prijava po ponastavitvi gesla : Geslo je uspešno ponastavljeno : Prijava.
    - E2: Gesli se ne ujemata.
      1. Gost klikne možnost "Pozabljeno geslo".
      2. Vnese e-naslov računa.
@@ -547,6 +550,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
      5. Sistem zazna neujemanje gesel in zavrne oddajo.
      6. Uporabnik popravi vnos in znova odda obrazec.
      7. Sistem shrani geslo in preusmeri na prijavo.
+        Razširitev: Neposredna prijava po ponastavitvi gesla : Geslo je uspešno ponastavljeno : Prijava.
 6. **Predpogoj**: Uporabnik ima ustvarjen račun.
 7. **Popogoj, posledice in učinki**: Uspeh: geslo je spremenjeno. Neuspeh: geslo ostane nespremenjeno.
 8. **Posebne zahteve**: Časovna omejenost in enkratna uporaba žetona.
@@ -1087,6 +1091,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
      4. Administrator ugotovi, da je potrebna administrativna akcija (npr. opozorilo, blokiranje ali deaktivacija uporabnika).
      5. Administrator izbere možnost "Upravljaj uporabnika".
      6. Sistem ga preusmeri na sekcijo Upravljati uporabnike s podatki relevantnega uporabnika.
+        Razširitev: Eskalacija na upravljanje uporabnikov : Potrebna je administrativna akcija nad uporabnikom : Upravljanje uporabnikov.
      7. Administrator izvede ustrezno akcijo (blokiraj, deblokiraj, aktiviraj, deaktiviraj, opozori).
      8. Sistem zabeleži akcijo in posodobi status v obvestilih.
    - E1: Podrobnosti obvestila niso dosegljive.
