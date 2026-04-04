@@ -1,0 +1,82 @@
+@startuml DPU
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam usecase {
+  backgroundColor white
+  borderColor #5FB8EC
+  arrowColor black
+}
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+
+left to right direction
+
+actor "Gost" AS Guest
+actor "Uporabnik" AS User
+actor "Administrator" AS Admin
+actor "E-poštni servis" AS Email
+actor "Geokodirni API" AS Geo
+
+User -|> Guest
+
+rectangle "Sistem za iskanje skupin" {
+  ' --- PRIJAVA ---
+  (Registracija) as UC1
+  (Prijava) as UC2
+  (Ponastavitev gesla) as UC3
+  (Odjava) as UC4
+  
+  ' --- PROFIL ---
+  (Urejanje profila) as UC5
+  
+  ' --- SKUPINE ---
+  (Iskanje skupin) as UC6
+  (Pregled skupin in chat) as UC19
+  (Odločitev o udeležbi) as UC8
+  
+  ' --- FEEDBACK ---
+  (Oddaja povratne informacije) as UC10
+  (Prijava neprimernega vedenja) as UC11
+  
+  ' --- ADMIN ---
+  (Upravljanje uporabnikov) as UC12
+  (Pregled prijav neprimernega vedenja) as UC13
+  (Upravljanje skupin) as UC14
+  (Upravljanje pametne komponente) as UC18
+
+  ' --- JAVNE STRANI ---
+  (Pregled informacij) as UC20
+  (Kontaktni obrazec) as UC21
+}
+
+Guest --> UC20
+Guest --> UC21
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC19
+User --> UC8
+User --> UC10
+User --> UC11
+
+Admin --> UC12
+Admin --> UC13
+Admin --> UC14
+Admin --> UC18
+
+UC3 .> UC2 : <<extend>>
+UC13 .> UC12 : <<extend>>
+
+UC1 --> Email
+UC3 --> Email
+UC21 --> Email
+
+UC1 --> Geo
+UC5 --> Geo
+
+@enduml
