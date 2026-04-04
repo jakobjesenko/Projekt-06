@@ -1295,6 +1295,11 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Pametna komponenta.
 
+![DPU](./gradivo/img/use_case.jpg "Ganttov diagram")
+
+**Diagram primerov uporabe** (izvorna koda [PlantUML](./gradivo/plantuml/Use_case_diagram.puml))
+
+
 ## 4 Opis sistema
 
 - Predstavite sistem in glavne izzive.
@@ -1319,6 +1324,10 @@ _Nadaljujte z vzdrževanjem **dnevnika sprememb**. Dodaje vse nove spremembe v p
 ### 6.2 Projektni načrt
 
 - Posodobljen Ganttov diagram in graf PERT.
+
+![Ganttov diagram](./gradivo/img/gantt2.png "Ganttov diagram")
+
+**Ganttov diagram** (izvorna koda [PlantUML](./gradivo/plantuml/Ganttov_diagram2.puml))
 
 ## 7 Ekipa
 
