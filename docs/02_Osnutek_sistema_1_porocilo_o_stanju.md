@@ -138,6 +138,8 @@ Spletni uporabniški vmesnik je strukturiran po maskah, ki sledijo osnovnemu tok
 
 Maska začetne strani uporabniku predstavi namen sistema in vstopne možnosti.
 
+Slika maske: ![Maska začetne strani](gradivo/img/homepage.png)
+
 1. Uporabnik vidi kratek opis platforme v osrednjem delu strani.
 2. Glava strani vsebuje logo ali ime aplikacije levo ter gumba za prijavo in registracijo desno.
 3. Noga strani vsebuje povezave do pogostih vprašanj, kontakta, pogojev uporabe in GDPR.
@@ -146,6 +148,10 @@ Maska začetne strani uporabniku predstavi namen sistema in vstopne možnosti.
 ###### 3.1.1.2.2 Maska za registracijo
 
 Maska registracije omogoča prvi vnos podatkov, potrebnih za ustvarjanje računa.
+
+Slike mask: ![Maska za registracijo 1/3](gradivo/img/registracija1_3.png)
+![Maska za registracijo 2/3](gradivo/img/registracija2_3.png)
+![Maska za registracijo 3/3](gradivo/img/registracija3_3.png)
 
 1. Sistem zahteva:
    a. ime,
@@ -168,6 +174,8 @@ Maska registracije omogoča prvi vnos podatkov, potrebnih za ustvarjanje računa
 
 Maska prijave omogoča avtentikacijo obstoječega uporabnika.
 
+Slika maske: ![Maska za prijavo](gradivo/img/prijava.png)
+
 1. Sistem zahteva:
    a. e-naslov,
    b. geslo.
@@ -180,6 +188,8 @@ Maska prijave omogoča avtentikacijo obstoječega uporabnika.
 
 Maska omogoča začetek postopka obnovitve dostopa do računa.
 
+Slika maske: ![Maska za zahtevo ponastavitve gesla](gradivo/img/.png)
+
 1. Uporabnik vnese e-naslov računa.
 2. Sistem preveri, ali račun obstaja, in pošlje povezavo za ponastavitev gesla.
 3. Sistem prikaže generično potrditev zahteve in ne razkrije, ali račun obstaja.
@@ -188,6 +198,8 @@ Maska omogoča začetek postopka obnovitve dostopa do računa.
 ###### 3.1.1.2.5 Maska za nastavitev novega gesla
 
 Maska omogoča zaključek ponastavitve gesla prek e-poštne povezave.
+
+Slika maske: ![Maska za nastavitev novega gesla](gradivo/img/.png)
 
 1. Uporabnik odpre veljavno povezavo iz e-pošte.
 2. Uporabnik vnese novo geslo in potrditev gesla.
@@ -198,6 +210,8 @@ Maska omogoča zaključek ponastavitve gesla prek e-poštne povezave.
 
 Maska združuje ključne funkcije uporabnika po prijavi.
 
+Slika maske: ![Maska uporabniške nadzorne plošče](gradivo/img/user_homepage.png)
+
 1. Leva stran prikazuje kratek profil (slika, ime, priimek, vzdevek, e-pošta), status iskanja skupine in hitra dejanja.
 2. Prikazani so interesi uporabnika ter dostop do urejanja profila.
 3. Prikazana so pretekla srečanja z osnovnimi podatki in dostopom do preteklih chatov.
@@ -206,6 +220,8 @@ Maska združuje ključne funkcije uporabnika po prijavi.
 ###### 3.1.1.2.7 Maska za predloge skupin
 
 Maska prikazuje predlagane skupine in omogoča hiter pregled članov pred potrditvijo.
+
+Slika maske: ![Maska za predloge skupin](gradivo/user_homepage.png)
 
 1. Uporabnik vidi seznam predlaganih skupin z osnovnimi podatki, odstotkom ujemanja in ključnimi razlogi za predlog.
 2. Uporabnik lahko pri vsaki predlagani skupini odpre hiter pregled članov skupine.
@@ -217,6 +233,8 @@ Maska prikazuje predlagane skupine in omogoča hiter pregled članov pred potrdi
 
 Maska prikazuje komunikacijo skupine.
 
+Slika maske: ![Maska skupinskega chata](gradivo/img/.png)
+
 1. Maska vsebuje osnovne informacije o skupini in seznam članov.
 2. Uporabnik lahko pregleduje zgodovino sporočil.
 3. Uporabnik lahko pošilja nova sporočila.
@@ -225,6 +243,8 @@ Maska prikazuje komunikacijo skupine.
 ###### 3.1.1.2.9 Maska za urejanje profila
 
 Maska profila omogoča upravljanje preferenc za delovanje algoritma.
+
+Slika maske: ![Maska za urejanje profila](gradivo/img/profile_edit.png)
 
 1. Uporabnik lahko ureja:
    a. interese,
@@ -236,12 +256,16 @@ Maska profila omogoča upravljanje preferenc za delovanje algoritma.
 
 Maska povratne informacije omogoča oddajo ocene po srečanju.
 
+Slika maske: ![Maska za povratno informacijo](gradivo/img/.png)
+
 1. Uporabnik poda oceno in kratek komentar.
 2. Sistem shrani odgovor in potrdi uspešen vnos.
 
 ###### 3.1.1.2.11 Maska administratorske nadzorne plošče
 
 Maska omogoča operativni nadzor sistema.
+
+Slika maske: ![Maska administratorske nadzorne plošče](gradivo/img/admin_dashboard.png)
 
 1. Administratorski vmesnik uporablja levi meni (sidebar) s sekcijami: Sistem, Uporabniki, Obvestila, Skupine, Pametna komponenta.
 2. Začetni pogled prikazuje osnovne podatke in statistike delovanja sistema.
@@ -254,6 +278,8 @@ Maska omogoča operativni nadzor sistema.
 ###### 3.1.1.2.12 Maska informacijskih strani in kontakta
 
 Maske pokrivajo strani, dostopne iz noge strani (footer).
+
+Slika maske: ![Maska informacijskih strani in kontakta](gradivo/img/.png)
 
 1. Maska pogojev uporabe vsebuje opis pogojev uporabe sistema.
 2. Maska GDPR vsebuje opis obdelave osebnih podatkov in uporabnikovih pravic.
@@ -1269,10 +1295,6 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Pametna komponenta.
 
-![DPU](./gradivo/img/use_case.jpg "Ganttov diagram")
-
-**Diagram primerov uporabe** (izvorna koda [PlantUML](./gradivo/plantuml/Use_case_diagram.puml))
-
 ## 4 Opis sistema
 
 - Predstavite sistem in glavne izzive.
@@ -1297,10 +1319,6 @@ _Nadaljujte z vzdrževanjem **dnevnika sprememb**. Dodaje vse nove spremembe v p
 ### 6.2 Projektni načrt
 
 - Posodobljen Ganttov diagram in graf PERT.
-
-![Ganttov diagram](./gradivo/img/gantt2.png "Ganttov diagram")
-
-**Ganttov diagram** (izvorna koda [PlantUML](./gradivo/plantuml/Ganttov_diagram2.puml))
 
 ## 7 Ekipa
 
