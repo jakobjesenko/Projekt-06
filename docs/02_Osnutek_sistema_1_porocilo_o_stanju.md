@@ -59,11 +59,37 @@ Administratorski del mora omogočati pregled in obravnavo prijav neprimernega ve
 
 ### 2.2 Nefunkcionalne zahteve
 
-Sistem mora biti uporaben, varen, zanesljiv in pripravljen za nadgradnje. Ključni tok od registracije do prvega predloga skupine mora biti praviloma izvedljiv v manj kot petih minutah, uporabniški vmesnik pa mora omogočati intuitivno uporabo brez dodatnega usposabljanja. Varnostni minimum vključuje zaščiten dostop do računov, varno shranjevanje gesel s kriptografskim hash algoritmom, uporabo HTTPS ter obdelavo osebnih podatkov po načelu minimizacije.
+Nefunkcionalne zahteve so razdeljene na zahteve izdelka, organizacijske zahteve in zunanje zahteve. Vse zahteve so zapisane merljivo, da jih je mogoče preveriti pri pregledu, testiranju ali potrjevanju izvedbe.
 
-Sistem mora zagotavljati zanesljivo shranjevanje ključnih dogodkov (posodobitve profila, odzivi na predloge, povratne informacije) in ciljno uspešnost zaključevanja ključnih tokov brez napak na ravni 99%. Arhitekturno mora rešitev omogočati iterativni razvoj, spremljanje napak z logiranjem in spremljanje kakovosti matching algoritma skozi čas. Ciljna vrednost osnovnega kazalnika kakovosti algoritma (npr. delež potrjenih predlogov) je najmanj 60%.
+#### 2.2.1 Zahteve izdelka
 
-Razpoložljivost sistema mora biti 24/7, razen v času načrtovanega vzdrževanja, pri čemer največji mesečni čas načrtovanih izpadov ne sme presegati enega dne. Rešitev mora podpirati nadaljnje razširitve brez popolne prenove (npr. novi kriteriji ujemanja) ter integracijo z zunanjimi storitvami za geokodiranje in obveščanje. Celoten sistem mora ostati skladen z GDPR.
+1. Ključni tok od registracije do prvega predloga skupine mora biti izvedljiv v največ 5 minutah pri tipični uporabi in brez ročnega posega administratorja.
+2. Uporabniški vmesnik mora omogočati izvedbo osnovnih tokov brez dodatnega usposabljanja, pri čemer mora najmanj 80% testnih uporabnikov brez pomoči uspešno zaključiti registracijo, prijavo in iskanje skupine.
+3. Sistem mora obdelati in shraniti najmanj 99% uspešno oddanih ključnih dogodkov, kamor sodijo posodobitve profila, odzivi na predloge in povratne informacije.
+4. Delež neuspešno zaključenih ključnih tokov zaradi notranjih napak sistema ne sme preseči 1%.
+5. Sistem mora biti dostopen 24/7, pri čemer načrtovani mesečni izpad ne sme preseči 24 ur.
+6. Sistem mora omogočiti osnovne funkcionalnosti brez ponovne namestitve ali arhitekturne prenove, kar pomeni, da mora dodajanje novega kriterija ujemanja biti izvedljivo brez spremembe obstoječih podatkovnih modelov uporabnikov.
+7. Kakovost algoritma za predloge mora biti merjena z deležem potrjenih predlogov in mora dosegati najmanj 60%.
+8. Sistem mora voditi revizijsko sled administrativnih dejanj, pri čemer mora biti vsaka administrativna akcija zabeležena z uporabnikom, časom in tipom akcije.
+9. Iskalni in prikazni tokovi morajo ob napaki prikazati opozorilo in možnost ponovnega poskusa v največ 2 dodatnih korakih.
+
+#### 2.2.2 Organizacijske zahteve
+
+1. Dokumentacija sistema mora biti pripravljena v Markdown obliki in razdeljena po strukturi, uporabljeni v tem poročilu.
+2. Diagrami morajo biti pripravljeni v PlantUML in vključeni kot izvorna koda ter povezava do generirane slike.
+3. Projektni dokumenti morajo biti verzionirani v sistemu Git, spremembe pa morajo biti sledljive po datumu in avtorju spremembe.
+4. Ekipa mora pri vsaki iteraciji dopolniti dnevnik sprememb z opisom spremembe, motivacijo in posledico.
+5. V poročilu morajo biti prikazani posodobljeni Ganttov diagram in graf PERT za trenutno iteracijo.
+6. Vsaka funkcionalna sprememba mora biti opisana tako, da se jo lahko poveže z enim primerom uporabe ali enim diagramom.
+
+#### 2.2.3 Zunanje zahteve
+
+1. Sistem mora uporabljati HTTPS za ves promet med uporabniškim vmesnikom in strežnikom.
+2. Sistem mora varovati osebne podatke v skladu z GDPR, kar vključuje omejeno hrambo, namen obdelave in pravice uporabnika do vpogleda ter izbrisa.
+3. Gesla morajo biti shranjena samo v zgoščeni obliki s kriptografskim hash algoritmom; nikoli se ne sme shraniti navadnega gesla.
+4. Sistem mora podpirati zunanji geokodirni servis za pretvorbo lokacije v koordinate.
+5. Sistem mora podpirati zunanji e-poštni servis za pošiljanje verifikacijskih in ponastavitvenih povezav.
+6. Če je zunanji servis za geokodiranje ali pošiljanje e-pošte nedosegljiv, mora sistem prikazati napako in omogočiti ponovni poskus v največ 1 dodatnem koraku.
 
 ## 3 Cilji projekta
 
@@ -75,13 +101,13 @@ Projekt naslavlja naslednje ključne težave naročnika:
 
 Spodaj so povzete ključne koristi, ki jih bo projekt prinesel naročniku in končnim uporabnikom.
 
-- hitrejše oblikovanje skupin in manj organizacijskega bremena za uporabnika;
-- večja verjetnost uspešnega srečanja zaradi bolj kompatibilne sestave skupin;
-- bolj preprost in prilagodljiv proces (uporabnik lahko sproti spreminja preference);
-- bolj strukturirano in varnejše okolje za spoznavanje novih ljudi;
-- podlaga za merjenje kakovosti predlogov in iterativno izboljševanje sistema.
-- enotno komunikacijsko okolje po potrditvi skupine (integriran chat);
-- operativni nadzor nad kakovostjo pametne komponente preko administratorskih metrik in opozoril.
+- povprečen čas od registracije do prvega predloga skupine naj bo največ 5 minut;
+- najmanj 60% prikazanih predlogov naj bo potrjenih s strani uporabnikov;
+- najmanj 80% testnih uporabnikov naj brez pomoči uspešno zaključi registracijo, prijavo in iskanje skupine;
+- delež neuspešno zaključenih ključnih tokov zaradi notranjih napak sistema naj ne preseže 1%;
+- po potrjeni skupini mora biti skupinski chat na voljo vsem potrjenim članom v istem vmesniku;
+- administrativna dejanja morajo biti v 100% primerov zabeležena z uporabnikom, časom in tipom akcije;
+- kakovost predlogov mora biti mogoče spremljati z metrikami, ki omogočajo primerjavo stanja pred in po spremembi algoritma.
 
 ### 3.1 Primeri uporabe
 
@@ -405,17 +431,17 @@ Prikaz odločitve uporabnika glede predloga skupine (potrjeno/zavrnjeno), vizual
 
 Spodaj so opredeljene vloge, ki sodelujejo v primerih uporabe, skupaj z njihovo naravo (vloga ali zunanji sistem). Akter v primeru uporabe je vedno zunanja entiteta glede na obravnavani sistem.
 
-##### 3.1.3.1 Uporabnik (vloga)
+##### 3.1.3.1 Uporabniška vloga
 
 Uporabnik je primarni poslovni akter sistema.
 Njegova vloga je vnos in vzdrževanje profila, sprožanje iskanja skupin, odločanje o predlogih (potrditev/zavrnitev), uporaba skupinskega chata ter oddaja povratnih informacij in prijav neprimernega vedenja.
 
-##### 3.1.3.2 Gost (vloga)
+##### 3.1.3.2 Gostovska vloga
 
 Gost je neprijavljen uporabnik sistema.
 Njegova vloga je dostop do začetne strani ter informacijskih strani v nogi, možnost registracije, prijave in zahtevka za ponastavitev gesla.
 
-##### 3.1.3.3 Administrator (vloga)
+##### 3.1.3.3 Administratorska vloga
 
 Administrator je operativni in nadzorni akter sistema.
 Njegova vloga je obravnava prijav, upravljanje uporabniških računov, pregled skupin in moderatorski vpogled v chat ter spremljanje metrik kakovosti pametne komponente.
@@ -442,7 +468,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 ##### 3.1.4.1 Registracija
 
 1. **Naslov**: Registracija
-2. **Akterji**: Gost (vloga), Uporabnik (vloga)
+2. **Akterji**: Gostovska vloga, Uporabniška vloga
 3. **Povzetek funkcionalnosti**: Nov uporabnik opravi registracijo v treh korakih in aktivira račun prek e-pošte.
 4. **Osnovni tok**:
    1. Gost odpre masko za registracijo.
@@ -495,7 +521,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 ##### 3.1.4.2 Prijava
 
 1. **Naslov**: Prijava
-2. **Akterji**: Gost (vloga), Uporabnik (vloga), Administrator (vloga)
+2. **Akterji**: Gostovska vloga, Uporabniška vloga, Administratorska vloga
 3. **Povzetek funkcionalnosti**: Akter se avtenticira in je preusmerjen na ustrezen pogled.
 4. **Osnovni tok**:
    1. Gost odpre masko za prijavo.
@@ -544,7 +570,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 ##### 3.1.4.3 Ponastavitev gesla
 
 1. **Naslov**: Ponastavitev gesla
-2. **Akterji**: Gost (vloga), Uporabnik (vloga)
+2. **Akterji**: Gostovska vloga, Uporabniška vloga
 3. **Povzetek funkcionalnosti**: Uporabnik zahteva povezavo za ponastavitev in nastavi novo geslo.
 4. **Osnovni tok**:
    1. Gost klikne možnost "Pozabljeno geslo".
@@ -599,8 +625,8 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Odjava
 2. **Akterji**:
-   - Uporabnik (vloga)
-   - Administrator (vloga)
+   - Uporabniška vloga
+   - Administratorska vloga
 3. **Povzetek funkcionalnosti**:
    - Prijavljen uporabnik ali administrator zaključi sejo in se vrne na javni del aplikacije.
 4. **Osnovni tok**:
@@ -643,7 +669,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Urejanje profila
 2. **Akterji**:
-   - Uporabnik (vloga)
+   - Uporabniška vloga
 3. **Povzetek funkcionalnosti**:
    - Uporabnik posodobi preference in/ali osnovne podatke profila.
 4. **Osnovni tok**:
@@ -693,7 +719,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Iskanje skupin
 2. **Akterji**:
-   - Uporabnik (vloga)
+   - Uporabniška vloga
 3. **Povzetek funkcionalnosti**:
    - Prijavljen uporabnik sproži iskanje skupine; sistem zažene izračun predlogov.
 4. **Osnovni tok**:
@@ -751,7 +777,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Pregled skupin in chata
 2. **Akterji**:
-   - Uporabnik (vloga)
+   - Uporabniška vloga
 3. **Povzetek funkcionalnosti**:
    - Uporabnik odpre izbrano predlagano skupino in na istem mestu pregleda osnovne podatke skupine, člane ter skupinski chat.
 4. **Osnovni tok**:
@@ -812,7 +838,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Odločitev o udeležbi
 2. **Akterji**:
-   - Uporabnik (vloga)
+   - Uporabniška vloga
 3. **Povzetek funkcionalnosti**:
    - Uporabnik po pregledu skupine potrdi ali zavrne predlog in sistem posodobi status odziva.
 4. **Osnovni tok**:
@@ -861,7 +887,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Oddaja povratne informacije
 2. **Akterji**:
-   - Uporabnik (vloga)
+   - Uporabniška vloga
 3. **Povzetek funkcionalnosti**:
    - Uporabnik po srečanju odda oceno in komentar za izbrano skupino.
 4. **Osnovni tok**:
@@ -911,7 +937,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Prijaviti neprimerno vedenje
 2. **Akterji**:
-   - Uporabnik (vloga)
+   - Uporabniška vloga
 3. **Povzetek funkcionalnosti**:
    - Uporabnik odda prijavo za neprimerno vedenje uporabnika znotraj gruppe.
 4. **Osnovni tok**:
@@ -957,8 +983,8 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Pregled informacij
 2. **Akterji**:
-   - Gost (vloga)
-   - Uporabnik (vloga)
+   - Gostovska vloga
+   - Uporabniška vloga
 3. **Povzetek funkcionalnosti**:
    - Gost ali uporabnik prek footer povezav dostopa do pogojev uporabe, GDPR in pogostih vprašanj.
 4. **Osnovni tok**:
@@ -1002,8 +1028,8 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Kontaktni obrazec
 2. **Akterji**:
-   - Gost (vloga)
-   - Uporabnik (vloga)
+   - Gostovska vloga
+   - Uporabniška vloga
 3. **Povzetek funkcionalnosti**:
    - Gost ali uporabnik prek kontaktnega obrazca pošlje sporočilo sistemu.
 4. **Osnovni tok**:
@@ -1048,7 +1074,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Upravljanje uporabnikov
 2. **Akterji**:
-   - Administrator (vloga)
+   - Administratorska vloga
 3. **Povzetek funkcionalnosti**:
    - Administrator pregleduje seznam uporabnikov in izvaja ukrepe nad računi, vključno z opozorilom uporabniku.
 4. **Osnovni tok**:
@@ -1101,7 +1127,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Pregled kontaktnih obrazcev in prijav neprimernega vedenja
 2. **Akterji**:
-   - Administrator (vloga)
+   - Administratorska vloga
 3. **Povzetek funkcionalnosti**:
    - Administrator pregleda prijave, vprašanja in povratna sporočila uporabnikov.
 4. **Osnovni tok**:
@@ -1159,7 +1185,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Pregledati skupine in chat
 2. **Akterji**:
-   - Administrator (vloga)
+   - Administratorska vloga
 3. **Povzetek funkcionalnosti**:
    - Administrator ima vpogled v vse ustvarjene skupine, njihove člane in vsebino skupinskega chata.
 4. **Osnovni tok**:
@@ -1204,7 +1230,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Pregled povratnih informacij
 2. **Akterji**:
-   - Administrator (vloga)
+   - Administratorska vloga
 3. **Povzetek funkcionalnosti**:
    - Administrator pregleda povratne informacije, ki so jih člani oddali za posamezno skupino.
 4. **Osnovni tok**:
@@ -1251,7 +1277,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 1. **Naslov**: Spremljati kakovost pametne komponente
 2. **Akterji**:
-   - Administrator (vloga)
+   - Administratorska vloga
    - Pametna komponenta (notranja komponenta sistema)
 3. **Povzetek funkcionalnosti**:
    - Administrator spremlja metrike kakovosti matching algoritma in po potrebi prilagodi parametre.
