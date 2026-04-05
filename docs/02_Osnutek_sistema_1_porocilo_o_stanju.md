@@ -188,7 +188,7 @@ Slika maske: ![Maska za prijavo](gradivo/img/prijava.png)
 
 Maska omogoča začetek postopka obnovitve dostopa do računa.
 
-Slika maske: ![Maska za zahtevo ponastavitve gesla](gradivo/img/.png)
+Slika maske: ![Maska za zahtevo ponastavitve gesla](gradivo/img/pozabljeno_geslo.png)
 
 1. Uporabnik vnese e-naslov računa.
 2. Sistem preveri, ali račun obstaja, in pošlje povezavo za ponastavitev gesla.
@@ -199,7 +199,7 @@ Slika maske: ![Maska za zahtevo ponastavitve gesla](gradivo/img/.png)
 
 Maska omogoča zaključek ponastavitve gesla prek e-poštne povezave.
 
-Slika maske: ![Maska za nastavitev novega gesla](gradivo/img/.png)
+Slika maske: ![Maska za nastavitev novega gesla](gradivo/img/ponastavitev_gesla.png)
 
 1. Uporabnik odpre veljavno povezavo iz e-pošte.
 2. Uporabnik vnese novo geslo in potrditev gesla.
@@ -221,7 +221,7 @@ Slika maske: ![Maska uporabniške nadzorne plošče](gradivo/img/user_homepage.p
 
 Maska prikazuje predlagane skupine in omogoča hiter pregled članov pred potrditvijo.
 
-Slika maske: ![Maska za predloge skupin](gradivo/user_homepage.png)
+Slika maske: ![Maska za predloge skupin](gradivo/img/ena_skupina.png)
 
 1. Uporabnik vidi seznam predlaganih skupin z osnovnimi podatki, odstotkom ujemanja in ključnimi razlogi za predlog.
 2. Uporabnik lahko pri vsaki predlagani skupini odpre hiter pregled članov skupine.
@@ -233,7 +233,7 @@ Slika maske: ![Maska za predloge skupin](gradivo/user_homepage.png)
 
 Maska prikazuje komunikacijo skupine.
 
-Slika maske: ![Maska skupinskega chata](gradivo/img/.png)
+Slika maske: ![Maska skupinskega chata](gradivo/img/chat.png)
 
 1. Maska vsebuje osnovne informacije o skupini in seznam članov.
 2. Uporabnik lahko pregleduje zgodovino sporočil.
@@ -256,7 +256,7 @@ Slika maske: ![Maska za urejanje profila](gradivo/img/profile_edit.png)
 
 Maska povratne informacije omogoča oddajo ocene po srečanju.
 
-Slika maske: ![Maska za povratno informacijo](gradivo/img/.png)
+Slika maske: ![Maska za povratno informacijo](gradivo/img/povratne_info.png)
 
 1. Uporabnik poda oceno in kratek komentar.
 2. Sistem shrani odgovor in potrdi uspešen vnos.
@@ -265,9 +265,12 @@ Slika maske: ![Maska za povratno informacijo](gradivo/img/.png)
 
 Maska omogoča operativni nadzor sistema.
 
-Slika maske: ![Maska administratorske nadzorne plošče](gradivo/img/admin_dashboard.png)
+Slike mask: ![Maska administratorske nadzorne plošče(uporabniki)](gradivo/img/admin_dashboard_uporabniki.png)
+![Maska administratorske nadzorne plošče(srečanja)](gradivo/img/admin_dashboard_srecanja.png)
+![Maska administratorske nadzorne plošče(ocene in komentarji)](gradivo/img/admin_dashboard_ocene.png)
+![Maska administratorske nadzorne plošče(pametna komponenta)](gradivo/img/admin_dashboard_pametna_komponenta.png)
 
-1. Administratorski vmesnik uporablja levi meni (sidebar) s sekcijami: Sistem, Uporabniki, Obvestila, Skupine, Pametna komponenta.
+1. Administratorski vmesnik uporablja navigacijski meni s sekcijami: Sistem, Uporabniki, Obvestila, Skupine, Pametna komponenta.
 2. Začetni pogled prikazuje osnovne podatke in statistike delovanja sistema.
 3. Sekcija Uporabniki vsebuje tabelo uporabnikov s paginacijo, iskanjem in akcijami blokiraj, deblokiraj, aktiviraj in deaktiviraj.
 4. Uporabnik z aktivnim opozorilom je vizualno označen z rumeno barvo.
@@ -279,7 +282,10 @@ Slika maske: ![Maska administratorske nadzorne plošče](gradivo/img/admin_dashb
 
 Maske pokrivajo strani, dostopne iz noge strani (footer).
 
-Slika maske: ![Maska informacijskih strani in kontakta](gradivo/img/.png)
+Slik mask: ![Maska informacijskih strani in kontakta](gradivo/img/pogoji_uporabe.png)
+![Maska informacijskih strani in kontakta](gradivo/img/pogosta_vprasanja.png)
+![Maska informacijskih strani in kontakta](gradivo/img/gdpr.png)
+![Maska informacijskih strani in kontakta](gradivo/img/kontaktni_obrazec.png)
 
 1. Maska pogojev uporabe vsebuje opis pogojev uporabe sistema.
 2. Maska GDPR vsebuje opis obdelave osebnih podatkov in uporabnikovih pravic.
@@ -1295,10 +1301,9 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Pametna komponenta.
 
-![DPU](./gradivo/img/use_case.jpg "Ganttov diagram")
+![DPU](./gradivo/img/use_case.jpg 'Ganttov diagram')
 
 **Diagram primerov uporabe** (izvorna koda [PlantUML](./gradivo/plantuml/Use_case_diagram.puml))
-
 
 ## 4 Opis sistema
 
@@ -1325,7 +1330,7 @@ _Nadaljujte z vzdrževanjem **dnevnika sprememb**. Dodaje vse nove spremembe v p
 
 - Posodobljen Ganttov diagram in graf PERT.
 
-![Ganttov diagram](./gradivo/img/gantt2.png "Ganttov diagram")
+![Ganttov diagram](./gradivo/img/gantt2.png 'Ganttov diagram')
 
 **Ganttov diagram** (izvorna koda [PlantUML](./gradivo/plantuml/Ganttov_diagram2.puml))
 
