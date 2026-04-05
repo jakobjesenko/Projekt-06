@@ -22,34 +22,36 @@ User -|> Guest
 
 rectangle "Sistem za iskanje skupin" {
   ' --- PRIJAVA ---
-  (Registracija) as UC1
-  (Prijava) as UC2
-  (Ponastavitev gesla) as UC3
-  (Odjava) as UC4
+  (PU 3.1.4.1: Registracija) as UC1
+  (PU 3.1.4.2: Prijava) as UC2
+  (PU 3.1.4.3: Ponastavitev gesla) as UC3
+  (PU 3.1.4.4: Odjava) as UC4
   
   ' --- PROFIL ---
-  (Urejanje profila) as UC5
+  (PU 3.1.4.5: Urejanje profila) as UC5
   
   ' --- SKUPINE ---
-  (Iskanje skupin) as UC6
-  (Pregled skupin in chat) as UC19
-  (Odločitev o udeležbi) as UC8
+  (PU 3.1.4.6: Iskanje skupin) as UC6
+  (PU 3.1.4.7: Pregled skupin in chata) as UC19
+  (PU 3.1.4.8: Odločitev o udeležbi) as UC8
   
   ' --- FEEDBACK ---
-  (Oddaja povratne informacije) as UC10
-  (Prijava neprimernega vedenja) as UC11
+  (PU 3.1.4.9: Oddaja povratne informacije) as UC10
+  (PU 3.1.4.10: Prijava neprimernega vedenja) as UC11
   
   ' --- ADMIN ---
-  (Upravljanje uporabnikov) as UC12
-  (Pregled prijav neprimernega vedenja) as UC13
-  (Upravljanje skupin) as UC14
-  (Upravljanje pametne komponente) as UC18
+  (PU 3.1.4.13: Upravljanje uporabnikov) as UC12
+  (PU 3.1.4.14: Pregled kontaktnih obrazcev in prijav neprimernega vedenja) as UC13
+  (PU 3.1.4.15: Pregled skupine in chata) as UC14
+  (PU 3.1.4.16: Pregled povratnih informacij) as UC17
+  (PU 3.1.4.17: Upravljanje pametne komponente) as UC18
 
   ' --- JAVNE STRANI ---
-  (Pregled informacij) as UC20
-  (Kontaktni obrazec) as UC21
+  (PU 3.1.4.11: Pregled informacij) as UC20
+  (PU 3.1.4.12: Kontaktni obrazec) as UC21
 }
 
+Guest --> UC3
 Guest --> UC20
 Guest --> UC21
 
@@ -63,11 +65,16 @@ User --> UC19
 User --> UC8
 User --> UC10
 User --> UC11
+User --> UC20
+User --> UC21
 
 Admin --> UC12
 Admin --> UC13
 Admin --> UC14
 Admin --> UC18
+Admin --> UC17
+Admin --> UC2
+Admin --> UC4
 
 UC3 .> UC2 : <<extend>>
 UC13 .> UC12 : <<extend>>
