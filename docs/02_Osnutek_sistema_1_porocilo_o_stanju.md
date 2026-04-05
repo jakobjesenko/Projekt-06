@@ -1344,11 +1344,14 @@ Sistem za spontana družabna srečanja je spletna aplikacija, ki uporabnikom omo
 
 - **Učinkovito spremljanje in izboljševanje algoritma:** Ker je kakovost predlogov ključna za uspeh sistema, je nujno vzpostaviti mehanizme za sledenje metrikam (delež potrjenih predlogov, povprečne ocene) in omogočiti administratorjem, da ukrepajo ob poslabšanju delovanja.
 
-#### Blokovni diagram sistema:
+### Blokovni diagram trenutnega sistema
 
 ![Blokovni diagram](./gradivo/img/blockDiagram.png 'Blokovni diagram')
 
 **Blokovni diagram sistema** (izvorna koda [PlantUML](./gradivo/plantuml/BlockDiagram.puml))
+
+Diagram prikazuje štirislojno arhitekturo sistema. Uporabniški vmesnik ločuje goste, prijavljene uporabnike in administratorje. Aplikacijski nivo vključuje pametno komponento za ujemanje uporabnikov na podlagi interesov, lokacije in časa. Podatkovna plast hrani profile, skupine, sporočila in povratne informacije, zunanje storitve pa zagotavljajo geokodiranje in e-poštno obveščanje.
+
 
 ## 5 Trenutno stanje
 
@@ -1378,9 +1381,6 @@ V tej iteraciji smo poleg ciljev, navedenih v uvodu, zasledovali tudi naslednje 
 
 - **Obseg administratorskih metrik:** Natančno je treba definirati, katere metrike so ključne za spremljanje kakovosti in kakšni so pragi za opozorila.
 
-### Blokovni diagram trenutnega sistema (konceptualni pogled)
-
-Diagram prikazuje štirislojno arhitekturo sistema. Uporabniški vmesnik ločuje goste, prijavljene uporabnike in administratorje. Aplikacijski nivo vključuje pametno komponento za ujemanje uporabnikov na podlagi interesov, lokacije in časa. Podatkovna plast hrani profile, skupine, sporočila in povratne informacije, zunanje storitve pa zagotavljajo geokodiranje in e-poštno obveščanje.
 
 ### Kateri testi so bili izvedeni?
 
