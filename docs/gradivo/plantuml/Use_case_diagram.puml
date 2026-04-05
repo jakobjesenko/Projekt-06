@@ -65,8 +65,6 @@ User --> UC19
 User --> UC8
 User --> UC10
 User --> UC11
-User --> UC20
-User --> UC21
 
 Admin --> UC12
 Admin --> UC13
