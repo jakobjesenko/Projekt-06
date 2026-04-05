@@ -1565,5 +1565,6 @@ Glavna težava je bila, da smo se prepozno lotili kodiranja. Prve iteracije smo 
 - **Par programiranje za zahtevne dele:** Za implementacijo pametne komponente in varnostnih mehanizmov bosta skupaj delala dva člana, kar bo zmanjšalo tveganje napak in izboljšalo deljeno znanje.
 
 - **Rednejše pregledovanje dokumentacije:** Da preprečimo zamike pri pisanju, bomo določili vmesne roke za osnutke posameznih poglavij (npr. 3 dni pred končnim rokom).
+  
 
 - **Dnevno spremljanje napredka kodiranja:** Vsak dan bomo na kratkem sestanku preverili, kaj je bilo narejeno in kaj so ovire.
