@@ -1123,7 +1123,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Uporabniki.
 
-##### 3.1.4.14 Pregled kontaktnih obrazcev in prijav neprimernega vedenja (administrator)
+##### 3.1.4.14 Pregled kontaktnih obrazcev in prijav neprimernega vedenja
 
 1. **Naslov**: Pregled kontaktnih obrazcev in prijav neprimernega vedenja
 2. **Akterji**:
@@ -1181,9 +1181,9 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Obvestila.
 
-##### 3.1.4.15 Pregledati skupine in chat (administrator)
+##### 3.1.4.15 Pregled skupin in chata
 
-1. **Naslov**: Pregledati skupine in chat
+1. **Naslov**: Pregled skupin in chata
 2. **Akterji**:
    - Administratorska vloga
 3. **Povzetek funkcionalnosti**:
@@ -1273,9 +1273,9 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
     - Pogostost: srednja.
     - Trigger: administrator odpre izbrano skupino v sekciji Skupine.
 
-##### 3.1.4.17 Upravljanje pametne komponente (administrator)
+##### 3.1.4.17 Upravljanje pametne komponente
 
-1. **Naslov**: Spremljati kakovost pametne komponente
+1. **Naslov**: Upravljanje pametne komponente
 2. **Akterji**:
    - Administratorska vloga
    - Pametna komponenta (notranja komponenta sistema)
