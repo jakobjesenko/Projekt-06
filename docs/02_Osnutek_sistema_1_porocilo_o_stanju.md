@@ -1309,6 +1309,105 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 - Predstavite sistem in glavne izzive.
 
+# Blokovni diagram sistema:
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    UPORABNIŠKI VMESNIK                      │
+│                                                             │
+│  - Javni del (gost)                                         │
+│  - Uporabniška nadzorna plošča                              │
+│  - Administratorska nadzorna plošča                         │
+│  - Skupinski chat                                           │
+└───────────────────┬─────────────────────────────────────────┘
+                    │ 
+                    ▼
+┌─────────────────────────────────────────────────────────────┐
+│                       API GATEWAY                           │
+│  - Usmerjanje zahtev                                        │
+│  - Avtentikacija in avtorizacija                            │
+└───────────────────┬─────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    APLIKACIJSKI NIVO                        │
+│                                                             │
+│  ┌──────────────────────────────┐                           │
+│  │ AVTENTIKACIJA & VARNOST      │                           │
+│  │ - prijava                    │                           │
+│  │ - registracija               │                           │
+│  │ - ponastavitev gesla         │                           │
+│  └──────────────────────────────┘                           │
+│                                                             │
+│  ┌──────────────────────────────┐                           │
+│  │ UPRAVLJANJE UPORABNIKOV      │                           │
+│  │ - profil                     │                           │
+│  │ - interesi, lokacija, čas    │                           │
+│  └──────────────────────────────┘                           │
+│                                                             │
+│  ┌──────────────────────────────┐                           │
+│  │ POVEZOVANJE V SKUPINE        │                           │
+│  │ - iskanje skupin             │                           │
+│  │ - predlogi skupin            │                           │
+│  │ - odločitev (sprejmi/zavrni) │                           │
+│  └───────────────┬──────────────┘                           │
+│                  │                                          │
+│                  ▼                                          │
+│      ┌──────────────────────────────────────┐               │
+│      │ PAMETNA KOMPONENTA                   │               │
+│      │ - algoritem za oblikovanje skupin    │               │
+│      │ - podobnost interesov                │               │
+│      │ - geografska bližina                 │               │
+│      │ - časovno ujemanje                   │               │ 
+│      └──────────────────────────────────────┘               │
+│                                                             │
+│  ┌──────────────────────────────┐                           │
+│  │ CHAT                         │                           │
+│  │ - pošiljanje sporočil        │                           │
+│  └──────────────────────────────┘                           │
+│                                                             │
+│  ┌──────────────────────────────┐                           │
+│  │ POVRATNE INFO IN PRIJAVE     │                           │ 
+│  │ - ocene srečanj              │                           │
+│  │ - prijava vedenja            │                           │
+│  └──────────────────────────────┘                           │
+│                                                             │
+│  ┌──────────────────────────────┐                           │
+│  │ ADMIN MODUL                  │                           │
+│  │ - upravljanje uporabnikov    │                           │
+│  │ - upravljanje skupin         │                           │
+│  │ - pregled prijav             │                           │
+│  │ - metrike algoritma          │                           │
+│  └──────────────────────────────┘                           │
+│                                                             │
+└───────────────────┬──────────────────────────────────┬──────┘
+                    │                                  │
+                    ▼                                  │
+┌───────────────────────────────────────────────────┐  │
+│                 PODATKOVNA PLAST                  │  │
+│                                                   │  │
+│  ┌────────────────────┐  ┌────────────────────┐   │  │
+│  │ Uporabniki         │  │ Skupine (predlogi, │   │  │
+│  │ (profili, interesi,│  │ statusi)           │   │  │
+│  │ lokacija,          │  └────────────────────┘   │  │
+│  | razpoložljivost)   |                           │  │
+|  └────────────────────┘                           |  |
+│  ┌────────────────────┐  ┌────────────────────┐   │  │
+│  │ Sporočila (chat)   │  │ Povratne           │   │  │
+│  └────────────────────┘  │ informacije        │   │  │
+│                          └────────────────────┘   │  │
+│  ┌────────────────────┐                           │  │
+│  │ Prijave vedenja    │                           │  │
+│  └────────────────────┘                           │  │
+└───────────────────────────────────────────────────┘  │
+                                                       │
+┌──────────────────────────────────────────────────────▼──────┐
+│                    ZUNANJE STORITVE                         │
+│                                                             │
+│  - Geokodirni API (lokacije → koordinate)                   │
+│  - E-poštni servis (verifikacija, ponastavitev gesla)       │
+└─────────────────────────────────────────────────────────────┘
+```
+
 ## 5 Trenutno stanje
 
 - Kakšni dodatni cilji te iteracije, poleg tega, kar je že navedeno v [uvodu](#1-uvod)?
