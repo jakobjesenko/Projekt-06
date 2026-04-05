@@ -1352,12 +1352,57 @@ Sistem za spontana družabna srečanja je spletna aplikacija, ki uporabnikom omo
 
 ## 5 Trenutno stanje
 
-- Kakšni dodatni cilji te iteracije, poleg tega, kar je že navedeno v [uvodu](#1-uvod)?
-  - Kaj deluje? Vključite posnetke zaslona.
-  - Kakšni izzivi?
-  - Uporabite blokovni diagram za razlago trenutnega sistema.
-- Katere teste ste izvedli?
-- Koliko vrstic kode ste napisali (skupno do tega trenutka)?
+V tej iteraciji smo poleg ciljev, navedenih v uvodu, zasledovali tudi naslednje dodatne cilje:
+
+- **Priprava podlage za razvoj:** Oblikovati dovolj natančne funkcionalne zahteve in opise primerov uporabe, da lahko ekipa v naslednji iteraciji začne z razvojem ključnih modulov (avtentikacija, profil, osnovni iskalni tok).
+
+- **Identifikacija tehnoloških tveganj:** Prepoznati morebitne težave pri integraciji z zunanjimi storitvami (geokodiranje, e-pošta) in jih dokumentirati.
+
+- **Določitev merljivih ciljev za MVP:** Jasno opredeliti, kaj pomeni "kakovosten predlog" in kako ga bomo merili.
+
+### Kaj deluje?
+
+- **Delujoča demo aplikacija:** Ekipa je pripravila delujočo demonstracijo osnovnega toka – od vnosa interesov, lokacije in časa do prikaza predloga skupine. Čeprav gre za prototip brez popolnega algoritma, smo združili zaslonske maske in simulirano logiko, da lahko naročniku in članom ekipe vizualno pokažemo, kako naj bi sistem izgledal in kako poteka uporabniška izkušnja (look & feel). Demo služi kot podlaga za nadaljnji razvoj in usklajevanje pričakovanj.
+
+- **Dokumentirani dogovori:** Ekipa ima jasno usklajene osnovne koncepte (interesi kot tagi, registracija v treh korakih).
+
+- **Struktura zahtev:** Funkcionalne in nefunkcionalne zahteve so razdeljene po vlogah in prioritetah (MoSCoW), kar bo olajšalo načrtovanje razvoja.
+
+- **Opredeljeni vmesniki:** Specifikacija ključnih uporabniških mask (forme) in primera zunanjega API-ja (geokodiranje) daje jasno smer razvijalcem.
+
+### Kakšni izzivi?
+
+- **Podrobnosti algoritma:** Natančna formula za izračun skupne ocene kompatibilnosti (uteži w1, w2, w3) in določitev pragov za "minimalno ustreznega" kandidata še nista dokončno določeni. To bo zahtevalo dodatno analizo in morebitne eksperimente.
+
+- **Modeliranje časovne razpoložljivosti:** Oblika vnosa (npr. izbira dni v tednu in časovnih blokov) mora biti dovolj preprosta za uporabnika, hkrati pa uporabna za algoritem.
+
+- **Obseg administratorskih metrik:** Natančno je treba definirati, katere metrike so ključne za spremljanje kakovosti in kakšni so pragi za opozorila.
+
+### Blokovni diagram trenutnega sistema (konceptualni pogled)
+
+Diagram prikazuje štirislojno arhitekturo sistema. Uporabniški vmesnik ločuje goste, prijavljene uporabnike in administratorje. Aplikacijski nivo vključuje pametno komponento za ujemanje uporabnikov na podlagi interesov, lokacije in časa. Podatkovna plast hrani profile, skupine, sporočila in povratne informacije, zunanje storitve pa zagotavljajo geokodiranje in e-poštno obveščanje.
+
+### Kateri testi so bili izvedeni?
+
+V tej iteraciji (priprava osnutka) smo izvedli predvsem validacijo zahtev:
+
+- **Pregled in usklajevanje znotraj ekipe:** Vse funkcionalne zahteve in opisi primerov uporabe so bili pregledani s strani vseh članov ekipe, da se zagotovi skupno razumevanje.
+
+- **Testi sprejemljivosti (konceptualni):** Za vsak primer uporabe smo pripravili okvirne sprejemne teste, ki bodo v kasnejših fazah uporabljeni za preverjanje implementacije.
+
+### Koliko vrstic kode ste napisali (skupno do tega trenutka)?
+
+Do zaključka te iteracije (osnutek sistema) ekipa še ni pričela s sistematičnim programiranjem. Razvoj se bo začel v naslednji iteraciji, ko bo na voljo dovolj natančna specifikacija. V tej fazi so morebitne vrstice kode omejene na posamične prototipe ali poizkuse posameznih članov, ki niso vključene v skupno projektno bazo kode.
+
+**Skupno število vrstic (demo aplikacija): 2500**
+
+### Vmesniki
+
+- **Geokodirni API:** Njegov namen je pretvorba uporabnikovega vnosa lokacije (naslov, mesto ali poštna številka) v geografske koordinate (širino in dolžino). Te koordinate sistem nato uporabi za izračun razdalj med uporabniki pri iskanju skupin. Sistem na ta API pošlje zahtevo z naslovom kot nizom znakov, v odgovor pa prejme seznam možnih lokacij s pripadajočimi koordinatami in prikaznim imenom.
+
+- **E-poštni servis:** Sistem ga uporablja za pošiljanje verifikacijske e-pošte ob registraciji novega uporabnika in za pošiljanje povezave za ponastavitev pozabljenega gesla. Sistem na ta API pošlje prejemnikov elektronski naslov, zadevo in vsebino sporočila, v odgovor pa prejme status pošiljanja, ali je bilo sporočilo uspešno poslano.
+
+Pri MVP različici veljata dve pomembni opombi. Prvič, geokodiranje se izvede le ob prvem shranjevanju profila in ob morebitni poznejši spremembi lokacije – sistem nato shrani tako koordinate kot prikazno ime lokacije. Drugič, e-poštni servis se kliče asinhrono, kar pomeni, da sistem ne čaka na odgovor, ampak nemudoma nadaljuje z izvedbo (npr. zaključkom registracije), medtem ko pošiljanje e-pošte poteka v ozadju.
 
 ## 6 Vodenje projekta
 
