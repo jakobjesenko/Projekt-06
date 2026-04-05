@@ -1,0 +1,51 @@
+@startuml
+skinparam defaultTextAlignment left
+skinparam linetype ortho
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    RoundCorner 0
+}
+skinparam arrowColor Black
+
+rectangle "**UPORABNIŠKI VMESNIK**\n\n- Javni del (gost)\n- Uporabniška nadzorna plošča\n- Administratorska nadzorna plošča\n- Skupinski chat" as UI
+
+rectangle "**API GATEWAY**\n- Usmerjanje zahtev\n- Avtentikacija in avtorizacija" as Gateway
+
+rectangle "**APLIKACIJSKI NIVO**" as AppLayer {
+    
+    rectangle "AVTENTIKACIJA & VARNOST\n- prijava\n- registracija\n- ponastavitev gesla" as Auth
+    rectangle "UPRAVLJANJE UPORABNIKOV\n- profil\n- interesi, lokacija, čas" as Users
+    rectangle "POVEZOVANJE V SKUPINE\n- iskanje skupin\n- predlogi skupin\n- odločitev (sprejmi/zavrni)" as Matching
+    rectangle "PAMETNA KOMPONENTA\n- algoritem za oblikovanje skupin\n- podobnost interesov\n- geografska bližina\n- časovno ujemanje" as Smart
+    
+    Matching --> Smart
+
+    rectangle "CHAT\n- pošiljanje sporočil" as Chat
+    rectangle "POVRATNE INFO IN PRIJAVE\n- ocene srečanj\n- prijava vedenja" as Feedback
+    rectangle "ADMIN MODUL\n- upravljanje uporabnikov\n- upravljanje skupin\n- pregled prijav\n- metrike algoritma" as Admin
+  
+    Auth -[hidden]d-> Chat
+    Users -[hidden]d-> Feedback
+}
+
+rectangle "**PODATKOVNA PLAST**" as DataLayer {
+    rectangle "Uporabniki\n(profili, interesi,\nlokacija, razpoložljivost)" as DB_Users
+    rectangle "Skupine (predlogi,\nstatusi)" as DB_Groups
+    rectangle "Sporočila (chat)" as DB_Chat
+    rectangle "Povratne\ninformacije" as DB_Feedback
+    rectangle "Prijave vedenja" as DB_Reports
+    
+    DB_Users -[hidden]r-> DB_Groups
+    DB_Chat -[hidden]r-> DB_Feedback
+    DB_Feedback -[hidden]r-> DB_Reports
+}
+
+rectangle "**ZUNANJE STORITVE**\n\n- Geokodirni API (lokacije → koordinate)\n- E-poštni servis (verifikacija, ponastavitev gesla)" as External
+
+UI --> Gateway
+Gateway --> AppLayer
+AppLayer --> DataLayer
+AppLayer ---> External
+
+@enduml
