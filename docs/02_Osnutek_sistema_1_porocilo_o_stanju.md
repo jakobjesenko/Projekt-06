@@ -1327,14 +1327,22 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Pametna komponenta.
       
-###Diagram primerov uporabe
+#### Diagram primerov uporabe
 ![DPU](./gradivo/img/use_case.jpg 'Ganttov diagram')
 
 **Diagram primerov uporabe** (izvorna koda [PlantUML](./gradivo/plantuml/Use_case_diagram.puml))
 
 ## 4 Opis sistema
 
-- Predstavite sistem in glavne izzive.
+Sistem za spontana družabna srečanja je spletna aplikacija, ki uporabnikom omogoča, da z minimalnim vnosom podatkov (interesi, lokacija, časovna razpoložljivost) pridobijo predloge za oblikovanje manjših skupin (3–5 oseb) za spontano druženje. Jedro sistema predstavlja pametna komponenta, ki na podlagi scoring modela izračuna stopnjo kompatibilnosti med uporabniki in oblikuje predloge skupin.
+
+### Glavni izzivi pri razvoju sistema so:
+
+- **Oblikovanje učinkovitega algoritma za ujemanje:** Pravilno uravnoteženje treh ključnih kriterijev (interesi, lokacija, časovna razpoložljivost) v skupno oceno, ki daje smiselne in uporabne predloge. Algoritem mora biti dovolj hiter za sprotno uporabo in hkrati razložljiv za uporabnike in administratorje.
+
+- **Enostavna in intuitivna uporabniška izkušnja:** Uporabnik mora brez dodatnega usposabljanja hitro razumeti namen sistema, izpolniti profil in sprejemati odločitve o predlogih. Poseben izziv je poenostaviti vnos časovne razpoložljivosti in lokacije, hkrati pa ohraniti dovolj podatkov za kakovostno ujemanje.
+
+- **Učinkovito spremljanje in izboljševanje algoritma:** Ker je kakovost predlogov ključna za uspeh sistema, je nujno vzpostaviti mehanizme za sledenje metrikam (delež potrjenih predlogov, povprečne ocene) in omogočiti administratorjem, da ukrepajo ob poslabšanju delovanja.
 
 #### Blokovni diagram sistema:
 
