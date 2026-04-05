@@ -308,10 +308,10 @@ Slike mask: ![Maska administratorske nadzorne plošče(uporabniki)](gradivo/img/
 
 Maske pokrivajo strani, dostopne iz noge strani (footer).
 
-Slik mask: ![Maska informacijskih strani in kontakta](gradivo/img/pogoji_uporabe.png)
-![Maska informacijskih strani in kontakta](gradivo/img/pogosta_vprasanja.png)
+Slik mask: ![Maska informacijskih strani in kontakta](gradivo/img/pogoji uporabe.png)
+![Maska informacijskih strani in kontakta](gradivo/img/fqa.png)
 ![Maska informacijskih strani in kontakta](gradivo/img/gdpr.png)
-![Maska informacijskih strani in kontakta](gradivo/img/kontaktni_obrazec.png)
+![Maska informacijskih strani in kontakta](gradivo/img/kontakt.png)
 
 1. Maska pogojev uporabe vsebuje opis pogojev uporabe sistema.
 2. Maska GDPR vsebuje opis obdelave osebnih podatkov in uporabnikovih pravic.
