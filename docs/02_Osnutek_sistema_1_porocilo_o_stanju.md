@@ -1309,7 +1309,7 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 
 - Predstavite sistem in glavne izzive.
 
-# Blokovni diagram sistema:
+#### Blokovni diagram sistema:
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    UPORABNIŠKI VMESNIK                      │
