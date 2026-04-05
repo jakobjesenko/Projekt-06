@@ -1326,7 +1326,8 @@ V nadaljevanju so za ključne cilje naročnika podani formalizirani opisi primer
 11. **Razširitev - pogostost uporabe in triggerji**:
     - Pogostost: srednja.
     - Trigger: administrator odpre sekcijo Pametna komponenta.
-
+      
+###Diagram primerov uporabe
 ![DPU](./gradivo/img/use_case.jpg 'Ganttov diagram')
 
 **Diagram primerov uporabe** (izvorna koda [PlantUML](./gradivo/plantuml/Use_case_diagram.puml))
