@@ -1406,11 +1406,36 @@ Pri MVP različici veljata dve pomembni opombi. Prvič, geokodiranje se izvede l
 
 ## 6 Vodenje projekta
 
-_Nadaljujte z vzdrževanjem **dnevnika sprememb**. Dodaje vse nove spremembe v projektu, kjer vključite datum, opis, motivacijo in posledico vsake spremembe._
+### Dnevnik sprememb (dopolnitev od zadnjega poročila)
 
-- Prikažite dnevnik sprememb do tega trenutka.
-  - Kakšni so cilji za naslednjo iteracijo?
-  - Kakšen je načrt za preostanek semestra?
+| Datum | Motivacija | Opis spremembe | Posledica |
+|-------|------------|----------------|------------|
+| 21. 3. 2026 | Prvo testiranje z naročniki | Izdelali smo prve testne zaslonske maske (wireframe-i osnovnih tokov: registracija, vnos profila, prikaz predlogov) in jih posredovali naročnikom v pregled. | Povratne informacije smo prejeli 27. 3. 2026, kar je vodilo v uskladitev prioritet in zmanjšanje obsega na MVP. |
+| 27. 3. 2026 | Usklajevanje po zagovoru in povratne informacije naročnikov | Na podlagi povratnih informacij naročnikov (prejetih 27. 3.) smo dodali nekatere funkcionalnosti in odstranili druge. | Iz predloga projekta smo odstranili funkcionalnosti, ki niso ključne za MVP. Hkrati smo dodali tiste, ki so se po mnenju naročnikov izkazale za pomembne za uporabniško izkušnjo. Zmanjšan obseg prve faze na MVP. |
+| 30. 3. 2026 | Dodatna zahteva | Vključitev funkcionalnosti za spremljanje kakovosti algoritma (administratorske metrike). | Dodana nova sekcija v administratorski plošči in nova funkcionalna zahteva. |
+| 1. 4. 2026 | Tehnična odločitev | Potrjena je uporaba tehnologij: Node.js, MongoDB, Angular. | Ekipa lahko začne s pripravo razvojnega okolja in osnovnih ogrodij. |
+| 3. 4. 2026 | Poenostavitev | Opustitev zahteve po avtomatičnem iskanju v ozadju za MVP. | Uporabnik mora eksplicitno klikniti "Išči skupino". Zmanjšana kompleksnost prve faze. |
+
+### Cilji za naslednjo iteracijo (3. iteracija: 6. 4. 2026 – 4. 5. 2026)
+
+Na podlagi Ganttovega diagrama bo 3. iteracija trajala 18 dni (od 6. aprila do 4. maja 2026). Cilji te iteracije so:
+
+- **Zaključek razvoja pametne komponente:** Implementacija scoring funkcije za ujemanje uporabnikov (interesi, lokacija, čas) in optimizacija algoritma za hitro delovanje.
+- **Integracija vseh treh modulov:** Povezava backenda (REST API, JWT avtentikacija) s frontendom v delujočo celoto.
+- **Implementacija administratorskega vmesnika:** Razvoj plošče za upravljanje uporabnikov, pregled skupin in spremljanje metrik algoritma.
+- **Osnovna funkcionalnost chata:** Implementacija pošiljanja sporočil znotraj obstoječih skupin.
+- **Prvi celoviti sprejemni testi:** Izvedba testiranja celotnega uporabniškega toka (registracija → profil → iskanje → predlogi → chat).
+- **Priprava 3. poročila o stanju:** Dokumentacija napredka, izmerjenih metrik in morebitnih odstopanj od načrta.
+
+### Načrt za preostanek semestra
+
+| Obdobje | Aktivnosti | Ključni mejniki |
+|---------|------------|-----------------|
+| 6. 4. – 19. 4. 2026 | Razvoj scoring funkcije, optimizacija algoritma, integracija backend–frontend | Delujoča pametna komponenta |
+| 20. 4. – 26. 4. 2026 | Implementacija administratorskega vmesnika, osnovnega chata, prvi sprejemni testi | Administratorska plošča, chat |
+| 27. 4. – 4. 5. 2026 | Testiranje, odpravljanje napak, priprava 3. poročila o stanju | Konec 3. iteracije (4. 5.) |
+| 5. 5. – 24. 5. 2026 | 4. iteracija (15 dni): Končna integracija, optimizacija, obsežno testiranje, priprava končne dokumentacije | Končna izdaja sistema (25. 5.) |
+| 25. 5. 2026 | Predaja sistema in končnega poročila | Zaključek projekta |
 
 ### 6.2 Projektni načrt
 
@@ -1422,14 +1447,123 @@ _Nadaljujte z vzdrževanjem **dnevnika sprememb**. Dodaje vse nove spremembe v p
 
 ## 7 Ekipa
 
-- Kakšne so bile vloge v ekipi za to iteracijo?
-  - Kaj je prispeval vsak član ekipe?
-  - Navedite grobo oceno prispevka posameznega člana ekipe v odstotkih.
+### Opis aktivnosti in prispevkov članov ekipe v tej iteraciji
+
+#### B1: Vodenje ekipe in koordinacija
+
+V ekipi smo si naloge razdelili enakovredno, vendar je Aleks Gogić prevzel organizacijo sestankov, spremljanje rokov in komunikacijo z naročnikom (profesorjem). Ostali člani so prav tako aktivno sodelovali pri usklajevanju, dogovarjanju o terminih in medsebojni pomoči. V tej iteraciji sta bila organizirana dva daljša sestanka in redna komunikacija prek skupinskega klepeta.
+
+- **Aleks Gogić:** 40% – organizacija sestankov, komunikacija z naročnikom, struktura poročila, poglavji 1 in 6, refleksija, končna integracija
+- **Miha Fabčič:** 15% – sodelovanje pri usklajevanju
+- **Jakob Jesenko:** 15% – sodelovanje pri usklajevanju
+- **Tim Pezdirc:** 15% – sodelovanje pri usklajevanju
+- **Leja Petrič:** 15% – sodelovanje pri usklajevanju
+
+#### B2: Funkcionalne zahteve
+
+Aktivnost vključuje identifikacijo vseh funkcionalnosti sistema, razdelitev po prioritetah (MoSCoW) in dokumentiranje zahtev za uporabniški, administratorski in gostujoči vmesnik. V tej iteraciji so bile definirane tudi zahteve za pametno komponento in chat.
+
+- **Aleks Gogić:** 60% – glavni avtor funkcionalnih zahtev (uporabnik, administrator)
+- **Ostali člani:** po 10% – pregled in dopolnitve
+
+#### B3: Nefunkcionalne zahteve
+
+Aktivnost zajema definicijo zahtev glede zmogljivosti (odzivni čas pod 2 sekundi), varnosti (JWT, GDPR), razpoložljivosti, skalabilnosti in uporabnosti. Določeni so bili tudi pragi za metrike kakovosti predlogov.
+
+- **Aleks Gogić:** 60% – glavni avtor nefunkcionalnih zahtev
+- **Ostali člani:** po 10% – pregled in dopolnitve
+
+#### B4: Opisi primerov uporabe
+
+Aktivnost vključuje pisanje podrobnih opisov osnovnih in alternativnih tokov za 16 primerov uporabe (registracija, prijava, vnos profila, iskanje skupin, sprejem/zavrnitev predloga, chat, administratorski pregled itd.). Za vsak primer so bili pripravljeni tudi okvirni sprejemni testi.
+
+- **Miha Fabčič:** 40% – opisi primerov uporabe
+- **Leja Petrič:** 30% – opisi primerov uporabe
+- **Ostali člani:** po 10% – pregled in dopolnitve
+
+#### B5: Specifikacija vmesnikov (API, maske) in diagrami
+
+Aktivnost vključuje specifikacijo zunanjih API-jev (geokodiranje, e-poštni servis), pripravo opisov ključnih uporabniških mask (forme za registracijo, profil, iskanje) in določitev podatkovnih struktur, ki se prenašajo med frontendom in backendom. V okviru te aktivnosti sta Jakob Jesenko in Tim Pezdirc izdelala PlantUML diagrame (Ganttov diagram, PERT graf, blokovni diagram arhitekture) ter definirala API vmesnike.
+
+- **Jakob Jesenko:** 40% – PlantUML diagrami (Gantt, PERT), API definicija
+- **Tim Pezdirc:** 40% – PlantUML diagrami (Gantt, PERT), API definicija, opis sistema
+- **Ostali člani:** po 10% – pregled
+
+#### B6: Pisanje poročila (1. poročilo o stanju)
+
+Aktivnost vključuje pisanje, urejanje, oblikovanje in končno integracijo celotnega poročila o stanju sistema. Vsi člani so prispevali deleže glede na svoja področja, Aleks pa je poskrbel za končno uskladitev in strukturo.
+
+- **Aleks Gogić:** 25% – struktura, uvod, vodenje projekta, refleksija, končna integracija
+- **Miha Fabčič:** 20% – funkcionalne zahteve in opisi uporabe
+- **Jakob Jesenko:** 15% – nefunkcionalne zahteve in testi
+- **Tim Pezdirc:** 20% – opis sistema, vmesniki, dnevnik sprememb
+- **Leja Petrič:** 20% – maske, cilji, potrebe naročnika
+
+#### B7: Izdelava demo aplikacije
+
+V okviru te aktivnosti je Leja Petrič izdelala demo aplikacijo – delujočo demonstracijo osnovnega toka (vnos interesov, lokacije, časa in prikaz predloga skupine) s pomočjo mock podatkov, da smo lahko naročniku vizualno pokazali, kako naj bi sistem izgledal. Ostali člani so prispevali povratne informacije in manjše dopolnitve.
+
+- **Leja Petrič:** 60% – izdelava demo aplikacije (frontend, mock podatki, povezava mask)
+- **Ostali člani:** po 10% – testiranje, povratne informacije, predlogi za izboljšave
+
+### Vloge v ekipi za to iteracijo
+
+| Aktivnost | Aleks Gogić | Miha Fabčič | Jakob Jesenko | Tim Pezdirc | Leja Petrič |
+|-----------|-------------|-------------|---------------|-------------|--------------|
+| B1: Vodenje ekipe in koordinacija | 40% | 15% | 15% | 15% | 15% |
+| B2: Funkcionalne zahteve | 60% | 10% | 10% | 10% | 10% |
+| B3: Nefunkcionalne zahteve | 60% | 10% | 10% | 10% | 10% |
+| B4: Opisi primerov uporabe | 10% | 40% | 10% | 10% | 30% |
+| B5: Specifikacija vmesnikov (API, maske) in diagrami | 10% | 10% | 40% | 40% | 10% |
+| B6: Pisanje poročila (1. poročilo o stanju) | 25% | 20% | 15% | 20% | 20% |
+| B7: Izdelava demo aplikacije | 10% | 10% | 10% | 10% | 60% |
+
+**Povzetek vlog:**
+
+- **Aleks Gogić:** Organizacija sestankov, komunikacija z naročnikom, pisanje funkcionalnih in nefunkcionalnih zahtev, struktura poročila, poglavji 1 in 6, refleksija, končna integracija
+- **Miha Fabčič:** Opisi primerov uporabe, sodelovanje pri usklajevanju, pregled in dopolnitve
+- **Jakob Jesenko:** PlantUML diagrami (Gantt, PERT), API definicija, sodelovanje pri usklajevanju
+- **Tim Pezdirc:** PlantUML diagrami (Gantt, PERT), API definicija, opis sistema, dnevnik sprememb, sodelovanje pri usklajevanju
+- **Leja Petrič:** Izdelava demo aplikacije, opisi primerov uporabe, specifikacija mask, cilji, potrebe naročnika, sodelovanje pri usklajevanju
 
 ## 9 Refleksija
 
-- Kaj je šlo po pričakovanjih?
-  - Kaj ni šlo po pričakovanjih?
-  - Kakšne težave so se pojavile pri ciljih, ki jih niste dosegli?
-  - Kako nameravate premagati te težave?
-  - Kaj boste naredili drugače v naslednji iteraciji?
+### Kaj je šlo po pričakovanjih?
+
+Sodelovanje in komunikacija v ekipi sta delovali dobro. Redno smo komunicirali prek skupinskega klepeta in se uspešno organizirali za dva daljša sestanka (ob začetku in pred zaključkom iteracije). Delitev na področja (zahteve, vmesniki, opisi) se je izkazala za učinkovito.
+
+Hitro smo uskladili, da je treba dokumentacijo pripraviti dovolj natančno za razvoj, vendar brez nepotrebnega poglabljanja v podrobnosti, ki se bodo spremenile med implementacijo.
+
+Vse ključne pripombe s strani naročnika (realnejši načrt, jasnejši opis algoritma, chat, administratorski nadzor) smo uspešno vključili v osnutek.
+
+### Kaj ni šlo po pričakovanjih?
+
+Glavna težava je bila, da smo se prepozno lotili kodiranja. Prve iteracije smo se preveč osredotočili na dokumentacijo in analizo, zato se nismo uspeli lotiti dejanske implementacije. Do konca te iteracije nimamo prave kode, ampak le demo aplikacijo.
+
+### Kakšne težave so se pojavile pri ciljih, ki jih niste dosegli?
+
+- **Nedorečen scoring model:** Ekipa ni uspela dokončno določiti natančne formule za izračun skupne ocene kompatibilnosti. Razprave o utežeh in normalizaciji so trajale dlje od predvidenega.
+
+- **Pozno lotenje kodiranja:** Zaradi prevelikega poudarka na dokumentaciji se ekipa ni pravočasno lotila implementacije. Prvotni cilj, da bi do konca te iteracije imeli prve module kode, ni bil dosežen.
+
+### Kako nameravate premagati te težave?
+
+- **Za nedorečen scoring model:** V naslednji iteraciji bomo pripravili preprost prototip algoritma v ločenem skriptu in ga testirali na sintetičnih podatkih, da bomo lažje ocenili vpliv različnih uteži.
+
+- **Za pozno lotenje kodiranja:** V naslednji iteraciji bomo takoj po postavitvi razvojnega okolja začeli s kodiranjem. Dokumentacijo bomo pisali vzporedno z razvojem, ne šele pred njim.
+
+- **Za nerealističen načrt:** Obseg naslednje iteracije smo zmanjšali na ključne MVP funkcionalnosti. Napredne funkcije (kot je avtomatično iskanje v ozadju) smo prestavili na kasnejše faze.
+
+### Kaj boste naredili drugače v naslednji iteraciji?
+
+- **Takojšen začetek kodiranja:** Takoj ko bo razvojno okolje pripravljeno, bomo začeli s kodiranjem. Dokumentacijo bomo pisali vzporedno z razvojem, ne šele pred njim.
+
+- **Zgodnejše določitev merljivih ciljev:** Že na začetku naslednje iteracije bomo natančno definirali metrike za uspeh posameznega modula (npr. odzivni čas registracije pod 2 sekundama).
+
+- **Uvedba več krajših sestankov:** Uvedli bomo 10-minutne online sestanke 2-krat tedensko, da bomo spremljali napredek in pravočasno odkrili morebitne blokade.
+
+- **Par programiranje za zahtevne dele:** Za implementacijo pametne komponente in varnostnih mehanizmov bosta skupaj delala dva člana, kar bo zmanjšalo tveganje napak in izboljšalo deljeno znanje.
+
+- **Rednejše pregledovanje dokumentacije:** Da preprečimo zamike pri pisanju, bomo določili vmesne roke za osnutke posameznih poglavij (npr. 3 dni pred končnim rokom).
+
+- **Dnevno spremljanje napredka kodiranja:** Vsak dan bomo na kratkem sestanku preverili, kaj je bilo narejeno in kaj so ovire.
