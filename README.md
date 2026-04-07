@@ -1,3 +1,3 @@
-# Spletno programiranje
+# TPO
 
-**Demo aplikacija** predmeta **Spletno programiranje**.
+**Demo aplikacija Srečajmo se**.
