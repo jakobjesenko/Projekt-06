@@ -1,0 +1,221 @@
+<div class="chat-container">
+    <!-- Group Info Sidebar -->
+    <div class="group-info-panel">
+        <div class="group-header">
+            <div class="group-avatar">
+                <i class="fas fa-users"></i>
+            </div>
+            <h2 class="group-name" id="groupName">{{groupName}}</h2>
+            <div class="group-location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="groupLocation">{{groupLocation}}</span>
+            </div>
+            <div class="group-time">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="groupDateTime">{{groupDateTime}}</span>
+            </div>
+        </div>
+        
+        <div class="members-section">
+            <h4><i class="fas fa-users"></i> Člani skupine (4)</h4>
+            <div class="members-list" id="membersList"></div>
+        </div>
+    </div>
+
+    <!-- Chat Main Area -->
+    <div class="chat-main">
+        <div class="chat-messages-area" id="chatMessagesArea"></div>
+        
+        <div class="chat-input-area">
+            <input type="text" id="messageInput" class="chat-input" placeholder="Napišite sporočilo...">
+            <button id="sendMessageBtn" class="btn-primary">
+                <i class="fas fa-paper-plane"></i> Pošlji
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Get group data from server
+    const groupName = '{{groupName}}';
+    const groupLocation = '{{groupLocation}}';
+    const groupDateTime = '{{groupDateTime}}';
+    
+    // Mock current user
+    const currentUser = {
+        id: 1,
+        name: 'Ana Novak',
+        initials: 'AN'
+    };
+    
+    // Mock members list
+    const members = [
+        { id: 1, name: 'Ana Novak', initials: 'AN', status: 'online' },
+        { id: 2, name: 'Tilen Kovač', initials: 'TK', status: 'online' },
+        { id: 3, name: 'Maja Horvat', initials: 'MH', status: 'away' },
+        { id: 4, name: 'Luka Benčič', initials: 'LB', status: 'offline' }
+    ];
+    
+    // Mock message history
+    let messages = [
+        {
+            id: 1,
+            senderId: 2,
+            senderName: 'Tilen Kovač',
+            text: 'Pozdravljeni vsi! Se veselim srečanja! 👋',
+            time: new Date(Date.now() - 3600000).toLocaleTimeString(),
+            timestamp: Date.now() - 3600000
+        },
+        {
+            id: 2,
+            senderId: 3,
+            senderName: 'Maja Horvat',
+            text: 'Jaz tudi! Kje točno se dobimo?',
+            time: new Date(Date.now() - 3500000).toLocaleTimeString(),
+            timestamp: Date.now() - 3500000
+        },
+        {
+            id: 3,
+            senderId: 1,
+            senderName: 'Ana Novak',
+            text: 'Dobimo se pred kavarno Evropa. Je to ok za vse? ☕',
+            time: new Date(Date.now() - 3400000).toLocaleTimeString(),
+            timestamp: Date.now() - 3400000
+        },
+        {
+            id: 4,
+            senderId: 2,
+            senderName: 'Tilen Kovač',
+            text: 'Super lokacija! Jaz sem za 👍',
+            time: new Date(Date.now() - 3300000).toLocaleTimeString(),
+            timestamp: Date.now() - 3300000
+        },
+        {
+            id: 5,
+            senderId: 4,
+            senderName: 'Luka Benčič',
+            text: 'Se pridružim malo kasneje, ampak pridem!',
+            time: new Date(Date.now() - 3200000).toLocaleTimeString(),
+            timestamp: Date.now() - 3200000
+        }
+    ];
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    function renderGroupInfo() {
+        document.getElementById('groupName').textContent = groupName;
+        document.getElementById('groupLocation').textContent = groupLocation;
+        document.getElementById('groupDateTime').textContent = groupDateTime;
+        
+        const membersList = document.getElementById('membersList');
+        membersList.innerHTML = members.map(member => `
+            <div class="member-item">
+                <div class="member-avatar">${member.initials}</div>
+                <div class="member-info">
+                    <div class="member-name">${member.name}</div>
+                    <div class="member-status ${member.status === 'online' ? '' : 'offline'}">
+                        <i class="fas ${member.status === 'online' ? 'fa-circle' : 'fa-circle'}"></i>
+                        ${member.status === 'online' ? 'Aktiven' : member.status === 'away' ? 'Odsoten' : 'Nedosegljiv'}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function renderMessages() {
+        const container = document.getElementById('chatMessagesArea');
+        
+        if (messages.length === 0) {
+            container.innerHTML = `
+                <div class="empty-chat">
+                    <i class="fas fa-comment-dots"></i>
+                    <p>Ni še sporočil. Začnite pogovor!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        const sortedMessages = [...messages].sort((a, b) => a.timestamp - b.timestamp);
+        
+        container.innerHTML = sortedMessages.map(msg => `
+            <div class="message ${msg.senderId === currentUser.id ? 'sent' : 'received'}">
+                <div class="message-bubble">
+                    ${msg.senderId !== currentUser.id ? `<div class="message-sender">${msg.senderName}</div>` : ''}
+                    <div class="message-text">${escapeHtml(msg.text)}</div>
+                    <div class="message-time">${msg.time}</div>
+                </div>
+            </div>
+        `).join('');
+        
+        container.scrollTop = container.scrollHeight;
+    }
+    
+    function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const text = input.value.trim();
+        
+        if (!text) return;
+        
+        const newMessage = {
+            id: Date.now(),
+            senderId: currentUser.id,
+            senderName: currentUser.name,
+            text: text,
+            time: new Date().toLocaleTimeString(),
+            timestamp: Date.now()
+        };
+        
+        messages.push(newMessage);
+        renderMessages();
+        input.value = '';
+        
+        setTimeout(() => {
+            simulateReply();
+        }, 2000);
+    }
+    
+    function simulateReply() {
+        const replies = [
+            'Se strinjam! 👍',
+            'Super ideja!',
+            'Kdaj točno se dobimo?',
+            'Jaz sem tudi za!',
+            'Odlično, se vidimo! 🎉',
+            'Hvala za informacijo!',
+            'Bom tam!'
+        ];
+        
+        const randomReply = replies[Math.floor(Math.random() * replies.length)];
+        const randomMember = members.find(m => m.id !== currentUser.id && m.status === 'online');
+        
+        if (randomMember) {
+            const replyMessage = {
+                id: Date.now(),
+                senderId: randomMember.id,
+                senderName: randomMember.name,
+                text: randomReply,
+                time: new Date().toLocaleTimeString(),
+                timestamp: Date.now()
+            };
+            
+            messages.push(replyMessage);
+            renderMessages();
+        }
+    }
+    
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+    
+    document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
+    
+    renderGroupInfo();
+    renderMessages();
+    document.getElementById('messageInput').focus();
+</script>

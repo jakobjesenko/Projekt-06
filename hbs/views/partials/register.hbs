@@ -1,0 +1,34 @@
+<div class="register-wizard">
+    <div class="wizard-container">
+        <div class="step-header">
+            <i class="fas fa-user-plus"></i>
+            <h2>Ustvari svoj profil</h2>
+            <p>Vse kar potrebujemo je nekaj osnovnih podatkov.</p>
+        </div>
+        
+        <form action="/api/auth/register" method="POST">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Vzdevek</label>
+                <input type="text" name="username" placeholder="npr. Kavoljubec_Ana" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> E-pošta</label>
+                <input type="email" name="email" placeholder="ana@email.com" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Geslo</label>
+                <input type="password" name="password" placeholder="••••••••" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-location-dot"></i> Tvoje območje</label>
+                <input type="text" name="location" placeholder="npr. Center Ljubljana, Šiška, Bežigrad" class="form-input" required>
+            </div>
+            
+            <button type="submit" class="btn-primary btn-large" style="width: 100%;">Registriraj se <i class="fas fa-arrow-right"></i></button>
+        </form>
+        
+        <div class="wizard-nav" style="justify-content: center; margin-top: 1rem;">
+            <button class="btn-secondary" onclick="window.location.href='/'">Nazaj</button>
+        </div>
+    </div>
+</div>

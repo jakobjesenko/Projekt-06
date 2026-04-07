@@ -1,0 +1,32 @@
+{
+  "name": "demo",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Demo application for Web Programming course",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "import:db-docker": "docker cp ./data/kulturne-dediscine.json sp-mongo-db:/kulturne-dediscine.json; docker exec -it sp-mongo-db mongoimport --db Demo --collection Locations --mode upsert --upsertFields id --jsonArray --file kulturne-dediscine.json; docker exec -it sp-mongo-db rm -rf kulturne-dediscine.json",
+    "delete:db-docker": "docker exec -it sp-mongo-db bash -c \"mongosh Demo --eval 'db.Locations.deleteMany({})'\"",
+    "view:db-docker": "docker exec -it sp-mongo-db bash -c \"mongosh Demo --eval 'db.Locations.find()'\"",
+    "transfer:db-docker-atlas": "docker exec -it sp-mongo-db bash -c \"mongodump -h localhost -d Demo -o ./\"; docker exec -it sp-mongo-db bash -c \"mongorestore --drop --uri mongodb+srv://app@demo.uhiawaf.mongodb.net ./Demo/Locations.bson\"; docker exec -it sp-mongo-db bash -c \"rm -rf ./Demo\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SP-2025-2026/Demo.git"
+  },
+  "author": "Dejan Lavbič <dejan@lavbic.net>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SP-2025-2026/Demo/issues"
+  },
+  "homepage": "https://github.com/SP-2025-2026/Demo#readme",
+  "dependencies": {
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "express-handlebars": "^9.0.1",
+    "express-session": "^1.19.0",
+    "hbs": "^4.2.1",
+    "mongoose": "^8.23.0"
+  }
+}

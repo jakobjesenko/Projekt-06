@@ -1,0 +1,33 @@
+<div class="register-wizard">
+    <div class="wizard-container">
+        <div class="step-header">
+            <i class="fas fa-user-edit"></i>
+            <h2>Uredi profil</h2>
+            <p>Spremeni svoje podatke</p>
+        </div>
+        
+        <form action="/api/auth/profile/{{user._id}}" method="POST">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Vzdevek</label>
+                <input type="text" name="username" value="{{user.username}}" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> E-pošta</label>
+                <input type="email" name="email" value="{{user.email}}" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Novo geslo (pusti prazno če ne želiš spremeniti)</label>
+                <input type="password" name="password" placeholder="••••••••" class="form-input">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-location-dot"></i> Lokacija</label>
+                <input type="text" name="location" value="{{user.location}}" class="form-input" required>
+            </div>
+            
+            <div class="wizard-nav">
+                <button type="button" class="btn-secondary" onclick="window.location.href='/dashboard'">Prekliči</button>
+                <button type="submit" class="btn-success">Shrani spremembe <i class="fas fa-save"></i></button>
+            </div>
+        </form>
+    </div>
+</div>

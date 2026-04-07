@@ -1,0 +1,120 @@
+<div class="dashboard-grid">
+    <!-- Sidebar -->
+    <div class="dashboard-sidebar">
+        <div class="user-card panel">
+            <div class="user-avatar-large">
+                <div class="avatar-initials">{{user.username.charAt 0}}</div>
+            </div>
+            <h3>{{user.username}}</h3>
+            <p class="user-email">{{user.email}}</p>
+            <div class="user-location">
+                <i class="fas fa-map-marker-alt"></i> <span>{{user.location}}</span>
+            </div>
+            <div class="search-status" id="searchStatus">
+                {{#if user.activeSearch}}
+                    <i class="fas fa-bell"></i> Iskanje aktivno
+                {{else}}
+                    <i class="fas fa-bell-slash"></i> Iskanje ni aktivno
+                {{/if}}
+            </div>
+            <form action="/api/auth/activate-search/{{user._id}}" method="POST">
+                <button type="submit" class="btn-primary btn-full">
+                    <i class="fas fa-search"></i> Aktiviraj iskanje
+                </button>
+            </form>
+            <button onclick="window.location.href='/profile/edit'" class="btn-secondary btn-full" style="margin-top: 0.5rem;">
+                <i class="fas fa-edit"></i> Uredi profil
+            </button>
+        </div>
+        
+        <div class="interests-card panel">
+            <h4><i class="fas fa-heart"></i> Moji interesi</h4>
+            <div class="interests-tags">
+                {{#each user.interests}}
+                    <span class="interest-tag"><i class="fas {{icon}}"></i> {{name}}</span>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="dashboard-main">
+        <div class="suggestions-header">
+            <h2><i class="fas fa-users"></i> Predlogi skupin</h2>
+            <p>Na podlagi tvojih interesov in razpoložljivosti</p>
+        </div>
+        <div id="groupSuggestionsContainer" class="suggestions-grid">
+            {{#each suggestions}}
+                <div class="group-card">
+                    <div class="group-header">
+                        <span class="group-badge"><i class="fas fa-users"></i> {{name}}</span>
+                        <span class="match-badge">{{matchScore}}% ujemanja</span>
+                    </div>
+                    <div class="group-members">
+                        {{#each members}}
+                            <span class="member-chip"><i class="fas fa-user-circle"></i> {{this}}</span>
+                        {{/each}}
+                    </div>
+                    <div class="group-details">
+                        <span><i class="fas fa-tag"></i> Skupni interesi: {{interests.join ", "}}</span>
+                    </div>
+                    <div class="group-details">
+                        <span><i class="fas fa-clock"></i> {{time}}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> {{location}}</span>
+                    </div>
+                    <div class="group-actions">
+                        <form action="/api/meetings/confirm" method="POST">
+                            <input type="hidden" name="userId" value="{{../user._id}}">
+                            <input type="hidden" name="groupName" value="{{name}}">
+                            <input type="hidden" name="members" value="{{json members}}">
+                            <input type="hidden" name="location" value="{{location}}">
+                            <input type="hidden" name="dateTime" value="{{time}}">
+                            <button type="submit" class="btn-primary"><i class="fas fa-check-circle"></i> Sprejmem predlog</button>
+                        </form>
+                        <button class="btn-secondary" onclick="alert('Klepet bo na voljo kmalu!')"><i class="fas fa-comment-dots"></i> Pogovor</button>
+                    </div>
+                </div>
+            {{else}}
+                <div class="group-card" style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-search" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+                    <h3>Trenutno ni predlogov</h3>
+                    <p style="color: #64748b;">Aktiviraj iskanje za prejemanje predlogov skupin.</p>
+                </div>
+            {{/each}}
+        </div>
+        
+        <!-- Confirmed Meetings -->
+        <div class="confirmed-meetings-section" style="margin-top: 2rem;">
+            <div class="suggestions-header">
+                <h2><i class="fas fa-check-circle"></i> Moja potrjena srečanja</h2>
+                <p>Srečanja, ki si jih potrdil/a</p>
+            </div>
+            <div class="suggestions-grid">
+                {{#each confirmedMeetings}}
+                    <div class="group-card">
+                        <div class="group-header">
+                            <span class="group-badge"><i class="fas fa-check-circle"></i> {{groupName}}</span>
+                            <span class="confirmed-badge">Potrjeno</span>
+                        </div>
+                        <div class="meeting-participants">
+                            <strong><i class="fas fa-users"></i> Udeleženci:</strong><br>
+                            {{#each members}}
+                                <span class="participant-name"><i class="fas fa-user-circle"></i> {{this}}</span>
+                            {{/each}}
+                        </div>
+                        <div class="group-details">
+                            <span><i class="fas fa-clock"></i> {{dateTime}}</span>
+                            <span><i class="fas fa-map-marker-alt"></i> {{location}}</span>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="group-card" style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-clock" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+                        <h3>Ni potrjenih srečanj</h3>
+                        <p style="color: #64748b;">Ko sprejmeš predlog skupine, se bo prikazal tukaj.</p>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
