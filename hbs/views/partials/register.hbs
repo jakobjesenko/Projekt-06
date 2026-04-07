@@ -1,34 +1,419 @@
+{{! register.hbs - 3-stopenjski čarovnik }}
 <div class="register-wizard">
     <div class="wizard-container">
+        {{! Progress bar }}
+        <div class="progress-steps">
+            <div class="step-progress active" data-step="1">1</div>
+            <div class="step-progress" data-step="2">2</div>
+            <div class="step-progress" data-step="3">3</div>
+        </div>
+
         <div class="step-header">
-            <i class="fas fa-user-plus"></i>
-            <h2>Ustvari svoj profil</h2>
-            <p>Vse kar potrebujemo je nekaj osnovnih podatkov.</p>
+            <i class="fas fa-user-plus" id="step-icon"></i>
+            <h2 id="step-title">Osebni podatki</h2>
+            <p id="step-desc">Najprej potrebujemo tvoje osnovne podatke.</p>
         </div>
-        
-        <form action="/api/auth/register" method="POST">
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Vzdevek</label>
-                <input type="text" name="username" placeholder="npr. Kavoljubec_Ana" class="form-input" required>
+
+        {{! === KORAK 1 === }}
+        <form id="wizardForm" action="/api/auth/register" method="POST">
+            <div id="step1" class="form-step active-step">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Ime</label>
+                        <input type="text" name="firstName" placeholder="Ana" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user-tag"></i> Priimek</label>
+                        <input type="text" name="lastName" placeholder="Novak" class="form-input" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-at"></i> Uporabniško ime</label>
+                    <input type="text" name="username" placeholder="kavoljubec_ana" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-alt"></i> Starost (leta)</label>
+                    <input type="number" name="age" placeholder="npr. 28" min="16" max="120" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> E-pošta</label>
+                    <input type="email" name="email" placeholder="ana@email.com" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Geslo</label>
+                    <input type="password" name="password" placeholder="••••••••" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-check-circle"></i> Potrdi geslo</label>
+                    <input type="password" name="passwordConfirm" placeholder="••••••••" class="form-input" required>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="terms" required> 
+                        <i class="fas fa-file-signature"></i> Strinjam se s pogoji uporabe
+                    </label>
+                </div>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-envelope"></i> E-pošta</label>
-                <input type="email" name="email" placeholder="ana@email.com" class="form-input" required>
+
+            {{! === KORAK 2: Interesi (vsaj 3) === }}
+            <div id="step2" class="form-step" style="display: none;">
+                <div class="interests-info">
+                    <i class="fas fa-heart"></i> Izberi vsaj tri stvari, ki te veselijo:
+                </div>
+                <div class="interests-grid" id="interestsGrid">
+                    {{#each interestsMaster}}
+                    <label class="interest-chip" data-value="{{this.name}}">
+                        <i class="fas {{this.icon}}"></i> {{this.name}}
+                    </label>
+                    {{/each}}
+                </div>
+                <div id="interestsError" class="error-message" style="display: none;">Izberi vsaj 3 interese (◕‸◕)</div>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> Geslo</label>
-                <input type="password" name="password" placeholder="••••••••" class="form-input" required>
+
+            {{! === KORAK 3: Območje + koledar === }}
+            <div id="step3" class="form-step" style="display: none;">
+                <div class="form-group">
+                    <label><i class="fas fa-location-dot"></i> Tvoje območje</label>
+                    <input type="text" name="location" placeholder="npr. Center Ljubljana, Šiška, Bežigrad" class="form-input" required>
+                </div>
+
+                <div class="availability-title"><i class="fas fa-calendar-week"></i> Kdaj si prost/a?</div>
+                
+                <div class="quick-buttons">
+                    <button type="button" class="quick-btn" id="quickWeeknights">🌙 Po delavnikih (pon–pet zvečer)</button>
+                    <button type="button" class="quick-btn" id="quickWeekends">🎉 Vikendi (sob, ned cel dan)</button>
+                    <button type="button" class="quick-btn" id="quickClear">🗑 Počisti vse</button>
+                </div>
+
+                {{! Koledar - dnevi zgoraj, deli dneva na levi }}
+                <div class="calendar-grid">
+                    <div class="calendar-header"></div>
+                    {{#each weekdays}}
+                    <div class="calendar-header day-header">{{this}}</div>
+                    {{/each}}
+                    
+                    {{#each dayPartsWithTimes}}
+                    <div class="time-label">
+                        {{this.label}}<br>
+                        <span class="time-range">{{this.range}}</span>
+                    </div>
+                    {{#each ../weekdays}}
+                    <label class="calendar-slot" data-day="{{this}}" data-part="{{../this.key}}">
+                        <input type="checkbox" name="availability" value="{{this}}__{{../this.key}}" style="display: none;">
+                        <span class="slot-time">{{../this.range}}</span>
+                    </label>
+                    {{/each}}
+                    {{/each}}
+                </div>
+                <div class="calendar-note">* Klikni na termin za izbiro. Izberi termine, ko si prost/a.</div>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-location-dot"></i> Tvoje območje</label>
-                <input type="text" name="location" placeholder="npr. Center Ljubljana, Šiška, Bežigrad" class="form-input" required>
+
+            {{! Navigacija }}
+            <div class="wizard-nav">
+                <button type="button" class="btn-secondary" id="prevBtn" style="display: none;"><i class="fas fa-chevron-left"></i> Nazaj</button>
+                <button type="button" class="btn-primary" id="nextBtn">Naprej <i class="fas fa-chevron-right"></i></button>
+                <button type="submit" class="btn-primary btn-large" id="submitBtn" style="display: none;">Registriraj se <i class="fas fa-arrow-right"></i></button>
             </div>
-            
-            <button type="submit" class="btn-primary btn-large" style="width: 100%;">Registriraj se <i class="fas fa-arrow-right"></i></button>
         </form>
-        
-        <div class="wizard-nav" style="justify-content: center; margin-top: 1rem;">
-            <button class="btn-secondary" onclick="window.location.href='/'">Nazaj</button>
-        </div>
     </div>
 </div>
+
+<script>
+    // Podatki za dele dneva s časi
+    const dayPartsWithTimes = [
+        { key: "jutro", label: "Zjutraj", range: "6:00 - 9:00" },
+        { key: "dopoldan", label: "Dopoldan", range: "9:00 - 12:00" },
+        { key: "popoldan", label: "Popoldan", range: "12:00 - 19:00" },
+        { key: "zvecer", label: "Zvečer", range: "19:00 - 00:00" }
+    ];
+
+    let currentStep = 1;
+    const totalSteps = 3;
+
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const stepTitle = document.getElementById('step-title');
+    const stepDesc = document.getElementById('step-desc');
+    const stepIcon = document.getElementById('step-icon');
+    const progressSteps = document.querySelectorAll('.step-progress');
+
+    // Interesi - obarvanje brez kljukice
+    const interestChips = document.querySelectorAll('.interest-chip');
+    const selectedInterests = new Set();
+
+    function updateInterestSelection() {
+        interestChips.forEach(chip => {
+            const value = chip.getAttribute('data-value');
+            if (selectedInterests.has(value)) {
+                chip.classList.add('selected');
+            } else {
+                chip.classList.remove('selected');
+            }
+        });
+    }
+
+    interestChips.forEach(chip => {
+        chip.addEventListener('click', function(e) {
+            const value = this.getAttribute('data-value');
+            if (selectedInterests.has(value)) {
+                selectedInterests.delete(value);
+            } else {
+                selectedInterests.add(value);
+            }
+            updateInterestSelection();
+            
+            const errorDiv = document.getElementById('interestsError');
+            if (selectedInterests.size >= 3) {
+                errorDiv.style.display = 'none';
+            }
+        });
+    });
+
+    // Koledar - vizualna izbira brez kljukice (samo obarvanje)
+    const calendarSlots = document.querySelectorAll('.calendar-slot');
+    
+    function updateCalendarSlot(slot) {
+        const checkbox = slot.querySelector('input[type="checkbox"]');
+        if (checkbox.checked) {
+            slot.classList.add('selected-slot');
+        } else {
+            slot.classList.remove('selected-slot');
+        }
+    }
+    
+    calendarSlots.forEach(slot => {
+        const checkbox = slot.querySelector('input[type="checkbox"]');
+        slot.addEventListener('click', function(e) {
+            if (e.target !== checkbox) {
+                checkbox.checked = !checkbox.checked;
+                updateCalendarSlot(slot);
+            }
+        });
+        updateCalendarSlot(slot);
+    });
+
+    // Hitri gumbi
+    function setQuickWeeknights() {
+        calendarSlots.forEach(slot => {
+            const day = slot.getAttribute('data-day');
+            const part = slot.getAttribute('data-part');
+            const weekdays = ['Pon', 'Tor', 'Sre', 'Čet', 'Pet'];
+            const checkbox = slot.querySelector('input[type="checkbox"]');
+            if (weekdays.includes(day) && part === 'zvecer') {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            updateCalendarSlot(slot);
+        });
+    }
+
+    function setQuickWeekends() {
+        calendarSlots.forEach(slot => {
+            const day = slot.getAttribute('data-day');
+            const weekendDays = ['Sob', 'Ned'];
+            const checkbox = slot.querySelector('input[type="checkbox"]');
+            if (weekendDays.includes(day)) {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            updateCalendarSlot(slot);
+        });
+    }
+
+    function clearAvailability() {
+        calendarSlots.forEach(slot => {
+            const checkbox = slot.querySelector('input[type="checkbox"]');
+            checkbox.checked = false;
+            updateCalendarSlot(slot);
+        });
+    }
+
+    document.getElementById('quickWeeknights')?.addEventListener('click', setQuickWeeknights);
+    document.getElementById('quickWeekends')?.addEventListener('click', setQuickWeekends);
+    document.getElementById('quickClear')?.addEventListener('click', clearAvailability);
+
+    function validateStep1() {
+        const firstName = document.querySelector('input[name="firstName"]')?.value.trim();
+        const lastName = document.querySelector('input[name="lastName"]')?.value.trim();
+        const username = document.querySelector('input[name="username"]')?.value.trim();
+        const age = document.querySelector('input[name="age"]')?.value;
+        const email = document.querySelector('input[name="email"]')?.value.trim();
+        const password = document.querySelector('input[name="password"]')?.value;
+        const passwordConfirm = document.querySelector('input[name="passwordConfirm"]')?.value;
+        const terms = document.querySelector('input[name="terms"]')?.checked;
+
+        if (!firstName || !lastName || !username || !age || !email || !password || !passwordConfirm) {
+            alert('Prosimo izpolnite vsa polja v prvem koraku.');
+            return false;
+        }
+        if (parseInt(age) < 16 || parseInt(age) > 120) {
+            alert('Starost mora biti med 16 in 120 let.');
+            return false;
+        }
+        if (password !== passwordConfirm) {
+            alert('Gesli se ne ujemata!');
+            return false;
+        }
+        if (password.length < 4) {
+            alert('Geslo mora imeti vsaj 4 znake.');
+            return false;
+        }
+        if (!terms) {
+            alert('Za registracijo se morate strinjati s pogoji uporabe.');
+            return false;
+        }
+        return true;
+    }
+
+    function validateStep2() {
+        const errorDiv = document.getElementById('interestsError');
+        if (selectedInterests.size < 3) {
+            errorDiv.style.display = 'block';
+            return false;
+        } else {
+            errorDiv.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateStep3() {
+        const location = document.querySelector('input[name="location"]')?.value.trim();
+        if (!location) {
+            alert('Vnesite svoje območje (npr. Center Ljubljana).');
+            return false;
+        }
+        const availabilityBoxes = document.querySelectorAll('input[name="availability"]:checked');
+        if (availabilityBoxes.length === 0) {
+            alert('Izberite vsaj en termin, ko ste prosti (koledar).');
+            return false;
+        }
+        return true;
+    }
+
+    function showStep(step) {
+        step1.style.display = 'none';
+        step2.style.display = 'none';
+        step3.style.display = 'none';
+        
+        if (step === 1) {
+            step1.style.display = 'block';
+            stepTitle.innerText = 'Osebni podatki';
+            stepDesc.innerText = 'Najprej potrebujemo tvoje osnovne podatke.';
+            stepIcon.className = 'fas fa-user-plus';
+            nextBtn.style.display = 'inline-flex';
+            prevBtn.style.display = 'none';
+            submitBtn.style.display = 'none';
+        } else if (step === 2) {
+            step2.style.display = 'block';
+            stepTitle.innerText = 'Kaj te veseli?';
+            stepDesc.innerText = 'Izberi vsaj tri področja, ki te navdušujejo.';
+            stepIcon.className = 'fas fa-smile-wink';
+            nextBtn.style.display = 'inline-flex';
+            prevBtn.style.display = 'inline-flex';
+            submitBtn.style.display = 'none';
+        } else if (step === 3) {
+            step3.style.display = 'block';
+            stepTitle.innerText = 'Dostopnost in kraj';
+            stepDesc.innerText = 'Kje si doma in kdaj si prost/a?';
+            stepIcon.className = 'fas fa-map-marker-alt';
+            nextBtn.style.display = 'none';
+            prevBtn.style.display = 'inline-flex';
+            submitBtn.style.display = 'block';
+        }
+        
+        progressSteps.forEach((el, idx) => {
+            const stepNum = idx + 1;
+            el.classList.remove('active', 'completed');
+            if (stepNum === step) {
+                el.classList.add('active');
+            } else if (stepNum < step) {
+                el.classList.add('completed');
+            }
+        });
+    }
+
+    function nextStep() {
+        if (currentStep === 1 && !validateStep1()) return;
+        if (currentStep === 2 && !validateStep2()) return;
+        if (currentStep < totalSteps) {
+            currentStep++;
+            showStep(currentStep);
+        }
+    }
+
+    function prevStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep(currentStep);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        showStep(1);
+        nextBtn.addEventListener('click', nextStep);
+        prevBtn.addEventListener('click', prevStep);
+        
+        const pwd = document.querySelector('input[name="password"]');
+        const pwdConfirm = document.querySelector('input[name="passwordConfirm"]');
+        if(pwd && pwdConfirm) {
+            function validatePasswordMatch() {
+                if(pwd.value !== pwdConfirm.value && pwdConfirm.value !== '') {
+                    pwdConfirm.setCustomValidity('Gesli se ne ujemata');
+                } else {
+                    pwdConfirm.setCustomValidity('');
+                }
+            }
+            pwd.addEventListener('input', validatePasswordMatch);
+            pwdConfirm.addEventListener('input', validatePasswordMatch);
+        }
+    });
+
+    const form = document.getElementById('wizardForm');
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (!validateStep1() || !validateStep2() || !validateStep3()) {
+            alert('Prosim preverite vse korake – vsaj 3 interesi, območje in razpoložljivost.');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('firstName', document.querySelector('input[name="firstName"]').value.trim());
+        formData.append('lastName', document.querySelector('input[name="lastName"]').value.trim());
+        formData.append('username', document.querySelector('input[name="username"]').value.trim());
+        formData.append('age', document.querySelector('input[name="age"]').value);
+        formData.append('email', document.querySelector('input[name="email"]').value.trim());
+        formData.append('password', document.querySelector('input[name="password"]').value);
+        formData.append('terms', 'on');
+        
+        const interestsSelected = Array.from(selectedInterests);
+        formData.append('interests', JSON.stringify(interestsSelected));
+        
+        formData.append('location', document.querySelector('input[name="location"]').value.trim());
+        
+        const availabilitySelected = Array.from(document.querySelectorAll('input[name="availability"]:checked')).map(cb => cb.value);
+        formData.append('availability', JSON.stringify(availabilitySelected));
+        
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (response.ok) {
+                window.location.href = '/dashboard?registered=true';
+            } else {
+                const err = await response.json();
+                alert('Napaka: ' + (err.message || 'Registracija ni uspela'));
+            }
+        } catch (err) {
+            alert('Napaka pri pošiljanju: ' + err.message);
+        }
+    });
+</script>

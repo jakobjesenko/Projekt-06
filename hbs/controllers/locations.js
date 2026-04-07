@@ -56,6 +56,13 @@ const register = (req, res) => {
     admin: req.session?.admin || null,
     interestsMaster: interestsMaster,
     timeOptions: timeOptions,
+    weekdays: ["Pon", "Tor", "Sre", "Čet", "Pet", "Sob", "Ned"],
+    dayPartsWithTimes: [
+      { key: "jutro", label: "Zjutraj", range: "6:00 - 9:00" },
+      { key: "dopoldan", label: "Dopoldan", range: "9:00 - 12:00" },
+      { key: "popoldan", label: "Popoldan", range: "12:00 - 19:00" },
+      { key: "zvecer", label: "Zvečer", range: "19:00 - 00:00" }
+    ],
     view: "register"
   });
 };
@@ -84,10 +91,7 @@ const dashboard = async (req, res) => {
 
 const editProfile = async (req, res) => {
   const user = req.session?.user;
-  
-  if (!user) {
-    return res.redirect("/login");
-  }
+  if (!user) return res.redirect("/login");
   
   res.render("index", { 
     title: "Uredi profil - Srečajmo se",
@@ -95,10 +99,11 @@ const editProfile = async (req, res) => {
     admin: req.session?.admin || null,
     interestsMaster: interestsMaster,
     timeOptions: timeOptions,
+    weekdays: ["Pon", "Tor", "Sre", "Čet", "Pet", "Sob", "Ned"],
+    dayParts: ["dopoldan", "popoldan", "zvečer"],
     view: "editProfile"
   });
 };
-
 const adminPanel = async (req, res) => {
   const admin = req.session?.admin;
   
