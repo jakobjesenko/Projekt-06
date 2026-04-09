@@ -5,31 +5,37 @@ const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   username: { type: String, required: true, unique: true },
-  age: { type: Number, required: true, min: 16, max: 120 },
+  birthday: { type: Date, required: true }, // Rojstni dan (YYYY-MM-DD)
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  termsAccepted: { type: Boolean, default: true },
   
-  // Lokacija z zemljevidom (samo koordinate in radij)
+  // Lokacija
   location: {
-    lat: { type: Number, required: false },
-    lng: { type: Number, required: false },
-    radius: { type: Number, default: 5 } // km
+    lat: { type: Number, default: null },
+    lng: { type: Number, default: null },
+    radius: { type: Number, default: 5 }
   },
   
-  // Interesi (shranjeni kot array stringov)
   interests: [{ type: String }],
-  
-  // Razpoložljivost (termini)
   availability: [{ type: String }],
   
   activeSearch: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true },
   isAdmin: { type: Boolean, default: false },
-  termsAccepted: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });
 
-// 2d sphere index za geolokacijske poizvedbe
-userSchema.index({ "location.lat": 1, "location.lng": 1 });
+// Metoda za izračun starosti iz rojstnega dne
+userSchema.methods.getAge = function() {
+  const today = new Date();
+  const birthDate = new Date(this.birthday);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+};
 
 export default mongoose.model("User", userSchema, "Users");

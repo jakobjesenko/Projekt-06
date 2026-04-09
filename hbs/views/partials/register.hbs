@@ -31,10 +31,11 @@
                     <label><i class="fas fa-at"></i> Uporabniško ime</label>
                     <input type="text" name="username" placeholder="kavoljubec_ana" class="form-input" required>
                 </div>
-                <div class="form-group">
-                    <label><i class="fas fa-calendar-alt"></i> Starost (leta)</label>
-                    <input type="number" name="age" placeholder="npr. 28" min="16" max="120" class="form-input" required>
-                </div>
+<div class="form-group">
+    <label><i class="fas fa-calendar-alt"></i> Datum rojstva</label>
+    <input type="date" name="birthday" class="form-input" required id="birthday">
+    <small class="form-hint">Stari morate biti vsaj 18 let za registracijo.</small>
+</div>
                 <div class="form-group">
                     <label><i class="fas fa-envelope"></i> E-pošta</label>
                     <input type="email" name="email" placeholder="ana@email.com" class="form-input" required>
@@ -151,10 +152,15 @@
     const stepDesc = document.getElementById('step-desc');
     const stepIcon = document.getElementById('step-icon');
     const progressSteps = document.querySelectorAll('.step-progress');
-
-    // Interesi
     const interestChips = document.querySelectorAll('.interest-chip');
     const selectedInterests = new Set();
+const today = new Date();
+const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+const maxDateString = maxDate.toISOString().split('T')[0];
+const birthdayInput = document.getElementById('birthday');
+if (birthdayInput) {
+    birthdayInput.setAttribute('max', maxDateString);
+}
 
     function updateInterestSelection() {
         interestChips.forEach(chip => {
@@ -247,38 +253,58 @@
     document.getElementById('quickWeekends')?.addEventListener('click', setQuickWeekends);
     document.getElementById('quickClear')?.addEventListener('click', clearAvailability);
 
-    function validateStep1() {
-        const firstName = document.querySelector('input[name="firstName"]')?.value.trim();
-        const lastName = document.querySelector('input[name="lastName"]')?.value.trim();
-        const username = document.querySelector('input[name="username"]')?.value.trim();
-        const age = document.querySelector('input[name="age"]')?.value;
-        const email = document.querySelector('input[name="email"]')?.value.trim();
-        const password = document.querySelector('input[name="password"]')?.value;
-        const passwordConfirm = document.querySelector('input[name="passwordConfirm"]')?.value;
-        const terms = document.querySelector('input[name="terms"]')?.checked;
+function validateStep1() {
+    const firstName = document.querySelector('input[name="firstName"]')?.value.trim();
+    const lastName = document.querySelector('input[name="lastName"]')?.value.trim();
+    const username = document.querySelector('input[name="username"]')?.value.trim();
+    const birthday = document.querySelector('input[name="birthday"]')?.value;
+    const email = document.querySelector('input[name="email"]')?.value.trim();
+    const password = document.querySelector('input[name="password"]')?.value;
+    const passwordConfirm = document.querySelector('input[name="passwordConfirm"]')?.value;
+    const terms = document.querySelector('input[name="terms"]')?.checked;
 
-        if (!firstName || !lastName || !username || !age || !email || !password || !passwordConfirm) {
-            alert('Prosimo izpolnite vsa polja v prvem koraku.');
-            return false;
-        }
-        if (parseInt(age) < 16 || parseInt(age) > 120) {
-            alert('Starost mora biti med 16 in 120 let.');
-            return false;
-        }
-        if (password !== passwordConfirm) {
-            alert('Gesli se ne ujemata!');
-            return false;
-        }
-        if (password.length < 4) {
-            alert('Geslo mora imeti vsaj 4 znake.');
-            return false;
-        }
-        if (!terms) {
-            alert('Za registracijo se morate strinjati s pogoji uporabe.');
-            return false;
-        }
-        return true;
+    // Debug: izpiši vrednosti
+    console.log("Validation:", { firstName, lastName, username, birthday, email, password, passwordConfirm, terms });
+
+    if (!firstName || !lastName || !username || !birthday || !email || !password || !passwordConfirm) {
+        alert('Prosimo izpolnite vsa polja v prvem koraku.');
+        return false;
     }
+    
+    // Preveri starost (vsaj 18 let)
+    const birthDate = new Date(birthday);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    
+    console.log("Izračunana starost:", age);
+    console.log("Rojstni dan:", birthday);
+    console.log("Danes:", today);
+    
+    if (age < 18) {
+        alert('Stari morate biti vsaj 18 let za registracijo.');
+        return false;
+    }
+    
+    if (password !== passwordConfirm) {
+        alert('Gesli se ne ujemata!');
+        return false;
+    }
+    if (password.length < 4) {
+        alert('Geslo mora imeti vsaj 4 znake.');
+        return false;
+    }
+    if (!terms) {
+        alert('Za registracijo se morate strinjati s pogoji uporabe.');
+        return false;
+    }
+    return true;
+}
+
+
 
     function validateStep2() {
         const errorDiv = document.getElementById('interestsError');
@@ -474,8 +500,7 @@
         formData.append('firstName', document.querySelector('input[name="firstName"]').value.trim());
         formData.append('lastName', document.querySelector('input[name="lastName"]').value.trim());
         formData.append('username', document.querySelector('input[name="username"]').value.trim());
-        formData.append('age', document.querySelector('input[name="age"]').value);
-        formData.append('email', document.querySelector('input[name="email"]').value.trim());
+        formData.append('birthday', document.querySelector('input[name="birthday"]').value);
         formData.append('password', document.querySelector('input[name="password"]').value);
         formData.append('terms', 'on');
         

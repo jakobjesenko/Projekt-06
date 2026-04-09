@@ -6,7 +6,9 @@
     <div class="nav-buttons">
         {{#if user}}
             <span class="user-greeting">Pozdravljen, {{user.username}}!</span>
-            <button class="btn-ghost" onclick="window.location.href='/dashboard'">Nadzorna plošča</button>
+            {{#if user.isAdmin}}
+                <button class="btn-ghost" onclick="window.location.href='/admin'">Admin panel</button>
+            {{/if}}
             <button class="btn-secondary" onclick="window.location.href='/logout'">Odjava</button>
         {{else if admin}}
             <span class="admin-badge">Admin</span>

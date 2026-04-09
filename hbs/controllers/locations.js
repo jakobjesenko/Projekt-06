@@ -74,7 +74,6 @@ const dashboard = async (req, res) => {
     return res.redirect("/login");
   }
   
-  // Poišči dejanskega uporabnika v bazi (da dobiš ObjectId)
   const dbUser = await User.findById(user._id);
   
   if (!dbUser) {
@@ -86,13 +85,20 @@ const dashboard = async (req, res) => {
   const confirmedMeetings = await ConfirmedMeeting.find({ userId: dbUser._id });
   const suggestions = generateSuggestions(dbUser);
   
+  // Dodaj starost za prikaz
+  const userWithAge = {
+    ...dbUser.toObject(),
+    age: dbUser.getAge()
+  };
+  
   res.render("index", { 
     title: "Nadzorna plošča - Srečajmo se",
-    user: dbUser,
+    user: userWithAge,
     admin: req.session?.admin || null,
     meetings: meetings,
     confirmedMeetings: confirmedMeetings,
     suggestions: suggestions,
+    weekdays: ["Pon", "Tor", "Sre", "Čet", "Pet", "Sob", "Ned"],
     view: "dashboard"
   });
 };
