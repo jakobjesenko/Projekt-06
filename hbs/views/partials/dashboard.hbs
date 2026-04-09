@@ -6,10 +6,19 @@
                 <div class="avatar-initials">{{user.username.charAt 0}}</div>
             </div>
             <h3>{{user.username}}</h3>
+            <p class="user-name">{{user.firstName}} {{user.lastName}}</p>
             <p class="user-email">{{user.email}}</p>
-            <div class="user-location">
-                <i class="fas fa-map-marker-alt"></i> <span>{{user.location}}</span>
+            <p class="user-age"><i class="fas fa-calendar-alt"></i> {{user.age}} let</p>
+            
+            <!-- Zemljevid za lokacijo -->
+            <div class="user-location-map">
+                <div id="userMap" style="height: 200px; width: 100%; border-radius: 16px; margin: 10px 0;"></div>
+                <div class="location-info">
+                    <i class="fas fa-map-marker-alt"></i> 
+                    <span>Radij: {{user.location.radius}} km</span>
+                </div>
             </div>
+            
             <div class="search-status" id="searchStatus">
                 {{#if user.activeSearch}}
                     <i class="fas fa-bell"></i> Iskanje aktivno
@@ -17,7 +26,7 @@
                     <i class="fas fa-bell-slash"></i> Iskanje ni aktivno
                 {{/if}}
             </div>
-            <form action="/api/auth/activate-search/{{user._id}}" method="POST">
+            <form id="activateSearchForm">
                 <button type="submit" class="btn-primary btn-full">
                     <i class="fas fa-search"></i> Aktiviraj iskanje
                 </button>
@@ -31,8 +40,70 @@
             <h4><i class="fas fa-heart"></i> Moji interesi</h4>
             <div class="interests-tags">
                 {{#each user.interests}}
-                    <span class="interest-tag"><i class="fas {{icon}}"></i> {{name}}</span>
+                    <span class="interest-tag">{{this}}</span>
                 {{/each}}
+            </div>
+        </div>
+        
+        <div class="availability-card panel">
+            <h4><i class="fas fa-clock"></i> Razpoložljivost</h4>
+            <div class="availability-table">
+                <table class="avail-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Pon</th>
+                            <th>Tor</th>
+                            <th>Sre</th>
+                            <th>Čet</th>
+                            <th>Pet</th>
+                            <th>Sob</th>
+                            <th>Ned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="time-label-cell">Zjutraj<br><span class="time-range">6-9</span></td>
+                            <td class="avail-cell" data-day="Pon" data-part="jutro"></td>
+                            <td class="avail-cell" data-day="Tor" data-part="jutro"></td>
+                            <td class="avail-cell" data-day="Sre" data-part="jutro"></td>
+                            <td class="avail-cell" data-day="Čet" data-part="jutro"></td>
+                            <td class="avail-cell" data-day="Pet" data-part="jutro"></td>
+                            <td class="avail-cell" data-day="Sob" data-part="jutro"></td>
+                            <td class="avail-cell" data-day="Ned" data-part="jutro"></td>
+                        </tr>
+                        <tr>
+                            <td class="time-label-cell">Dopoldan<br><span class="time-range">9-12</span></td>
+                            <td class="avail-cell" data-day="Pon" data-part="dopoldan"></td>
+                            <td class="avail-cell" data-day="Tor" data-part="dopoldan"></td>
+                            <td class="avail-cell" data-day="Sre" data-part="dopoldan"></td>
+                            <td class="avail-cell" data-day="Čet" data-part="dopoldan"></td>
+                            <td class="avail-cell" data-day="Pet" data-part="dopoldan"></td>
+                            <td class="avail-cell" data-day="Sob" data-part="dopoldan"></td>
+                            <td class="avail-cell" data-day="Ned" data-part="dopoldan"></td>
+                        </tr>
+                        <tr>
+                            <td class="time-label-cell">Popoldan<br><span class="time-range">12-19</span></td>
+                            <td class="avail-cell" data-day="Pon" data-part="popoldan"></td>
+                            <td class="avail-cell" data-day="Tor" data-part="popoldan"></td>
+                            <td class="avail-cell" data-day="Sre" data-part="popoldan"></td>
+                            <td class="avail-cell" data-day="Čet" data-part="popoldan"></td>
+                            <td class="avail-cell" data-day="Pet" data-part="popoldan"></td>
+                            <td class="avail-cell" data-day="Sob" data-part="popoldan"></td>
+                            <td class="avail-cell" data-day="Ned" data-part="popoldan"></td>
+                        </tr>
+                        <tr>
+                            <td class="time-label-cell">Zvečer<br><span class="time-range">19-00</span></td>
+                            <td class="avail-cell" data-day="Pon" data-part="zvecer"></td>
+                            <td class="avail-cell" data-day="Tor" data-part="zvecer"></td>
+                            <td class="avail-cell" data-day="Sre" data-part="zvecer"></td>
+                            <td class="avail-cell" data-day="Čet" data-part="zvecer"></td>
+                            <td class="avail-cell" data-day="Pet" data-part="zvecer"></td>
+                            <td class="avail-cell" data-day="Sob" data-part="zvecer"></td>
+                            <td class="avail-cell" data-day="Ned" data-part="zvecer"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -47,12 +118,12 @@
             {{#each suggestions}}
                 <div class="group-card">
                     <div class="group-header">
-                        <span class="group-badge"><i class="fas fa-users"></i> {{name}}</span>
+                        <span class="group-badge">{{name}}</span>
                         <span class="match-badge">{{matchScore}}% ujemanja</span>
                     </div>
                     <div class="group-members">
                         {{#each members}}
-                            <span class="member-chip"><i class="fas fa-user-circle"></i> {{this}}</span>
+                            <span class="member-chip">{{this}}</span>
                         {{/each}}
                     </div>
                     <div class="group-details">
@@ -93,13 +164,13 @@
                 {{#each confirmedMeetings}}
                     <div class="group-card">
                         <div class="group-header">
-                            <span class="group-badge"><i class="fas fa-check-circle"></i> {{groupName}}</span>
+                            <span class="group-badge">{{groupName}}</span>
                             <span class="confirmed-badge">Potrjeno</span>
                         </div>
                         <div class="meeting-participants">
                             <strong><i class="fas fa-users"></i> Udeleženci:</strong><br>
                             {{#each members}}
-                                <span class="participant-name"><i class="fas fa-user-circle"></i> {{this}}</span>
+                                <span class="participant-name">{{this}}</span>
                             {{/each}}
                         </div>
                         <div class="group-details">
@@ -117,8 +188,80 @@
             </div>
         </div>
     </div>
-    <script>
-    // Aktivacija iskanja preko fetch (da ne preloada strani)
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<script>
+    // Razpoložljivost uporabnika (iz serverja)
+    const userAvailability = {{{json user.availability}}};
+    
+    // Obarvaj celice v tabeli razpoložljivosti
+    function markAvailability() {
+        const cells = document.querySelectorAll('.avail-cell');
+        console.log("Cells found:", cells.length);
+        console.log("User availability:", userAvailability);
+        
+        cells.forEach(cell => {
+            const day = cell.getAttribute('data-day');
+            const part = cell.getAttribute('data-part');
+            const value = `${day}__${part}`;
+            
+            if (userAvailability && userAvailability.includes(value)) {
+                cell.classList.add('available');
+                cell.innerHTML = '✓';
+            } else {
+                cell.innerHTML = '';
+            }
+        });
+    }
+    
+    // Zemljevid za uporabnikovo lokacijo
+    function initUserMap() {
+        const lat = {{user.location.lat}};
+        const lng = {{user.location.lng}};
+        const radius = {{user.location.radius}};
+        
+        console.log("Map init - lat:", lat, "lng:", lng, "radius:", radius);
+        
+        const mapContainer = document.getElementById('userMap');
+        if (!mapContainer) {
+            console.error("Map container not found!");
+            return;
+        }
+        
+        if (lat && lng && lat !== 0 && lng !== 0 && lat !== null && lng !== null) {
+            try {
+                const map = L.map('userMap').setView([lat, lng], 12);
+                
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    subdomains: 'abcd',
+                    maxZoom: 19
+                }).addTo(map);
+                
+                L.marker([lat, lng]).addTo(map).bindPopup('Tvoja lokacija').openPopup();
+                
+                L.circle([lat, lng], {
+                    color: '#818cf8',
+                    fillColor: '#c084fc',
+                    fillOpacity: 0.2,
+                    radius: radius * 1000
+                }).addTo(map);
+                
+                console.log("Map initialized successfully");
+            } catch (err) {
+                console.error("Map error:", err);
+                mapContainer.innerHTML = '<div style="height: 100%; display: flex; align-items: center; justify-content: center; background: #1e293b; border-radius: 16px; color: #64748b;">Napaka pri nalaganju zemljevida</div>';
+            }
+        } else {
+            console.log("No location data");
+            mapContainer.innerHTML = '<div style="height: 100%; display: flex; align-items: center; justify-content: center; background: #1e293b; border-radius: 16px; color: #64748b;">Ni izbrane lokacije</div>';
+        }
+    }
+    
+    // Aktivacija iskanja
     const activateForm = document.getElementById('activateSearchForm');
     if (activateForm) {
         activateForm.addEventListener('submit', async function(e) {
@@ -131,11 +274,10 @@
                     headers: { 'Content-Type': 'application/json' }
                 });
                 
-                const data = await response.json();
-                
                 if (response.ok) {
-                    location.reload(); // Osveži stran
+                    location.reload();
                 } else {
+                    const data = await response.json();
                     alert('Napaka: ' + (data.message || 'Aktivacija ni uspela'));
                 }
             } catch (err) {
@@ -143,5 +285,162 @@
             }
         });
     }
+    
+    // Inicializacija ko se stran naloži
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM loaded, initializing...");
+        markAvailability();
+        setTimeout(initUserMap, 100);
+    });
 </script>
-</div>
+
+<style>
+    /* Dashboard sidebar */
+    .user-card {
+        text-align: center;
+    }
+    .user-name {
+        font-size: 0.9rem;
+        color: #94a3b8;
+        margin-bottom: 0.5rem;
+    }
+    .user-age {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        margin-bottom: 0.5rem;
+    }
+    .user-location-map {
+        margin: 15px 0;
+    }
+    .location-info {
+        text-align: center;
+        font-size: 0.85rem;
+        color: #a78bfa;
+        margin-top: 5px;
+    }
+    
+    /* Tabela razpoložljivosti */
+    .availability-table {
+        overflow-x: auto;
+        margin-top: 10px;
+    }
+    .avail-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.7rem;
+    }
+    .avail-table th,
+    .avail-table td {
+        padding: 8px 4px;
+        text-align: center;
+        border: 1px solid #334155;
+    }
+    .avail-table th {
+        background: rgba(129, 140, 248, 0.1);
+        color: #a78bfa;
+        font-weight: 600;
+    }
+    .time-label-cell {
+        background: rgba(129, 140, 248, 0.05);
+        font-weight: 600;
+        color: #cbd5e1;
+    }
+    .time-range {
+        font-size: 0.6rem;
+        color: #64748b;
+        font-weight: normal;
+    }
+    .avail-cell {
+        background: #1e293b;
+        transition: all 0.2s ease;
+        cursor: default;
+    }
+    .avail-cell.available {
+        background: linear-gradient(135deg, #818cf8, #c084fc);
+        color: white;
+        font-weight: bold;
+    }
+    
+    /* Interesi tagi */
+    .interests-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    .interest-tag {
+        background: linear-gradient(135deg, #818cf8, #c084fc);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: white;
+    }
+    
+    /* Member chips */
+    .member-chip {
+        background: #1e293b;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        color: #cbd5e1;
+        display: inline-block;
+        margin: 2px;
+    }
+    .participant-name {
+        background: #1e293b;
+        padding: 2px 8px;
+        border-radius: 16px;
+        font-size: 0.7rem;
+        display: inline-block;
+        margin: 2px;
+        color: #cbd5e1;
+    }
+    
+    /* Panel styles */
+    .panel {
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 28px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(129, 140, 248, 0.2);
+    }
+    .avatar-initials {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #818cf8, #c084fc);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+    }
+    .btn-full {
+        width: 100%;
+        margin-top: 10px;
+    }
+    .group-badge {
+        background: linear-gradient(135deg, #818cf8, #c084fc);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: white;
+    }
+    .match-badge {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34d399;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+    .confirmed-badge {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34d399;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+</style>

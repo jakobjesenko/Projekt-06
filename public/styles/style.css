@@ -2660,3 +2660,27 @@ body {
 .location-status i {
     margin-right: 6px;
 }
+
+    .user-location-map {
+        margin: 15px 0;
+    }
+    .location-info {
+        text-align: center;
+        font-size: 0.85rem;
+        color: #a78bfa;
+        margin-top: 5px;
+    }
+    .availability-tag {
+        display: inline-block;
+        background: #1e293b;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        margin: 3px;
+        color: #cbd5e1;
+    }
+    .user-age {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        margin-bottom: 0.5rem;
+    }
