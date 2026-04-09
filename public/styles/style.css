@@ -2582,3 +2582,68 @@ body {
         font-size: 0.6rem;
     }
 }
+
+
+/* Radius control styles */
+.radius-control {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #1e293b;
+    border-radius: 20px;
+}
+
+.radius-control label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #e2e8f0;
+}
+
+.radius-control label i {
+    color: #a78bfa;
+    margin-right: 8px;
+}
+
+#radiusSlider {
+    width: 100%;
+    height: 6px;
+    background: #334155;
+    border-radius: 3px;
+    outline: none;
+    margin: 0.5rem 0;
+}
+
+#radiusSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, #818cf8, #c084fc);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(129, 140, 248, 0.4);
+}
+
+.radius-hint {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.radius-hint i {
+    color: #a78bfa;
+}
+
+/* Popravek za zemljevid v čarovniku */
+#map {
+    z-index: 1;
+    border: 2px solid rgba(129, 140, 248, 0.3);
+    transition: all 0.3s ease;
+}
+
+#map:hover {
+    border-color: #a78bfa;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+}

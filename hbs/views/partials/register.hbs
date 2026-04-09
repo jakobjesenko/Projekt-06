@@ -70,11 +70,22 @@
                 <div id="interestsError" class="error-message" style="display: none;">Izberi vsaj 3 interese (◕‸◕)</div>
             </div>
 
-            {{! === KORAK 3: Območje + koledar === }}
+            {{! === KORAK 3: Območje + zemljevid + koledar === }}
             <div id="step3" class="form-step" style="display: none;">
                 <div class="form-group">
-                    <label><i class="fas fa-location-dot"></i> Tvoje območje</label>
-                    <input type="text" name="location" placeholder="npr. Center Ljubljana, Šiška, Bežigrad" class="form-input" required>
+                    <label><i class="fas fa-location-dot"></i> Tvoja lokacija (klikni na zemljevid)</label>
+                    <div id="map" style="height: 400px; width: 100%; border-radius: 20px; margin-bottom: 1rem;"></div>
+                    <input type="hidden" name="locationLat" id="locationLat">
+                    <input type="hidden" name="locationLng" id="locationLng">
+                    <input type="hidden" name="locationRadius" id="locationRadius" value="5">
+                    
+                    <div class="radius-control">
+                        <label><i class="fas fa-expand-alt"></i> Radij iskanja: <span id="radiusValue">5</span> km</label>
+                        <input type="range" id="radiusSlider" min="1" max="50" step="1" value="5">
+                        <div class="radius-hint">
+                            <i class="fas fa-info-circle"></i> Krog prikazuje območje, kjer si pripravljen/a potovati.
+                        </div>
+                    </div>
                 </div>
 
                 <div class="availability-title"><i class="fas fa-calendar-week"></i> Kdaj si prost/a?</div>
@@ -416,4 +427,139 @@
             alert('Napaka pri pošiljanju: ' + err.message);
         }
     });
+
+    // ========== ZEMLJEVID IN KROG ==========
+let map;
+let circle;
+let marker;
+
+function initMap() {
+    // Default center (Ljubljana)
+    const defaultCenter = [46.0569, 14.5058];
+    
+    map = L.map('map').setView(defaultCenter, 13);
+    
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+    
+    // Click na zemljevid
+    map.on('click', function(e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+        
+        // Shrani koordinate
+        document.getElementById('locationLat').value = lat;
+        document.getElementById('locationLng').value = lng;
+        
+        // Odstrani obstoječi marker in krog
+        if (marker) map.removeLayer(marker);
+        if (circle) map.removeLayer(circle);
+        
+        // Dodaj marker
+        marker = L.marker([lat, lng]).addTo(map);
+        
+        // Nariši krog
+        const radiusKm = parseFloat(document.getElementById('radiusSlider').value);
+        circle = L.circle([lat, lng], {
+            color: '#818cf8',
+            fillColor: '#c084fc',
+            fillOpacity: 0.2,
+            radius: radiusKm * 1000 // v metrih
+        }).addTo(map);
+        
+        // Prikaži popup
+        marker.bindPopup(`Tvoje središče: ${radiusKm} km radius`).openPopup();
+    });
+    
+    // Slider za radij
+    const radiusSlider = document.getElementById('radiusSlider');
+    const radiusValue = document.getElementById('radiusValue');
+    
+    radiusSlider.addEventListener('input', function() {
+        const newRadius = parseFloat(this.value);
+        radiusValue.innerText = newRadius;
+        document.getElementById('locationRadius').value = newRadius;
+        
+        // Posodobi krog, če obstaja
+        if (circle && document.getElementById('locationLat').value) {
+            const center = circle.getLatLng();
+            circle.setRadius(newRadius * 1000);
+            if (marker) {
+                marker.bindPopup(`Tvoje središče: ${newRadius} km radius`).openPopup();
+            }
+        }
+    });
+}
+
+// Inicializiraj zemljevid, ko se prikaže 3. korak
+// Spremeni showStep funkcijo
+const originalShowStep = showStep;
+window.showStep = function(step) {
+    originalShowStep(step);
+    if (step === 3) {
+        // Počakaj, da se DOM posodobi
+        setTimeout(() => {
+            if (!map) {
+                initMap();
+            } else {
+                map.invalidateSize();
+            }
+        }, 100);
+    }
+};
+
+    // Override showStep
+    showStep = function(step) {
+        step1.style.display = 'none';
+        step2.style.display = 'none';
+        step3.style.display = 'none';
+        
+        if (step === 1) {
+            step1.style.display = 'block';
+            stepTitle.innerText = 'Osebni podatki';
+            stepDesc.innerText = 'Najprej potrebujemo tvoje osnovne podatke.';
+            stepIcon.className = 'fas fa-user-plus';
+            nextBtn.style.display = 'inline-flex';
+            prevBtn.style.display = 'none';
+            submitBtn.style.display = 'none';
+        } else if (step === 2) {
+            step2.style.display = 'block';
+            stepTitle.innerText = 'Kaj te veseli?';
+            stepDesc.innerText = 'Izberi vsaj tri področja, ki te navdušujejo.';
+            stepIcon.className = 'fas fa-smile-wink';
+            nextBtn.style.display = 'inline-flex';
+            prevBtn.style.display = 'inline-flex';
+            submitBtn.style.display = 'none';
+        } else if (step === 3) {
+            step3.style.display = 'block';
+            stepTitle.innerText = 'Dostopnost in kraj';
+            stepDesc.innerText = 'Klikni na zemljevid in izberi radij potovanja.';
+            stepIcon.className = 'fas fa-map-marker-alt';
+            nextBtn.style.display = 'none';
+            prevBtn.style.display = 'inline-flex';
+            submitBtn.style.display = 'block';
+            
+            // Inicializiraj ali osveži zemljevid
+            setTimeout(() => {
+                if (!map) {
+                    initMap();
+                } else {
+                    map.invalidateSize();
+                }
+            }, 200);
+        }
+        
+        progressSteps.forEach((el, idx) => {
+            const stepNum = idx + 1;
+            el.classList.remove('active', 'completed');
+            if (stepNum === step) {
+                el.classList.add('active');
+            } else if (stepNum < step) {
+                el.classList.add('completed');
+            }
+        });
+};
 </script>
