@@ -2647,3 +2647,16 @@ body {
     border-color: #a78bfa;
     box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
 }
+
+.location-status {
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 12px;
+    text-align: center;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.location-status i {
+    margin-right: 6px;
+}

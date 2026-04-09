@@ -117,4 +117,31 @@
             </div>
         </div>
     </div>
+    <script>
+    // Aktivacija iskanja preko fetch (da ne preloada strani)
+    const activateForm = document.getElementById('activateSearchForm');
+    if (activateForm) {
+        activateForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const userId = '{{user._id}}';
+            
+            try {
+                const response = await fetch(`/api/auth/activate-search/${userId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    location.reload(); // Osveži stran
+                } else {
+                    alert('Napaka: ' + (data.message || 'Aktivacija ni uspela'));
+                }
+            } catch (err) {
+                alert('Napaka: ' + err.message);
+            }
+        });
+    }
+</script>
 </div>

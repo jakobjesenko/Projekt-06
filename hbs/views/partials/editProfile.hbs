@@ -1,33 +1,56 @@
-<div class="register-wizard">
-    <div class="wizard-container">
-        <div class="step-header">
-            <i class="fas fa-user-edit"></i>
-            <h2>Uredi profil</h2>
-            <p>Spremeni svoje podatke</p>
-        </div>
-        
-        <form action="/api/auth/profile/{{user._id}}" method="POST">
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Vzdevek</label>
-                <input type="text" name="username" value="{{user.username}}" class="form-input" required>
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-envelope"></i> E-pošta</label>
-                <input type="email" name="email" value="{{user.email}}" class="form-input" required>
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> Novo geslo (pusti prazno če ne želiš spremeniti)</label>
-                <input type="password" name="password" placeholder="••••••••" class="form-input">
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-location-dot"></i> Lokacija</label>
-                <input type="text" name="location" value="{{user.location}}" class="form-input" required>
-            </div>
-            
-            <div class="wizard-nav">
-                <button type="button" class="btn-secondary" onclick="window.location.href='/dashboard'">Prekliči</button>
-                <button type="submit" class="btn-success">Shrani spremembe <i class="fas fa-save"></i></button>
-            </div>
-        </form>
+<form id="editProfileForm">
+    <div class="form-group">
+        <label><i class="fas fa-user"></i> Vzdevek</label>
+        <input type="text" name="username" value="{{user.username}}" class="form-input" required>
     </div>
-</div>
+    <div class="form-group">
+        <label><i class="fas fa-envelope"></i> E-pošta</label>
+        <input type="email" name="email" value="{{user.email}}" class="form-input" required>
+    </div>
+    <div class="form-group">
+        <label><i class="fas fa-lock"></i> Novo geslo (pusti prazno če ne želiš spremeniti)</label>
+        <input type="password" name="password" placeholder="••••••••" class="form-input">
+    </div>
+    <div class="form-group">
+        <label><i class="fas fa-location-dot"></i> Lokacija</label>
+        <input type="text" name="location" value="{{user.location}}" class="form-input" required>
+    </div>
+    
+    <div class="wizard-nav">
+        <button type="button" class="btn-secondary" onclick="window.location.href='/dashboard'">Prekliči</button>
+        <button type="submit" class="btn-success">Shrani spremembe <i class="fas fa-save"></i></button>
+    </div>
+</form>
+
+<script>
+    const form = document.getElementById('editProfileForm');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const userId = '{{user._id}}';
+        const username = document.querySelector('input[name="username"]').value.trim();
+        const email = document.querySelector('input[name="email"]').value.trim();
+        const password = document.querySelector('input[name="password"]').value;
+        const location = document.querySelector('input[name="location"]').value.trim();
+        
+        try {
+            const response = await fetch(`/api/auth/profile/${userId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password, location })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                alert('Profil uspešno posodobljen!');
+                window.location.href = '/dashboard';
+            } else {
+                alert('Napaka: ' + (data.message || 'Posodobitev ni uspela'));
+            }
+        } catch (err) {
+            alert('Napaka: ' + err.message);
+        }
+    });
+</script>

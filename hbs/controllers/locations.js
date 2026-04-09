@@ -74,13 +74,21 @@ const dashboard = async (req, res) => {
     return res.redirect("/login");
   }
   
-  const meetings = await Meeting.find({ members: user.username });
-  const confirmedMeetings = await ConfirmedMeeting.find({ userId: user._id });
-  const suggestions = generateSuggestions(user);
+  // Poišči dejanskega uporabnika v bazi (da dobiš ObjectId)
+  const dbUser = await User.findById(user._id);
+  
+  if (!dbUser) {
+    req.session.destroy();
+    return res.redirect("/login");
+  }
+  
+  const meetings = await Meeting.find({ members: dbUser.username });
+  const confirmedMeetings = await ConfirmedMeeting.find({ userId: dbUser._id });
+  const suggestions = generateSuggestions(dbUser);
   
   res.render("index", { 
     title: "Nadzorna plošča - Srečajmo se",
-    user: user,
+    user: dbUser,
     admin: req.session?.admin || null,
     meetings: meetings,
     confirmedMeetings: confirmedMeetings,

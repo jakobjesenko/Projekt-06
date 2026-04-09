@@ -1,6 +1,6 @@
+// api/controllers/users.js
 import User from "../models/User.js";
 
-// Vsi uporabniki
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({ isAdmin: false });
@@ -10,7 +10,6 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// Deaktiviraj uporabnika
 const deactivateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
@@ -24,7 +23,6 @@ const deactivateUser = async (req, res) => {
   }
 };
 
-// Aktiviraj uporabnika
 const activateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.userId, { isActive: true }, { new: true });

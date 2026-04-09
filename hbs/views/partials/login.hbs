@@ -6,14 +6,14 @@
             <p>Vnesite svoje podatke za prijavo</p>
         </div>
         
-        <form action="/api/auth/login" method="POST">
+        <form id="loginForm">
             <div class="form-group">
                 <label><i class="fas fa-envelope"></i> E-pošta</label>
-                <input type="email" name="email" placeholder="ana@email.com" class="form-input" required>
+                <input type="email" id="email" name="email" placeholder="ana@email.com" class="form-input" required>
             </div>
             <div class="form-group">
                 <label><i class="fas fa-lock"></i> Geslo</label>
-                <input type="password" name="password" placeholder="••••••••" class="form-input" required>
+                <input type="password" id="password" name="password" placeholder="••••••••" class="form-input" required>
             </div>
             <div style="text-align: right; margin-bottom: 1.5rem;">
                 <a href="/forgot-password" style="color: #a78bfa;">Pozabljeno geslo?</a>
@@ -25,9 +25,44 @@
             <span>Nimate računa? </span>
             <a href="/register" style="color: #a78bfa;">Registrirajte se</a>
         </div>
-        
-        <div class="wizard-nav" style="justify-content: center; margin-top: 1rem;">
-            <button class="btn-secondary" onclick="window.location.href='/'">Nazaj</button>
-        </div>
     </div>
 </div>
+
+<script>
+    const form = document.getElementById('loginForm');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        
+        console.log("Prijava za:", email);
+        
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            
+            const data = await response.json();
+            console.log("Odgovor:", data);
+            
+            if (response.ok) {
+                if (data.isAdmin) {
+                    // Admin preusmeritev
+                    window.location.href = '/admin';
+                } else {
+                    // Uporabnik preusmeritev na dashboard
+                    window.location.href = '/dashboard?loggedin=true';
+                }
+            } else {
+                alert('Napaka: ' + (data.message || 'Prijava ni uspela'));
+            }
+        } catch (err) {
+            console.error("Napaka:", err);
+            alert('Napaka pri pošiljanju: ' + err.message);
+        }
+    });
+</script>

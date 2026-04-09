@@ -75,6 +75,7 @@
                 <div class="form-group">
                     <label><i class="fas fa-location-dot"></i> Tvoja lokacija (klikni na zemljevid)</label>
                     <div id="map" style="height: 400px; width: 100%; border-radius: 20px; margin-bottom: 1rem;"></div>
+                    
                     <input type="hidden" name="locationLat" id="locationLat">
                     <input type="hidden" name="locationLng" id="locationLng">
                     <input type="hidden" name="locationRadius" id="locationRadius" value="5">
@@ -86,6 +87,7 @@
                             <i class="fas fa-info-circle"></i> Krog prikazuje območje, kjer si pripravljen/a potovati.
                         </div>
                     </div>
+                    <div id="locationStatus" class="location-status"></div>
                 </div>
 
                 <div class="availability-title"><i class="fas fa-calendar-week"></i> Kdaj si prost/a?</div>
@@ -96,7 +98,6 @@
                     <button type="button" class="quick-btn" id="quickClear">🗑 Počisti vse</button>
                 </div>
 
-                {{! Koledar - dnevi zgoraj, deli dneva na levi }}
                 <div class="calendar-grid">
                     <div class="calendar-header"></div>
                     {{#each weekdays}}
@@ -130,7 +131,6 @@
 </div>
 
 <script>
-    // Podatki za dele dneva s časi
     const dayPartsWithTimes = [
         { key: "jutro", label: "Zjutraj", range: "6:00 - 9:00" },
         { key: "dopoldan", label: "Dopoldan", range: "9:00 - 12:00" },
@@ -152,7 +152,7 @@
     const stepIcon = document.getElementById('step-icon');
     const progressSteps = document.querySelectorAll('.step-progress');
 
-    // Interesi - obarvanje brez kljukice
+    // Interesi
     const interestChips = document.querySelectorAll('.interest-chip');
     const selectedInterests = new Set();
 
@@ -168,7 +168,7 @@
     }
 
     interestChips.forEach(chip => {
-        chip.addEventListener('click', function(e) {
+        chip.addEventListener('click', function() {
             const value = this.getAttribute('data-value');
             if (selectedInterests.has(value)) {
                 selectedInterests.delete(value);
@@ -176,7 +176,6 @@
                 selectedInterests.add(value);
             }
             updateInterestSelection();
-            
             const errorDiv = document.getElementById('interestsError');
             if (selectedInterests.size >= 3) {
                 errorDiv.style.display = 'none';
@@ -184,7 +183,7 @@
         });
     });
 
-    // Koledar - vizualna izbira brez kljukice (samo obarvanje)
+    // Koledar
     const calendarSlots = document.querySelectorAll('.calendar-slot');
     
     function updateCalendarSlot(slot) {
@@ -207,7 +206,6 @@
         updateCalendarSlot(slot);
     });
 
-    // Hitri gumbi
     function setQuickWeeknights() {
         calendarSlots.forEach(slot => {
             const day = slot.getAttribute('data-day');
@@ -294,11 +292,14 @@
     }
 
     function validateStep3() {
-        const location = document.querySelector('input[name="location"]')?.value.trim();
-        if (!location) {
-            alert('Vnesite svoje območje (npr. Center Ljubljana).');
+        const lat = document.getElementById('locationLat')?.value;
+        const lng = document.getElementById('locationLng')?.value;
+        
+        if (!lat || !lng) {
+            alert('Kliknite na zemljevid, da izberete svojo lokacijo.');
             return false;
         }
+        
         const availabilityBoxes = document.querySelectorAll('input[name="availability"]:checked');
         if (availabilityBoxes.length === 0) {
             alert('Izberite vsaj en termin, ko ste prosti (koledar).');
@@ -331,11 +332,19 @@
         } else if (step === 3) {
             step3.style.display = 'block';
             stepTitle.innerText = 'Dostopnost in kraj';
-            stepDesc.innerText = 'Kje si doma in kdaj si prost/a?';
+            stepDesc.innerText = 'Klikni na zemljevid in izberi radij potovanja.';
             stepIcon.className = 'fas fa-map-marker-alt';
             nextBtn.style.display = 'none';
             prevBtn.style.display = 'inline-flex';
             submitBtn.style.display = 'block';
+            
+            setTimeout(() => {
+                if (typeof map === 'undefined' || !map) {
+                    initMap();
+                } else {
+                    map.invalidateSize();
+                }
+            }, 200);
         }
         
         progressSteps.forEach((el, idx) => {
@@ -365,6 +374,65 @@
         }
     }
 
+    // ZEMLJEVID
+    let map, circle, marker;
+
+    function initMap() {
+        const defaultCenter = [46.0569, 14.5058];
+        map = L.map('map').setView(defaultCenter, 13);
+        
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+        
+        map.on('click', function(e) {
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+            
+            document.getElementById('locationLat').value = lat;
+            document.getElementById('locationLng').value = lng;
+            
+            if (marker) map.removeLayer(marker);
+            if (circle) map.removeLayer(circle);
+            
+            marker = L.marker([lat, lng]).addTo(map);
+            const radiusKm = parseFloat(document.getElementById('radiusSlider').value);
+            circle = L.circle([lat, lng], {
+                color: '#818cf8',
+                fillColor: '#c084fc',
+                fillOpacity: 0.2,
+                radius: radiusKm * 1000
+            }).addTo(map);
+            
+            const locationStatus = document.getElementById('locationStatus');
+            locationStatus.innerHTML = `<i class="fas fa-check-circle" style="color: #10b981;"></i> Lokacija izbrana! Radij: ${radiusKm} km`;
+            marker.bindPopup(`📍 Izbrana lokacija<br>📡 Radij: ${radiusKm} km`).openPopup();
+        });
+        
+        const radiusSlider = document.getElementById('radiusSlider');
+        const radiusValue = document.getElementById('radiusValue');
+        
+        radiusSlider.addEventListener('input', function() {
+            const newRadius = parseFloat(this.value);
+            radiusValue.innerText = newRadius;
+            document.getElementById('locationRadius').value = newRadius;
+            
+            if (circle && document.getElementById('locationLat').value) {
+                const center = circle.getLatLng();
+                circle.setRadius(newRadius * 1000);
+                if (marker) {
+                    marker.bindPopup(`📍 Izbrana lokacija<br>📡 Radij: ${newRadius} km`).openPopup();
+                }
+                const locationStatus = document.getElementById('locationStatus');
+                if (locationStatus.innerHTML.includes('Lokacija izbrana')) {
+                    locationStatus.innerHTML = `<i class="fas fa-check-circle" style="color: #10b981;"></i> Lokacija izbrana! Radij: ${newRadius} km`;
+                }
+            }
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         showStep(1);
         nextBtn.addEventListener('click', nextStep);
@@ -373,24 +441,32 @@
         const pwd = document.querySelector('input[name="password"]');
         const pwdConfirm = document.querySelector('input[name="passwordConfirm"]');
         if(pwd && pwdConfirm) {
-            function validatePasswordMatch() {
+            pwd.addEventListener('input', () => {
                 if(pwd.value !== pwdConfirm.value && pwdConfirm.value !== '') {
                     pwdConfirm.setCustomValidity('Gesli se ne ujemata');
                 } else {
                     pwdConfirm.setCustomValidity('');
                 }
-            }
-            pwd.addEventListener('input', validatePasswordMatch);
-            pwdConfirm.addEventListener('input', validatePasswordMatch);
+            });
+            pwdConfirm.addEventListener('input', () => {
+                if(pwd.value !== pwdConfirm.value) {
+                    pwdConfirm.setCustomValidity('Gesli se ne ujemata');
+                } else {
+                    pwdConfirm.setCustomValidity('');
+                }
+            });
         }
     });
 
+    // SUBMIT HANDLER
     const form = document.getElementById('wizardForm');
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        console.log("Submit triggered!"); // Debug
+        
         if (!validateStep1() || !validateStep2() || !validateStep3()) {
-            alert('Prosim preverite vse korake – vsaj 3 interesi, območje in razpoložljivost.');
+            alert('Prosim preverite vse korake – vsaj 3 interesi, lokacija in razpoložljivost.');
             return;
         }
         
@@ -406,10 +482,18 @@
         const interestsSelected = Array.from(selectedInterests);
         formData.append('interests', JSON.stringify(interestsSelected));
         
-        formData.append('location', document.querySelector('input[name="location"]').value.trim());
+        // Koordinate in radij
+        formData.append('locationLat', document.getElementById('locationLat').value);
+        formData.append('locationLng', document.getElementById('locationLng').value);
+        formData.append('locationRadius', document.getElementById('locationRadius').value);
         
         const availabilitySelected = Array.from(document.querySelectorAll('input[name="availability"]:checked')).map(cb => cb.value);
         formData.append('availability', JSON.stringify(availabilitySelected));
+        
+        // Debug: izpiši podatke
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
         
         try {
             const response = await fetch('/api/auth/register', {
@@ -417,149 +501,19 @@
                 body: formData
             });
             
+            console.log("Response status:", response.status);
+            
             if (response.ok) {
+                const data = await response.json();
+                console.log("Success:", data);
                 window.location.href = '/dashboard?registered=true';
             } else {
                 const err = await response.json();
                 alert('Napaka: ' + (err.message || 'Registracija ni uspela'));
             }
         } catch (err) {
+            console.error('Error:', err);
             alert('Napaka pri pošiljanju: ' + err.message);
         }
     });
-
-    // ========== ZEMLJEVID IN KROG ==========
-let map;
-let circle;
-let marker;
-
-function initMap() {
-    // Default center (Ljubljana)
-    const defaultCenter = [46.0569, 14.5058];
-    
-    map = L.map('map').setView(defaultCenter, 13);
-    
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 19
-    }).addTo(map);
-    
-    // Click na zemljevid
-    map.on('click', function(e) {
-        const lat = e.latlng.lat;
-        const lng = e.latlng.lng;
-        
-        // Shrani koordinate
-        document.getElementById('locationLat').value = lat;
-        document.getElementById('locationLng').value = lng;
-        
-        // Odstrani obstoječi marker in krog
-        if (marker) map.removeLayer(marker);
-        if (circle) map.removeLayer(circle);
-        
-        // Dodaj marker
-        marker = L.marker([lat, lng]).addTo(map);
-        
-        // Nariši krog
-        const radiusKm = parseFloat(document.getElementById('radiusSlider').value);
-        circle = L.circle([lat, lng], {
-            color: '#818cf8',
-            fillColor: '#c084fc',
-            fillOpacity: 0.2,
-            radius: radiusKm * 1000 // v metrih
-        }).addTo(map);
-        
-        // Prikaži popup
-        marker.bindPopup(`Tvoje središče: ${radiusKm} km radius`).openPopup();
-    });
-    
-    // Slider za radij
-    const radiusSlider = document.getElementById('radiusSlider');
-    const radiusValue = document.getElementById('radiusValue');
-    
-    radiusSlider.addEventListener('input', function() {
-        const newRadius = parseFloat(this.value);
-        radiusValue.innerText = newRadius;
-        document.getElementById('locationRadius').value = newRadius;
-        
-        // Posodobi krog, če obstaja
-        if (circle && document.getElementById('locationLat').value) {
-            const center = circle.getLatLng();
-            circle.setRadius(newRadius * 1000);
-            if (marker) {
-                marker.bindPopup(`Tvoje središče: ${newRadius} km radius`).openPopup();
-            }
-        }
-    });
-}
-
-// Inicializiraj zemljevid, ko se prikaže 3. korak
-// Spremeni showStep funkcijo
-const originalShowStep = showStep;
-window.showStep = function(step) {
-    originalShowStep(step);
-    if (step === 3) {
-        // Počakaj, da se DOM posodobi
-        setTimeout(() => {
-            if (!map) {
-                initMap();
-            } else {
-                map.invalidateSize();
-            }
-        }, 100);
-    }
-};
-
-    // Override showStep
-    showStep = function(step) {
-        step1.style.display = 'none';
-        step2.style.display = 'none';
-        step3.style.display = 'none';
-        
-        if (step === 1) {
-            step1.style.display = 'block';
-            stepTitle.innerText = 'Osebni podatki';
-            stepDesc.innerText = 'Najprej potrebujemo tvoje osnovne podatke.';
-            stepIcon.className = 'fas fa-user-plus';
-            nextBtn.style.display = 'inline-flex';
-            prevBtn.style.display = 'none';
-            submitBtn.style.display = 'none';
-        } else if (step === 2) {
-            step2.style.display = 'block';
-            stepTitle.innerText = 'Kaj te veseli?';
-            stepDesc.innerText = 'Izberi vsaj tri področja, ki te navdušujejo.';
-            stepIcon.className = 'fas fa-smile-wink';
-            nextBtn.style.display = 'inline-flex';
-            prevBtn.style.display = 'inline-flex';
-            submitBtn.style.display = 'none';
-        } else if (step === 3) {
-            step3.style.display = 'block';
-            stepTitle.innerText = 'Dostopnost in kraj';
-            stepDesc.innerText = 'Klikni na zemljevid in izberi radij potovanja.';
-            stepIcon.className = 'fas fa-map-marker-alt';
-            nextBtn.style.display = 'none';
-            prevBtn.style.display = 'inline-flex';
-            submitBtn.style.display = 'block';
-            
-            // Inicializiraj ali osveži zemljevid
-            setTimeout(() => {
-                if (!map) {
-                    initMap();
-                } else {
-                    map.invalidateSize();
-                }
-            }, 200);
-        }
-        
-        progressSteps.forEach((el, idx) => {
-            const stepNum = idx + 1;
-            el.classList.remove('active', 'completed');
-            if (stepNum === step) {
-                el.classList.add('active');
-            } else if (stepNum < step) {
-                el.classList.add('completed');
-            }
-        });
-};
 </script>

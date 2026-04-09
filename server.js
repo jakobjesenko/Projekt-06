@@ -3,6 +3,7 @@ import session from "express-session";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import hbs from "hbs";
+import multer from "multer"; // <-- DODAJ
 import hbsRouter from "./hbs/routes/hbs.js";
 import apiRouter from "./api/routes/api.js";
 import "./api/models/db.js";
@@ -11,12 +12,16 @@ const port = process.env.PORT || 3000;
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// Multer za FormData (brez datotek)
+const upload = multer();
+app.use(upload.none()); // <-- POMEMBNO: parsira multipart/form-data
+
 // Session middleware
 app.use(session({
     secret: 'srecajmose-secret-key',
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 } // 1 dan
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
 
 app.use(express.json());
@@ -27,10 +32,8 @@ app.use(express.static(join(__dirname, "public")));
 app.set("views", join(__dirname, "hbs", "views"));
 app.set("view engine", "hbs");
 
-// 🔴 POMEMBNO: Registriraj mapo s partiali
 hbs.registerPartials(join(__dirname, "hbs", "views", "partials"));
 
-// Register handlebars helpers
 hbs.registerHelper("eq", function(a, b) {
     return a === b;
 });
