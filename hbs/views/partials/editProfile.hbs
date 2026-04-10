@@ -25,8 +25,9 @@
             </div>
             
             <div class="form-group">
-                <label><i class="fas fa-calendar-alt"></i> Starost (leta)</label>
-                <input type="number" name="age" value="{{user.age}}" min="16" max="120" class="form-input" required>
+                <label><i class="fas fa-calendar-alt"></i> Datum rojstva</label>
+                <input type="date" name="birthday" value="{{formatDate user.birthday}}" class="form-input" required id="birthday">
+                <small class="form-hint">Stari morate biti vsaj 16 let.</small>
             </div>
             
             <div class="form-group">
@@ -118,7 +119,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <script>
-    // Podatki za dele dneva
     const dayPartsWithTimes = [
         { key: "jutro", label: "Zjutraj", range: "6:00 - 9:00" },
         { key: "dopoldan", label: "Dopoldan", range: "9:00 - 12:00" },
@@ -317,13 +317,27 @@
             return;
         }
         
+        // Preveri starost
+        const birthday = document.querySelector('input[name="birthday"]').value;
+        const birthDate = new Date(birthday);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        if (age < 16) {
+            alert('Stari morate biti vsaj 16 let.');
+            return;
+        }
+        
         const availabilitySelected = Array.from(document.querySelectorAll('input[name="availability"]:checked')).map(cb => cb.value);
         
         const formData = {
             firstName: document.querySelector('input[name="firstName"]').value.trim(),
             lastName: document.querySelector('input[name="lastName"]').value.trim(),
             username: document.querySelector('input[name="username"]').value.trim(),
-            age: parseInt(document.querySelector('input[name="age"]').value),
+            birthday: birthday,
             email: document.querySelector('input[name="email"]').value.trim(),
             password: password,
             interests: Array.from(selectedInterests),
@@ -335,6 +349,8 @@
             }
         };
         
+        console.log("Sending update:", formData);
+        
         try {
             const response = await fetch(`/api/auth/profile/{{user._id}}`, {
                 method: 'PUT',
@@ -343,6 +359,7 @@
             });
             
             const data = await response.json();
+            console.log("Response:", data);
             
             if (response.ok) {
                 alert('Profil uspešno posodobljen!');
@@ -351,34 +368,22 @@
                 alert('Napaka: ' + (data.message || 'Posodobitev ni uspela'));
             }
         } catch (err) {
+            console.error("Error:", err);
             alert('Napaka: ' + err.message);
         }
     });
     
-    const dayPartsWithTimes = [
-    { key: "jutro", label: "Zjutraj", range: "6:00 - 9:00" },
-    { key: "dopoldan", label: "Dopoldan", range: "9:00 - 12:00" },
-    { key: "popoldan", label: "Popoldan", range: "12:00 - 19:00" },
-    { key: "zvecer", label: "Zvečer", range: "19:00 - 00:00" }
-];
-const editProfile = async (req, res) => {
-  const user = req.session?.user;
-  if (!user) return res.redirect("/login");
-  
-  // Poišči sveže podatke iz baze
-  const dbUser = await User.findById(user._id);
-  
-  res.render("index", { 
-    title: "Uredi profil - Srečajmo se",
-    user: dbUser,
-    admin: req.session?.admin || null,
-    interestsMaster: interestsMaster,
-    weekdays: ["Pon", "Tor", "Sre", "Čet", "Pet", "Sob", "Ned"],
-    dayPartsWithTimes: dayPartsWithTimes,
-    view: "editProfile"
-  });
-};
-    document.addEventListener('DOMContentLoaded', initMap);
+    document.addEventListener('DOMContentLoaded', function() {
+        initMap();
+        
+        // Nastavi max datum za rojstni dan (16 let nazaj)
+        const birthdayInput = document.getElementById('birthday');
+        if (birthdayInput) {
+            const today = new Date();
+            const maxDate = new Date(today.getFullYear() - 16, today.getMonth(), today.getDate());
+            birthdayInput.setAttribute('max', maxDate.toISOString().split('T')[0]);
+        }
+    });
 </script>
 
 <style>
@@ -492,5 +497,11 @@ const editProfile = async (req, res) => {
         flex-wrap: wrap;
         gap: 8px;
         margin: 10px 0;
+    }
+    .error-message {
+        color: #ef4444;
+        font-size: 0.8rem;
+        margin-top: 5px;
+        text-align: center;
     }
 </style>

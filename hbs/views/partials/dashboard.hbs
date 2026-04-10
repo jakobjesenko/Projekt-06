@@ -2,9 +2,6 @@
     <!-- Sidebar -->
     <div class="dashboard-sidebar">
         <div class="user-card panel">
-            <div class="user-avatar-large">
-                <div class="avatar-initials">{{user.username.charAt 0}}</div>
-            </div>
             <h3>{{user.username}}</h3>
             <p class="user-name">{{user.firstName}} {{user.lastName}}</p>
             <p class="user-email">{{user.email}}</p>
@@ -12,7 +9,7 @@
             
             <!-- Zemljevid za lokacijo -->
             <div class="user-location-map">
-                <div id="userMap" style="height: 200px; width: 100%; border-radius: 16px; margin: 10px 0;"></div>
+                <div id="userMap" style="height: 180px; width: 100%; border-radius: 16px; margin: 10px 0;"></div>
                 <div class="location-info">
                     <i class="fas fa-map-marker-alt"></i> 
                     <span>Radij: {{user.location.radius}} km</span>
@@ -47,64 +44,26 @@
         
         <div class="availability-card panel">
             <h4><i class="fas fa-clock"></i> Razpoložljivost</h4>
-            <div class="availability-table">
-                <table class="avail-table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Pon</th>
-                            <th>Tor</th>
-                            <th>Sre</th>
-                            <th>Čet</th>
-                            <th>Pet</th>
-                            <th>Sob</th>
-                            <th>Ned</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="time-label-cell">Zjutraj<br><span class="time-range">6-9</span></td>
-                            <td class="avail-cell" data-day="Pon" data-part="jutro"></td>
-                            <td class="avail-cell" data-day="Tor" data-part="jutro"></td>
-                            <td class="avail-cell" data-day="Sre" data-part="jutro"></td>
-                            <td class="avail-cell" data-day="Čet" data-part="jutro"></td>
-                            <td class="avail-cell" data-day="Pet" data-part="jutro"></td>
-                            <td class="avail-cell" data-day="Sob" data-part="jutro"></td>
-                            <td class="avail-cell" data-day="Ned" data-part="jutro"></td>
-                        </tr>
-                        <tr>
-                            <td class="time-label-cell">Dopoldan<br><span class="time-range">9-12</span></td>
-                            <td class="avail-cell" data-day="Pon" data-part="dopoldan"></td>
-                            <td class="avail-cell" data-day="Tor" data-part="dopoldan"></td>
-                            <td class="avail-cell" data-day="Sre" data-part="dopoldan"></td>
-                            <td class="avail-cell" data-day="Čet" data-part="dopoldan"></td>
-                            <td class="avail-cell" data-day="Pet" data-part="dopoldan"></td>
-                            <td class="avail-cell" data-day="Sob" data-part="dopoldan"></td>
-                            <td class="avail-cell" data-day="Ned" data-part="dopoldan"></td>
-                        </tr>
-                        <tr>
-                            <td class="time-label-cell">Popoldan<br><span class="time-range">12-19</span></td>
-                            <td class="avail-cell" data-day="Pon" data-part="popoldan"></td>
-                            <td class="avail-cell" data-day="Tor" data-part="popoldan"></td>
-                            <td class="avail-cell" data-day="Sre" data-part="popoldan"></td>
-                            <td class="avail-cell" data-day="Čet" data-part="popoldan"></td>
-                            <td class="avail-cell" data-day="Pet" data-part="popoldan"></td>
-                            <td class="avail-cell" data-day="Sob" data-part="popoldan"></td>
-                            <td class="avail-cell" data-day="Ned" data-part="popoldan"></td>
-                        </tr>
-                        <tr>
-                            <td class="time-label-cell">Zvečer<br><span class="time-range">19-00</span></td>
-                            <td class="avail-cell" data-day="Pon" data-part="zvecer"></td>
-                            <td class="avail-cell" data-day="Tor" data-part="zvecer"></td>
-                            <td class="avail-cell" data-day="Sre" data-part="zvecer"></td>
-                            <td class="avail-cell" data-day="Čet" data-part="zvecer"></td>
-                            <td class="avail-cell" data-day="Pet" data-part="zvecer"></td>
-                            <td class="avail-cell" data-day="Sob" data-part="zvecer"></td>
-                            <td class="avail-cell" data-day="Ned" data-part="zvecer"></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- IDENTIČEN KOLEDAR KOT V REGISTRACIJI -->
+            <div class="calendar-grid">
+                <div class="calendar-header"></div>
+                {{#each weekdays}}
+                <div class="calendar-header day-header">{{this}}</div>
+                {{/each}}
+                
+                {{#each dayPartsWithTimes}}
+                <div class="time-label">
+                    {{this.label}}<br>
+                    <span class="time-range">{{this.range}}</span>
+                </div>
+                {{#each ../weekdays}}
+                <div class="calendar-slot-display" data-day="{{this}}" data-part="{{../this.key}}">
+                    <span class="slot-time">{{../this.range}}</span>
+                </div>
+                {{/each}}
+                {{/each}}
             </div>
+            <div class="calendar-note">* Obarvani termini so tvoji prosti časi.</div>
         </div>
     </div>
     
@@ -194,25 +153,20 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <script>
-    // Razpoložljivost uporabnika (iz serverja)
+    // Razpoložljivost uporabnika
     const userAvailability = {{{json user.availability}}};
     
-    // Obarvaj celice v tabeli razpoložljivosti
+    // Obarvaj celice v koledarju (IDENTIČNO kot v registraciji)
     function markAvailability() {
-        const cells = document.querySelectorAll('.avail-cell');
-        console.log("Cells found:", cells.length);
-        console.log("User availability:", userAvailability);
+        const slots = document.querySelectorAll('.calendar-slot-display');
         
-        cells.forEach(cell => {
-            const day = cell.getAttribute('data-day');
-            const part = cell.getAttribute('data-part');
+        slots.forEach(slot => {
+            const day = slot.getAttribute('data-day');
+            const part = slot.getAttribute('data-part');
             const value = `${day}__${part}`;
             
             if (userAvailability && userAvailability.includes(value)) {
-                cell.classList.add('available');
-                cell.innerHTML = '✓';
-            } else {
-                cell.innerHTML = '';
+                slot.classList.add('selected-slot');
             }
         });
     }
@@ -223,13 +177,8 @@
         const lng = {{user.location.lng}};
         const radius = {{user.location.radius}};
         
-        console.log("Map init - lat:", lat, "lng:", lng, "radius:", radius);
-        
         const mapContainer = document.getElementById('userMap');
-        if (!mapContainer) {
-            console.error("Map container not found!");
-            return;
-        }
+        if (!mapContainer) return;
         
         if (lat && lng && lat !== 0 && lng !== 0 && lat !== null && lng !== null) {
             try {
@@ -249,14 +198,10 @@
                     fillOpacity: 0.2,
                     radius: radius * 1000
                 }).addTo(map);
-                
-                console.log("Map initialized successfully");
             } catch (err) {
-                console.error("Map error:", err);
                 mapContainer.innerHTML = '<div style="height: 100%; display: flex; align-items: center; justify-content: center; background: #1e293b; border-radius: 16px; color: #64748b;">Napaka pri nalaganju zemljevida</div>';
             }
         } else {
-            console.log("No location data");
             mapContainer.innerHTML = '<div style="height: 100%; display: flex; align-items: center; justify-content: center; background: #1e293b; border-radius: 16px; color: #64748b;">Ni izbrane lokacije</div>';
         }
     }
@@ -286,23 +231,27 @@
         });
     }
     
-    // Inicializacija ko se stran naloži
+    // Inicializacija
     document.addEventListener('DOMContentLoaded', function() {
-        console.log("DOM loaded, initializing...");
         markAvailability();
-        setTimeout(initUserMap, 100);
+        initUserMap();
     });
 </script>
 
 <style>
-    /* Dashboard sidebar */
+    /* Dashboard sidebar - brez avatarja */
     .user-card {
         text-align: center;
     }
     .user-name {
         font-size: 0.9rem;
         color: #94a3b8;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.3rem;
+    }
+    .user-email {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 0.3rem;
     }
     .user-age {
         font-size: 0.85rem;
@@ -314,86 +263,107 @@
     }
     .location-info {
         text-align: center;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: #a78bfa;
         margin-top: 5px;
     }
     
-    /* Tabela razpoložljivosti */
-    .availability-table {
-        overflow-x: auto;
-        margin-top: 10px;
-    }
-    .avail-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.7rem;
-    }
-    .avail-table th,
-    .avail-table td {
-        padding: 8px 4px;
-        text-align: center;
-        border: 1px solid #334155;
-    }
-    .avail-table th {
-        background: rgba(129, 140, 248, 0.1);
-        color: #a78bfa;
-        font-weight: 600;
-    }
-    .time-label-cell {
-        background: rgba(129, 140, 248, 0.05);
-        font-weight: 600;
-        color: #cbd5e1;
-    }
-    .time-range {
-        font-size: 0.6rem;
-        color: #64748b;
-        font-weight: normal;
-    }
-    .avail-cell {
-        background: #1e293b;
-        transition: all 0.2s ease;
-        cursor: default;
-    }
-    .avail-cell.available {
-        background: linear-gradient(135deg, #818cf8, #c084fc);
-        color: white;
-        font-weight: bold;
-    }
-    
-    /* Interesi tagi */
+    /* Interesi - majhni */
     .interests-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px;
         margin-top: 10px;
     }
     .interest-tag {
         background: linear-gradient(135deg, #818cf8, #c084fc);
-        padding: 5px 12px;
+        padding: 3px 10px;
         border-radius: 20px;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
+        color: white;
+        display: inline-block;
+    }
+    
+    /* IDENTIČEN KOLEDAR KOT V REGISTRACIJI */
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: 90px repeat(7, 1fr);
+        gap: 0.5rem;
+        margin-top: 0.8rem;
+        background: #1e293b;
+        padding: 1rem;
+        border-radius: 20px;
+        overflow-x: auto;
+    }
+    
+    .calendar-header {
+        font-weight: bold;
+        text-align: center;
+        padding: 0.5rem;
+        color: #a78bfa;
+    }
+    
+    .day-header {
+        background: rgba(129, 140, 248, 0.1);
+        border-radius: 12px;
+        padding: 8px 4px;
+    }
+    
+    .time-label {
+        font-weight: 600;
+        padding: 0.5rem;
+        color: #cbd5e1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 0.85rem;
+        background: rgba(129, 140, 248, 0.05);
+        border-radius: 12px;
+    }
+    
+    .time-range {
+        font-size: 0.7rem;
+        color: #94a3b8;
+        font-weight: normal;
+    }
+    
+    .calendar-slot-display {
+        background: #0f172a;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+        border: 1px solid #334155;
+        transition: all 0.2s ease;
+        padding: 0.5rem;
+        text-align: center;
+        font-size: 0.7rem;
+        color: #94a3b8;
+    }
+    
+    .calendar-slot-display.selected-slot {
+        background: linear-gradient(135deg, #818cf8, #c084fc);
+        border-color: #a78bfa;
         color: white;
     }
     
-    /* Member chips */
-    .member-chip {
-        background: #1e293b;
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        color: #cbd5e1;
-        display: inline-block;
-        margin: 2px;
-    }
-    .participant-name {
-        background: #1e293b;
-        padding: 2px 8px;
-        border-radius: 16px;
+    .slot-time {
         font-size: 0.7rem;
-        display: inline-block;
-        margin: 2px;
-        color: #cbd5e1;
+    }
+    
+    .calendar-slot-display.selected-slot .slot-time {
+        color: white;
+        font-weight: 500;
+    }
+    
+    .calendar-note {
+        font-size: 0.7rem;
+        margin-top: 0.8rem;
+        color: #64748b;
+        text-align: center;
     }
     
     /* Panel styles */
@@ -405,23 +375,12 @@
         margin-bottom: 1rem;
         border: 1px solid rgba(129, 140, 248, 0.2);
     }
-    .avatar-initials {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, #818cf8, #c084fc);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto;
-        font-size: 2rem;
-        font-weight: 700;
-        color: white;
-    }
     .btn-full {
         width: 100%;
         margin-top: 10px;
     }
+    
+    /* Group card styles */
     .group-badge {
         background: linear-gradient(135deg, #818cf8, #c084fc);
         padding: 4px 12px;
@@ -434,13 +393,132 @@
         color: #34d399;
         padding: 4px 12px;
         border-radius: 20px;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
     .confirmed-badge {
         background: rgba(16, 185, 129, 0.2);
         color: #34d399;
         padding: 4px 12px;
         border-radius: 20px;
+        font-size: 0.7rem;
+    }
+    .member-chip {
+        background: #1e293b;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        color: #cbd5e1;
+        display: inline-block;
+        margin: 2px;
+    }
+    .participant-name {
+        background: #1e293b;
+        padding: 2px 8px;
+        border-radius: 16px;
+        font-size: 0.65rem;
+        display: inline-block;
+        margin: 2px;
+        color: #cbd5e1;
+    }
+    .group-card {
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 28px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(129, 140, 248, 0.2);
+        margin-bottom: 1rem;
+    }
+    .group-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(129, 140, 248, 0.4);
+    }
+    .group-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .group-members {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+    .group-details {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
         font-size: 0.8rem;
+        color: #94a3b8;
+        flex-wrap: wrap;
+    }
+    .group-details i {
+        color: #a78bfa;
+        margin-right: 4px;
+    }
+    .group-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    /* Search status */
+    .search-status {
+        background: #1e293b;
+        padding: 8px 12px;
+        border-radius: 40px;
+        font-size: 0.75rem;
+        text-align: center;
+        margin: 10px 0;
+        color: #94a3b8;
+    }
+    
+    /* Dashboard grid */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 1.5rem;
+        animation: slideUp 0.6s ease;
+    }
+    
+    @media (max-width: 900px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+        .calendar-grid {
+            grid-template-columns: 70px repeat(7, 1fr);
+            font-size: 0.7rem;
+        }
+    }
+    
+    /* Gumbi */
+    .btn-primary {
+        background: linear-gradient(135deg, #818cf8, #c084fc);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .btn-secondary {
+        background: rgba(51, 65, 85, 0.8);
+        color: #f1f5f9;
+        border: 1px solid #475569;
+        padding: 10px 20px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover, .btn-secondary:hover {
+        transform: translateY(-2px);
     }
 </style>

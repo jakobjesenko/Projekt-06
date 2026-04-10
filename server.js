@@ -2,8 +2,7 @@ import express from "express";
 import session from "express-session";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-import hbs from "hbs";
-import multer from "multer"; // <-- DODAJ
+import { engine } from "express-handlebars";
 import hbsRouter from "./hbs/routes/hbs.js";
 import apiRouter from "./api/routes/api.js";
 import "./api/models/db.js";
@@ -11,10 +10,6 @@ import "./api/models/db.js";
 const port = process.env.PORT || 3000;
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// Multer za FormData (brez datotek)
-const upload = multer();
-app.use(upload.none()); // <-- POMEMBNO: parsira multipart/form-data
 
 // Session middleware
 app.use(session({
@@ -28,19 +23,35 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(join(__dirname, "public")));
 
-// View engine setup
-app.set("views", join(__dirname, "hbs", "views"));
-app.set("view engine", "hbs");
+// ========== HANDLEBARS SETUP ==========
+app.engine('hbs', engine({
+    extname: '.hbs',
+    defaultLayout: false,
+    helpers: {
+        eq: (a, b) => a === b,
+        json: (context) => JSON.stringify(context),
+        formatDate: (date) => {
+            if (!date) return '';
+            const d = new Date(date);
+            if (isNaN(d.getTime())) return '';
+            return d.toISOString().split('T')[0];
+        },
+        getAge: (birthday) => {
+            if (!birthday) return '?';
+            const today = new Date();
+            const birthDate = new Date(birthday);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+    }
+}));
 
-hbs.registerPartials(join(__dirname, "hbs", "views", "partials"));
-
-hbs.registerHelper("eq", function(a, b) {
-    return a === b;
-});
-
-hbs.registerHelper("json", function(context) {
-    return JSON.stringify(context);
-});
+app.set('view engine', 'hbs');
+app.set('views', join(__dirname, 'hbs', 'views'));
 
 // Routes
 app.use("/", hbsRouter);
