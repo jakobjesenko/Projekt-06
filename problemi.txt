@@ -1,0 +1,29 @@
+REGISTRACIJA:
+ne spusti te cez 1. fazo
+lahko vidis geslo ko ga napises
+dodaj vec interesov
+popraviti startost na rojstni dan in ne stevilko
+
+DASHBOARD:
+razpolozljivost je treba spremeniti v koledar
+
+UREDI PROFIL:
+razpolozljivost je treba spremeniti v koledar
+lahko vidis geslo ko ga napises
+
+O NAS:
+treba dejansko napsiati nekaj
+
+KAKO DELUJE:
+treba dejansko napsiati nekaj
+
+FOOTER:
+naj bo dejansko na dnu in cez cel zaslon
+
+ADMIN:
+v headerju odstrani dvojni admin
+naj prokaze razlicne podatke (srecanjs, ocene, pametna komponenta)
+deaktivacija uporabnika ni povezana
+
+DB:
+treba hashirat geslo
