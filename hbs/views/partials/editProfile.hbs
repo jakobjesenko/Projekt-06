@@ -27,7 +27,7 @@
             <div class="form-group">
                 <label><i class="fas fa-calendar-alt"></i> Datum rojstva</label>
                 <input type="date" name="birthday" value="{{formatDate user.birthday}}" class="form-input" required id="birthday">
-                <small class="form-hint">Stari morate biti vsaj 16 let.</small>
+                <small class="form-hint">Stari morate biti vsaj 18 let.</small>
             </div>
             
             <div class="form-group">
@@ -48,7 +48,7 @@
             <!-- Lokacija z zemljevidom -->
             <div class="form-group">
                 <label><i class="fas fa-location-dot"></i> Tvoja lokacija (klikni na zemljevid)</label>
-                <div id="map" style="height: 300px; width: 100%; border-radius: 20px; margin-bottom: 1rem;"></div>
+                <div id="editMap" style="height: 300px; width: 100%; border-radius: 20px; margin-bottom: 1rem;"></div>
                 
                 <input type="hidden" name="locationLat" id="locationLat" value="{{user.location.lat}}">
                 <input type="hidden" name="locationLng" id="locationLng" value="{{user.location.lng}}">
@@ -61,7 +61,6 @@
                         <i class="fas fa-info-circle"></i> Krog prikazuje območje, kjer si pripravljen/a potovati.
                     </div>
                 </div>
-                <div id="locationStatus" class="location-status"></div>
             </div>
             
             <!-- Interesi -->
@@ -230,54 +229,61 @@
     document.getElementById('quickClear')?.addEventListener('click', clearAvailability);
     
     // Zemljevid
-    let map, circle, marker;
+    let editMap, editCircle, editMarker;
     
-    function initMap() {
-        const defaultLat = parseFloat(document.getElementById('locationLat').value) || 46.0569;
-        const defaultLng = parseFloat(document.getElementById('locationLng').value) || 14.5058;
+    function initEditMap() {
+        const defaultLat = parseFloat(document.getElementById('locationLat').value);
+        const defaultLng = parseFloat(document.getElementById('locationLng').value);
+        const defaultRadius = parseFloat(document.getElementById('locationRadius').value) || 5;
         
-        map = L.map('map').setView([defaultLat, defaultLng], 13);
+        // Default center Ljubljana če ni lokacije
+        const centerLat = defaultLat && !isNaN(defaultLat) ? defaultLat : 46.0569;
+        const centerLng = defaultLng && !isNaN(defaultLng) ? defaultLng : 14.5058;
+        
+        console.log("Initializing map with:", centerLat, centerLng, defaultRadius);
+        
+        editMap = L.map('editMap').setView([centerLat, centerLng], 13);
         
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             subdomains: 'abcd',
             maxZoom: 19
-        }).addTo(map);
+        }).addTo(editMap);
         
-        if (defaultLat && defaultLng && defaultLat !== 46.0569) {
-            const radiusKm = parseFloat(document.getElementById('radiusSlider').value);
-            marker = L.marker([defaultLat, defaultLng]).addTo(map);
-            circle = L.circle([defaultLat, defaultLng], {
+        // Če obstaja shranjena lokacija, prikaži marker in krog
+        if (defaultLat && !isNaN(defaultLat) && defaultLng && !isNaN(defaultLng)) {
+            editMarker = L.marker([defaultLat, defaultLng]).addTo(editMap);
+            editCircle = L.circle([defaultLat, defaultLng], {
                 color: '#818cf8',
                 fillColor: '#c084fc',
                 fillOpacity: 0.2,
-                radius: radiusKm * 1000
-            }).addTo(map);
-            marker.bindPopup(`📍 Tvoja lokacija<br>📡 Radij: ${radiusKm} km`).openPopup();
+                radius: defaultRadius * 1000
+            }).addTo(editMap);
+            editMarker.bindPopup(`📍 Tvoja lokacija<br>📡 Radij: ${defaultRadius} km`).openPopup();
         }
         
-        map.on('click', function(e) {
+        editMap.on('click', function(e) {
             const lat = e.latlng.lat;
             const lng = e.latlng.lng;
             
             document.getElementById('locationLat').value = lat;
             document.getElementById('locationLng').value = lng;
             
-            if (marker) map.removeLayer(marker);
-            if (circle) map.removeLayer(circle);
+            if (editMarker) editMap.removeLayer(editMarker);
+            if (editCircle) editMap.removeLayer(editCircle);
             
-            marker = L.marker([lat, lng]).addTo(map);
+            editMarker = L.marker([lat, lng]).addTo(editMap);
             const radiusKm = parseFloat(document.getElementById('radiusSlider').value);
-            circle = L.circle([lat, lng], {
+            editCircle = L.circle([lat, lng], {
                 color: '#818cf8',
                 fillColor: '#c084fc',
                 fillOpacity: 0.2,
                 radius: radiusKm * 1000
-            }).addTo(map);
+            }).addTo(editMap);
             
             const locationStatus = document.getElementById('locationStatus');
             locationStatus.innerHTML = `<i class="fas fa-check-circle" style="color: #10b981;"></i> Lokacija posodobljena! Radij: ${radiusKm} km`;
-            marker.bindPopup(`📍 Nova lokacija<br>📡 Radij: ${radiusKm} km`).openPopup();
+            editMarker.bindPopup(`📍 Nova lokacija<br>📡 Radij: ${radiusKm} km`).openPopup();
         });
     }
     
@@ -289,11 +295,11 @@
         radiusValue.innerText = newRadius;
         document.getElementById('locationRadius').value = newRadius;
         
-        if (circle && document.getElementById('locationLat').value) {
-            const center = circle.getLatLng();
-            circle.setRadius(newRadius * 1000);
-            if (marker) {
-                marker.bindPopup(`📍 Tvoja lokacija<br>📡 Radij: ${newRadius} km`).openPopup();
+        if (editCircle && document.getElementById('locationLat').value) {
+            const center = editCircle.getLatLng();
+            editCircle.setRadius(newRadius * 1000);
+            if (editMarker) {
+                editMarker.bindPopup(`📍 Tvoja lokacija<br>📡 Radij: ${newRadius} km`).openPopup();
             }
         }
     });
@@ -317,7 +323,7 @@
             return;
         }
         
-        // Preveri starost
+        // Preveri starost (vsaj 18 let)
         const birthday = document.querySelector('input[name="birthday"]').value;
         const birthDate = new Date(birthday);
         const today = new Date();
@@ -326,8 +332,8 @@
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
-        if (age < 16) {
-            alert('Stari morate biti vsaj 16 let.');
+        if (age < 18) {
+            alert('Stari morate biti vsaj 18 let.');
             return;
         }
         
@@ -374,13 +380,13 @@
     });
     
     document.addEventListener('DOMContentLoaded', function() {
-        initMap();
+        initEditMap();
         
-        // Nastavi max datum za rojstni dan (16 let nazaj)
+        // Nastavi max datum za rojstni dan (18 let nazaj)
         const birthdayInput = document.getElementById('birthday');
         if (birthdayInput) {
             const today = new Date();
-            const maxDate = new Date(today.getFullYear() - 16, today.getMonth(), today.getDate());
+            const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
             birthdayInput.setAttribute('max', maxDate.toISOString().split('T')[0]);
         }
     });
@@ -503,5 +509,8 @@
         font-size: 0.8rem;
         margin-top: 5px;
         text-align: center;
+    }
+    #editMap {
+        z-index: 1;
     }
 </style>

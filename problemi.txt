@@ -10,6 +10,7 @@ razpolozljivost je treba spremeniti v koledar
 UREDI PROFIL:
 razpolozljivost je treba spremeniti v koledar
 lahko vidis geslo ko ga napises
+css za interese treba popraviti
 
 O NAS:
 treba dejansko napsiati nekaj
