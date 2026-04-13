@@ -63,6 +63,74 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
+// Swagger Documentation
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
+const swaggerDocument = swaggerJsDoc({
+  definition: {
+    openapi: '3.1.1',
+    info: {
+      title: 'Koncerti.net API',
+      version: '1.0.0',
+      description: 'REST API za spletno aplikacijo Koncerti.net',
+    },
+    servers: [
+      { url: 'http://localhost:3000/api', description: 'DEV' },
+      { url: 'https://dodaj/api', description: 'PROD' },
+    ],
+    components: {
+      schemas: {
+        SuccessMessage: {
+          type: 'object',
+          properties: {
+            success: {
+              type: 'boolean',
+              example: true,
+            },
+            message: {
+              type: 'string',
+              description: 'Success message',
+              example: 'Operation completed successfully',
+            },
+          },
+          required: ['success', 'message'],
+        },
+        ErrorMessage: {
+          type: 'object',
+          properties: {
+            success: {
+              type: 'boolean',
+              example: false,
+            },
+            message: {
+              type: 'string',
+              description: 'Description of the error',
+              example: 'Error processing the request',
+            },
+          },
+          required: ['success', 'message'],
+        },
+      },
+      securitySchemes: {
+        jwt: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: 'Vnesi samo token (brez "Bearer ")',
+        },
+      },
+    },
+  },
+  apis: ['./api/models/*.js', './api/controllers/*.js', './api/routes/*.js'],
+});
+
+// JSON output
+app.get('/api/swagger.json', (req, res) => res.status(200).json(swaggerDocument));
+
+// UI output
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

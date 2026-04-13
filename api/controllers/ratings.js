@@ -1,4 +1,4 @@
-import Rating from "../models/Rating.js";
+import Rating from "../models/ratings.js";
 
 const getAllRatings = async (req, res) => {
   try {

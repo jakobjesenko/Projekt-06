@@ -1,15 +1,19 @@
 {
-  "name": "demo",
+  "name": "Projekt-06",
   "version": "0.1.0",
   "type": "module",
-  "description": "Demo application for Web Programming course",
+  "description": "Lastni projekt pri predmetu Tehnologije programske opreme",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "import:db-docker": "docker cp ./data/kulturne-dediscine.json sp-mongo-db:/kulturne-dediscine.json; docker exec -it sp-mongo-db mongoimport --db Demo --collection Locations --mode upsert --upsertFields id --jsonArray --file kulturne-dediscine.json; docker exec -it sp-mongo-db rm -rf kulturne-dediscine.json",
     "delete:db-docker": "docker exec -it sp-mongo-db bash -c \"mongosh Demo --eval 'db.Locations.deleteMany({})'\"",
     "view:db-docker": "docker exec -it sp-mongo-db bash -c \"mongosh Demo --eval 'db.Locations.find()'\"",
-    "transfer:db-docker-atlas": "docker exec -it sp-mongo-db bash -c \"mongodump -h localhost -d Demo -o ./\"; docker exec -it sp-mongo-db bash -c \"mongorestore --drop --uri mongodb+srv://app@demo.uhiawaf.mongodb.net ./Demo/Locations.bson\"; docker exec -it sp-mongo-db bash -c \"rm -rf ./Demo\""
+    "transfer:db-docker-atlas": "docker exec -it sp-mongo-db bash -c \"mongodump -h localhost -d Demo -o ./\"; docker exec -it sp-mongo-db bash -c \"mongorestore --drop --uri mongodb+srv://app@demo.uhiawaf.mongodb.net ./Demo/Locations.bson\"; docker exec -it sp-mongo-db bash -c \"rm -rf ./Demo\"",
+    "dev": "nodemon ./server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   },
   "repository": {
     "type": "git",
@@ -22,11 +26,21 @@
   },
   "homepage": "https://github.com/SP-2025-2026/Demo#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "express-handlebars": "^9.0.1",
     "express-session": "^1.19.0",
     "mongoose": "^8.23.0",
-    "multer": "^2.1.1"
+    "http-errors": "^2.0.1",
+    "socket.io": "^4.8.1",
+    "cors": "^2.8.5",
+    "cookie-parser": "^1.4.7",
+    "jsonwebtoken": "^9.0.2",
+    "axios": "^1.13.2",
+    "multer": "^2.1.1",
+    "resend": "^6.10.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }

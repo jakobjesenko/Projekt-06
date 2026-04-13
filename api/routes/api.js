@@ -1,38 +1,21 @@
 import { Router } from "express";
-const router = Router();
 
-import authCtrl from "../controllers/auth.js";
-import usersCtrl from "../controllers/users.js";
-import meetingsCtrl from "../controllers/meetings.js";
-import ratingsCtrl from "../controllers/ratings.js";
-import suggestionsCtrl from "../controllers/suggestions.js";
+import authRouter from "./auth.js";
+import usersRouter from "./users.js";
+import meetingsRouter from "./meetings.js";
+import ratingsRouter from "./ratings.js";
+import suggestionsRouter from "./suggestions.js";
+import contactRouter from "./contacts.js";
+import messageRouter from "./messages.js";
 
-// Auth
-router.post("/auth/register", authCtrl.register);
-router.post("/auth/login", authCtrl.login);
-router.post("/auth/forgot-password", authCtrl.forgotPassword);
-router.put("/auth/profile/:userId", authCtrl.updateProfile);
-router.put("/auth/activate-search/:userId", authCtrl.activateSearch);
+const apiRouter = Router();
 
-// Admin - Users
-router.get("/admin/users", usersCtrl.getAllUsers);
-router.put("/admin/users/:userId/deactivate", usersCtrl.deactivateUser);
-router.put("/admin/users/:userId/activate", usersCtrl.activateUser);
+apiRouter.use("/auth", authRouter);
+apiRouter.use("/admin/users", usersRouter);
+apiRouter.use("/meetings", meetingsRouter);
+apiRouter.use("/ratings", ratingsRouter);
+apiRouter.use("/suggestions", suggestionsRouter);
+apiRouter.use("/contacts", contactRouter);
+apiRouter.use("/messages", messageRouter);
 
-// Meetings
-router.get("/meetings", meetingsCtrl.getAllMeetings);
-router.post("/meetings", meetingsCtrl.createMeeting);
-router.delete("/meetings/:meetingId", meetingsCtrl.deleteMeeting);
-router.get("/meetings/confirmed/:userId", meetingsCtrl.getUserConfirmedMeetings);
-router.post("/meetings/confirm", meetingsCtrl.confirmMeeting);
-router.delete("/meetings/confirm/:meetingId", meetingsCtrl.cancelConfirmedMeeting);
-
-// Ratings
-router.get("/ratings", ratingsCtrl.getAllRatings);
-router.post("/ratings", ratingsCtrl.createRating);
-router.delete("/ratings/:ratingId", ratingsCtrl.deleteRating);
-
-// Suggestions
-router.get("/suggestions/:userId", suggestionsCtrl.generateSuggestions);
-
-export default router;
+export default apiRouter;

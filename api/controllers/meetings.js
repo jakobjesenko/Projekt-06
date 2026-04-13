@@ -1,5 +1,5 @@
-import Meeting from "../models/Meeting.js";
-import ConfirmedMeeting from "../models/ConfirmedMeeting.js";
+import Meeting from "../models/meetings.js";
+import ConfirmedMeeting from "../models/meetings.js";
 
 // Vsa srečanja
 const getAllMeetings = async (req, res) => {

@@ -4,13 +4,44 @@ dotenv.config();
 
 import mongoose from "mongoose";
 
-const dbURI = process.env.MONGODB_ATLAS_URI || "mongodb://127.0.0.1:27017/tpo";
+// trenutno se veze na lokalno bazo, ce spremenis  NODE_ENV=prduciton se veze na produkcijsko bazo
+let dbURI = process.env.MONGODB_ATLAS_URI || "mongodb://127.0.0.1:27017/tpo";
+
+if (process.env.NODE_ENV === 'production') {
+  dbURI = process.env.MONGODB_ATLAS_URI;
+} else if (process.env.NODE_ENV === 'docker') {
+  dbURI =
+    process.env.MONGODB_DOCKER_URI ||
+    'mongodb://admin:password@mongodb:27017/srecajmose?authSource=admin'; // notr gre se geslo tm med admin: in @
+} else {
+  dbURI = "mongodb://127.0.0.1:27017/tpo";
+}
 
 console.log("📡 Connecting to database...");
 
-mongoose.connect(dbURI)
-  .then(() => console.log("✅ Connected to database!"))
-  .catch(err => console.error("❌ Connection error:", err.message));
+// naredi pool povezav za boljso zmogljivost tista fora s predavanj glej skripto poglavje 7 cist na koncu
+const options = {
+  maxPoolSize: 20,
+  minPoolSize: 5,
+  socketTimeoutMS: 45000,
+  serverSelectionTimeoutMS: 5000,
+  family: 4,
+};
+
+mongoose.connect(dbURI, options);
+
+// asynhrono da preveri ce se je vzpostavil pool
+mongoose.connection.on('connected', async () => {
+  console.log(`Mongoose connected to ${dbURI.replace(/:.+?@/, ':*****@')}.`);
+
+  // Ping baze šele, ko db obstaja
+  try {
+    await mongoose.connection.db.admin().ping();
+    console.log('Ping uspešen, pool dela!');
+  } catch (err) {
+    console.error('Ping ni uspel:', err);
+  }
+});
 
 mongoose.connection.on("error", (err) =>
   console.log(`Mongoose connection error: ${err.message}.`)
@@ -40,7 +71,10 @@ process.on("SIGTERM", () => {
 });
 
 // Import modelov
-import "./User.js";
-import "./Meeting.js";
-import "./ConfirmedMeeting.js";
-import "./Rating.js";
+import "./users.js";
+import "./meetings.js";
+import "./ratings.js";
+import "./messages.js";
+import "./contacts.js";
+import "./analytics.js";
+import "./reports.js"

@@ -1,8 +1,8 @@
 // controllers/locations.js
-import User from "../../api/models/User.js";
-import Meeting from "../../api/models/Meeting.js";
-import ConfirmedMeeting from "../../api/models/ConfirmedMeeting.js";
-import Rating from "../../api/models/Rating.js";
+import User from "../../api/models/users.js";
+import Meeting from "../../api/models/meetings.js";
+import ConfirmedMeeting from "../../api/models/meetings.js";
+import Rating from "../../api/models/ratings.js";
 
 const interestsMaster = [
   { id: 1, name: "Kava", icon: "fa-mug-hot" },

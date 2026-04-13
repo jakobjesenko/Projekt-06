@@ -1,4 +1,4 @@
-import User from "../models/User.js";
+import User from "../models/users.js";
 
 const interestsMaster = [
   { id: 1, name: "Kava", icon: "fa-mug-hot" },
