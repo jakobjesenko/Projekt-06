@@ -1,14 +1,7 @@
 import mongoose from 'mongoose';
 import Message from '../models/messages.js';
 import Meeting from '../models/meetings.js';
-
-const ensureMeetingAccess = (meeting, userId, role) => {
-  if (role === 'admin') return true;
-
-  return meeting.members.some(
-    (member) => member?.user && member.user.toString() === userId.toString(),
-  );
-};
+import User from '../models/users.js';
 
 /**
  * @openapi
@@ -18,7 +11,7 @@ const ensureMeetingAccess = (meeting, userId, role) => {
  *   security:
  *    - jwt: []
  *   summary: Get meeting messages
- *   description: Get messages for a specific meeting. Access is allowed for assigned meeting members and admins.
+ *   description: Get messages for a specific meeting. You can use the `before` and `limit` for lazy loading/pagination.
  *   parameters:
  *    - name: meetingId
  *      in: path
@@ -94,8 +87,8 @@ const ensureMeetingAccess = (meeting, userId, role) => {
 
 // GET /api/messages/:meetingId : pridobi sporocila za meeting
 const getMeetingMessages = async (req, res) => {
-  const { meetingId } = req.params;
-  const { before, limit = 20 } = req.query;
+  let { meetingId } = req.params;
+  let { before, limit = 20 } = req.query;
 
   if (!meetingId || !mongoose.Types.ObjectId.isValid(meetingId)) {
     return res.status(400).json({
@@ -104,24 +97,27 @@ const getMeetingMessages = async (req, res) => {
     });
   }
 
+  const meetingExists = await Meeting.exists({ _id: meetingId });
+
+  if (!meetingExists) {
+    return res.status(404).json({
+      success: false,
+      message: 'Meeting z ID-jem ' + meetingId + ' ne obstaja.',
+    });
+  }
+
+  // Preveri ali je uporabnik član tega meetinga
+  const userId = req.user.id;
+  const isMember = await Meeting.exists({ _id: meetingId, 'members.user': userId });
+
+  if (!isMember && req.user.role !== 'admin') {
+    return res.status(403).json({
+      success: false,
+      message: 'Nimate dostopa do tega klepeta. Niste član tega meetinga.',
+    });
+  }
+
   try {
-    const meeting = await Meeting.findById(meetingId).select('groupName members');
-
-    if (!meeting) {
-      return res.status(404).json({
-        success: false,
-        message: `Meeting z ID-jem ${meetingId} ne obstaja.`,
-      });
-    }
-
-    const userId = req.user.id;
-    if (!ensureMeetingAccess(meeting, userId, req.user.role)) {
-      return res.status(403).json({
-        success: false,
-        message: 'Nimate dostopa do tega klepeta, ker niste dodeljeni v to skupino.',
-      });
-    }
-
     const query = { meeting: meetingId };
     if (before) {
       query.timestamp = { $lt: new Date(before) };
@@ -136,21 +132,27 @@ const getMeetingMessages = async (req, res) => {
 
     const formattedMessages = messages.reverse().map((msg) => ({
       _id: msg._id.toString(),
-      meeting: msg.meeting?._id?.toString() || meetingId,
-      meetingName: msg.meeting?.groupName || meeting.groupName,
-      user: msg.user?._id?.toString(),
-      username: msg.user?.username,
-      userImage: msg.user?.profileImage || '/img/default-avatar.png',
+      meeting: msg.meeting._id.toString(),
+      meetingName: msg.meeting.groupName,
+      user: msg.user._id.toString(),
+      username: msg.user.username,
+      userImage: msg.user.profileImage || '/img/default-avatar.png',
       message: msg.message,
       timestamp: msg.timestamp,
     }));
+
+    console.log(`Retrieved ${messages.length} messages for meeting ${meetingId}`);
+
+    if (formattedMessages.length > 0) {
+      console.log('First message user field:', formattedMessages[0].user);
+    }
 
     return res.status(200).json(formattedMessages);
   } catch (error) {
     console.error('Error retrieving messages from database:', error);
     return res.status(500).json({
       success: false,
-      message: 'Napaka pri pridobivanju sporočil iz baze podatkov.',
+      message: 'Error retrieving messages from database.',
     });
   }
 };
@@ -163,7 +165,7 @@ const getMeetingMessages = async (req, res) => {
  *    security:
  *     - jwt: []
  *    summary: Send message to meeting chat
- *    description: Send a message to the chat for a specific meeting. Access is allowed for assigned meeting members and admins.
+ *    description: Send a message to the chat for a specific meeting.
  *    parameters:
  *     - name: meetingId
  *       in: path
@@ -182,7 +184,7 @@ const getMeetingMessages = async (req, res) => {
  *        properties:
  *         message:
  *          type: string
- *          example: Komaj cakam srecanje
+ *          example: Komaj cakam meeting
  *        required:
  *         - message
  *    responses:
@@ -198,7 +200,7 @@ const getMeetingMessages = async (req, res) => {
  *          _id: 64d1f0c2e4f77b002f6d5f3a
  *          meeting: 64b8c3d5e4f77b002f6d5e9b
  *          user: 64a1b2c3d4e5f6001a2b3c4d
- *          message: "Komaj cakam koncert"
+ *          message: "Komaj cakam meeting"
  *          timestamp: 2024-07-15T12:34:56.789Z
  *     '400':
  *      description: Bad Request, with error message.
@@ -220,14 +222,14 @@ const getMeetingMessages = async (req, res) => {
  *           success: false
  *           message: "Sporočilo je predolgo. (max 500 znakov)"
  *     '404':
- *      description: Concert with the given ID does not exist.
+ *      description: Meeting with the given ID does not exist.
  *      content:
  *       application/json:
  *        schema:
  *         $ref: '#/components/schemas/ErrorMessage'
  *        example:
  *         success: false
- *         message: Koncert z ID-jem 64b8c3d5e4f77b002f6d5e9b ne obstaja.
+ *         message: Meeting z ID-jem 64b8c3d5e4f77b002f6d5e9b ne obstaja.
  *     '500':
  *      description: Error saving message to database.
  *      content:
@@ -239,42 +241,45 @@ const getMeetingMessages = async (req, res) => {
  *         message: "Napaka pri shranjevanju sporočila."
  */
 
-// POST : pošlji sporočilo v klepetu o koncertu
+// POST : pošlji sporočilo v klepetu o meetingu
 const sendMessage = async (req, res) => {
-  const { meetingId } = req.params;
+  const meetingId = req.params.meetingId;
   const { message } = req.body;
 
   if (!meetingId || !mongoose.Types.ObjectId.isValid(meetingId)) {
     return res.status(400).json({ success: false, message: 'Neveljavna ID vrednost za meeting.' });
   }
-
   if (!message || !/\S/.test(message)) {
     return res.status(400).json({ success: false, message: 'Sporočilo je prazno.' });
   }
-
   if (message.length > 500) {
     return res
       .status(400)
       .json({ success: false, message: 'Sporočilo je predolgo. (max 500 znakov)' });
   }
+  const meetingExists = await Meeting.exists({ _id: meetingId });
+
+  if (!meetingExists) {
+    return res
+      .status(404)
+      .json({ success: false, message: 'Meeting z ID-jem ' + meetingId + ' ne obstaja.' });
+  }
+
+  // Uporabi req.user.id iz JWT tokena (protect middleware ga doda)
+  const userId = req.user.id;
+
+  // Preveri ali je uporabnik član tega meetinga
+  const isMember = await Meeting.exists({ _id: meetingId, 'members.user': userId });
+
+  if (!isMember && req.user.role !== 'admin') {
+    return res.status(403).json({
+      success: false,
+      message: 'Nimate dostopa do tega klepeta. Niste član tega meetinga.',
+    });
+  }
 
   try {
-    const meeting = await Meeting.findById(meetingId).select('groupName members');
-
-    if (!meeting) {
-      return res.status(404).json({
-        success: false,
-        message: `Meeting z ID-jem ${meetingId} ne obstaja.`,
-      });
-    }
-
-    const userId = req.user.id;
-    if (!ensureMeetingAccess(meeting, userId, req.user.role)) {
-      return res.status(403).json({
-        success: false,
-        message: 'Nimate dostopa do tega klepeta, ker niste dodeljeni v to skupino.',
-      });
-    }
+    console.log('Saving message with userId:', userId);
 
     const newMessage = await Message.create({
       meeting: meetingId,
@@ -282,24 +287,29 @@ const sendMessage = async (req, res) => {
       message: message.trim(),
     });
 
-    await newMessage.populate('user', 'username profileImage');
+    console.log(`Message saved to database: ${newMessage._id}`);
+
+    // Naložimo ime meetinga in user podatke
+    const meeting = await Meeting.findById(meetingId).select('groupName');
+    const user = await User.findById(userId).select('username profileImage');
 
     const payload = {
-      _id: newMessage._id.toString(),
-      meeting: meetingId,
+      _id: newMessage._id,
+      meeting: newMessage.meeting.toString(),
+      user: newMessage.user.toString(),
       meetingName: meeting.groupName,
-      user: newMessage.user._id.toString(),
-      username: newMessage.user.username,
-      userImage: newMessage.user.profileImage || '/img/default-avatar.png',
+      username: user.username,
+      userImage: user.profileImage,
       message: newMessage.message,
       timestamp: newMessage.timestamp,
     };
 
+    // Emit vsem v sobi (vključno z pošiljateljem!)
     const io = req.app.get('io');
-    if (io) {
-      io.to(meetingId).emit('newMeetingMessage', payload);
-    }
+    io.to(meetingId).emit('newMeetingMessage', payload);
+    console.log(`Message sent to clients: ${newMessage._id}`);
 
+    // Vrni payload kot odgovor
     return res.status(201).json({ success: true, data: payload });
   } catch (error) {
     console.error('Error saving message to database:', error);
@@ -315,7 +325,7 @@ const sendMessage = async (req, res) => {
  *   security:
  *    - jwt: []
  *   summary: Update a message
- *   description: Update content of a specific message. Only message owner or admin can update.
+ *   description: Update the content of a specific message. Only the message owner or admin can update.
  *   parameters:
  *    - name: messageId
  *      in: path
@@ -357,7 +367,7 @@ const sendMessage = async (req, res) => {
  *        success: true
  *        data:
  *         _id: "64d1f0c2e4f77b002f6d5f3a"
- *         concert: "64b8c3d5e4f77b002f6d5e9b"
+ *         meeting: "64b8c3d5e4f77b002f6d5e9b"
  *         user: "64a1b2c3d4e5f6001a2b3c4d"
  *         message: "Popravljeno sporočilo"
  *         timestamp: "2024-07-15T12:34:56.789Z"
@@ -408,7 +418,7 @@ const sendMessage = async (req, res) => {
  *        message: "Napaka pri posodabljanju sporočila."
  */
 const updateMessage = async (req, res) => {
-  const { messageId } = req.params;
+  const messageId = req.params.messageId;
   const { message: newMessageContent } = req.body;
 
   if (!messageId || !mongoose.Types.ObjectId.isValid(messageId)) {
@@ -420,16 +430,20 @@ const updateMessage = async (req, res) => {
   }
 
   if (newMessageContent.trim().length > 500) {
-    return res.status(400).json({ success: false, message: 'Sporočilo ne sme presegati 500 znakov.' });
+    return res.status(400).json({
+      success: false,
+      message: 'Sporočilo ne sme presegati 500 znakov.',
+    });
   }
 
   try {
-    const message = await Message.findById(messageId).populate('meeting', 'groupName');
+    const message = await Message.findById(messageId);
 
     if (!message) {
       return res.status(404).json({ success: false, message: 'Sporočilo ne obstaja.' });
     }
 
+    // Preveri dovoljenje (samo lastnik ali admin)
     const userId = req.user.id;
     const userRole = req.user.role;
 
@@ -440,9 +454,15 @@ const updateMessage = async (req, res) => {
       });
     }
 
+    // Posodobi sporočilo
     message.message = newMessageContent.trim();
     await message.save();
+
+    console.log(`Message updated: ${messageId}`);
+
+    // Populiraj podatke za response
     await message.populate('user', 'username profileImage');
+    await message.populate('meeting', 'groupName');
 
     const payload = {
       _id: message._id.toString(),
@@ -450,20 +470,23 @@ const updateMessage = async (req, res) => {
       meetingName: message.meeting.groupName,
       user: message.user._id.toString(),
       username: message.user.username,
-      userImage: message.user.profileImage || '/img/default-avatar.png',
+      userImage: message.user.profileImage,
       message: message.message,
       timestamp: message.timestamp,
     };
 
+    // Obvesti vse v sobi o posodobitvi
     const io = req.app.get('io');
-    if (io) {
-      io.to(message.meeting._id.toString()).emit('updateMeetingMessage', payload);
-    }
+    io.to(message.meeting._id.toString()).emit('updateMeetingMessage', payload);
+    console.log(`Message update sent to clients: ${messageId}`);
 
     return res.status(200).json({ success: true, data: payload });
   } catch (error) {
     console.error('Error updating message:', error);
-    return res.status(500).json({ success: false, message: 'Napaka pri posodabljanju sporočila.' });
+    return res.status(500).json({
+      success: false,
+      message: 'Napaka pri posodabljanju sporočila.',
+    });
   }
 };
 
@@ -475,7 +498,7 @@ const updateMessage = async (req, res) => {
  *   security:
  *    - jwt: []
  *   summary: Delete a message
- *   description: Delete a specific message by its ID. Only message owner or admin can delete.
+ *   description: Delete a specific message by its ID.
  *   parameters:
  *    - name: messageId
  *      in: path
@@ -495,9 +518,9 @@ const updateMessage = async (req, res) => {
  *        success: true
  *        data:
  *         _id: "64d1f0c2e4f77b002f6d5f3a"
- *         concert: 64b8c3d5e4f77b002f6d5e9b"
+ *         meeting: "64b8c3d5e4f77b002f6d5e9b"
  *         user: "64a1b2c3d4e5f6001a2b3c4d"
- *         message: "Komaj cakam koncert"
+ *         message: "Komaj cakam meeting"
  *         timestamp: "2024-07-15T12:34:56.789Z"
  *    '400':
  *     description: Invalid message ID
@@ -539,10 +562,10 @@ const updateMessage = async (req, res) => {
 
 // DELETE /api/messages/:messageId : izbriši sporočilo
 const deleteMessage = async (req, res) => {
-  const { messageId } = req.params;
+  const messageId = req.params.messageId;
 
   if (!messageId || !mongoose.Types.ObjectId.isValid(messageId)) {
-    return res.status(400).json({ success: false, message: 'ID sporočila ni veljaven.' });
+    return res.status(400).json({ success: false, message: 'ID sporocila ni validen.' });
   }
 
   try {
@@ -552,6 +575,7 @@ const deleteMessage = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Sporočilo ne obstaja.' });
     }
 
+    // Preveri, ali je uporabnik lastnik sporočila ali admin
     const userId = req.user.id;
     const userRole = req.user.role;
 
@@ -562,16 +586,15 @@ const deleteMessage = async (req, res) => {
       });
     }
 
-    const meetingId = message.meeting.toString();
-
     await message.deleteOne();
+    console.log(`Message deleted from database: ${messageId}`);
 
+    // Obvesti vse v sobi (chat meetinga) da je bilo sporočilo izbrisano
     const io = req.app.get('io');
-    if (io) {
-      io.to(meetingId).emit('deleteMeetingMessage', { messageId });
-    }
+    io.to(message.meeting.toString()).emit('deleteMeetingMessage', { messageId: messageId });
+    console.log(`Message deletion sent to clients: ${messageId}`);
 
-    return res.status(200).json({ success: true, data: { messageId } });
+    return res.status(200).json({ success: true, data: message });
   } catch (error) {
     console.error('Error deleting message:', error);
     return res.status(500).json({ success: false, message: 'Napaka pri brisanju sporočila.' });
