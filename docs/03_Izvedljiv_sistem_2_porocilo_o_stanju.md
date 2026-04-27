@@ -12,40 +12,94 @@ Izogibajte se nepotrebnemu podvajanju pri opisovanju sistema. Vključite ostale 
 
 Za izdelavo diagramov uporabite orodje [**PlantUML**](https://plantuml.com/) in v poročilo vključite izvorno kodo diagrama v jeziku PlantUML (v mapi [`gradivo`](gradivo)), sliko diagrama pa vključite s povezavo (in ne preko neposredne vključitve binarne datoteke) preko storitve <https://teaching.lavbic.net/plantuml>, kot prikazujejo primeri vključenih diagram v tej predlogi poročila.
 
-## :page_with_curl: Naslov projekta
+## :page_with_curl: Sistem za spontana družabna srečanja – združi ljudi s skupnimi interesi v tvoji bližini
 
-## :information_desk_person: Ime ekipe: Člani ekipe
+## :information_desk_person: Ime ekipe: 06. skupina | Člani ekipe: Miha Fabčič, Aleks Gogić, Jakob Jesenko, Leja Petrič, Tim Pezdirc
 
 ## 1 Uvod
 
+To poročilo predstavlja 2. poročilo o stanju projekta sistema za spontana družabna srečanja. Medtem ko je bila prejšnja iteracija namenjena zasnovi sistema in pripravi demo aplikacije z demo podatki, se je ekipa v tej iteraciji prvič lotila dejanske implementacije. Osrednji dosežki so vzpostavitev podatkovne baze MongoDB, razvoj celotnega backenda z REST API-jem ter implementacija ključnih delov Angular frontenda (registracija, prijava, nadzorna plošča). Poročilo je osredotočeno na opis arhitekture sistema (poglavje 4) in prikaz trenutnega stanja implementacije (poglavje 5).
+
 ### 1.2 Poudarki
 
-- Kakšen je bil načrt za to iteracijo?
-  - Kaj je ekipa dosegla?
+**Načrt za to iteracijo** je bil prehod iz dokumentacijsko-demo faze v dejansko implementacijo. Konkretni cilji so bili: vzpostavitev MongoDB podatkovne baze z ustreznimi modeli, implementacija celotnega backend REST API-ja, uspešna povezava backenda s frontendom ter prototipna implementacija pametne komponente za oblikovanje skupin.
+
+**Ekipa je v tej iteraciji dosegla:**
+
+- Vzpostavitev MongoDB podatkovne baze z dokumentnimi modeli za uporabnike, profile, interese, skupine in sporočila.
+- Implementacijo celotnega backend REST API-ja (Node.js/Express) z vsemi ključnimi endpointi: upravljanje uporabnikov in profilov, interesi, iskanje in predlogi skupin, skupinski chat ter administratorske funkcije.
+- JWT-based avtentikacijo z zaščito zasebnih API poti in ločenimi vlogami (uporabnik, administrator).
+- Integracijo zunanjega e-poštnega servisa (Nodemailer + SMTP) za verifikacijo računa ob registraciji in ponastavitev gesla.
+- Prototipno implementacijo pametne komponente – osnovna logika scoring algoritma (Jaccard podobnost interesov, Haversine geografska razdalja, časovno prekrivanje) je vzpostavljena in funkcionalna, a kalibracija uteži in obravnava robnih primerov še nista dokončani.
+- Na strani frontenda (Angular): implementacijo toka registracije v treh korakih, prijave z JWT ter uporabniške nadzorne plošče (dashboard).
+- Uspešno integracijo frontenda z backendom prek REST API-ja za vse implementirane maske.
 
 ### 1.3 Spremembe
 
-- Povzemite vse večje spremembe predloga projekta.
-- Vključite datum, motivacijo, opis in posledice vsake spremembe.
-- Če sprememb ni bilo, samo navedite, da jih ni bilo.
+Nismo uvedli nobenih sprememb.
 
 ## 2 Potrebe naročnika
 
-- Na kratko opišite želeno splošno izkušnjo naročnika.
+Primarni naročnik so končni uporabniki (mladi odrasli, 18–35 let, v urbanih okoljih), ki iščejo preprost in učinkovit način za organizacijo spontanih družabnih srečanj z novimi ljudmi. Želijo si sistem, ki jim z minimalnim vnosom podatkov (interesi, lokacija, razpoložljivost) ponudi kakovostne predloge manjših skupin (3–5 oseb) ter omogoči neposredno usklajevanje srečanja v skupinskem chatu.
+
+Sekundarni deležniki (lokalna skupnost, ponudniki prostorov za srečanja) pričakujejo večjo socialno vključenost in strukturiran način organizacije srečanj v javnih prostorih. Operativni naročnik (administrator sistema) pričakuje pregledno nadzorno ploščo za upravljanje uporabnikov, reševanje prijav neprimernega vedenja ter vpogled v ključne metrike kakovosti algoritma za oblikovanje skupin.
+
+Splošna želena izkušnja naročnika je, da se celoten tok od registracije do prvega predloga skupin odvije v manj kot 5 minutah, brez tehničnih ovir in z občutkom varnosti pri spoznavanju novih ljudi.
+
+---
 
 ## 3 Cilji projekta
 
-- Povzamite naročnikove težave, ki jih projekt naslavlja.
-- Kakšne koristi bo prinesel projekt?
+Projekt naslavlja problem avtomatskega oblikovanja manjših kompatibilnih skupin za spontana srečanja, ki ga obstoječe platforme ne rešujejo celovito. Tinder in Bumble sta osredotočena na individualno ujemanje, Meetup na organizacijo večjih javnih dogodkov, Timeleft na fiksne tematske večerje. Nobena od teh rešitev ne kombinira sočasnega ujemanja interesov, geografske bližine in časovne razpoložljivosti za samodejno oblikovanje manjših spontanih skupin.
+
+**Ključne koristi projekta za naročnika:**
+
+- Povprečen čas od registracije do prvega predloga skupin je največ 5 minut.
+- Najmanj 60 % prikazanih predlogov skupin je potrjenih s strani uporabnikov.
+- Najmanj 80 % testnih uporabnikov brez pomoči uspešno zaključi registracijo, prijavo in iskanje skupine.
+- Delež neuspešno zaključenih ključnih tokov zaradi notranjih napak ne preseže 1 %.
+- Po potrjeni skupini je skupinski chat takoj dostopen vsem potrjenim članom v istem vmesniku.
+- Administrativna dejanja so v 100 % primerov zabeležena z identiteto izvajalca, časom in tipom akcije.
+- Kakovost predlogov je merljiva z deležem sprejetih predlogov in povprečno oceno po srečanju.
 
 ## 4 Opis sistema
 
 ### 4.1 Pregled sistema
 
-- Predstavite sistem in glavne izzive.
-  - Povzemite utemeljitve izbranih načrtovalskih odločitev.
-  - Narišite kontekstni diagram, ki prikazuje, kako sistem sodeluje z zunanjimi storitvami, podatkovnimi bazami ipd. Jasno označite meje sistema.
-- Na kratko pojasnite zunanje interakcije sistema.
+Sistem za spontana družabna srečanja je spletna aplikacija, ki na podlagi profilov registriranih uporabnikov (interesi, lokacija, časovna razpoložljivost) samodejno oblikuje manjše kompatibilne skupine (3–5 oseb) in jim omogoča usklajevanje srečanja prek vgrajenega skupinskega chata. Sistem je zasnovan po tristopenjski arhitekturi: Angular SPA frontend, Node.js/Express REST API backend ter MongoDB podatkovna baza. Za komunikacijo v realnem času (skupinski chat) je vzporedno z REST API-jem vzpostavljen WebSocket strežnik (Socket.io).
+
+Jedro sistema je **pametna komponenta** – algoritem za oblikovanje skupin, ki kombinira tri kriterije ujemanja v skupno oceno kompatibilnosti:
+
+```
+score = w1 * similarity_interesov + w2 * blizina_geografska + w3 * prekrivanje_casa
+```
+
+Podobnost interesov se izračuna z Jaccard indeksom (razmerje skupnih do vseh interesov para), geografska bližina s Haversine formulo (razdalja v km med koordinatama dveh lokacij), časovno prekrivanje pa kot delež skupnih urnih blokov razpoložljivosti. Uteži `w1`, `w2`, `w3` so nastavljivi parametri; privzete vrednosti se bodo kalibrirale na podlagi podatkov iz testiranja v naslednji iteraciji.
+
+**Glavne načrtovalske odločitve in njihove utemeljitve:**
+
+- **MongoDB** kot podatkovna baza: Interesi in časovna razpoložljivost so po naravi polstrukturirani in variabilni med uporabniki. Dokumentni model MongoDB omogoča shranjevanje teh podatkov brez stroge relacijske sheme ter pospešuje razvoj v MVP fazi, hkrati pa podpira enostavno razširitev z novimi atributi brez migracij.
+- **Node.js/Express** za backend: JavaScript full-stack pristop zmanjšuje kontekstualni preklop med frontendom in backendom ter omogoča souporabo validacijske logike. Express je uveljavljen mikro-framework, primeren za hitro postavitev RESTful API-ja z dobro podporo za JWT middleware in integracijo Socket.io.
+- **Angular** za frontend: Ekipa ima predhodno izkušnjo z Angularom. Komponentna arhitektura ogrodja ustreza modularni naravi aplikacije (profil, predlogi skupin, chat, admin panel). Reaktivni pristop prek RxJS je primeren za obvladovanje asinhronih REST klicev in WebSocket dogodkov.
+- **JWT avtentikacija**: Brezstanovno preverjanje pristnosti je naravno za SPA arhitekturo – strežnik ne vzdržuje sej, žeton pa nosi informacijo o vlogi (uporabnik/administrator), kar poenostavlja zaščito API poti z middleware.
+- **Socket.io** za skupinski chat: Zahteva po dvosmerni komunikaciji v realnem času narekuje WebSocket pristop. Socket.io zagotavlja zanesljivo abstrakcijo s samodejnim fallback mehanizmom ter sobami (rooms), ki naravno ustrezajo konceptu skupin v sistemu.
+- **Resend** za e-pošto: Preprosta integracija za MVP;
+
+**Kontekstni diagram sistema** prikazuje meje sistema in ključne zunanje interakcije:
+
+![Kontekstni diagram](./gradivo/img/kontekstni_diagram_01.png 'Kontekstni diagram')
+
+**Opis zunanjih interakcij sistema:**
+
+Sistem komunicira s tremi zunanjimi entitetami:
+
+1. **Geokodirni API** (npr. OpenStreetMap Nominatim): Ob vnosu lokacije v profilu sistem pošlje besedilni niz zunanjemu servisu, ki vrne standardizirane geografske koordinate. Koordinate se shranijo v MongoDB in pri vsakem klicu algoritma za oblikovanje skupin uporabijo za izračun geografske razdalje po Haversine formuli. Ob nedosegljivosti zunanjega servisa sistem prikaže napako in omogoča ponovni vnos.
+
+2. **E-poštni servis** (SMTP prek Resenda): Sistem pošlje verifikacijsko e-pošto ob registraciji in e-pošto za ponastavitev gesla ob zahtevi. Prek tega kanala se prenašajo izključno sistemska obvestila; vsebina skupinskih chatov in osebni podatki se ne prenašajo. Ob nedosegljivosti servisa sistem zabeleži napako v dnevnik in obvesti uporabnika.
+
+3. **Spletni brskalnik (odjemalec)**: Vsi uporabniki (gostje, registrirani uporabniki, administratorji) dostopajo do sistema prek spletnega brskalnika. Komunikacija med Angular SPA in backendom poteka prek HTTPS za REST API klice ter prek WSS (WebSocket Secure) za skupinski chat v realnem času.
+
+Znotraj meja sistema so vse komponente: Angular frontend, Node.js/Express REST API, Socket.io strežnik, MongoDB podatkovna baza in pametna komponenta (algoritem za oblikovanje skupin).
 
 ### 4.2 Osrednji arhitekturni pogledi
 
