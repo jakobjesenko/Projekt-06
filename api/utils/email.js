@@ -4,9 +4,18 @@ if (process.env.NODE_ENV !== 'production') {
 
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const createResendClient = () => new Resend(process.env.RESEND_API_KEY);
+let resend = createResendClient();
 const APP_URL = process.env.APP_URL || 'http://localhost:3000';
 const EMAIL_FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+
+export const __setResendForTests = (client) => {
+  resend = client;
+};
+
+export const __resetResendForTests = () => {
+  resend = createResendClient();
+};
 
 // Pošlje email
 export const sendVerificationEmail = async (email, token, firstName, type = 'verification') => {
@@ -403,179 +412,6 @@ export const sendEmail = async (to, subject, html, text) => {
     return { success: true, data };
   } catch (error) {
     console.error('Email sending exception:', error);
-    return { success: false, error: error.message };
-  }
-};
-
-export const sendPaymentStatusEmail = async ({
-  to,
-  firstName,
-  status, // 'pending' | 'paid'
-  orderId,
-  meetingTitle,
-  quantity,
-  totalAmount,
-  currency,
-  stripeSessionId,
-  paidAt,
-}) => {
-  const isPaid = status === 'paid';
-
-  const subject = isPaid
-    ? `✅ Potrditev rezervacije – ${meetingTitle}`
-    : `⏳ Rezervacija ustvarjena – čaka na potrditev`;
-
-  const title = isPaid ? 'Plačilo uspešno ✅' : 'Naročilo ustvarjeno ⏳';
-  const message = isPaid
-    ? 'Hvala! Vaše plačilo je bilo uspešno potrjeno.'
-    : 'Za testiranje: naročilo je trenutno v stanju PENDING (čaka na potrditev).';
-
-  const profileLink = `${APP_URL}/dashboard`;
-
-  try {
-    const { data, error } = await resend.emails.send({
-      from: EMAIL_FROM,
-      to,
-      subject,
-      html: `
-        <!DOCTYPE html>
-        <html lang="sl">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>${title}</title>
-          <style>
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-              line-height: 1.6;
-              color: #333;
-              max-width: 600px;
-              margin: 0 auto;
-              padding: 20px;
-              background-color: #f4f4f4;
-            }
-            .container {
-              background-color: white;
-              border-radius: 10px;
-              padding: 30px;
-              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-            .header {
-              text-align: center;
-              padding-bottom: 20px;
-              border-bottom: 2px solid ${isPaid ? '#198754' : '#0d6efd'};
-            }
-            .header h1 {
-              color: ${isPaid ? '#198754' : '#0d6efd'};
-              margin: 0;
-              font-size: 28px;
-            }
-            .badge {
-              display: inline-block;
-              padding: 6px 10px;
-              border-radius: 999px;
-              font-size: 12px;
-              font-weight: 700;
-              color: white;
-              background: ${isPaid ? '#198754' : '#0d6efd'};
-            }
-            .content { padding: 20px 0; }
-            .box {
-              background: #f8f9fa;
-              border: 1px solid #e9ecef;
-              padding: 14px;
-              border-radius: 8px;
-            }
-            .button {
-              display: inline-block;
-              padding: 12px 18px;
-              background-color: ${isPaid ? '#198754' : '#0d6efd'};
-              color: white !important;
-              text-decoration: none;
-              border-radius: 6px;
-              font-weight: bold;
-              margin-top: 14px;
-            }
-            .muted { color: #666; font-size: 14px; }
-            .footer {
-              text-align: center;
-              padding-top: 20px;
-              border-top: 1px solid #ddd;
-              color: #666;
-              font-size: 14px;
-            }
-            .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <h1>🤝 Srecajmo se</h1>
-            </div>
-
-            <div class="content">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-                <h2 style="margin:0;">${title}</h2>
-                <span class="badge">${isPaid ? 'PAID' : 'PENDING'}</span>
-              </div>
-
-              <p>Pozdravljeni${firstName ? `, ${firstName}` : ''}! 👋</p>
-              <p>${message}</p>
-
-              <div class="box">
-                <div><b>Srecanje:</b> ${meetingTitle}</div>
-                <div><b>Količina:</b> ${quantity}</div>
-                <div><b>Skupaj:</b> ${Number(totalAmount).toFixed(2)} ${String(currency || 'EUR').toUpperCase()}</div>
-                <div><b>Order ID:</b> <span class="mono">${orderId}</span></div>
-                ${stripeSessionId ? `<div><b>Stripe session:</b> <span class="mono">${stripeSessionId}</span></div>` : ''}
-                ${paidAt ? `<div><b>Plačano:</b> ${new Date(paidAt).toLocaleString('sl-SI')}</div>` : ''}
-              </div>
-
-              <center>
-                <a class="button" href="${profileLink}">👥 Moja srecanja</a>
-              </center>
-
-              <p class="muted" style="margin-top:18px;">
-                Če gumba ne vidite, odprite: <br/>
-                <span class="mono">${profileLink}</span>
-              </p>
-            </div>
-
-            <div class="footer">
-              <p>&copy; 2025 Srecajmo se</p>
-              <p style="font-size: 12px; color: #999;">To je avtomatsko sporočilo. Prosimo, ne odgovarjajte nanj.</p>
-            </div>
-          </div>
-        </body>
-        </html>
-      `,
-      text: `
-${title}
-
-Pozdravljeni${firstName ? `, ${firstName}` : ''}!
-
-${message}
-
-Srecanje: ${meetingTitle}
-Količina: ${quantity}
-Skupaj: ${Number(totalAmount).toFixed(2)} ${String(currency || 'EUR').toUpperCase()}
-Order ID: ${orderId}
-${stripeSessionId ? `Stripe session: ${stripeSessionId}` : ''}
-${paidAt ? `Plačano: ${new Date(paidAt).toLocaleString('sl-SI')}` : ''}
-
-Moja srecanja: ${profileLink}
-      `.trim(),
-    });
-
-    if (error) {
-      console.error('Payment email sending error:', error);
-      return { success: false, error };
-    }
-
-    console.log('Payment email sent successfully:', data);
-    return { success: true, data };
-  } catch (error) {
-    console.error('Payment email sending exception:', error);
     return { success: false, error: error.message };
   }
 };

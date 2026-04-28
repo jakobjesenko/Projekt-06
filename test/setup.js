@@ -3,7 +3,9 @@ import mongoose from 'mongoose';
 
 let mongoServer;
 
-before(async () => {
+before(async function () {
+  this.timeout(60000);
+
   // Nastavi environment na test
   process.env.NODE_ENV = 'test';
   process.env.JWT_SECRET = 'test-secret';
@@ -26,9 +28,16 @@ before(async () => {
   await import('../api/models/reports.js');
 });
 
-after(async () => {
-  await mongoose.disconnect();
-  await mongoServer.stop();
+after(async function () {
+  this.timeout(60000);
+
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.disconnect();
+  }
+
+  if (mongoServer) {
+    await mongoServer.stop();
+  }
 });
 
 afterEach(async () => {

@@ -11,34 +11,65 @@ describe('Report model — validacija sheme', () => {
   });
 
   it('uspešno shrani veljaven report', async () => {
-    const report = new Report(validReport());
-    const saved = await report.save();
+    const saved = await new Report(validReport()).save();
 
     assert.ok(saved._id);
     assert.strictEqual(saved.status, 'new');
   });
 
-  it('zavrne report brez obveznih polj', async () => {
-    const report = new Report({});
+  it('privzeti status je new', async () => {
+    const saved = await new Report(validReport()).save();
+    assert.strictEqual(saved.status, 'new');
+  });
+
+  it('zavrne report brez reporter', async () => {
+    const data = validReport();
+    delete data.reporter;
 
     await assert.rejects(
-      () => report.save(),
+      () => new Report(data).save(),
       (err) => {
         assert.ok(err instanceof mongoose.Error.ValidationError);
         assert.ok(err.errors.reporter);
-        assert.ok(err.errors.reportedUser);
-        assert.ok(err.errors.meeting);
-        assert.ok(err.errors.description);
         return true;
       },
     );
   });
 
-  it('zavrne prekratek description', async () => {
-    const report = new Report({ ...validReport(), description: 'prekratko' });
+  it('zavrne report brez reportedUser', async () => {
+    const data = validReport();
+    delete data.reportedUser;
 
     await assert.rejects(
-      () => report.save(),
+      () => new Report(data).save(),
+      (err) => {
+        assert.ok(err instanceof mongoose.Error.ValidationError);
+        assert.ok(err.errors.reportedUser);
+        return true;
+      },
+    );
+  });
+
+  it('zavrne report brez meeting', async () => {
+    const data = validReport();
+    delete data.meeting;
+
+    await assert.rejects(
+      () => new Report(data).save(),
+      (err) => {
+        assert.ok(err instanceof mongoose.Error.ValidationError);
+        assert.ok(err.errors.meeting);
+        return true;
+      },
+    );
+  });
+
+  it('zavrne report brez description', async () => {
+    const data = validReport();
+    delete data.description;
+
+    await assert.rejects(
+      () => new Report(data).save(),
       (err) => {
         assert.ok(err instanceof mongoose.Error.ValidationError);
         assert.ok(err.errors.description);
@@ -47,11 +78,39 @@ describe('Report model — validacija sheme', () => {
     );
   });
 
-  it('zavrne neveljaven status', async () => {
-    const report = new Report({ ...validReport(), status: 'closed' });
-
+  it('zavrne prekratek description (manj kot 10 znakov)', async () => {
     await assert.rejects(
-      () => report.save(),
+      () => new Report({ ...validReport(), description: 'prekratko' }).save(),
+      (err) => {
+        assert.ok(err instanceof mongoose.Error.ValidationError);
+        assert.ok(err.errors.description);
+        return true;
+      },
+    );
+  });
+
+  it('zavrne predolg description (več kot 2000 znakov)', async () => {
+    await assert.rejects(
+      () => new Report({ ...validReport(), description: 'a'.repeat(2001) }).save(),
+      (err) => {
+        assert.ok(err instanceof mongoose.Error.ValidationError);
+        assert.ok(err.errors.description);
+        return true;
+      },
+    );
+  });
+
+  it('sprejme description točno 10 znakov', async () => {
+    const saved = await new Report({
+      ...validReport(),
+      description: '1234567890',
+    }).save();
+    assert.ok(saved._id);
+  });
+
+  it('zavrne neveljaven status', async () => {
+    await assert.rejects(
+      () => new Report({ ...validReport(), status: 'closed' }).save(),
       (err) => {
         assert.ok(err instanceof mongoose.Error.ValidationError);
         assert.ok(err.errors.status);
@@ -59,14 +118,39 @@ describe('Report model — validacija sheme', () => {
       },
     );
   });
+
+  it('sprejme vse veljavne statuse', async () => {
+    const statuses = ['new', 'in-review', 'resolved', 'rejected'];
+
+    for (const status of statuses) {
+      const saved = await new Report({ ...validReport(), status }).save();
+      assert.strictEqual(saved.status, status);
+    }
+  });
+
+  it('posodobi updatedAt ob shranjevanju', async () => {
+    const report = await new Report(validReport()).save();
+    const prvičUpdatedAt = report.updatedAt;
+
+    await new Promise((r) => setTimeout(r, 10));
+    report.status = 'in-review';
+    await report.save();
+
+    assert.ok(report.updatedAt > prvičUpdatedAt);
+  });
+
+  it('trim-a whitespace iz description', async () => {
+    const saved = await new Report({
+      ...validReport(),
+      description: '  Neprimerno vedenje na srečanju.  ',
+    }).save();
+
+    assert.strictEqual(saved.description, 'Neprimerno vedenje na srečanju.');
+  });
 });
 
 describe('Report model — statična metoda getPaginatedReports', () => {
-  let meeting1;
-  let meeting2;
-  let reporter1;
-  let reporter2;
-  let reported1;
+  let meeting1, meeting2, reporter1, reporter2, reported1;
 
   beforeEach(async () => {
     meeting1 = new mongoose.Types.ObjectId();
@@ -110,7 +194,16 @@ describe('Report model — statična metoda getPaginatedReports', () => {
     assert.strictEqual(reports.length, 3);
   });
 
-  it('filtrira po statusu', async () => {
+  it('filtrira po statusu new', async () => {
+    const { totalCount } = await Report.getPaginatedReports({
+      offset: 0,
+      limit: 10,
+      status: 'new',
+    });
+    assert.strictEqual(totalCount, 1);
+  });
+
+  it('filtrira po statusu in-review', async () => {
     const { reports, totalCount } = await Report.getPaginatedReports({
       offset: 0,
       limit: 10,
@@ -121,27 +214,31 @@ describe('Report model — statična metoda getPaginatedReports', () => {
     assert.strictEqual(reports[0].status, 'in-review');
   });
 
-  it('filtrira po reporter / reportedUser / meeting', async () => {
-    const byReporter = await Report.getPaginatedReports({
+  it('filtrira po reporter', async () => {
+    const { totalCount } = await Report.getPaginatedReports({
       offset: 0,
       limit: 10,
       reporter: reporter1,
     });
-    assert.strictEqual(byReporter.totalCount, 1);
+    assert.strictEqual(totalCount, 1);
+  });
 
-    const byReported = await Report.getPaginatedReports({
+  it('filtrira po reportedUser', async () => {
+    const { totalCount } = await Report.getPaginatedReports({
       offset: 0,
       limit: 10,
       reportedUser: reported1,
     });
-    assert.strictEqual(byReported.totalCount, 1);
+    assert.strictEqual(totalCount, 1);
+  });
 
-    const byMeeting = await Report.getPaginatedReports({
+  it('filtrira po meeting', async () => {
+    const { totalCount } = await Report.getPaginatedReports({
       offset: 0,
       limit: 10,
       meeting: meeting1,
     });
-    assert.strictEqual(byMeeting.totalCount, 2);
+    assert.strictEqual(totalCount, 2);
   });
 
   it('išče po description', async () => {
@@ -153,5 +250,23 @@ describe('Report model — statična metoda getPaginatedReports', () => {
 
     assert.strictEqual(totalCount, 1);
     assert.ok(reports[0].description.toLowerCase().includes('spam'));
+  });
+
+  it('upošteva limit in offset', async () => {
+    const { reports } = await Report.getPaginatedReports({ offset: 0, limit: 2 });
+    assert.strictEqual(reports.length, 2);
+
+    const { reports: page2 } = await Report.getPaginatedReports({ offset: 2, limit: 2 });
+    assert.strictEqual(page2.length, 1);
+  });
+
+  it('vrne prazen array če ni zadetkov', async () => {
+    const { reports, totalCount } = await Report.getPaginatedReports({
+      offset: 0,
+      limit: 10,
+      search: 'xxxyyyzzz',
+    });
+    assert.strictEqual(totalCount, 0);
+    assert.strictEqual(reports.length, 0);
   });
 });

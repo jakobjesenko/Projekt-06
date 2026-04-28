@@ -103,7 +103,6 @@ describe('Contact model — validacija sheme', () => {
 });
 
 describe('Contact model — statična metoda getPaginatedContacts', () => {
-  // setup.js po vsakem testu počisti kolekcije, zato seedamo pred vsakim testom
   beforeEach(async () => {
     await Contact.create([
       {
