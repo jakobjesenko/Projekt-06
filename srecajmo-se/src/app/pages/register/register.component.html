@@ -1,0 +1,185 @@
+<div class="register-wizard">
+  <div class="wizard-container">
+
+    <!-- Progress bar -->
+    <div class="progress-steps">
+      <div class="step-progress" [class.active]="currentStep >= 1" data-step="1">1</div>
+      <div class="step-progress" [class.active]="currentStep >= 2" data-step="2">2</div>
+      <div class="step-progress" [class.active]="currentStep >= 3" data-step="3">3</div>
+    </div>
+
+    <!-- Step header -->
+    <div class="step-header">
+      <i class="fas"
+         [class.fa-user-plus]="currentStep === 1"
+         [class.fa-heart]="currentStep === 2"
+         [class.fa-map-marker-alt]="currentStep === 3"
+         id="step-icon">
+      </i>
+      <h2 id="step-title">
+        {{ currentStep === 1 ? 'Osebni podatki' : currentStep === 2 ? 'Interesi' : 'Lokacija & Razpoložljivost' }}
+      </h2>
+      <p id="step-desc">
+        {{ currentStep === 1 ? 'Najprej potrebujemo tvoje osnovne podatke.' :
+           currentStep === 2 ? 'Izberi vsaj tri stvari, ki te veselijo.' :
+           'Nastavi svojo lokacijo in razpoložljivost.' }}
+      </p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="submit()">
+
+      <!-- ===== STEP 1: Personal info ===== -->
+      <div id="step1" class="form-step" *ngIf="currentStep === 1">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label><i class="fas fa-user"></i> Ime</label>
+            <input type="text" formControlName="firstName" placeholder="Ana" class="form-input">
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-user-tag"></i> Priimek</label>
+            <input type="text" formControlName="lastName" placeholder="Novak" class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-at"></i> Uporabniško ime</label>
+          <input type="text" formControlName="username" placeholder="kavoljubec_ana" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-calendar-alt"></i> Datum rojstva</label>
+          <input type="date" formControlName="birthday" class="form-input" id="birthday">
+          <small class="form-hint">Stari morate biti vsaj 18 let za registracijo.</small>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> E-pošta</label>
+          <input type="email" formControlName="email" placeholder="ana@email.com" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-lock"></i> Geslo</label>
+          <input type="password" formControlName="password" placeholder="••••••••" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-check-circle"></i> Potrdi geslo</label>
+          <input type="password" formControlName="passwordConfirm" placeholder="••••••••" class="form-input">
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="terms">
+            <i class="fas fa-file-signature"></i> Strinjam se s pogoji uporabe
+          </label>
+        </div>
+
+      </div>
+
+      <!-- ===== STEP 2: Interests ===== -->
+      <div id="step2" class="form-step" *ngIf="currentStep === 2">
+
+        <div class="interests-info">
+          <i class="fas fa-heart"></i> Izberi vsaj tri stvari, ki te veselijo:
+        </div>
+
+        <div class="interests-grid" id="interestsGrid">
+          <label
+            *ngFor="let interest of interestsMaster"
+            class="interest-chip"
+            [class.selected]="isSelected(interest.name)"
+            (click)="toggleInterest(interest.name)">
+            <i class="fas {{ interest.icon }}"></i> {{ interest.name }}
+          </label>
+        </div>
+
+        <div id="interestsError" class="error-message" *ngIf="selectedInterests.length < 3 && selectedInterests.length > 0">
+          Izberi vsaj 3 interese (◕‸◕)
+        </div>
+
+      </div>
+
+      <!-- ===== STEP 3: Location + Calendar ===== -->
+      <div id="step3" class="form-step" *ngIf="currentStep === 3">
+
+        <div class="form-group">
+          <label><i class="fas fa-location-dot"></i> Tvoja lokacija (klikni na zemljevid)</label>
+          <div id="map" style="height: 400px; width: 100%; border-radius: 20px; margin-bottom: 1rem;"></div>
+
+          <input type="hidden" formControlName="locationLat" id="locationLat">
+          <input type="hidden" formControlName="locationLng" id="locationLng">
+          <input type="hidden" formControlName="locationRadius" id="locationRadius">
+
+          <div class="radius-control">
+            <label>
+              <i class="fas fa-expand-alt"></i> Radij iskanja:
+              <span id="radiusValue">{{ registerForm.get('locationRadius')?.value }}</span> km
+            </label>
+            <input
+              type="range"
+              id="radiusSlider"
+              min="1" max="50" step="1"
+              formControlName="locationRadius">
+            <div class="radius-hint">
+              <i class="fas fa-info-circle"></i> Krog prikazuje območje, kjer si pripravljen/a potovati.
+            </div>
+          </div>
+
+          <div id="locationStatus" class="location-status"></div>
+        </div>
+
+        <!-- Availability calendar -->
+        <div class="availability-title"><i class="fas fa-calendar-week"></i> Kdaj si prost/a?</div>
+
+        <div class="quick-buttons">
+          <button type="button" class="quick-btn" id="quickWeeknights">🌙 Po delavnikih (pon–pet zvečer)</button>
+          <button type="button" class="quick-btn" id="quickWeekends">🎉 Vikendi (sob, ned cel dan)</button>
+          <button type="button" class="quick-btn" id="quickClear">🗑 Počisti vse</button>
+        </div>
+
+        <div class="calendar-grid">
+
+          <!-- Header row: empty corner + day names -->
+          <div class="calendar-header"></div>
+          <div class="calendar-header day-header" *ngFor="let day of weekdays">{{ day }}</div>
+
+          <!-- Time rows -->
+          <ng-container *ngFor="let part of dayPartsWithTimes">
+            <div class="time-label">
+              {{ part.label }}<br>
+              <span class="time-range">{{ part.range }}</span>
+            </div>
+            <label
+              *ngFor="let day of weekdays"
+              class="calendar-slot"
+              [class.selected]="isAvailabilitySelected(day + '__' + part.key)"
+              [attr.data-day]="day"
+              [attr.data-part]="part.key"
+              (click)="toggleAvailability(day + '__' + part.key)">
+              <span class="slot-time">{{ part.range }}</span>
+            </label>
+          </ng-container>
+
+        </div>
+
+        <div class="calendar-note">* Klikni na termin za izbiro. Izberi termine, ko si prost/a.</div>
+
+      </div>
+
+      <!-- Navigation buttons -->
+      <div class="wizard-nav">
+        <button type="button" class="btn-secondary" id="prevBtn" *ngIf="currentStep > 1" (click)="prevStep()">
+          <i class="fas fa-chevron-left"></i> Nazaj
+        </button>
+        <button type="button" class="btn-primary" id="nextBtn" *ngIf="currentStep < totalSteps" (click)="nextStep()">
+          Naprej <i class="fas fa-chevron-right"></i>
+        </button>
+        <button type="submit" class="btn-primary btn-large" id="submitBtn" *ngIf="currentStep === totalSteps">
+          Registriraj se <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
