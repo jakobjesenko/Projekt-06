@@ -133,9 +133,11 @@
         <div class="availability-title"><i class="fas fa-calendar-week"></i> Kdaj si prost/a?</div>
 
         <div class="quick-buttons">
-          <button type="button" class="quick-btn" id="quickWeeknights">🌙 Po delavnikih (pon–pet zvečer)</button>
-          <button type="button" class="quick-btn" id="quickWeekends">🎉 Vikendi (sob, ned cel dan)</button>
-          <button type="button" class="quick-btn" id="quickClear">🗑 Počisti vse</button>
+
+          <button type="button" class="quick-btn" (click)="selectWeeknights()">🌙 Po delavnikih (pon–pet zvečer)</button>
+          <button type="button" class="quick-btn" (click)="selectWeekends()">🎉 Vikendi (sob, ned cel dan)</button>
+          <button type="button" class="quick-btn" (click)="clearAvailability()">🗑 Počisti vse</button>
+          <button type="button" (click)="setLocation(46.0569, 14.5058)">Uporabi Ljubljano</button>
         </div>
 
         <div class="calendar-grid">
@@ -150,15 +152,14 @@
               {{ part.label }}<br>
               <span class="time-range">{{ part.range }}</span>
             </div>
-            <label
+            <button
+              type="button"
               *ngFor="let day of weekdays"
               class="calendar-slot"
-              [class.selected]="isAvailabilitySelected(day + '__' + part.key)"
-              [attr.data-day]="day"
-              [attr.data-part]="part.key"
+              [class.selected-slot]="isAvailabilitySelected(day + '__' + part.key)"
               (click)="toggleAvailability(day + '__' + part.key)">
               <span class="slot-time">{{ part.range }}</span>
-            </label>
+            </button>
           </ng-container>
 
         </div>

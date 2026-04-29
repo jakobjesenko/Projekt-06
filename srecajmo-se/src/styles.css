@@ -2227,7 +2227,7 @@ body {
 
 .calendar-grid {
     display: grid;
-    grid-template-columns: 90px repeat(3, 1fr);
+    grid-template-columns: 90px repeat(7, 1fr);
     gap: 0.5rem;
     margin-top: 0.8rem;
     background: #1e293b;
