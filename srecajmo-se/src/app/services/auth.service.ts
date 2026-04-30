@@ -5,14 +5,15 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap, catchError, of } from 'rxjs';
 
 export interface User {
-  _id: string;
+  id: string;
   username: string;
   firstName: string;
   lastName: string;
   email: string;
-  isAdmin: boolean;
   role: string;
-  status: string;
+  status?: string;
+  profileImage?: string;
+  spotifyConnected?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -42,7 +43,7 @@ export class AuthService {
   }
 
   get isAdmin(): boolean {
-    return this.currentUserSubject.value?.isAdmin ?? false;
+    return this.currentUserSubject.value?.role === 'admin';
   }
 
   get token(): string | null {
@@ -74,11 +75,32 @@ export class AuthService {
     );
   }
 
-  logout(): void {
-    this.saveToken('');
-    localStorage.removeItem(this.TOKEN_KEY);
+  logout(redirect = true): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(this.TOKEN_KEY);
+    }
+
     this.currentUserSubject.next(null);
-    this.router.navigate(['/']);
+
+    if (redirect) {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.API}/forgot-password`,
+      { email },
+      { withCredentials: true }
+    );
+  }
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post<any>(
+      `${this.API}/reset-password`,
+      { token, newPassword },
+      { withCredentials: true }
+    );
   }
 
   // ─── Session restore ──────────────────────────────────────────────
@@ -126,5 +148,13 @@ export class AuthService {
     } catch {
       return true;
     }
+  }
+
+  resendVerification(email: string) {
+    return this.http.post<any>(
+      `${this.API}/resend-verification`,
+      { email },
+      { withCredentials: true }
+    );
   }
 }

@@ -1,32 +1,88 @@
 <div class="login-container">
-    <div class="register-wizard">
-        <div class="step-header">
-            <i class="fas fa-sign-in-alt"></i>
-            <h2>Prijava</h2>
-            <p>Vnesite svoje podatke za prijavo</p>
-        </div>
-
-        <form id="login-form">
-            <div class="form-group">
-                <label><i class="fas fa-envelope"></i> E-pošta</label>
-                <input type="email" id="email" name="email" placeholder="ana@email.com" class="form-input" required>
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> Geslo</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" class="form-input" required>
-            </div>
-
-            <div style="text-align: right; margin-bottom: 1.5rem;">
-                <a href="/forgot-password" style="color: #a78bfa;">Pozabljeno geslo?</a>
-            </div>
-
-            <button type="submit" class="btn-primary btn-large" style="width: 100%;">Prijavi se <i class="fas fa-arrow-right"></i></button>
-        </form>
-
-        <div style="text-align: center; margin-top: 1rem;">
-            <span>Nimate računa? </span>
-            <a href="/register" style="color: #a78bfa;">Registrirajte se</a>
-        </div>
+  <div class="register-wizard">
+    <div class="step-header">
+      <i class="fas fa-sign-in-alt"></i>
+      <h2>Prijava</h2>
+      <p>Vnesite svoje podatke za prijavo</p>
     </div>
+
+    <div *ngIf="errorMessage" class="alert alert-error">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <form id="login-form" #loginForm="ngForm" (ngSubmit)="login()">
+      <div class="form-group">
+        <label for="email">
+          <i class="fas fa-envelope"></i> E-pošta ali uporabniško ime
+        </label>
+
+        <input
+          type="text"
+          id="email"
+          name="email"
+          placeholder="ana@email.com"
+          class="form-input"
+          required
+          [(ngModel)]="email"
+          [disabled]="loading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">
+          <i class="fas fa-lock"></i> Geslo
+        </label>
+
+        <div style="position: relative;">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            class="form-input"
+            required
+            [(ngModel)]="password"
+            [disabled]="loading"
+          />
+
+          <button
+            type="button"
+            (click)="showPassword = !showPassword"
+            style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer;"
+          >
+            <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </button>
+        </div>
+      </div>
+
+      <div style="text-align: right; margin-bottom: 1.5rem;">
+        <a routerLink="/forgot-password" style="color: #a78bfa;">Pozabljeno geslo?</a>
+      </div>
+
+      <button
+        type="submit"
+        class="btn-primary btn-large"
+        style="width: 100%;"
+        [disabled]="loading || loginForm.invalid"
+      >
+        <span *ngIf="!loading">Prijavi se <i class="fas fa-arrow-right"></i></span>
+        <span *ngIf="loading">Prijava...</span>
+      </button>
+    </form>
+
+    <div *ngIf="requiresEmailVerification" style="text-align: center; margin-top: 1rem;">
+      <button type="button" class="btn-secondary" (click)="resendVerification()" [disabled]="loading">
+        Ponovno pošlji potrditveni email
+      </button>
+    </div>
+
+    <div style="text-align: center; margin-top: 1rem;">
+      <span>Nimate računa? </span>
+      <a routerLink="/register" style="color: #a78bfa;">Registrirajte se</a>
+    </div>
+  </div>
 </div>
