@@ -1,4 +1,12 @@
-<div class="dashboard-grid">
+<div *ngIf="loading" style="text-align: center; padding: 3rem;">
+  Nalaganje nadzorne plošče...
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-error">
+  {{ errorMessage }}
+</div>
+
+<div class="dashboard-grid" *ngIf="!loading && user">
 
   <!-- Sidebar -->
   <div class="dashboard-sidebar">
@@ -6,18 +14,36 @@
     <!-- User Card -->
     <div class="user-card panel">
       <h3>{{ user.username }}</h3>
-      <p class="user-name">{{ user.firstName }} {{ user.lastName }}</p>
-      <p class="user-email">{{ user.email }}</p>
-      <p class="user-age"><i class="fas fa-calendar-alt"></i> {{ user.age }} let</p>
+
+      <p class="user-name">
+        {{ user.firstName }} {{ user.lastName }}
+      </p>
+
+      <p class="user-email">
+        {{ user.email }}
+      </p>
+
+      <p class="user-age" *ngIf="user.age">
+        <i class="fas fa-calendar-alt"></i> {{ user.age }} let
+      </p>
 
       <div class="user-location-map">
         <div class="map-placeholder">
           <i class="fas fa-map-marker-alt"></i>
-          <span>{{ user.location.lat.toFixed(4) }}, {{ user.location.lng.toFixed(4) }}</span>
+
+          <span *ngIf="user.location?.lat !== null && user.location?.lng !== null; else noLocation">
+            {{ user.location?.lat?.toFixed(4) }},
+            {{ user.location?.lng?.toFixed(4) }}
+          </span>
+
+          <ng-template #noLocation>
+            <span>Lokacija ni nastavljena</span>
+          </ng-template>
         </div>
+
         <div class="location-info">
           <i class="fas fa-map-marker-alt"></i>
-          <span>Radij: {{ user.location.radius }} km</span>
+          <span>Radij: {{ user.location?.radius || 5 }} km</span>
         </div>
       </div>
 
@@ -25,6 +51,7 @@
         <ng-container *ngIf="user.activeSearch; else searchOff">
           <i class="fas fa-bell"></i> Iskanje aktivno
         </ng-container>
+
         <ng-template #searchOff>
           <i class="fas fa-bell-slash"></i> Iskanje ni aktivno
         </ng-template>
@@ -34,6 +61,7 @@
         <i class="fas fa-search"></i>
         {{ user.activeSearch ? 'Deaktiviraj iskanje' : 'Aktiviraj iskanje' }}
       </button>
+
       <button class="btn-secondary btn-full" routerLink="/profile/edit">
         <i class="fas fa-edit"></i> Uredi profil
       </button>
@@ -42,35 +70,48 @@
     <!-- Interests Card -->
     <div class="interests-card panel">
       <h4><i class="fas fa-heart"></i> Moji interesi</h4>
-      <div class="interests-tags">
-        <span class="interest-tag" *ngFor="let interest of user.interests">{{ interest }}</span>
+
+      <div class="interests-tags" *ngIf="user.interests?.length; else noInterests">
+        <span class="interest-tag" *ngFor="let interest of user.interests">
+          {{ interest }}
+        </span>
       </div>
+
+      <ng-template #noInterests>
+        <p style="color: #64748b;">Nimaš še dodanih interesov.</p>
+      </ng-template>
     </div>
 
     <!-- Availability Calendar -->
     <div class="availability-card panel">
       <h4><i class="fas fa-clock"></i> Razpoložljivost</h4>
-      <div class="calendar-grid">
 
+      <div class="calendar-grid">
         <div class="calendar-header"></div>
-        <div class="calendar-header day-header" *ngFor="let day of weekdays">{{ day }}</div>
+
+        <div class="calendar-header day-header" *ngFor="let day of weekdays">
+          {{ day }}
+        </div>
 
         <ng-container *ngFor="let part of dayParts">
           <div class="time-label">
             {{ part.label }}<br>
             <span class="time-range">{{ part.range }}</span>
           </div>
+
           <div
-            class="calendar-slot-display"
+            class="calendar-slot"
             [class.selected-slot]="isAvailable(day, part.key)"
             *ngFor="let day of weekdays"
           >
             <span class="slot-time">{{ part.range }}</span>
           </div>
         </ng-container>
-
       </div>
-      <div class="calendar-note">* Obarvani termini so tvoji prosti časi.</div>
+
+      <div class="calendar-note">
+        * Obarvani termini so tvoji prosti časi.
+      </div>
     </div>
 
   </div>
@@ -83,6 +124,7 @@
       <h2><i class="fas fa-users"></i> Predlogi skupin</h2>
       <p>Na podlagi tvojih interesov in razpoložljivosti</p>
     </div>
+
     <div class="suggestions-grid">
       <ng-container *ngIf="suggestions.length > 0; else noSuggestions">
         <div class="group-card" *ngFor="let s of suggestions">
@@ -90,31 +132,49 @@
             <span class="group-badge">{{ s.name }}</span>
             <span class="match-badge">{{ s.matchScore }}% ujemanja</span>
           </div>
+
           <div class="group-members">
-            <span class="member-chip" *ngFor="let member of s.members">{{ member }}</span>
+            <span class="member-chip" *ngFor="let member of s.members">
+              {{ member }}
+            </span>
           </div>
+
           <div class="group-details">
-            <span><i class="fas fa-tag"></i> Skupni interesi: {{ s.interests.join(', ') }}</span>
+            <span>
+              <i class="fas fa-tag"></i>
+              Skupni interesi: {{ s.interests.join(', ') }}
+            </span>
           </div>
+
           <div class="group-details">
-            <span><i class="fas fa-clock"></i> {{ s.time }}</span>
-            <span><i class="fas fa-map-marker-alt"></i> {{ s.location }}</span>
+            <span>
+              <i class="fas fa-clock"></i> {{ s.time }}
+            </span>
+
+            <span>
+              <i class="fas fa-map-marker-alt"></i> {{ s.location }}
+            </span>
           </div>
+
           <div class="group-actions">
             <button class="btn-primary" (click)="acceptSuggestion(s)">
               <i class="fas fa-check-circle"></i> Sprejmem predlog
             </button>
+
             <button class="btn-secondary" routerLink="/chat">
               <i class="fas fa-comment-dots"></i> Pogovor
             </button>
           </div>
         </div>
       </ng-container>
+
       <ng-template #noSuggestions>
         <div class="group-card" style="text-align: center; padding: 3rem;">
           <i class="fas fa-search" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
           <h3>Trenutno ni predlogov</h3>
-          <p style="color: #64748b;">Aktiviraj iskanje za prejemanje predlogov skupin.</p>
+          <p style="color: #64748b;">
+            Aktiviraj iskanje za prejemanje predlogov skupin.
+          </p>
         </div>
       </ng-template>
     </div>
@@ -125,6 +185,7 @@
         <h2><i class="fas fa-check-circle"></i> Moja potrjena srečanja</h2>
         <p>Srečanja, ki si jih potrdil/a</p>
       </div>
+
       <div class="suggestions-grid">
         <ng-container *ngIf="confirmedMeetings.length > 0; else noMeetings">
           <div class="group-card" *ngFor="let meeting of confirmedMeetings">
@@ -132,21 +193,37 @@
               <span class="group-badge">{{ meeting.groupName }}</span>
               <span class="confirmed-badge">Potrjeno</span>
             </div>
+
             <div class="meeting-participants">
-              <strong><i class="fas fa-users"></i> Udeleženci:</strong><br>
-              <span class="participant-name" *ngFor="let member of meeting.members">{{ member }}</span>
+              <strong>
+                <i class="fas fa-users"></i> Udeleženci:
+              </strong>
+              <br>
+
+              <span class="participant-name" *ngFor="let member of meeting.members">
+                {{ member }}
+              </span>
             </div>
+
             <div class="group-details">
-              <span><i class="fas fa-clock"></i> {{ meeting.dateTime }}</span>
-              <span><i class="fas fa-map-marker-alt"></i> {{ meeting.location }}</span>
+              <span>
+                <i class="fas fa-clock"></i> {{ meeting.dateTime }}
+              </span>
+
+              <span>
+                <i class="fas fa-map-marker-alt"></i> {{ meeting.location }}
+              </span>
             </div>
           </div>
         </ng-container>
+
         <ng-template #noMeetings>
           <div class="group-card" style="text-align: center; padding: 3rem;">
             <i class="fas fa-clock" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
             <h3>Ni potrjenih srečanj</h3>
-            <p style="color: #64748b;">Ko sprejmeš predlog skupine, se bo prikazal tukaj.</p>
+            <p style="color: #64748b;">
+              Ko sprejmeš predlog skupine, se bo prikazal tukaj.
+            </p>
           </div>
         </ng-template>
       </div>

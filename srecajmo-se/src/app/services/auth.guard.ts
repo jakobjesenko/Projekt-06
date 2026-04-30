@@ -1,27 +1,46 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import {
+  CanActivate,
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot
+} from '@angular/router';
 import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
-  canActivate(route: ActivatedRouteSnapshot): boolean {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
     if (!this.auth.isLoggedIn) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: state.url }
+      });
       return false;
     }
 
-    // Mirrors your restrictTo() middleware — check required roles
     const requiredRole = route.data['role'];
-    if (requiredRole && this.auth.currentUser?.role !== requiredRole) {
-      this.router.navigate(['/']);
+
+    // Only check role if currentUser is already loaded.
+    // On page refresh, token exists first, user data loads shortly after.
+    if (
+      requiredRole &&
+      this.auth.currentUser &&
+      this.auth.currentUser.role !== requiredRole
+    ) {
+      this.router.navigate(['/dashboard']);
       return false;
     }
 
-    // Mirror blocked status check
     if (this.auth.currentUser?.status === 'blocked') {
-      this.auth.logout();
+      this.auth.logout(false);
+      this.router.navigate(['/login']);
       return false;
     }
 

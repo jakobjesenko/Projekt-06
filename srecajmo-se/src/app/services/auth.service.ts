@@ -39,7 +39,11 @@ export class AuthService {
   }
 
   get isLoggedIn(): boolean {
-    return !!this.currentUserSubject.value;
+    const token = this.token;
+
+    if (!token) return false;
+
+    return !this.isTokenExpired(token);
   }
 
   get isAdmin(): boolean {
@@ -54,7 +58,11 @@ export class AuthService {
   // ─── Auth actions ─────────────────────────────────────────────────
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.API}/login`, { email, password }).pipe(
+    return this.http.post<any>(
+      `${this.API}/login`,
+      { email, password },
+      { withCredentials: true }
+    ).pipe(
       tap(res => {
         if (res.success && res.token) {
           this.saveToken(res.token);
@@ -65,7 +73,11 @@ export class AuthService {
   }
 
   register(data: any): Observable<any> {
-    return this.http.post<any>(`${this.API}/register`, data).pipe(
+    return this.http.post<any>(
+      `${this.API}/register`,
+      data,
+      { withCredentials: true }
+    ).pipe(
       tap(res => {
         if (res.success && res.token) {
           this.saveToken(res.token);
@@ -103,36 +115,58 @@ export class AuthService {
     );
   }
 
+  getMe(): Observable<any> {
+    return this.http.get<any>(
+      `${this.API}/me?t=${Date.now()}`,
+      { withCredentials: true }
+    );
+  }
+
   // ─── Session restore ──────────────────────────────────────────────
 
-  private restoreSession(): void {
-    if (!isPlatformBrowser(this.platformId)) return;  // ← SSR guard
+private restoreSession(): void {
+  if (!isPlatformBrowser(this.platformId)) return;
 
-    const token = this.token;
-    if (!token) return;
+  const tokenAtStart = this.token;
 
-    if (this.isTokenExpired(token)) {
-      this.logout();
-      return;
-    }
+  if (!tokenAtStart) return;
 
-    this.http.get<any>(`${this.API}/me`).pipe(
-      catchError(() => {
-        this.logout();
-        return of(null);
-      })
-    ).subscribe(res => {
-      if (res?.success && res.user) {
-        if (res.user.status === 'blocked') {
-          this.logout();
-          return;
-        }
-        this.currentUserSubject.next(res.user);
-      } else {
-        this.logout();
-      }
-    });
+  if (this.isTokenExpired(tokenAtStart)) {
+    this.logout(false);
+    return;
   }
+
+  this.http.get<any>(`${this.API}/me?t=${Date.now()}`, {
+    withCredentials: true
+  }).pipe(
+    catchError(() => {
+      // Only logout if the token is still the same one that failed.
+      // If user logged in meanwhile, do NOT delete the new token.
+      if (this.token === tokenAtStart) {
+        this.logout(false);
+      }
+
+      return of(null);
+    })
+  ).subscribe(res => {
+    if (!res) return;
+
+    if (res?.success && res.user) {
+      if (res.user.status === 'blocked') {
+        if (this.token === tokenAtStart) {
+          this.logout(false);
+        }
+        return;
+      }
+
+      this.currentUserSubject.next(res.user);
+    } else {
+      if (this.token === tokenAtStart) {
+        this.logout(false);
+      }
+    }
+  });
+}
 
   // ─── Token helpers ────────────────────────────────────────────────
 
