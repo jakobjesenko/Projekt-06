@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 interface FaqItem {
   icon: string;
@@ -14,10 +15,22 @@ interface FaqItem {
   selector: 'app-faq',
   imports: [CommonModule, FormsModule],
   templateUrl: './faq.component.html',
-  styleUrl: './faq.component.css'
+  styleUrls: ['./faq.component.css']
 })
-export class FaqComponent {
+export class FaqComponent implements AfterViewInit, OnDestroy {
   searchTerm = '';
+
+  private clickHandler = (e: Event) => {
+    const target = e.target as HTMLElement;
+    const anchor = target.closest('a');
+    if (!anchor) return;
+    const href = anchor.getAttribute('href');
+    if (href && href.startsWith('/')) {
+      e.preventDefault();
+      // navigate using router
+      this.router.navigateByUrl(href).catch(() => {});
+    }
+  };
 
   items: FaqItem[] = [
     {
@@ -154,5 +167,15 @@ export class FaqComponent {
 
   toggle(item: FaqItem): void {
     item.isOpen = !item.isOpen;
+  }
+
+  constructor(private router: Router, private elRef: ElementRef) {}
+
+  ngAfterViewInit(): void {
+    this.elRef.nativeElement.addEventListener('click', this.clickHandler);
+  }
+
+  ngOnDestroy(): void {
+    this.elRef.nativeElement.removeEventListener('click', this.clickHandler);
   }
 }

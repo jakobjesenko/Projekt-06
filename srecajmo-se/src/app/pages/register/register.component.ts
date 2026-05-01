@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,7 +9,10 @@ import {
   ValidationErrors
 } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Subscription } from 'rxjs';
+
+declare var L: any;
 
 interface Interest {
   name: string;
@@ -23,7 +26,7 @@ interface Interest {
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   currentStep = 1;
   totalSteps = 3;
   isSubmitting = false;
@@ -52,8 +55,18 @@ export class RegisterComponent implements OnInit {
 
   selectedInterests: string[] = [];
   registerForm!: FormGroup;
+  locationSelected = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {}
+  private leafletMap: any = null;
+  private mapMarker: any = null;
+  private mapCircle: any = null;
+  private radiusSub: Subscription | null = null;
+
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly http: HttpClient,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
+  ) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group(
@@ -74,6 +87,10 @@ export class RegisterComponent implements OnInit {
       },
       { validators: this.passwordsMatchValidator }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.destroyMap();
   }
 
   get availability(): FormArray {
@@ -159,23 +176,88 @@ export class RegisterComponent implements OnInit {
   }
 
   setLocation(lat: number, lng: number): void {
-    this.registerForm.patchValue({
-      locationLat: lat,
-      locationLng: lng
-    });
+    this.registerForm.patchValue({ locationLat: lat, locationLng: lng });
+    this.locationSelected = true;
+    this.placeMarker(lat, lng, true);
+  }
+
+  private placeMarker(lat: number, lng: number, panTo: boolean): void {
+    if (!this.leafletMap) return;
+
+    const radiusMeters = (this.registerForm.get('locationRadius')?.value ?? 5) * 1000;
+
+    if (this.mapMarker) {
+      this.mapMarker.setLatLng([lat, lng]);
+    } else {
+      this.mapMarker = L.marker([lat, lng]).addTo(this.leafletMap);
+    }
+
+    if (this.mapCircle) {
+      this.mapCircle.setLatLng([lat, lng]).setRadius(radiusMeters);
+    } else {
+      this.mapCircle = L.circle([lat, lng], {
+        radius: radiusMeters,
+        color: '#e91e8c',
+        fillColor: '#e91e8c',
+        fillOpacity: 0.15,
+        weight: 2
+      }).addTo(this.leafletMap);
+    }
+
+    if (panTo) {
+      this.leafletMap.setView([lat, lng], 12);
+    }
+  }
+
+  private initMap(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    setTimeout(() => {
+      if (this.leafletMap || typeof L === 'undefined') return;
+
+      this.leafletMap = L.map('map').setView([46.0569, 14.5058], 11);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 18
+      }).addTo(this.leafletMap);
+
+      const currentLat = this.registerForm.get('locationLat')?.value;
+      const currentLng = this.registerForm.get('locationLng')?.value;
+      if (currentLat && currentLng) {
+        this.placeMarker(currentLat, currentLng, false);
+      }
+
+      this.leafletMap.on('click', (e: any) => {
+        this.registerForm.patchValue({ locationLat: e.latlng.lat, locationLng: e.latlng.lng });
+        this.locationSelected = true;
+        this.placeMarker(e.latlng.lat, e.latlng.lng, false);
+      });
+
+      this.radiusSub = this.registerForm.get('locationRadius')!.valueChanges.subscribe(val => {
+        if (this.mapCircle) {
+          this.mapCircle.setRadius(Number(val) * 1000);
+        }
+      });
+    }, 0);
+  }
+
+  private destroyMap(): void {
+    this.radiusSub?.unsubscribe();
+    this.radiusSub = null;
+    if (this.leafletMap) {
+      this.leafletMap.remove();
+      this.leafletMap = null;
+      this.mapMarker = null;
+      this.mapCircle = null;
+    }
   }
 
   nextStep(): void {
     if (this.currentStep === 1) {
       const step1Fields = [
-        'firstName',
-        'lastName',
-        'username',
-        'birthday',
-        'email',
-        'password',
-        'passwordConfirm',
-        'terms'
+        'firstName', 'lastName', 'username', 'birthday',
+        'email', 'password', 'passwordConfirm', 'terms'
       ];
 
       step1Fields.forEach(field => this.registerForm.get(field)?.markAsTouched());
@@ -195,9 +277,16 @@ export class RegisterComponent implements OnInit {
     }
 
     this.currentStep++;
+
+    if (this.currentStep === 3) {
+      this.initMap();
+    }
   }
 
   prevStep(): void {
+    if (this.currentStep === 3) {
+      this.destroyMap();
+    }
     this.currentStep--;
   }
 
@@ -235,12 +324,10 @@ export class RegisterComponent implements OnInit {
     this.http.post<any>(this.apiUrl, payload).subscribe({
       next: res => {
         alert(res.message || 'Registracija uspešna! Preveri email.');
-        this.registerForm.reset({
-          terms: false,
-          locationRadius: 5
-        });
+        this.registerForm.reset({ terms: false, locationRadius: 5 });
         this.clearAvailability();
         this.selectedInterests = [];
+        this.locationSelected = false;
         this.currentStep = 1;
         this.isSubmitting = false;
       },

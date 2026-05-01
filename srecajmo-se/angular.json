@@ -70,7 +70,8 @@
               "buildTarget": "srecajmo-se:build:production"
             },
             "development": {
-              "buildTarget": "srecajmo-se:build:development"
+              "buildTarget": "srecajmo-se:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
