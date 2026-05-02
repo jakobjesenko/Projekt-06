@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 interface StatCard {
   icon: string;
@@ -8,11 +9,14 @@ interface StatCard {
 }
 
 interface AdminUser {
-  id: string;
+  _id: string;
   username: string;
   email: string;
-  location: string;
+  firstName: string;
+  lastName: string;
+  location?: { lat?: number; lng?: number; radius?: number };
   isActive: boolean;
+  activeSearch: boolean;
 }
 
 @Component({
@@ -21,19 +25,57 @@ interface AdminUser {
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit {
   stats: StatCard[] = [
-    { icon: 'fas fa-users',         value: 142,  label: 'Skupaj uporabnikov' },
-    { icon: 'fas fa-calendar-check', value: 318,  label: 'Skupaj srečanj' },
+    { icon: 'fas fa-users',          value: '...', label: 'Skupaj uporabnikov' },
+    { icon: 'fas fa-calendar-check', value: 318,   label: 'Skupaj srečanj' },
     { icon: 'fas fa-star',           value: '4.7', label: 'Povprečna ocena' },
-    { icon: 'fas fa-search',         value: 27,   label: 'Aktivnih iskanj' }
+    { icon: 'fas fa-search',         value: 27,    label: 'Aktivnih iskanj' },
   ];
 
-  users: AdminUser[] = [
-    { id: '001', username: 'ana_novak',    email: 'ana.novak@email.si',    location: 'Ljubljana', isActive: true  },
-    { id: '002', username: 'miha_kralj',   email: 'miha.kralj@email.si',   location: 'Maribor',   isActive: true  },
-    { id: '003', username: 'petra_kovac',  email: 'petra.kovac@email.si',  location: 'Celje',     isActive: false },
-    { id: '004', username: 'luka_horvat',  email: 'luka.horvat@email.si',  location: 'Koper',     isActive: true  },
-    { id: '005', username: 'maja_zupan',   email: 'maja.zupan@email.si',   location: 'Kranj',     isActive: false }
-  ];
+  users: AdminUser[] = [];
+  loading = true;
+  error = '';
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  loadUsers(): void {
+    this.loading = true;
+    this.error = '';
+    this.http.get<AdminUser[]>('/api/admin/users/').subscribe({
+      next: (users) => {
+        this.users = users;
+        this.stats[0].value = users.length;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Napaka pri nalaganju uporabnikov.';
+        this.loading = false;
+      }
+    });
+  }
+
+  toggleActive(user: AdminUser): void {
+    const url = user.isActive
+      ? `/api/admin/users/${user._id}/deactivate`
+      : `/api/admin/users/${user._id}/activate`;
+
+    this.http.put<{ success: boolean; user: AdminUser }>(url, {}).subscribe({
+      next: (res) => {
+        if (res.success) {
+          user.isActive = res.user.isActive;
+          user.activeSearch = res.user.activeSearch;
+        }
+      }
+    });
+  }
+
+  formatLocation(location?: { lat?: number; lng?: number }): string {
+    if (!location || location.lat == null) return '—';
+    return `${location.lat.toFixed(2)}, ${location.lng?.toFixed(2)}`;
+  }
 }

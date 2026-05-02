@@ -975,6 +975,16 @@ body {
     border-bottom: 2px solid #a78bfa;
 }
 
+.table-status {
+    padding: 1rem;
+    color: #94a3b8;
+    text-align: center;
+}
+
+.table-error {
+    color: #f87171;
+}
+
 .admin-table-container {
     background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(10px);

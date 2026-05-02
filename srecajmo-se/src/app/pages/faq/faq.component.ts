@@ -20,6 +20,8 @@ interface FaqItem {
 export class FaqComponent implements AfterViewInit, OnDestroy {
   searchTerm = '';
 
+  constructor(private router: Router, private elRef: ElementRef) {}
+
   private clickHandler = (e: Event) => {
     const target = e.target as HTMLElement;
     const anchor = target.closest('a');
@@ -168,8 +170,6 @@ export class FaqComponent implements AfterViewInit, OnDestroy {
   toggle(item: FaqItem): void {
     item.isOpen = !item.isOpen;
   }
-
-  constructor(private router: Router, private elRef: ElementRef) {}
 
   ngAfterViewInit(): void {
     this.elRef.nativeElement.addEventListener('click', this.clickHandler);

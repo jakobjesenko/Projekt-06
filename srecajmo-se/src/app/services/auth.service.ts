@@ -177,7 +177,15 @@ private restoreSession(): void {
 
   isTokenExpired(token: string): boolean {
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const parts = token.split('.');
+      if (parts.length !== 3) return true;
+
+      // JWT uses base64url encoding (chars - and _). Convert to base64 for atob.
+      let b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      // Pad with '=' to make length a multiple of 4
+      while (b64.length % 4) b64 += '=';
+
+      const payload = JSON.parse(atob(b64));
       return payload.exp * 1000 < Date.now();
     } catch {
       return true;
