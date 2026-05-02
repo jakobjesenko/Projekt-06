@@ -161,7 +161,12 @@
               <i class="fas fa-check-circle"></i> Sprejmem predlog
             </button>
 
-            <button class="btn-secondary" routerLink="/chat">
+            <button
+              class="btn-secondary"
+              type="button"
+              disabled
+              title="Najprej sprejmi predlog"
+            >
               <i class="fas fa-comment-dots"></i> Pogovor
             </button>
           </div>
@@ -213,6 +218,26 @@
               <span>
                 <i class="fas fa-map-marker-alt"></i> {{ meeting.location }}
               </span>
+            </div>
+
+            <div class="group-actions">
+              <button
+                class="btn-secondary"
+                *ngIf="meeting.id"
+                [routerLink]="['/chat', meeting.id]"
+              >
+                <i class="fas fa-comment-dots"></i> Pogovor
+              </button>
+
+              <button
+                class="btn-secondary"
+                *ngIf="!meeting.id"
+                type="button"
+                disabled
+                title="To srečanje še nima ID-ja za klepet"
+              >
+                <i class="fas fa-comment-dots"></i> Pogovor
+              </button>
             </div>
           </div>
         </ng-container>

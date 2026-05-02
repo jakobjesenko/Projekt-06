@@ -31,7 +31,8 @@ export const routes: Routes = [
   { path: 'faq',        component: FaqComponent },
   { path: 'gdpr',       component: GdprComponent },
   { path: 'terms',      component: TermsComponent },
-  { path: 'chat',       component: ChatComponent },
+  { path: 'chat/:meetingId', component: ChatComponent, canActivate: [AuthGuard] },
+  { path: 'chat', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'rating',     component: RatingComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
 

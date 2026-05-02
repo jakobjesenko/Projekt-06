@@ -35,6 +35,7 @@ interface GroupSuggestion {
 }
 
 interface ConfirmedMeeting {
+  id?: string;
   groupName: string;
   members: string[];
   dateTime: string;
@@ -266,14 +267,74 @@ export class DashboardComponent implements OnInit {
       });
   }
 
+  getFutureMeetingDate(): Date {
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+    date.setHours(18, 0, 0, 0);
+    return date;
+  }
+  
   acceptSuggestion(suggestion: GroupSuggestion): void {
-    this.confirmedMeetings.push({
-      groupName: suggestion.name,
-      members: suggestion.members,
-      dateTime: suggestion.time,
-      location: suggestion.location
-    });
+    if (!this.user?.id) return;
 
-    this.suggestions = this.suggestions.filter(s => s !== suggestion);
+    const memberIds = suggestion.memberIds || [];
+
+    const payload = {
+      groupName: suggestion.name,
+
+      members: [
+        {
+          user: this.user.id,
+          response: 'accepted',
+          respondedAt: new Date()
+        },
+        ...memberIds.map((id) => ({
+          user: id,
+          response: 'pending',
+          respondedAt: null
+        }))
+      ],
+
+      sharedInterests: suggestion.interests || [],
+      matchPercentage: suggestion.matchScore || 0,
+
+      venue: {
+        address: suggestion.location || 'Lokacija še ni določena',
+        city: 'Ljubljana',
+        country: 'Slovenia',
+        coordinates: {
+          lat: this.user.location?.lat || 46.0569,
+          lng: this.user.location?.lng || 14.5058
+        }
+      },
+
+      date: this.getFutureMeetingDate(),
+
+      status: 'upcoming'
+    };
+
+    console.log('Creating meeting payload:', payload);
+
+    this.http.post<any>('/api/meetings', payload, {
+      withCredentials: true
+    }).subscribe({
+      next: (meeting) => {
+        this.confirmedMeetings.push({
+          id: meeting._id,
+          groupName: meeting.groupName || suggestion.name,
+          members: suggestion.members,
+          dateTime: meeting.date
+            ? new Date(meeting.date).toLocaleString('sl-SI')
+            : suggestion.time,
+          location: meeting.venue?.address || suggestion.location
+        });
+
+        this.suggestions = this.suggestions.filter(s => s !== suggestion);
+      },
+      error: (err) => {
+        console.error('Napaka pri ustvarjanju srečanja:', err);
+        console.error('Backend response:', err.error);
+      }
+    });
   }
 }

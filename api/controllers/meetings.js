@@ -35,7 +35,12 @@ const deleteMeeting = async (req, res) => {
 // Potrjena srečanja uporabnika
 const getUserConfirmedMeetings = async (req, res) => {
   try {
-    const meetings = await ConfirmedMeeting.find({ userId: parseInt(req.params.userId) });
+    const meetings = await Meeting.find({
+      'members.user': req.params.userId
+    })
+      .populate('members.user', 'username firstName lastName profileImage')
+      .lean();
+
     res.status(200).json(meetings);
   } catch (err) {
     res.status(500).json({ message: err.message });

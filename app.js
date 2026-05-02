@@ -1,7 +1,7 @@
 import express from "express";
 import session from "express-session";
 import http from "node:http";
-import jwt from "jsonwebtoken";
+import { verifyToken } from "./api/utils/jwt.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import { dirname, join } from "path";
@@ -55,7 +55,7 @@ app.use(express.static(join(__dirname, "public")));
 io.on("connection", (socket) => {
   console.log("a user connected:", socket.id);
 
-  const token = socket.handshake.auth.token;
+  const token = socket.handshake.auth?.token;
 
   if (!token) {
     console.log("No JWT token, disconnecting:", socket.id);
@@ -63,16 +63,17 @@ io.on("connection", (socket) => {
     return;
   }
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    socket.userId = decoded.id;
-    socket.username = decoded.username;
-    console.log("User authenticated:", decoded.username);
-  } catch (error) {
+  const decoded = verifyToken(token);
+
+  if (!decoded) {
     console.log("Invalid JWT token, disconnecting:", socket.id);
     socket.disconnect();
     return;
   }
+
+  socket.userId = decoded.id;
+  socket.username = decoded.username;
+  console.log("User authenticated:", decoded.username);
 
   socket.on("joinMeetingRoom", (meetingId) => {
     socket.join(meetingId);
