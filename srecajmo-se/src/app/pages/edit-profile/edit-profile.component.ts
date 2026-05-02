@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
 declare var L: any;
@@ -22,7 +23,7 @@ interface Interest {
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css'
 })
@@ -30,6 +31,9 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   selectedInterests: string[] = [];
   locationSelected = false;
+  saving = false;
+
+  private readonly apiUrl = 'http://localhost:3000/api/auth';
 
   weekdays = ['Pon', 'Tor', 'Sre', 'Čet', 'Pet', 'Sob', 'Ned'];
 
@@ -59,6 +63,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly router: Router,
+    private readonly http: HttpClient,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
@@ -80,6 +85,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       { validators: this.passwordsMatchValidator }
     );
 
+    this.loadUserIntoForm();
     this.initMap();
   }
 
@@ -99,6 +105,62 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     const d = new Date();
     d.setFullYear(d.getFullYear() - 18);
     return d.toISOString().split('T')[0];
+  }
+
+  private getStoredUser(): any | null {
+    const stored =
+      localStorage.getItem('user') ||
+      sessionStorage.getItem('user') ||
+      localStorage.getItem('currentUser') ||
+      sessionStorage.getItem('currentUser');
+
+    if (!stored) return null;
+
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return null;
+    }
+  }
+
+  private getLoggedInUserId(): string | null {
+    const user = this.getStoredUser();
+
+    return user?._id || user?.id || null;
+  }
+
+  private loadUserIntoForm(): void {
+    const user = this.getStoredUser();
+
+    if (!user) {
+      return;
+    }
+
+    this.selectedInterests = user.interests ?? [];
+
+    this.availability.clear();
+    (user.availability ?? []).forEach((slot: string) => {
+      this.availability.push(this.fb.control(slot));
+    });
+
+    const birthday = user.birthday
+      ? new Date(user.birthday).toISOString().split('T')[0]
+      : '';
+
+    this.form.patchValue({
+      firstName: user.firstName ?? '',
+      lastName: user.lastName ?? '',
+      username: user.username ?? '',
+      birthday,
+      email: user.email ?? '',
+      locationLat: user.location?.lat ?? null,
+      locationLng: user.location?.lng ?? null,
+      locationRadius: user.location?.radius ?? 5
+    });
+
+    if (user.location?.lat != null && user.location?.lng != null) {
+      this.locationSelected = true;
+    }
   }
 
   minimumAgeValidator(minAge: number) {
@@ -187,6 +249,14 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         maxZoom: 19
       }).addTo(this.leafletMap);
 
+      const lat = this.form.get('locationLat')?.value;
+      const lng = this.form.get('locationLng')?.value;
+
+      if (lat != null && lng != null) {
+        this.placeMarker(Number(lat), Number(lng));
+        this.leafletMap.setView([Number(lat), Number(lng)], 11);
+      }
+
       this.leafletMap.on('click', (e: any) => {
         this.form.patchValue({ locationLat: e.latlng.lat, locationLng: e.latlng.lng });
         this.locationSelected = true;
@@ -237,13 +307,68 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
     const fields = ['firstName', 'lastName', 'username', 'birthday', 'email'];
     fields.forEach(f => this.form.get(f)?.markAsTouched());
+
     if (fields.some(f => this.form.get(f)?.invalid)) {
       alert('Popravi označena polja.');
       return;
     }
 
-    // API integration will go here
-    alert('Shranjeno! (API integracija bo kmalu.)');
+    const userId = this.getLoggedInUserId();
+
+    if (!userId) {
+      alert('Napaka: ID uporabnika ni najden. Prijavite se ponovno.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const value = this.form.value;
+
+    const payload: any = {
+      firstName: value.firstName,
+      lastName: value.lastName,
+      username: value.username,
+      birthday: value.birthday,
+      email: value.email,
+      interests: this.selectedInterests,
+      availability: value.availability,
+      location: {
+        lat: value.locationLat,
+        lng: value.locationLng,
+        radius: value.locationRadius
+      }
+    };
+
+    if (value.password && value.password.trim()) {
+      payload.password = value.password.trim();
+    }
+
+    this.saving = true;
+
+    this.http.put<any>(
+      `${this.apiUrl}/profile/${userId}`,
+      payload,
+      { withCredentials: true }
+    ).subscribe({
+      next: (res) => {
+        this.saving = false;
+
+        if (!res.success) {
+          alert(res.message || 'Napaka pri posodobitvi profila.');
+          return;
+        }
+
+        if (res.user) {
+          localStorage.setItem('user', JSON.stringify(res.user));
+        }
+
+        alert('Profil uspešno posodobljen.');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.saving = false;
+        alert(err.error?.message || 'Napaka pri posodobitvi profila.');
+      }
+    });
   }
 
   cancel(): void {

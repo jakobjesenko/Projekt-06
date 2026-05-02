@@ -50,37 +50,82 @@ const activateUser = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { firstName, lastName, username, birthday, email, password, interests, availability, location } =
-      req.body;
 
-    const updateData = { firstName, lastName, username, email, interests, availability, location };
+    const {
+      firstName,
+      lastName,
+      username,
+      birthday,
+      email,
+      password,
+      interests,
+      availability,
+      location
+    } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Uporabnik ni najden.'
+      });
+    }
+
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.username = username;
+    user.email = email;
+    user.interests = interests ?? [];
+    user.availability = availability ?? [];
+
+    user.location = {
+      lat: location?.lat ?? null,
+      lng: location?.lng ?? null,
+      radius: location?.radius ?? 5
+    };
 
     if (birthday) {
       const birthDate = new Date(birthday);
+
       if (Number.isNaN(birthDate.getTime())) {
-        return res.status(400).json({ success: false, message: 'Neveljaven datum rojstva.' });
+        return res.status(400).json({
+          success: false,
+          message: 'Neveljaven datum rojstva.'
+        });
       }
-      updateData.birthday = birthDate;
+
+      user.birthday = birthDate;
     }
 
     if (password && password.trim()) {
-      updateData.password = password;
+      user.password = password.trim();
     }
 
-    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
-
-    if (!updatedUser) {
-      return res.status(404).json({ success: false, message: 'Uporabnik ni najden.' });
-    }
+    const updatedUser = await user.save();
 
     if (req.session) {
       req.session.user = getSessionUser(updatedUser);
     }
 
-    return res.status(200).json({ success: true, user: updatedUser });
+    return res.status(200).json({
+      success: true,
+      user: getSessionUser(updatedUser)
+    });
   } catch (error) {
     console.error('Update profile error:', error);
-    return res.status(500).json({ success: false, message: 'Napaka pri posodobitvi profila.' });
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: 'Uporabniško ime ali email je že v uporabi.'
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: 'Napaka pri posodobitvi profila.'
+    });
   }
 };
 

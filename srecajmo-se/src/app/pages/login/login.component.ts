@@ -42,6 +42,10 @@ export class LoginComponent {
         this.loading = false;
         this.successMessage = res.message || 'Prijava uspešna!';
 
+        if (res.user) {
+          localStorage.setItem('user', JSON.stringify(res.user));
+        }
+
         setTimeout(() => {
           this.router.navigate(['/dashboard']);
         }, 600);
