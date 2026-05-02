@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { AuthService, User } from '../../services/auth.service';
 
 interface DayPart {
@@ -23,9 +24,11 @@ interface DashboardUser extends User {
 }
 
 interface GroupSuggestion {
+  id?: string;
   name: string;
   matchScore: number;
   members: string[];
+  memberIds?: string[];
   interests: string[];
   time: string;
   location: string;
@@ -61,11 +64,36 @@ export class DashboardComponent implements OnInit {
 
   suggestions: GroupSuggestion[] = [];
   confirmedMeetings: ConfirmedMeeting[] = [];
+  loadingSuggestions = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly http: HttpClient
+  ) {}
 
   ngOnInit(): void {
     this.loadDashboardUser();
+  }
+
+  loadSuggestions(userId: string): void {
+    if (!userId) return;
+    this.loadingSuggestions = true;
+
+    this.http
+      .get<GroupSuggestion[]>(`/api/suggestions/${userId}`, {
+        withCredentials: true
+      })
+      .subscribe({
+        next: (data) => {
+          this.suggestions = data || [];
+          this.loadingSuggestions = false;
+        },
+        error: (err) => {
+          console.error('Napaka pri nalaganju predlogov:', err);
+          this.suggestions = [];
+          this.loadingSuggestions = false;
+        }
+      });
   }
 
   loadDashboardUser(): void {
@@ -79,8 +107,9 @@ export class DashboardComponent implements OnInit {
         const rawAvailability = user.availability || [];
         const normalizedAvailability = this.normalizeAvailability(rawAvailability);
 
-        this.user = {
+        const dashboardUser: DashboardUser = {
           ...user,
+          id: user.id || user._id,
           age: this.calculateAge(user.birthday),
           interests: user.interests || [],
           availability: normalizedAvailability,
@@ -92,7 +121,12 @@ export class DashboardComponent implements OnInit {
           }
         };
 
+        this.user = dashboardUser;
         this.loading = false;
+
+        if (dashboardUser.activeSearch && dashboardUser.id) {
+          this.loadSuggestions(dashboardUser.id);
+        }
       },
       error: (err: any) => {
         this.loading = false;
@@ -207,11 +241,29 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleSearch(): void {
-    if (!this.user) return;
+    if (!this.user?.id) return;
 
-    this.user.activeSearch = !this.user.activeSearch;
+    const userId = this.user.id;
+    const newState = !this.user.activeSearch;
+    const endpoint = newState ? 'activate-search' : 'deactivate-search';
 
-    // Later this should call backend
+    this.http
+      .put(`/api/admin/users/${endpoint}/${userId}`, {}, { withCredentials: true })
+      .subscribe({
+        next: () => {
+          if (!this.user) return;
+          this.user.activeSearch = newState;
+
+          if (newState) {
+            this.loadSuggestions(userId);
+          } else {
+            this.suggestions = [];
+          }
+        },
+        error: (err) => {
+          console.error('Napaka pri spremembi iskanja:', err);
+        }
+      });
   }
 
   acceptSuggestion(suggestion: GroupSuggestion): void {

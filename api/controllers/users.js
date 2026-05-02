@@ -99,10 +99,26 @@ export const activateSearch = async (req, res) => {
   }
 };
 
+export const deactivateSearch = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findByIdAndUpdate(userId, { activeSearch: false }, { new: true });
+
+    if (req.session?.user) {
+      req.session.user.activeSearch = false;
+    }
+
+    return res.status(200).json({ success: true, user });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export default {
   getAllUsers,
   deactivateUser,
   activateUser,
   updateProfile,
   activateSearch,
+  deactivateSearch,
 };

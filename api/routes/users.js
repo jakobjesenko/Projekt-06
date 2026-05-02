@@ -15,7 +15,10 @@ usersRouter.put("/:userId/activate", usersCtrl.activateUser);
 // PUT /api/auth/profile/:userId
 usersRouter.put('/profile/:userId', usersCtrl.updateProfile);
 
-// PUT /api/auth/activate-search/:userId
+// PUT /api/admin/users/activate-search/:userId
 usersRouter.put('/activate-search/:userId', usersCtrl.activateSearch);
+
+// PUT /api/admin/users/deactivate-search/:userId
+usersRouter.put('/deactivate-search/:userId', usersCtrl.deactivateSearch);
 
 export default usersRouter;
