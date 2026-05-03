@@ -103,12 +103,12 @@ Znotraj meja sistema so vse komponente: Angular frontend, Node.js/Express REST A
 
 ### 4.2 Osrednji arhitekturni pogledi
 
-**Razredni diagram**
+##Razredni diagram
 Razredni diagram prikazuje strukturo sistema na treh ravneh: mejne razrede (zeleni), ki predstavljajo zaslonske maske, kontrolne razrede (rdeči), ki vsebujejo poslovno logiko, in entitetne razrede (modri), ki hranijo podatke. Mejni razredi so vsaka stran v aplikaciji (registracija, prijava, profil, nadzorna plošča, admin plošče). Kontrolni razredi upravljajo procese, kot so registracija, prijava, iskanje skupin in pošiljanje e-pošte. Entitetni razredi predstavljajo trajne podatke: uporabnike, profile, skupine, sporočila, prijave in parametre algoritma. Povezave med razredi so označene s števnostmi (npr. en uporabnik ima en profil, ena skupina ima več članov). Diagram je izhodišče za izvedbo podatkovne baze in programskih razredov.
 
 ![Razredni Diagram](./gradivo/img/razredniDiagram.png)
 
-**Arhitektura sistema**
+##Arhitektura sistema
 Seznam elementov in skrbnikov:
 | Element | Namen | Skrbnik |
 |---------|-------|---------|
@@ -123,25 +123,19 @@ Seznam elementov in skrbnikov:
 | Krmilniki | Upravljanje različnih delov aplikacije | Leja Petrič |
 | E-mail servis | Pošilja e-maile za verifikacijo profila in ponastavitev gesla | Aleks Gogić |
 
-**Logični pogled (paketni diagram)**
+##Logični pogled (paketni diagram)
 ![Paketni Diagram](./gradivo/img/paketni_diagram.png "Paketni diagram")
 
-**Procesni pogled (diagram aktivnosti)**
+##Procesni pogled (diagram aktivnosti)
 ![Diagram Aktivnosti](./gradivo/img/diagram_aktivnosti.png "Diagram aktivnosti")
 
-**Razvojni pogled (komponentni diagram)**
+##Razvojni pogled (komponentni diagram)
 ![Komponentni Diagram](./gradivo/img/komponentni_diagram.png "Komponentni diagram")
 
-**Fizični pogled (postavitveni diagram)**
+##Fizični pogled (postavitveni diagram)
 ![Postavitveni Diagram](./gradivo/img/postavitveni_diagram.png "Postavitveni diagram")
 
-**Diagrami za osnovne in alternativne tokove**
 ## Diagrami zaporedja za osnovne in alternativne tokove
-
-V nadaljevanju so predstavljeni diagrami zaporedja za primere uporabe od 1 do 7. Vsak diagram prikazuje interakcije med akterjem, mejnimi razredi (zaslonske maske), kontrolnimi razredi (logika) in entitetnimi razredi (podatki) za določen scenarij.
-
----
-
 ### 1. Registracija
 
 **Osnovni tok:** Gost odpre masko za registracijo, izpolni tri korake, sistem validira podatke, ustvari nepotrjen račun in pošlje verifikacijsko povezavo. Gost odpre povezavo in sistem aktivira račun.
@@ -280,145 +274,185 @@ V nadaljevanju so predstavljeni diagrami zaporedja za primere uporabe od 1 do 7.
 
 ![Pregled skupin in chata E2](./gradivo/img/7-Pregled%20skupin%20in%20chata%20-%20Izjemni%20tok%20E2%20(skupina%20postane%20neveljavna).png)
 
-**8. Odločitev o udeležbi**
+---
 
-![Odločitev o udeležbi osnovni](./gradivo/img/8-Odločitev%20o%20udeležbi.png "Odločitev o udeležbi osnovni")
+### 8. Odločitev o udeležbi
 
-  - Alternativni tok potrditev udeležbe
+**Osnovni tok:** Uporabnik iz pregleda skupine izbere potrditev ali zavrnitev. Sistem preveri, ali je skupina še veljavna, zabeleži odločitev in posodobi status odziva.
 
-  ![Odločitev o udeležbi A1](./gradivo/img/8-Alt%20tok%20(potrditev%20udeležbe).png "Odločitev o udeležbi A1")
+![Odločitev o udeležbi osnovni](./gradivo/img/8-Odločitev%20o%20udeležbi.png)
 
-  - Alternativni tok zavrnitev udeležbe
+**Alternativni tok A1 (potrditev udeležbe):** Uporabnik izbere potrditev. Sistem preveri veljavnost skupine, zabeleži status "potrjeno" in posodobi status odziva.
 
-  ![Odločitev o udeležbi A2](./gradivo/img/8-Alt%20tok%20(zavrnitev%20udeležbe).png "Odločitev o udeležbi A2")
+![Odločitev o udeležbi A1](./gradivo/img/8-Alt%20tok%20(potrditev%20udeležbe).png)
 
-  - Izjemni tok predlog ni več aktiven
+**Alternativni tok A2 (zavrnitev predloga):** Uporabnik izbere zavrnitev. Sistem preveri veljavnost skupine, zabeleži status "zavrnjeno" in posodobi status odziva.
 
-  ![Odločitev o udeležbi E1](./gradivo/img/8-Izjemni%20(predlog%20ni%20aktiven).png "Odločitev o udeležbi E1")
+![Odločitev o udeležbi A2](./gradivo/img/8-Alt%20tok%20(zavrnitev%20udeležbe).png)
 
-**9. Oddaja povratne informacije**
+**Izjemni tok E1 (predlog ni več aktiven):** Uporabnik izbere potrditev ali zavrnitev, vendar sistem zazna, da predlog ni več veljaven. Zavrne akcijo in osveži seznam predlogov.
 
-![Oddaja povratne informacije osnovni](./gradivo/img/9-Oddaja%20povratne%20informacije.png "Oddaja povratne informacije osnovni")
+![Odločitev o udeležbi E1](./gradivo/img/8-Izjemni%20(predlog%20ni%20aktiven).png)
 
-  - Alternativni tok oddaja samo ocene
+---
 
-  ![Oddaja povratne informacije A1](./gradivo/img/9-Alt%20tok%20(oddaja%20samo%20ocene).png "Oddaja povratne informacijei A1")
+### 9. Oddaja povratne informacije
 
-  - Izjemni tok uporabnik je že oddal povratno informacijo
+**Osnovni tok:** Sistem prikaže poziv za oddajo povratne informacije. Uporabnik vnese oceno in komentar. Sistem preveri veljavnost in shrani povratno informacijo.
 
-  ![Oddaja povratne informacije E1](./gradivo/img/9-Izjemni%20(podvojena%20oddaja).png "Oddaja povratne informacije E1")
+![Oddaja povratne informacije osnovni](./gradivo/img/9-Oddaja%20povratne%20informacije.png)
 
-  - Izjemni tok napaka pri shranjevanju
+**Alternativni tok A1 (oddaja samo ocene):** Uporabnik vnese samo oceno in pusti komentar prazen. Sistem sprejme oddajo in shrani povratno informacijo.
 
-  ![Oddaja povratne informacije E2](./gradivo/img/9-Izjemni%20(napaka%20pri%20shranjevanju).png "Oddaja povratne informacije E2")
+![Oddaja povratne informacije A1](./gradivo/img/9-Alt%20tok%20(oddaja%20samo%20ocene).png)
 
-**10. Prijava neprimernega vedenja**
+**Izjemni tok E1 (uporabnik je že oddal povratno informacijo):** Uporabnik poskuša oddati povratno informacijo za isti dogodek. Sistem zazna podvojitev in zavrne oddajo.
 
-![Prijava neprimernega vedenja osnovni](./gradivo/img/10-Prijava%20neprimernega%20vedenja.png "Prijava neprimernega vedenja osnovni")
+![Oddaja povratne informacije E1](./gradivo/img/9-Izjemni%20(podvojena%20oddaja).png)
 
-  - Alternativni tok dopolnitev prijave
+**Izjemni tok E2 (napaka pri shranjevanju):** Sistem ne uspe shraniti podatkov. Ponudi ponovni poskus. Uporabnik ponovi oddajo in sistem uspešno shrani.
 
-  ![Prijava neprimernega vedenja A1](./gradivo/img/10-Alt%20tok%20(dopolnitev%20prijave).png "Prijava neprimernega vedenja A1")
+![Oddaja povratne informacije E2](./gradivo/img/9-Izjemni%20(napaka%20pri%20shranjevanju).png)
 
-  - Izjemni tok neprimerno izpolnjena prijava
+---
 
-  ![Prijava neprimernega vedenja E1](./gradivo/img/10-Izjemni%20(neveljavni%20podatki).png "Prijava neprimernega vedenja E1")
+### 10. Prijava neprimernega vedenja
 
-**11. Pregled informacij**  
+**Osnovni tok:** Uporabnik odpre skupino, izbere uporabnika in možnost "Prijavi neprimerno vedenje". Sistem prikaže obrazec. Uporabnik vnese opis incidenta in odda prijavo. Sistem shrani prijavo in potrdi prejem.
 
-![Pregled informacij osnovni](./gradivo/img/11-Pregled%20informacij.png "Pregled informacij osnovni")
+![Prijava neprimernega vedenja osnovni](./gradivo/img/10-Prijava%20neprimernega%20vedenja.png)
 
-  - Alternativni tok branje več informacijskih strani
+**Alternativni tok A1 (dopolnitev prijave):** Uporabnik odda prijavo. Sistem potrdi prejem. Uporabnik se vrne in dopolni opis. Sistem shrani spremembo.
 
-  ![Pregled informacij A1](./gradivo/img/11-Alt%20tok%20(branje%20več%20info%20strani).png "Pregled informacij A1")
+![Prijava neprimernega vedenja A1](./gradivo/img/10-Alt%20tok%20(dopolnitev%20prijave).png)
 
-  - Izjemni tok informacijska stran ni dosegljiva
+**Izjemni tok E1 (neprimerno izpolnjena prijava):** Uporabnik vpiše podatke, ki ne izpolnjujejo zahtev. Sistem zavrne oddajo in označi obvezna polja. Uporabnik popravi podatke in ponovno odda prijavo.
 
-  ![Pregled informacij E1](./gradivo/img/11-Izjemni%20(stran%20ni%20dosegljiva).png "Pregled informacij E1")
+![Prijava neprimernega vedenja E1](./gradivo/img/10-Izjemni%20(neveljavni%20podatki).png)
 
-**12. Kontaktni obrazec**
+---
 
-![Kontaktni obrazec osnovni](./gradivo/img/12-Kontaktni%20obrazec.png "Kontaktni obrazec osnovni")
+### 11. Pregled informacij
 
-  - Alternativni tok dopolnitev obrazca pred oddajo
+**Osnovni tok:** Gost ali uporabnik v footerju odpre izbrano informacijsko stran. Sistem prikaže vsebino izbrane strani.
 
-  ![Kontaktni obrazec A1](./gradivo/img/12-Alt%20tok%20(dopolnitev%20obrazca).png "Kontaktni obrazec A1")
+![Pregled informacij osnovni](./gradivo/img/11-Pregled%20informacij.png)
 
-  - Izjemni tok neveljavno izpolnjen kontaktni obrazec
+**Alternativni tok A1 (branje več informacijskih strani):** Uporabnik odpre prvo informacijsko stran, nato odpre še drugo. Sistem prikaže obe vsebini.
 
-  ![Kontaktni obrazec E1](./gradivo/img/12-Izjemni%20(neveljavni%20podatki).png "Kontaktni obrazec E1")
+![Pregled informacij A1](./gradivo/img/11-Alt%20tok%20(branje%20več%20info%20strani).png)
 
-**13. Upravljanje uporabnikov (administrator)**
+**Izjemni tok E1 (informacijska stran ni dosegljiva):** Sistem poskuša naložiti vsebino, vendar nalaganje ne uspe. Prikaže opozorilo in možnost ponovnega nalaganja. Uporabnik ponovi zahtevo in sistem prikaže vsebino.
 
-![Upravljanje uporabnikov (administrator) osnovni](./gradivo/img/13-Upravljanje%20uporabnikov%20(admin).png "Upravljanje uporabnikov (administrator) osnovni")
+![Pregled informacij E1](./gradivo/img/11-Izjemni%20(stran%20ni%20dosegljiva).png)
 
-  - Alternativni tok opozorilo uporabniku
+---
 
-  ![Upravljanje uporabnikov (administrator) A1](./gradivo/img/13-Alt%20tok%20(opozorilo).png "Upravljanje uporabnikov (administrator) A1")
+### 12. Kontaktni obrazec
 
-  - Izjemni tok administrator nima ustreznih pravic
+**Osnovni tok:** Gost ali uporabnik odpre stran "Kontakt", vpiše podatke in odda obrazec. Sistem preveri veljavnost, shrani sporočilo in potrdi prejem.
 
-  ![Upravljanje uporabnikov (administrator) E1](./gradivo/img/13-Izjemni%20(nima%20ustreznih%20pravic).png "Upravljanje uporabnikov (administrator) E1")
+![Kontaktni obrazec osnovni](./gradivo/img/12-Kontaktni%20obrazec.png)
 
-  - Izjemni tok konflikt stanja računa
+**Alternativni tok A1 (dopolnitev obrazca pred oddajo):** Uporabnik vpiše del obrazca, nato opazi manjkajoče podatke. Dopolni obvezna polja in ponovno odda obrazec.
 
-  ![Upravljanje uporabnikov (administrator) E2](./gradivo/img/13-Izjemni%20(konflikt%20stanja).png "Upravljanje uporabnikov (administrator) E2")
+![Kontaktni obrazec A1](./gradivo/img/12-Alt%20tok%20(dopolnitev%20obrazca).png)
 
-**14. Pregled kontaktnih obrazcev in prijav neprimernega vedenja**
+**Izjemni tok E1 (neveljavno izpolnjen kontaktni obrazec):** Uporabnik odda obrazec z manjkajočimi ali napačnimi podatki. Sistem zavrne oddajo in označi napake v poljih. Uporabnik popravi obrazec in ponovno odda.
 
-![Pregled kontaktnih obrazcev in prijav neprimernega vedenja osnovni](./gradivo/img/14-Pregled%20obvestil,%20prijav%20in%20kontaktov.png "Pregled kontaktnih obrazcev in prijav neprimernega vedenja osnovni")
+![Kontaktni obrazec E1](./gradivo/img/12-Izjemni%20(neveljavni%20podatki).png)
 
-  - Alternativni tok eskalacija obvestila
+---
 
-  ![Pregled kontaktnih obrazcev in prijav neprimernega vedenja A1](./gradivo/img/14-Alt%20tok%20(eskalacija%20obvestila).png "Pregled kontaktnih obrazcev in prijav neprimernega vedenja A1")
+### 13. Upravljanje uporabnikov (administrator)
 
-  - Alternativni tok eskalacija na upravljanje uporabnika
+**Osnovni tok:** Administrator odpre sekcijo Uporabniki. Sistem prikaže paginiran seznam uporabnikov. Administrator izvede akcijo (blokiraj/deblokiraj/aktiviraj/deaktiviraj/opozori).
 
-  ![Pregled kontaktnih obrazcev in prijav neprimernega vedenja A2](./gradivo/img/14-Alt%20tok%20(eskalacija%20na%20upravljanje%20uporabnika).png "Pregled kontaktnih obrazcev in prijav neprimernega vedenja A2")
+![Upravljanje uporabnikov (admin) osnovni](./gradivo/img/13-Upravljanje%20uporabnikov%20(admin).png)
 
-  - Izjemni tok podrobnosti obvestila niso dosegljive
+**Alternativni tok A1 (opozorilo uporabniku):** Administrator odpre izbranega uporabnika in izbere akcijo "Opozori". Sistem shrani opozorilo in uporabnika označi z rumeno vizualno oznako.
 
-  ![Pregled kontaktnih obrazcev in prijav neprimernega vedenja E1](./gradivo/img/14-Izjemni%20(podrobnosti%20niso%20dosegljive).png "Pregled kontaktnih obrazcev in prijav neprimernega vedenja E1")
+![Upravljanje uporabnikov (admin) A1](./gradivo/img/13-Alt%20tok%20(opozorilo).png)
 
-**15. Pregled skupin in chata**
+**Izjemni tok E1 (administrator nima ustreznih pravic):** Administrator sproži administrativno akcijo, vendar sistem preveri pravice in akcijo zavrne. Prikaže razlog zavrnitve.
 
-![Pregled skupin in chata osnovni](./gradivo/img/15-Pregled%20skupin%20in%20chata.png "Pregled skupin in chata osnovni")
+![Upravljanje uporabnikov (admin) E1](./gradivo/img/13-Izjemni%20(nima%20ustreznih%20pravic).png)
 
-  - Alternativni tok filtriranje pred vpogledom
+**Izjemni tok E2 (konflikt stanja računa):** Administrator izvede akcijo nad uporabnikom, vendar sistem zazna konflikt stanja v drugi seji. Sistem osveži seznam uporabnikov in administrator ponovi akcijo.
 
-  ![Pregled skupin in chata A1](./gradivo/img/15-Alt%20tok%20(filtriranje).png "Pregled skupin in chata A1")
+![Upravljanje uporabnikov (admin) E2](./gradivo/img/13-Izjemni%20(konflikt%20stanja).png)
 
-  - Izjemni tok podatki chata niso dosegljivi
+---
 
-  ![Pregled skupin in chata E1](./gradivo/img/15-Izjemni%20(podatki%20chata%20niso%20dosegljivi).png "Pregled skupin in chata E1")
+### 14. Pregled kontaktnih obrazcev in prijav (administrator)
 
-**16. Pregled povratnih informacij (administrator)**
+**Osnovni tok:** Administrator odpre sekcijo Obvestila. Sistem prikaže seznam obvestil. Administrator odpre podrobnosti in označi obvestilo kot obdelano.
 
-![Pregled povratnih informacij (administrator) osnovni](./gradivo/img/16-Pregled%20povratnih%20info.png "Pregled povratnih informacij (administrator) osnovni")
+![Pregled obvestil, prijav in kontaktov osnovni](./gradivo/img/14-Pregled%20obvestil,%20prijav%20in%20kontaktov.png)
 
-  - Alternativni tok filtriranje povratnih informacij po skupini
+**Alternativni tok A1 (eskalacija obvestila):** Administrator odpre obvestilo visoke prioritete in izbere možnost eskalacije. Sistem označi obvestilo kot eskalirano in ga posreduje v nadaljnjo obravnavo.
 
-  ![Pregled povratnih informacij (administrator) A1](./gradivo/img/16-Alt%20tok%20(filtriranje).png "Pregled povratnih informacij (administrator) A1")
+![Pregled obvestil, prijav in kontaktov A1](./gradivo/img/14-Alt%20tok%20(eskalacija%20obvestila).png)
 
-  - Izjemni tok povratne informacije za skupino niso dosegljive
+**Alternativni tok A2 (eskalacija na upravljanje uporabnika):** Administrator pri pregledu prijave ugotovi, da je potrebna administrativna akcija. Izbere možnost "Upravljaj uporabnika", sistem ga preusmeri na sekcijo za upravljanje uporabnikov. Po izvedeni akciji se vrne nazaj.
 
-  ![Pregled povratnih informacij (administrator) E1](./gradivo/img/16-Izjemni%20(povratne%20info%20niso%20dosegljive).png "Pregled povratnih informacij (administrator) E1")
+![Pregled obvestil, prijav in kontaktov A2](./gradivo/img/14-Alt%20tok%20(eskalacija%20na%20upravljanje%20uporabnika).png)
 
-**17. Upravljanje pametne komponente**
+**Izjemni tok E1 (podrobnosti obvestila niso dosegljive):** Sistem ne naloži podrobnosti obvestila. Prikaže opozorilo in možnost ponovnega nalaganja. Administrator ponovi zahtevo in sistem naloži podrobnosti.
 
-![Upravljanje pametne komponente osnovni](./gradivo/img/17-Upravljanje%20pametne%20komponente.png "Upravljanje pametne komponente osnovni")
+![Pregled obvestil, prijav in kontaktov E1](./gradivo/img/14-Izjemni%20(podrobnosti%20niso%20dosegljive).png)
 
-  - Alternativni tok spremljanje brez spremembe parametrov
+---
 
-  ![Upravljanje pametne komponente A1](./gradivo/img/17-Alt%20tok%20(brez%20spremembe%20parametrov).png "Upravljanje pametne komponente A1")
+### 15. Pregled skupin in chata (administrator)
 
-  - Izjemni tok parametri so izven dovoljenih mej
+**Osnovni tok:** Administrator odpre sekcijo Skupine. Sistem prikaže seznam vseh skupin. Administrator odpre izbrano skupino in pregleda chat.
 
-  ![Upravljanje pametne komponente E1](./gradivo/img/17-Izjemni%20(parametri%20izven%20mej).png "Upravljanje pametne komponente E1")
+![Pregled skupin in chata (admin) osnovni](./gradivo/img/15-Pregled%20skupin%20in%20chata.png)
 
-  - Izjemni tok konflikt sočasnih sprememb
+**Alternativni tok A1 (filtriranje pred vpogledom):** Administrator nastavi filtre (status, obdobje, št. članov). Sistem osveži seznam skupin. Administrator nato odpre izbrano skupino.
 
-  ![Upravljanje pametne komponente E1](./gradivo/img/17-Izjemni%20(sočasne%20spremembe).png "Upravljanje pametne komponente E1")
+![Pregled skupin in chata (admin) A1](./gradivo/img/15-Alt%20tok%20(filtriranje).png)
+
+**Izjemni tok E1 (podatki chata niso dosegljivi):** Sistem ne uspe naložiti podatkov chata. Prikaže opozorilo in možnost ponovnega poskusa. Administrator ponovi nalaganje in sistem prikaže chat.
+
+![Pregled skupin in chata (admin) E1](./gradivo/img/15-Izjemni%20(podatki%20chata%20niso%20dosegljivi).png)
+
+---
+
+### 16. Pregled povratnih informacij (administrator)
+
+**Osnovni tok:** Administrator odpre sekcijo Skupine, nato izbrano skupino. Sistem prikaže povprečno oceno, število oddanih ocen in seznam komentarjev.
+
+![Pregled povratnih informacij (admin) osnovni](./gradivo/img/16-Pregled%20povratnih%20info.png)
+
+**Alternativni tok A1 (filtriranje povratnih informacij po skupini):** Administrator uporabi filtre za določeno skupino ali obdobje. Sistem osveži prikaz povratnih informacij.
+
+![Pregled povratnih informacij (admin) A1](./gradivo/img/16-Alt%20tok%20(filtriranje).png)
+
+**Izjemni tok E1 (povratne informacije za skupino niso dosegljive):** Sistem ne naloži povratnih informacij. Prikaže opozorilo in možnost ponovnega nalaganja. Administrator ponovi nalaganje in sistem prikaže podatke.
+
+![Pregled povratnih informacij (admin) E1](./gradivo/img/16-Izjemni%20(povratne%20info%20niso%20dosegljive).png)
+
+---
+
+### 17. Upravljanje pametne komponente
+
+**Osnovni tok:** Administrator odpre sekcijo Pametna komponenta. Sistem prikaže ključne metrike kakovosti. Administrator po potrebi spremeni parametre algoritma. Sistem zabeleži spremembo in prikaže primerjavo metrik pred/po spremembi.
+
+![Upravljanje pametne komponente osnovni](./gradivo/img/17-Upravljanje%20pametne%20komponente.png)
+
+**Alternativni tok A1 (spremljanje brez spremembe parametrov):** Administrator pregleda metrike in trend po obdobjih, vendar ne spremeni parametrov. Sistem ne zabeleži spremembe nastavitev.
+
+![Upravljanje pametne komponente A1](./gradivo/img/17-Alt%20tok%20(brez%20spremembe%20parametrov).png)
+
+**Izjemni tok E1 (parametri so izven dovoljenih mej):** Administrator spremeni parameter z neveljavno vrednostjo. Sistem zavrne spremembo in prikaže dovoljene meje. Administrator vnese veljavno vrednost in sistem zabeleži spremembo.
+
+![Upravljanje pametne komponente E1](./gradivo/img/17-Izjemni%20(parametri%20izven%20mej).png)
+
+**Izjemni tok E2 (konflikt sočasnih sprememb):** Administrator spremeni parameter, medtem ko drug administrator sočasno ureja isti parameter. Sistem pri shranjevanju zazna konflikt in zahteva osvežitev. Administrator osveži podatke, ponovno odda spremembo in sistem jo zabeleži.
+
+![Upravljanje pametne komponente E2](./gradivo/img/17-Izjemni%20(sočasne%20spremembe).png)
 
 - Za vsak pogled zagotovite osrednji diagram (npr. postavitveni ([deployment](https://plantuml.com/deployment-diagram)), paketni ([class](https://plantuml.com/class-diagram)) diagram oz. komponentni ([component](https://plantuml.com/component-diagram)) diagram).
   - Pri predlogu upoštevajte arhitekturne in načrtovalske vzorce.
