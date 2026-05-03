@@ -457,60 +457,34 @@ Seznam elementov in skrbnikov:
 
 ## Diagram stanj
 
-Diagrami stanj prikazujejo življenjske cikle ključnih entitet v sistemu. Za vsako pomembno entiteto smo pripravili diagram, ki opisuje dovoljena stanja, prehode med njimi in dogodke, ki te prehode sprožijo.
-
 *Diagram stanj za uporabnika*
-
 Uporabniški račun je lahko v štirih stanjih: **Nepotrjen** (takoj po registraciji), **Aktiven** (po uspešni verifikaciji), **Blokiran** in **Deaktiviran** (slednji dve stanji nastavi administrator). Iz nepotrjenega stanja uporabnik preide v aktivnega z odprtjem verifikacijske povezave. Administrator lahko aktivnega uporabnika blokira ali deaktivira ter ga iz teh stanj tudi vrne nazaj v aktivnega.
-
 ![Diagram stanj - Uporabnik](./gradivo/img/Uporabnik.png)
 
 *Diagram stanj za skupino*
-
 Skupina (predlog za srečanje) ima štiri stanja: **Predlog** (ustvarjen s strani pametne komponente), **Aktivna** (ko vsaj trije člani potrdijo udeležbo), **Zaključena** (po izvedenem srečanju) in **Razveljavljena** (če premalo članov potrdi udeležbo ali administrator odpove srečanje).
-
 ![Diagram stanj - Skupina](./gradivo/img/Skupina.png)
 
 *Diagram stanj za člana skupine*
-
 Vsak član skupine ima svoj status odziva: **Neodločen** (privzeto po vstopu v skupino), **Potrdil** (uporabnik je potrdil udeležbo) in **Zavrnil** (uporabnik je zavrnil udeležbo). Dokler skupina ni aktivna, lahko uporabnik svojo odločitev poljubno spreminja.
-
 ![Diagram stanj - ČlanSkupine](./gradivo/img/ČlanSkupine.png)
 
 *Diagram stanj za prijavo neprimernega vedenja*
-
 Prijava, ki jo odda uporabnik, ima tri stanja: **Nova** (pravkar oddana, čaka na obravnavo), **Obdelana** (administrator jo je pregledal in zaključil) in **Eskalirana** (administrator jo je posredoval v nadaljnjo obravnavo). Eskalirano prijavo nato zaključi višji administrator.
-
 ![Diagram stanj - Prijava](./gradivo/img/Prijava.png)
 
 *Diagram stanj za verifikacijski žeton*
-
 Verifikacijski žeton (za potrditev e-pošte ali ponastavitev gesla) je lahko **Veljaven** (ustvarjen in poslan uporabniku), **Uporabljen** (uporabnik je odprl povezavo) ali **Potekel** (uporabnik povezave ni odprl v časovni omejitvi, npr. 24 ur).
-
 ![Diagram stanj - VerifikacijskiŽeton](./gradivo/img/VerifikacijskiŽeton.png)
 
 *Diagram stanj za parametre algoritma*
-
 Parametri pametne komponente (uteži w1, w2, w3) imajo tri stanja: **Osnovni** (privzeti parametri ob zagonu sistema), **Spremenjeni** (administrator je spremenil parametre) in **Arhivirani** (stara verzija parametrov, shranjena v zgodovino). Arhivirani parametri se po enem letu izbrišejo.
-
 ![Diagram stanj - ParametriAlgoritma](./gradivo/img/ParametriAlgoritma.png)
 
 *Diagram stanj za uporabniško sejo (JWT)*
-
 Uporabniška seja ima tri stanja: **Brez seje** (uporabnik ni prijavljen), **Aktivna seja** (uporabnik je uspešno prijavljen) in **Potekla seja** (JWT žeton je potekel zaradi neaktivnosti ali izteka časa). Iz potekle seje se uporabnik vrne v stanje brez seje, ko poskusi dostopati do zaščitene strani.
-
 ![Diagram stanj - Uporabniška seja](./gradivo/img/UporabniškaSeja.png)
 
-    - **Psevdokoda**
-
-      > **assume** vrednost1 &subseteq; C, vrednost2 &subseteq; C  
-      > **let** maxVrednost1 = max {r | (s,r) &in; vrednost1}  
-      > **for** (s, r) **in** vrednost2:  
-      > &nbsp;&nbsp;&nbsp;&nbsp;**if** r &le; maxVrednost1 **return false**  
-      > **return true**
-
-- Za arhitekturne elemente v diagramu dodajte katalog elementov z imenom in namenom vsakega elementa.
-- Za vsak element določite enega člana ekipe (tudi, če je več članov ekipe prispevalo k elementu), ki bo njen skrbnik.
 
 ## 5 Trenutno stanje
 
