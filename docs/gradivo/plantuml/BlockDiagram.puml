@@ -6,46 +6,69 @@ skinparam rectangle {
     BorderColor Black
     RoundCorner 0
 }
+skinparam packageStyle rectangle
 skinparam arrowColor Black
 
-rectangle "**UPORABNIŠKI VMESNIK**\n\n- Javni del (gost)\n- Uporabniška nadzorna plošča\n- Administratorska nadzorna plošča\n- Skupinski chat" as UI
+rectangle "**UPORABNIŠKI VMESNIK (Angular SPA)**\n\n- Javni del (gost)\n- Registracija / prijava\n- Uporabniška nadzorna plošča\n- Urejanje profila\n- Predlogi srečanj\n- Skupinski chat\n- Administratorska nadzorna plošča" as UI
 
-rectangle "**API GATEWAY**\n- Usmerjanje zahtev\n- Avtentikacija in avtorizacija" as Gateway
+rectangle "**BACKEND API (Node.js / Express)**\n\n- REST API\n- JWT / session avtentikacija\n- avtorizacija uporabnik / admin\n- Socket.io za chat v realnem času" as API
 
-rectangle "**APLIKACIJSKI NIVO**" as AppLayer {
-    
-    rectangle "AVTENTIKACIJA & VARNOST\n- prijava\n- registracija\n- ponastavitev gesla" as Auth
-    rectangle "UPRAVLJANJE UPORABNIKOV\n- profil\n- interesi, lokacija, čas" as Users
-    rectangle "POVEZOVANJE V SKUPINE\n- iskanje skupin\n- predlogi skupin\n- odločitev (sprejmi/zavrni)" as Matching
-    rectangle "PAMETNA KOMPONENTA\n- algoritem za oblikovanje skupin\n- podobnost interesov\n- geografska bližina\n- časovno ujemanje" as Smart
-    
-    Matching --> Smart
+package "**APLIKACIJSKI NIVO**" as AppLayer {
 
-    rectangle "CHAT\n- pošiljanje sporočil" as Chat
-    rectangle "POVRATNE INFO IN PRIJAVE\n- ocene srečanj\n- prijava vedenja" as Feedback
-    rectangle "ADMIN MODUL\n- upravljanje uporabnikov\n- upravljanje skupin\n- pregled prijav\n- metrike algoritma" as Admin
-  
-    Auth -[hidden]d-> Chat
-    Users -[hidden]d-> Feedback
+    rectangle "AVTENTIKACIJA & VARNOST\n- registracija\n- prijava / odjava\n- verifikacija e-pošte\n- ponastavitev gesla\n- JWT / session" as Auth
+
+    rectangle "UPRAVLJANJE UPORABNIKOV\n- profil uporabnika\n- interesi\n- lokacija\n- razpoložljivost\n- activeSearch" as Users
+
+    rectangle "PREDLOGI / PAMETNA KOMPONENTA\n- scoring algoritem\n- podobnost interesov\n- geografska bližina\n- časovno ujemanje\n- generiranje predlogov srečanj" as Suggestions
+
+    rectangle "SREČANJA\n- ustvarjanje srečanj\n- prikaz predlogov\n- sprejmi / zavrni\n- potrjena srečanja\n- statusi srečanj" as Meetings
+
+    rectangle "CHAT / SPOROČILA\n- pošiljanje sporočil\n- prikaz sporočil\n- Socket.io sobe" as Chat
+
+    rectangle "OCENE & PRIJAVE\n- ocene srečanj\n- komentarji\n- prijava vedenja" as Feedback
+
+    rectangle "KONTAKT\n- kontaktni obrazec\n- sporočila uporabnikov" as Contact
+
+    rectangle "ADMIN MODUL\n- pregled uporabnikov\n- aktivacija / deaktivacija\n- pregled prijav\n- pregled srečanj\n- analitika sistema" as Admin
 }
 
-rectangle "**PODATKOVNA PLAST**" as DataLayer {
-    rectangle "Uporabniki\n(profili, interesi,\nlokacija, razpoložljivost)" as DB_Users
-    rectangle "Skupine (predlogi,\nstatusi)" as DB_Groups
-    rectangle "Sporočila (chat)" as DB_Chat
-    rectangle "Povratne\ninformacije" as DB_Feedback
-    rectangle "Prijave vedenja" as DB_Reports
-    
-    DB_Users -[hidden]r-> DB_Groups
-    DB_Chat -[hidden]r-> DB_Feedback
-    DB_Feedback -[hidden]r-> DB_Reports
+package "**PODATKOVNA PLAST (MongoDB)**" as DataLayer {
+    rectangle "users\n- računi\n- profili\n- interesi\n- lokacija\n- razpoložljivost\n- vloge" as DB_Users
+
+    rectangle "meetings\n- srečanja\n- člani\n- statusi\n- lokacija\n- datum" as DB_Meetings
+
+    rectangle "messages\n- chat sporočila" as DB_Messages
+
+    rectangle "ratings\n- ocene srečanj\n- komentarji" as DB_Ratings
+
+    rectangle "reports\n- prijave vedenja" as DB_Reports
+
+    rectangle "contacts\n- kontaktna sporočila" as DB_Contacts
+
+    rectangle "analytics\n- statistika sistema\n- metrični zapisi" as DB_Analytics
 }
 
-rectangle "**ZUNANJE STORITVE**\n\n- Geokodirni API (lokacije → koordinate)\n- E-poštni servis (verifikacija, ponastavitev gesla)" as External
+rectangle "**ZUNANJE STORITVE**\n\n- Geokodirni API (lokacija → koordinate)\n- E-poštni servis (verifikacija, ponastavitev gesla)" as External
 
-UI --> Gateway
-Gateway --> AppLayer
+UI --> API
+API --> AppLayer
 AppLayer --> DataLayer
-AppLayer ---> External
+AppLayer --> External
+
+Suggestions --> Users
+Suggestions --> Meetings
+
+Auth --> DB_Users
+Users --> DB_Users
+Suggestions --> DB_Users
+Meetings --> DB_Meetings
+Chat --> DB_Messages
+Feedback --> DB_Ratings
+Feedback --> DB_Reports
+Contact --> DB_Contacts
+Admin --> DB_Users
+Admin --> DB_Meetings
+Admin --> DB_Reports
+Admin --> DB_Analytics
 
 @enduml

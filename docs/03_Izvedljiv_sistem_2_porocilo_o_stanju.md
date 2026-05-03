@@ -358,12 +358,60 @@ Uporabniška seja ima tri stanja: **Brez seje** (uporabnik ni prijavljen), **Akt
 
 ## 5 Trenutno stanje
 
-- Kakšni dodatni cilji te iteracije, poleg tega, kar je že navedeno v [uvodu](#1-uvod)?
-  - Kaj deluje? Vključite posnetke zaslona.
-  - Kakšni izzivi?
-  - Uporabite blokovni diagram za razlago trenutnega sistema.
-- Katere teste ste izvedli?
-- Koliko vrstic kode ste napisali (skupno do tega trenutka)?
+### Cilji te iteracije
+
+Glavni cilji te iteracije so bili: vzpostavitev podatkovne baze, razvoj celotnega backenda z REST API-jem ter implementacija ključnih delov Angular frontenda (registracija, prijava, nadzorna plošča, potrjevanje srečanj, urejanje profila, chat).
+
+### Kaj deluje?
+
+- Registracija, ki sestoji iz treh korakov in vsebuje potrditev preko maila
+
+![Prvi korak registracije](gradivo/img/kajDelujeRegistracija1.png)
+
+![Drugi korak registracije](gradivo/img/kajDelujeRegistracija2.png)
+
+![Tretji korak registracije](gradivo/img/kajDelujeRegistracija3.png)
+
+![Potrditev računa](gradivo/img/kajDelujeRegistracijaPotrditev.png)
+
+- Prijava v račun
+
+![Prijava v račun](gradivo/img/kajDelujeLogin.png)
+
+- Dashboard, ki poišče in prikaže predloge za skupine z največjo verjetnostjo ujemanja
+
+![Dashboard](gradivo/img/kajDelujeDashboard.png)
+
+- Možnost urejanja profila
+
+![Urejanje profila](gradivo/img/kajDelujeUrediProfil.png)
+
+- Potrjevanje srečanj in prikaz le-teh
+
+![Potrjena srečanja](gradivo/img/kajDelujePotrjenaSrecanja.png)
+
+- Pogovor (chat) znotraj potrjenega srečanja
+
+![chat](gradivo/img/kajDelujeChat.png)
+
+### Blokovni diagram trenutnega sistema
+
+![Blokovni diagram](./gradivo/img/blockDiagram.png 'Blokovni diagram')
+
+**Blokovni diagram sistema** (izvorna koda [PlantUML](./gradivo/plantuml/BlockDiagram.puml))
+
+Diagram prikazuje trenutno arhitekturo sistema za spontana družabna srečanja. Uporabniki do aplikacije dostopajo prek Angular uporabniškega vmesnika, ki omogoča registracijo, prijavo, urejanje profila, pregled predlogov srečanj, chat in administratorski pregled. Zahteve se pošiljajo na backend, implementiran z Node.js in Express, kjer se izvajajo avtentikacija, upravljanje uporabnikov, predlogi srečanj, chat, ocene, prijave in administracija. Aplikacijski nivo komunicira z MongoDB podatkovno plastjo, ki vsebuje kolekcije users, meetings, messages, ratings, reports, contacts in analytics.
+Sistem uporablja tudi zunanje storitve, predvsem e-poštni servis za verifikacijo računa in ponastavitev gesla ter geokodirni API za pretvorbo lokacije v koordinate.
+
+### Testi
+V tej iteraciji smo izvedli predvsem ročno funkcionalno testiranje, integracijsko testiranje med frontendom in backendom ter testiranje z ročno pripravljenimi testnimi podatki v MongoDB.
+Ročno testiranje smo izvajali tako, da smo aplikacijo uporabljali kot končni uporabniki in preverjali, ali se posamezni uporabniški tokovi izvedejo pravilno. Pri tem smo preizkušali tako pravilne vnose kot tudi neveljavne podatke in robne primere.
+V okviru unit testiranja smo preverjali manjše, izolirane funkcije za generiranje testnih podatkov. Testi so se osredotočali na to, ali posamezna funkcija vrne podatke v pričakovani strukturi in z vrednostmi, ki ustrezajo pravilom podatkovnega modela.
+
+### Število vrstic kode
+
+- Število vrstic (demo aplikacija): 2500
+- Število vrstic kode naše aplikacije do tega trenutka: okrog 15000
 
 ## 6 Vodenje projekta
 
