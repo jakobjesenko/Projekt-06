@@ -1,0 +1,40 @@
+@startuml
+title E1 - Neveljavni podatki pri prijavi
+
+actor "Uporabnik" as User
+boundary "PregledSkupineMaska" as UI
+control "PrijaveKontroler" as Controller
+entity "Prijave" as Reports
+
+User -> UI: odpre obrazec za prijavo
+activate UI
+
+User -> UI: vnese neveljavne podatke
+User -> UI: odda prijavo
+
+UI -> Controller: oddajPrijavo(...)
+activate Controller
+
+Controller -> Controller: preveriVeljavnostPodatkov()
+
+alt neveljavniPodatki
+    Controller --> UI: napaka (manjkajoča / napačna polja)
+    UI --> User: označi obvezna polja
+    
+    User -> UI: popravi podatke
+    User -> UI: ponovno odda prijavo
+    
+    UI -> Controller: oddajPrijavo(...)
+    
+    Controller -> Reports: shraniPrijavo(...)
+    activate Reports
+    Reports --> Controller: prijavaShranjena
+    deactivate Reports
+
+    Controller --> UI: potrditevPrejema
+    UI --> User: prikaz potrditve
+end
+
+deactivate Controller
+deactivate UI
+@enduml

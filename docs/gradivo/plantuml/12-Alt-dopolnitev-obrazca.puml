@@ -1,0 +1,41 @@
+@startuml
+title A1 - Dopolnitev kontaktnega obrazca
+
+actor "Gost/Uporabnik" as Visitor
+boundary "KontaktnaMaska" as UI
+control "KontaktKontroler" as Controller
+entity "KontaktnaSporočila" as Messages
+entity "EmailServis" as Email
+
+Visitor -> UI: odpre stran "Kontakt"
+activate UI
+UI --> Visitor: prikaže obrazec
+
+Visitor -> UI: vpiše del podatkov
+Visitor -> UI: opazi manjkajoča polja
+Visitor -> UI: dopolni podatke
+
+Visitor -> UI: odda obrazec
+
+UI -> Controller: oddajKontaktnoSporočilo(...)
+activate Controller
+
+Controller -> Controller: preveriVeljavnostPodatkov()
+
+Controller -> Messages: shraniSporočilo(...)
+activate Messages
+Messages --> Controller: sporočiloShranjeno
+deactivate Messages
+
+Controller -> Email: pošljiObvestiloAdminu(...)
+activate Email
+Email --> Controller: obvestiloPoslano
+deactivate Email
+
+Controller --> UI: potrditevPrejema
+deactivate Controller
+
+UI --> Visitor: prikaz potrditve
+
+deactivate UI
+@enduml

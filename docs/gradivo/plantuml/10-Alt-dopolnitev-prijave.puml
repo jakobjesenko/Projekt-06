@@ -1,0 +1,50 @@
+@startuml
+title A1 - Dopolnitev prijave
+
+actor "Uporabnik" as User
+boundary "PregledSkupineMaska" as UI
+control "PrijaveKontroler" as Controller
+entity "Prijave" as Reports
+
+User -> UI: izbere uporabnika in prijavi vedenje
+activate UI
+
+UI -> Controller: odpriObrazecZaPrijavo(...)
+activate Controller
+Controller --> UI: obrazec
+deactivate Controller
+
+User -> UI: vnese opis in odda prijavo
+
+UI -> Controller: oddajPrijavo(...)
+activate Controller
+
+Controller -> Reports: shraniPrijavo(...)
+activate Reports
+Reports --> Controller: prijavaShranjena
+deactivate Reports
+
+Controller --> UI: potrditevPrejema
+deactivate Controller
+
+UI --> User: prikaz potrditve
+
+== Dopolnitev prijave ==
+
+User -> UI: odpre obstoječo prijavo
+User -> UI: dopolni opis
+
+UI -> Controller: posodobiPrijavo(prijavaId, novOpis)
+activate Controller
+
+Controller -> Reports: posodobiPrijavo(...)
+activate Reports
+Reports --> Controller: spremembaShranjena
+deactivate Reports
+
+Controller --> UI: uspeh
+deactivate Controller
+
+UI --> User: prikaz posodobljene prijave
+deactivate UI
+@enduml

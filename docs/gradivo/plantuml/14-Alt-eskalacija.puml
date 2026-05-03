@@ -1,0 +1,46 @@
+@startuml
+title A1 - Eskalacija obvestila
+
+actor "Administrator" as Admin
+boundary "AdminObvestilaMaska" as UI
+control "AdminObvestilaKontroler" as Controller
+entity "Prijave/Kontakti" as Notifications
+
+Admin -> UI: odpre sekcijo "Obvestila"
+activate UI
+
+UI -> Controller: pridobiSeznamObvestil(...)
+activate Controller
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže seznam
+
+Admin -> UI: odpre obvestilo visoke prioritete
+
+UI -> Controller: pridobiPodrobnostiObvestila(...)
+activate Controller
+Controller -> Notifications: najdiObvestilo(...)
+activate Notifications
+Notifications --> Controller: podrobnosti
+deactivate Notifications
+Controller --> UI: podrobnosti
+deactivate Controller
+
+UI --> Admin: prikaže podrobnosti
+
+Admin -> UI: izbere "Eskaliraj"
+
+UI -> Controller: eskalirajObvestilo(obvestiloId)
+activate Controller
+Controller -> Notifications: označiKotEskalirano(obvestiloId)
+activate Notifications
+Notifications --> Controller: posodobljeno
+deactivate Notifications
+
+Controller --> UI: uspeh
+deactivate Controller
+
+UI --> Admin: osvežen seznam (status eskalirano)
+
+deactivate UI
+@enduml

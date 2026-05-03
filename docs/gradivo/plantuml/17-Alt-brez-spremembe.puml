@@ -1,0 +1,37 @@
+@startuml
+title A1 - Spremljanje brez spremembe parametrov
+
+actor "Administrator" as Admin
+boundary "AdminPametnaKomponentaMaska" as UI
+control "AdminPametnaKontroler" as Controller
+entity "PametnaKomponenta" as Smart
+entity "MetrikeZgodovina" as MetricsHistory
+
+Admin -> UI: odpre sekcijo "Pametna komponenta"
+activate UI
+
+UI -> Controller: pridobiMetrikeKakovosti(...)
+activate Controller
+
+Controller -> Smart: izračunajTrenutneMetrike()
+activate Smart
+Smart --> Controller: metrike
+deactivate Smart
+
+Controller -> MetricsHistory: pridobiZgodovinoMetrik()
+activate MetricsHistory
+MetricsHistory --> Controller: časovna vrsta
+deactivate MetricsHistory
+
+Controller --> UI: metrike + zgodovina
+deactivate Controller
+
+UI --> Admin: prikaže trende
+
+== samo pregled, brez sprememb ==
+
+Admin -> UI: pregleda podatke (brez sprememb)
+Admin -> UI: zapre pogled
+
+deactivate UI
+@enduml

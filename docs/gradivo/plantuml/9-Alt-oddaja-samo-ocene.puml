@@ -1,0 +1,41 @@
+@startuml
+title A1 - Oddaja samo ocene
+
+actor "Uporabnik" as User
+boundary "PovratnaInfoMaska" as UI
+control "PovratneInfoKontroler" as Controller
+entity "PovratneInformacije" as Feedback
+entity "Skupine" as Groups
+
+Sistem -> User: prikaže poziv za oddajo
+
+User -> UI: odpre obrazec
+activate UI
+
+User -> UI: vnese oceno (komentar prazen)
+User -> UI: odda obrazec
+
+UI -> Controller: oddajPovratnoInfo(..., ocena, "", jwt)
+activate Controller
+
+Controller -> Feedback: preveriŽeOddano(...)
+activate Feedback
+Feedback --> Controller: niOddano = da
+deactivate Feedback
+
+Controller -> Feedback: shraniPovratnoInfo(ocena, "")
+activate Feedback
+Feedback --> Controller: shranjeno
+deactivate Feedback
+
+Controller -> Groups: posodobiPovprečnoOceno(...)
+activate Groups
+Groups --> Controller: ocenaPosodobljena
+deactivate Groups
+
+Controller --> UI: uspeh
+deactivate Controller
+
+UI --> User: potrditev oddaje
+deactivate UI
+@enduml

@@ -1,0 +1,40 @@
+@startuml
+title Diagram zaporedja - Odločitev o udeležbi (osnovni tok)
+
+actor "Uporabnik" as User
+boundary "PregledSkupineMaska" as UI
+control "OdločitevKontroler" as Controller
+entity "Skupine" as Groups
+entity "Člani" as Members
+
+User -> UI: izbere potrditev ali zavrnitev udeležbe
+activate UI
+
+UI -> Controller: posodobiStatusUdeležbe(skupinaId, uporabnikId, odločitev, jwtŽeton)
+activate Controller
+
+Controller -> Groups: preveriVeljavnostSkupine(skupinaId)
+activate Groups
+Groups --> Controller: skupinaVeljavna (da/ne)
+deactivate Groups
+
+alt skupinaNiVeljavna
+    Controller --> UI: napaka (predlog ni več aktiven)
+    UI --> User: prikaži obvestilo in osveži seznam
+else skupinaVeljavna
+    Controller -> Members: zabeležiOdločitev(skupinaId, uporabnikId, odločitev)
+    activate Members
+    Members --> Controller: odločitevShranjena
+    deactivate Members
+    
+    Controller -> Groups: posodobiStatusOdziva(skupinaId, uporabnikId, odločitev)
+    activate Groups
+    Groups --> Controller: statusPosodobljen
+    deactivate Groups
+    
+    Controller --> UI: uspeh
+    deactivate Controller
+    UI --> User: prikaže potrditev in posodobljen status
+end
+deactivate UI
+@enduml

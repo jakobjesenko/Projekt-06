@@ -1,0 +1,56 @@
+@startuml
+title A2 - Eskalacija na upravljanje uporabnika
+
+actor "Administrator" as Admin
+boundary "AdminObvestilaMaska" as UI
+control "AdminObvestilaKontroler" as Controller
+entity "Prijave" as Reports
+
+Admin -> UI: odpre sekcijo "Obvestila"
+activate UI
+
+UI -> Controller: pridobiSeznamObvestil(...)
+activate Controller
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže seznam
+
+Admin -> UI: odpre prijavo
+
+UI -> Controller: pridobiPodrobnostiObvestila(...)
+activate Controller
+Controller -> Reports: najdiPrijavo(...)
+activate Reports
+Reports --> Controller: podrobnosti (targetUserId)
+deactivate Reports
+Controller --> UI: podrobnosti
+deactivate Controller
+
+UI --> Admin: prikaže podrobnosti
+
+Admin -> UI: izbere "Upravljaj uporabnika"
+
+UI --> Admin: preusmeritev na sekcijo "Uporabniki" (z izbranim uporabnikom)
+
+== Upravljanje uporabnika ==
+
+Admin -> UI: izvede akcijo (blokiraj/opozori/...)
+UI -> Controller: izvediAkcijoNaUporabniku(...)
+activate Controller
+Controller --> UI: uspeh
+deactivate Controller
+
+UI -> Controller: označiKotObdelano(obvestiloId)
+activate Controller
+Controller -> Reports: označiKotObdelano(...)
+activate Reports
+Reports --> Controller: posodobljeno
+deactivate Reports
+
+Controller --> UI: uspeh
+deactivate Controller
+
+UI --> Admin: osvežen seznam
+
+deactivate UI
+@enduml

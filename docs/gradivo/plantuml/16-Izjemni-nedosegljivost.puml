@@ -1,0 +1,64 @@
+@startuml
+title E1 - Povratne informacije niso dosegljive
+
+actor "Administrator" as Admin
+boundary "AdminSkupineMaska" as UI
+control "AdminPovratneInfoKontroler" as Controller
+entity "Skupine" as Groups
+entity "PovratneInformacije" as Feedback
+
+Admin -> UI: odpre sekcijo "Skupine"
+activate UI
+
+UI -> Controller: pridobiSeznamSkupin(...)
+activate Controller
+Controller -> Groups: najdiVseSkupine()
+activate Groups
+Groups --> Controller: seznam
+deactivate Groups
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže seznam
+
+Admin -> UI: izbere skupino
+
+UI -> Controller: pridobiPovratneInformacijeZaSkupino(...)
+activate Controller
+
+Controller -> Feedback: izračunajPovprečnoOceno(...)
+activate Feedback
+Feedback --> Controller: napaka
+deactivate Feedback
+
+Controller --> UI: napaka (ni podatkov)
+UI --> Admin: opozorilo + možnost ponovnega nalaganja
+
+== Ponovni poskus ==
+
+Admin -> UI: ponovno naloži
+
+UI -> Controller: pridobiPovratneInformacijeZaSkupino(...)
+
+activate Controller
+Controller -> Feedback: izračunajPovprečnoOceno(...)
+activate Feedback
+Feedback --> Controller: povprečnaOcena
+deactivate Feedback
+
+Controller -> Feedback: pridobiSeznamKomentarjev(...)
+activate Feedback
+Feedback --> Controller: komentarji
+deactivate Feedback
+
+Controller -> Groups: pridobiŠteviloOddanihOcen(...)
+activate Groups
+Groups --> Controller: število
+deactivate Groups
+
+Controller --> UI: podatki
+deactivate Controller
+
+UI --> Admin: prikaže povratne informacije
+
+deactivate UI
+@enduml

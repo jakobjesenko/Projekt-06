@@ -1,0 +1,48 @@
+@startuml
+title Diagram zaporedja - Pregled povratnih informacij (admin)
+
+actor "Administrator" as Admin
+boundary "AdminSkupineMaska" as UI
+control "AdminPovratneInfoKontroler" as Controller
+entity "Skupine" as Groups
+entity "PovratneInformacije" as Feedback
+
+Admin -> UI: odpre sekcijo "Skupine"
+activate UI
+
+UI -> Controller: pridobiSeznamSkupin(adminJwt)
+activate Controller
+Controller -> Controller: preveriAdminPravice(adminJwt)
+Controller -> Groups: najdiVseSkupine()
+activate Groups
+Groups --> Controller: seznamSkupin
+deactivate Groups
+Controller --> UI: seznamSkupin
+deactivate Controller
+UI --> Admin: prikaže seznam skupin
+
+Admin -> UI: izbere skupino za pregled povratnih informacij
+UI -> Controller: pridobiPovratneInformacijeZaSkupino(skupinaId, adminJwt)
+activate Controller
+Controller -> Controller: preveriAdminPravice(adminJwt)
+
+Controller -> Feedback: izračunajPovprečnoOceno(skupinaId)
+activate Feedback
+Feedback --> Controller: povprečnaOcena
+deactivate Feedback
+
+Controller -> Feedback: pridobiSeznamKomentarjev(skupinaId)
+activate Feedback
+Feedback --> Controller: seznamKomentarjev (z avtorji, časom)
+deactivate Feedback
+
+Controller -> Groups: pridobiŠteviloOddanihOcen(skupinaId)
+activate Groups
+Groups --> Controller: številoOcen
+deactivate Groups
+
+Controller --> UI: povprečnaOcena + številoOcen + seznamKomentarjev
+deactivate Controller
+UI --> Admin: prikaže agregirane podatke in komentarje
+deactivate UI
+@enduml

@@ -1,0 +1,52 @@
+@startuml
+title E2 - Konflikt stanja uporabnika
+
+actor "Administrator" as Admin
+boundary "AdminUporabnikiMaska" as UI
+control "AdminUporabnikiKontroler" as Controller
+entity "Uporabnik" as User
+
+Admin -> UI: odpre sekcijo "Uporabniki"
+activate UI
+
+UI -> Controller: pridobiSeznamUporabnikov(...)
+activate Controller
+Controller -> User: najdiVseUporabnike(...)
+activate User
+User --> Controller: seznamUporabnikov
+deactivate User
+
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže seznam
+
+Admin -> UI: izvede akcijo nad uporabnikom
+
+UI -> Controller: izvediAkcijo(...)
+activate Controller
+
+Controller -> Controller: preveriAdminPravice()
+
+Controller -> User: izvediAkcijoNaUporabniku(...)
+activate User
+User --> Controller: konfliktStanja
+deactivate User
+
+Controller --> UI: napaka (konflikt stanja)
+UI --> Admin: obvestilo + osvežitev seznama
+
+UI -> Controller: pridobiSeznamUporabnikov(...)
+activate Controller
+Controller -> User: najdiVseUporabnike(...)
+activate User
+User --> Controller: osveženSeznam
+deactivate User
+
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže osvežen seznam
+
+Admin -> UI: ponovi akcijo
+
+deactivate UI
+@enduml

@@ -1,0 +1,59 @@
+@startuml
+title Diagram zaporedja - Upravljanje pametne komponente (admin)
+
+actor "Administrator" as Admin
+boundary "AdminPametnaKomponentaMaska" as UI
+control "AdminPametnaKontroler" as Controller
+entity "PametnaKomponenta" as Smart
+entity "MetrikeZgodovina" as MetricsHistory
+
+Admin -> UI: odpre sekcijo "Pametna komponenta"
+activate UI
+
+UI -> Controller: pridobiMetrikeKakovosti(adminJwt)
+activate Controller
+Controller -> Controller: preveriAdminPravice(adminJwt)
+
+Controller -> Smart: izračunajTrenutneMetrike()
+activate Smart
+Smart --> Controller: metrike (npr. povprečna ocena skupin, sprejetost predlogov, čas izračuna)
+deactivate Smart
+
+Controller -> MetricsHistory: pridobiZgodovinoMetrik(zadnjih 30 dni)
+activate MetricsHistory
+MetricsHistory --> Controller: časovnaVrstaMetrik
+deactivate MetricsHistory
+
+Controller --> UI: trenutneMetrike + zgodovina
+deactivate Controller
+UI --> Admin: prikaže ključne metrike in trende
+
+Admin -> UI: spremeni parameter algoritma (npr. utež w1, w2, w3)
+UI -> Controller: posodobiParametre(noviParametri, adminJwt)
+activate Controller
+Controller -> Controller: validirajParametre(znotrajMeja)
+alt parametriNeveljavni
+    Controller --> UI: napaka (dovoljene meje)
+    UI --> Admin: prikaži napako in dovoljene meje
+else parametriVeljavni
+    Controller -> Smart: nastaviNoveParametre(noviParametri)
+    activate Smart
+    Smart --> Controller: parametriSpremenjeni
+    deactivate Smart
+    
+    Controller -> MetricsHistory: zabeležiSprememboParametrov(adminId, stariParametri, noviParametri, timestamp)
+    activate MetricsHistory
+    MetricsHistory --> Controller: spremembaZabeležena
+    deactivate MetricsHistory
+    
+    Controller -> Smart: simulirajPrimerjavoMetrik(stariParametri, noviParametri)
+    activate Smart
+    Smart --> Controller: primerjavaMetrik (pred/po)
+    deactivate Smart
+    
+    Controller --> UI: uspeh + primerjavaMetrik
+    deactivate Controller
+    UI --> Admin: prikaže primerjavo (pred/po spremembi)
+end
+deactivate UI
+@enduml

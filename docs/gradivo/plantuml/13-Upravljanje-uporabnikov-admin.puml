@@ -1,0 +1,40 @@
+@startuml
+title Diagram zaporedja - Upravljanje uporabnikov (admin, osnovni tok)
+
+actor "Administrator" as Admin
+boundary "AdminUporabnikiMaska" as UI
+control "AdminUporabnikiKontroler" as Controller
+entity "Uporabnik" as User
+
+Admin -> UI: odpre sekcijo "Uporabniki"
+activate UI
+
+UI -> Controller: pridobiSeznamUporabnikov(adminJwt, stran, velikostStrani)
+activate Controller
+Controller -> Controller: preveriAdminPravice(adminJwt)
+alt nimaPravic
+    Controller --> UI: napaka (zavrnitev)
+    UI --> Admin: prikaže "ni pravic"
+else imaPravice
+    Controller -> User: najdiVseUporabnike(skip, limit)
+    activate User
+    User --> Controller: paginiranSeznamUporabnikov
+    deactivate User
+    Controller --> UI: seznamUporabnikov + metapodatki (skupaj strani, ...)
+    deactivate Controller
+    UI --> Admin: prikaže paginiran seznam uporabnikov
+
+    Admin -> UI: izbere akcijo (blokiraj/deblokiraj/aktiviraj/deaktiviraj/opozori) na izbranem uporabniku
+    UI -> Controller: izvediAkcijo(uporabnikId, tipAkcije, adminJwt)
+    activate Controller
+    Controller -> Controller: preveriAdminPravice(adminJwt)
+    Controller -> User: izvediAkcijoNaUporabniku(uporabnikId, tipAkcije)
+    activate User
+    User --> Controller: akcijaUspešna (novStatus)
+    deactivate User
+    Controller --> UI: potrditev + osveženPodatekUporabnika
+    deactivate Controller
+    UI --> Admin: posodobi prikaz (npr. blokiran uporabnik je označen)
+end
+deactivate UI
+@enduml

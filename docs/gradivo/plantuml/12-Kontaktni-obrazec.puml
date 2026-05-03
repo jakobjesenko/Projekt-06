@@ -1,0 +1,34 @@
+@startuml
+title Diagram zaporedja - Kontaktni obrazec (osnovni tok)
+
+actor "Gost/Uporabnik" as Visitor
+boundary "KontaktnaMaska" as UI
+control "KontaktKontroler" as Controller
+entity "KontaktnaSporočila" as Messages
+entity "EmailServis" as Email
+
+Visitor -> UI: v footerju odpre stran "Kontakt"
+activate UI
+UI --> Visitor: prikaže obrazec (ime, priimek, e-naslov, zadeva, sporočilo)
+
+Visitor -> UI: vpiše ime, priimek, e-naslov, zadevo, sporočilo
+Visitor -> UI: odda obrazec
+
+UI -> Controller: oddajKontaktnoSporočilo(ime, priimek, eNaslov, zadeva, vsebina)
+activate Controller
+
+Controller -> Messages: shraniSporočilo(podatki)
+activate Messages
+Messages --> Controller: sporočiloShranjeno
+deactivate Messages
+
+Controller -> Email: pošljiObvestiloAdminu(zadeva, vsebina, eNaslov pošiljatelja)
+activate Email
+Email --> Controller: obvestiloPoslano
+deactivate Email
+
+Controller --> UI: potrditevPrejema
+deactivate Controller
+UI --> Visitor: prikaže potrditev (sporočilo je bilo oddano)
+deactivate UI
+@enduml

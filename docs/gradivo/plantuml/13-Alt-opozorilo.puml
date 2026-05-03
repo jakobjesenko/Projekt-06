@@ -1,0 +1,43 @@
+@startuml
+title A1 - Opozorilo uporabniku
+
+actor "Administrator" as Admin
+boundary "AdminUporabnikiMaska" as UI
+control "AdminUporabnikiKontroler" as Controller
+entity "Uporabnik" as User
+
+Admin -> UI: odpre sekcijo "Uporabniki"
+activate UI
+
+UI -> Controller: pridobiSeznamUporabnikov(...)
+activate Controller
+Controller -> Controller: preveriAdminPravice()
+
+Controller -> User: najdiVseUporabnike(...)
+activate User
+User --> Controller: seznamUporabnikov
+deactivate User
+
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže seznam
+
+Admin -> UI: izbere uporabnika + akcijo "Opozori"
+
+UI -> Controller: izvediAkcijo(uporabnikId, "opozori", jwt)
+activate Controller
+
+Controller -> Controller: preveriAdminPravice()
+
+Controller -> User: shraniOpozorilo(uporabnikId)
+activate User
+User --> Controller: opozoriloShranjeno
+deactivate User
+
+Controller --> UI: uspeh + statusPosodobljen
+deactivate Controller
+
+UI --> Admin: uporabnik označen (rumeno)
+
+deactivate UI
+@enduml

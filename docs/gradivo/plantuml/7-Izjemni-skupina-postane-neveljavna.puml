@@ -1,0 +1,61 @@
+@startuml
+title E2 - Skupina postane neveljavna med prikazom (uporabnik)
+
+actor "Uporabnik" as User
+boundary "PregledSkupineMaska" as UI
+control "SkupineKontroler" as Controller
+entity "Skupine" as Groups
+entity "Člani" as Members
+entity "ChatSporočila" as Chat
+
+User -> UI: odpre izbrano skupino
+activate UI
+
+UI -> Controller: pridobiPodatkeSkupine(skupinaId, jwt)
+activate Controller
+
+Controller -> Groups: najdiSkupino(skupinaId)
+activate Groups
+Groups --> Controller: podatkiSkupine
+deactivate Groups
+
+Controller -> Members: najdiČlane(skupinaId)
+activate Members
+Members --> Controller: seznamČlanov
+deactivate Members
+
+Controller --> UI: podatki + člani
+deactivate Controller
+
+UI --> User: prikaže podatke skupine
+
+== sprememba stanja med prikazom ==
+
+Controller -> Groups: preveriStatusSkupine(skupinaId)
+activate Groups
+Groups --> Controller: NEVELJAVNA
+deactivate Groups
+
+Controller --> UI: opozorilo (skupina neveljavna)
+UI --> User: zapre pregled in osveži seznam
+
+User -> UI: izbere drugo skupino
+UI -> Controller: pridobiPodatkeSkupine(novaSkupinaId, jwt)
+
+activate Controller
+Controller -> Groups: najdiSkupino(novaSkupinaId)
+activate Groups
+Groups --> Controller: podatkiSkupine
+deactivate Groups
+
+Controller -> Members: najdiČlane(novaSkupinaId)
+activate Members
+Members --> Controller: člani
+deactivate Members
+
+Controller --> UI: novi podatki
+UI --> User: prikaže novo skupino
+
+deactivate Controller
+deactivate UI
+@enduml

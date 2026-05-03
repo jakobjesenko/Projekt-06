@@ -1,0 +1,49 @@
+@startuml
+title Diagram zaporedja - Pregled skupin in chata (admin)
+
+actor "Administrator" as Admin
+boundary "AdminSkupineMaska" as UI
+control "AdminSkupineKontroler" as Controller
+entity "Skupine" as Groups
+entity "Člani" as Members
+entity "ChatSporočila" as Chat
+
+Admin -> UI: odpre sekcijo "Skupine"
+activate UI
+
+UI -> Controller: pridobiSeznamVsehSkupin(adminJwt, filtri, stran)
+activate Controller
+Controller -> Controller: preveriAdminPravice(adminJwt)
+Controller -> Groups: najdiVseSkupine(filtri, skip, limit)
+activate Groups
+Groups --> Controller: paginiranSeznamSkupin
+deactivate Groups
+Controller --> UI: seznamSkupin
+deactivate Controller
+UI --> Admin: prikaže seznam skupin (z možnostjo filtriranja)
+
+Admin -> UI: izbere skupino za vpogled
+UI -> Controller: pridobiPodrobnostiSkupineZChatom(skupinaId, adminJwt)
+activate Controller
+Controller -> Controller: preveriAdminPravice(adminJwt)
+
+Controller -> Groups: najdiSkupino(skupinaId)
+activate Groups
+Groups --> Controller: podatkiSkupine
+deactivate Groups
+
+Controller -> Members: najdiČlane(skupinaId)
+activate Members
+Members --> Controller: seznamČlanov (vključno z njihovimi statusi)
+deactivate Members
+
+Controller -> Chat: najdiZgodovinoChat(skupinaId, brezZgornjeMeje)
+activate Chat
+Chat --> Controller: vsaSporočila (časovno)
+deactivate Chat
+
+Controller --> UI: podatkiSkupine + seznamČlanov + vsaChatSporočila
+deactivate Controller
+UI --> Admin: prikaže vpogled (člani, statusi, celoten chat)
+deactivate UI
+@enduml

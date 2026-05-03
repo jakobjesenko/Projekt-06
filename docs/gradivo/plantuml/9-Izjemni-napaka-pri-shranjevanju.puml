@@ -1,0 +1,53 @@
+@startuml
+title E2 - Napaka pri shranjevanju in ponovni poskus
+
+actor "Uporabnik" as User
+boundary "PovratnaInfoMaska" as UI
+control "PovratneInfoKontroler" as Controller
+entity "PovratneInformacije" as Feedback
+entity "Skupine" as Groups
+
+Sistem -> User: prikaže poziv za oddajo
+
+User -> UI: odpre obrazec
+activate UI
+
+User -> UI: vnese oceno in komentar
+User -> UI: odda obrazec
+
+UI -> Controller: oddajPovratnoInfo(..., ocena, komentar, jwt)
+activate Controller
+
+Controller -> Feedback: preveriŽeOddano(...)
+activate Feedback
+Feedback --> Controller: niOddano = da
+deactivate Feedback
+
+Controller -> Feedback: shraniPovratnoInfo(...)
+activate Feedback
+Feedback --> Controller: napakaPriShranjevanju
+deactivate Feedback
+
+Controller --> UI: napaka (shranjevanje ni uspelo)
+UI --> User: ponudi ponovni poskus
+
+User -> UI: ponovno odda obrazec
+
+UI -> Controller: oddajPovratnoInfo(..., ocena, komentar, jwt)
+
+Controller -> Feedback: shraniPovratnoInfo(...)
+activate Feedback
+Feedback --> Controller: shranjeno
+deactivate Feedback
+
+Controller -> Groups: posodobiPovprečnoOceno(...)
+activate Groups
+Groups --> Controller: ocenaPosodobljena
+deactivate Groups
+
+Controller --> UI: uspeh
+deactivate Controller
+
+UI --> User: potrditev oddaje
+deactivate UI
+@enduml

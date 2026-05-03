@@ -1,0 +1,57 @@
+@startuml
+title E2 - Konflikt sočasnih sprememb
+
+actor "Administrator" as Admin
+actor "Drugi administrator" as Admin2
+boundary "AdminPametnaKomponentaMaska" as UI
+control "AdminPametnaKontroler" as Controller
+entity "PametnaKomponenta" as Smart
+
+Admin -> UI: odpre pametno komponento
+Admin2 -> UI: odpre pametno komponento
+
+UI -> Controller: pridobiMetrikeKakovosti()
+activate Controller
+Controller -> Smart: izračunajTrenutneMetrike()
+activate Smart
+Smart --> Controller: metrike
+deactivate Smart
+Controller --> UI: podatki
+deactivate Controller
+
+== sočasna sprememba ==
+
+Admin -> UI: spremeni parameter A
+Admin2 -> UI: spremeni parameter A
+
+UI -> Controller: posodobiParametre(Admin)
+activate Controller
+Controller -> Smart: shraniParametre()
+
+Smart --> Controller: konflikt (zastarela verzija)
+
+Controller --> UI: konflikt (sočasna sprememba)
+UI --> Admin: zahteva osvežitev
+
+Admin -> UI: osveži podatke
+UI -> Controller: pridobiMetrikeKakovosti()
+
+Controller -> Smart: izračunajTrenutneMetrike()
+activate Smart
+Smart --> Controller: posodobljeni podatki
+deactivate Smart
+
+Controller --> UI: sveži podatki
+UI --> Admin: omogoči ponovni poskus
+
+Admin -> UI: ponovno odda spremembo
+UI -> Controller: posodobiParametre()
+
+Controller -> Smart: nastaviNoveParametre()
+Smart --> Controller: uspeh
+
+Controller --> UI: potrjeno
+deactivate Controller
+
+deactivate UI
+@enduml

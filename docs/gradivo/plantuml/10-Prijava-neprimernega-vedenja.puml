@@ -1,0 +1,40 @@
+@startuml
+title Diagram zaporedja - Prijava neprimernega vedenja (osnovni tok)
+
+actor "Uporabnik" as User
+boundary "PregledSkupineMaska" as UI
+control "PrijaveKontroler" as Controller
+entity "Prijave" as Reports
+entity "Uporabnik" as TargetUser
+
+User -> UI: odpre skupino in izbere uporabnika (kršitelja)
+activate UI
+
+User -> UI: izbere možnost "Prijavi neprimerno vedenje"
+UI -> Controller: odpriObrazecZaPrijavo(targetUserId, skupinaId)
+activate Controller
+Controller --> UI: obrazec
+deactivate Controller
+UI --> User: prikaže obrazec za prijavo
+
+User -> UI: vnese opis incidenta
+User -> UI: odda prijavo
+
+UI -> Controller: oddajPrijavo(targetUserId, skupinaId, opis, jwtŽeton)
+activate Controller
+
+Controller -> Reports: shraniPrijavo(prijaviteljId, targetUserId, skupinaId, opis, timestamp)
+activate Reports
+Reports --> Controller: prijavaShranjena
+deactivate Reports
+
+Controller -> TargetUser: povečajŠtevecPrijav(targetUserId) (opcijsko za alarm)
+activate TargetUser
+TargetUser --> Controller: števecPosodobljen
+deactivate TargetUser
+
+Controller --> UI: potrditevPrejema
+deactivate Controller
+UI --> User: prikaže potrditev (prijava oddana)
+deactivate UI
+@enduml

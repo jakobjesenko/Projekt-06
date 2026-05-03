@@ -1,0 +1,48 @@
+@startuml
+title A1 - Filtriranje skupin pred vpogledom
+
+actor "Administrator" as Admin
+boundary "AdminSkupineMaska" as UI
+control "AdminSkupineKontroler" as Controller
+entity "Skupine" as Groups
+
+Admin -> UI: odpre sekcijo "Skupine"
+activate UI
+
+UI -> Controller: pridobiSeznamVsehSkupin(...)
+activate Controller
+Controller -> Groups: najdiVseSkupine(...)
+activate Groups
+Groups --> Controller: seznamSkupin
+deactivate Groups
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže seznam
+
+== Nastavitev filtrov ==
+
+Admin -> UI: nastavi filtre (status, obdobje, št. članov)
+
+UI -> Controller: pridobiSeznamVsehSkupin(filtri)
+activate Controller
+Controller -> Groups: najdiVseSkupine(filtri)
+activate Groups
+Groups --> Controller: filtriranSeznam
+deactivate Groups
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže filtriran seznam
+
+== Vpogled v skupino ==
+
+Admin -> UI: izbere skupino
+
+UI -> Controller: pridobiPodrobnostiSkupineZChatom(...)
+activate Controller
+Controller --> UI: podatkiSkupine + chat
+deactivate Controller
+
+UI --> Admin: prikaže vpogled
+
+deactivate UI
+@enduml

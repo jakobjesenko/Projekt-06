@@ -1,0 +1,29 @@
+@startuml
+title E1 - Predlog ni več aktiven
+
+actor "Uporabnik" as User
+boundary "PregledSkupineMaska" as UI
+control "OdločitevKontroler" as Controller
+entity "Skupine" as Groups
+
+User -> UI: izbere potrditev ali zavrnitev
+activate UI
+
+UI -> Controller: posodobiStatusUdeležbe(..., odločitev, jwt)
+activate Controller
+
+Controller -> Groups: preveriVeljavnostSkupine(skupinaId)
+activate Groups
+Groups --> Controller: skupinaVeljavna = ne
+deactivate Groups
+
+Controller --> UI: napaka (predlog ni več aktiven)
+deactivate Controller
+
+UI --> User: obvestilo + osvežitev seznama
+
+User -> UI: izbere drug predlog
+User -> UI: ponovno odpre pregled skupine
+
+deactivate UI
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+title E1 - Neveljavni podatki v kontaktnem obrazcu
+
+actor "Gost/Uporabnik" as Visitor
+boundary "KontaktnaMaska" as UI
+control "KontaktKontroler" as Controller
+entity "KontaktnaSporočila" as Messages
+entity "EmailServis" as Email
+
+Visitor -> UI: odpre stran "Kontakt"
+activate UI
+UI --> Visitor: prikaže obrazec
+
+Visitor -> UI: vnese nepopolne / napačne podatke
+Visitor -> UI: odda obrazec
+
+UI -> Controller: oddajKontaktnoSporočilo(...)
+activate Controller
+
+Controller -> Controller: preveriVeljavnostPodatkov()
+
+alt neveljavniPodatki
+    Controller --> UI: napaka (manjkajoča / napačna polja)
+    UI --> Visitor: označi napake
+    
+    Visitor -> UI: popravi podatke
+    Visitor -> UI: ponovno odda obrazec
+    
+    UI -> Controller: oddajKontaktnoSporočilo(...)
+    
+    Controller -> Messages: shraniSporočilo(...)
+    activate Messages
+    Messages --> Controller: sporočiloShranjeno
+    deactivate Messages
+
+    Controller -> Email: pošljiObvestiloAdminu(...)
+    activate Email
+    Email --> Controller: obvestiloPoslano
+    deactivate Email
+
+    Controller --> UI: potrditevPrejema
+    UI --> Visitor: prikaz potrditve
+end
+
+deactivate Controller
+deactivate UI
+@enduml

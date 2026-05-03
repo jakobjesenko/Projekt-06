@@ -1,0 +1,69 @@
+@startuml
+title Diagram zaporedja - Pregled obvestil, prijav in kontaktov (admin)
+
+actor "Administrator" as Admin
+boundary "AdminObvestilaMaska" as UI
+control "AdminObvestilaKontroler" as Controller
+entity "KontaktnaSporočila" as ContactMessages
+entity "Prijave" as Reports
+
+Admin -> UI: odpre sekcijo "Obvestila"
+activate UI
+
+UI -> Controller: pridobiSeznamObvestil(adminJwt, typeFilter)
+activate Controller
+Controller -> Controller: preveriAdminPravice(adminJwt)
+
+Controller -> ContactMessages: pridobiNeprocesiranaKontaktnaSporočila()
+activate ContactMessages
+ContactMessages --> Controller: seznamKontaktnihSporočil
+deactivate ContactMessages
+
+Controller -> Reports: pridobiNeprocesiranePrijave()
+activate Reports
+Reports --> Controller: seznamPrijav
+deactivate Reports
+
+Controller --> UI: združenSeznamObvestil (kontakti + prijave)
+deactivate Controller
+UI --> Admin: prikaže seznam obvestil
+
+Admin -> UI: odpre podrobnosti obvestila
+UI -> Controller: pridobiPodrobnostiObvestila(obvestiloId, tip)
+activate Controller
+alt tip == "kontakt"
+    Controller -> ContactMessages: najdiSporočilo(obvestiloId)
+    activate ContactMessages
+    ContactMessages --> Controller: podrobnosti
+    deactivate ContactMessages
+else tip == "prijava"
+    Controller -> Reports: najdiPrijavo(obvestiloId)
+    activate Reports
+    Reports --> Controller: podrobnosti (vključno s targetUserId)
+    deactivate Reports
+end
+Controller --> UI: podrobnosti
+deactivate Controller
+UI --> Admin: prikaže podrobnosti
+
+Admin -> UI: označi obvestilo kot obdelano
+UI -> Controller: označiKotObdelano(obvestiloId, tip, adminJwt)
+activate Controller
+
+alt tip == "kontakt"
+    Controller -> ContactMessages: označiKotObdelano(obvestiloId)
+    activate ContactMessages
+    ContactMessages --> Controller: posodobljeno
+    deactivate ContactMessages
+else tip == "prijava"
+    Controller -> Reports: označiKotObdelano(obvestiloId)
+    activate Reports
+    Reports --> Controller: posodobljeno
+    deactivate Reports
+end
+
+Controller --> UI: uspeh
+deactivate Controller
+UI --> Admin: osveži seznam (obvestilo izginilo ali označeno)
+deactivate UI
+@enduml

@@ -1,0 +1,66 @@
+@startuml
+title E1 - Parametri izven dovoljenih mej
+
+actor "Administrator" as Admin
+boundary "AdminPametnaKomponentaMaska" as UI
+control "AdminPametnaKontroler" as Controller
+entity "PametnaKomponenta" as Smart
+entity "MetrikeZgodovina" as MetricsHistory
+
+Admin -> UI: odpre sekcijo "Pametna komponenta"
+activate UI
+
+UI -> Controller: pridobiMetrikeKakovosti(...)
+activate Controller
+
+Controller -> Smart: izračunajTrenutneMetrike()
+activate Smart
+Smart --> Controller: metrike
+deactivate Smart
+
+Controller -> MetricsHistory: pridobiZgodovinoMetrik()
+activate MetricsHistory
+MetricsHistory --> Controller: zgodovina
+deactivate MetricsHistory
+
+Controller --> UI: prikaz metrik
+deactivate Controller
+UI --> Admin: prikaže dashboard
+
+== sprememba parametrov ==
+
+Admin -> UI: vnese neveljavne parametre
+UI -> Controller: posodobiParametre(noviParametri)
+activate Controller
+
+Controller -> Controller: validirajParametre()
+
+alt parametriNeveljavni
+    Controller --> UI: napaka (izven meja)
+    UI --> Admin: prikaže dovoljene meje
+
+    Admin -> UI: popravi parametre
+    UI -> Controller: posodobiParametre(veljavniParametri)
+
+    Controller -> Smart: nastaviNoveParametre()
+    activate Smart
+    Smart --> Controller: OK
+    deactivate Smart
+
+    Controller -> MetricsHistory: zabeležiSpremembo()
+    activate MetricsHistory
+    MetricsHistory --> Controller: zapisano
+    deactivate MetricsHistory
+
+    Controller -> Smart: simulirajPrimerjavo()
+    activate Smart
+    Smart --> Controller: primerjava
+    deactivate Smart
+
+    Controller --> UI: uspeh + primerjava
+    UI --> Admin: prikaže pred/po
+end
+
+deactivate Controller
+deactivate UI
+@enduml

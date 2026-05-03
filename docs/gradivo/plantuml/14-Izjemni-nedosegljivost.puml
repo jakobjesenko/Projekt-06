@@ -1,0 +1,50 @@
+@startuml
+title E1 - Podrobnosti obvestila niso dosegljive
+
+actor "Administrator" as Admin
+boundary "AdminObvestilaMaska" as UI
+control "AdminObvestilaKontroler" as Controller
+entity "Prijave/Kontakti" as Notifications
+
+Admin -> UI: odpre sekcijo "Obvestila"
+activate UI
+
+UI -> Controller: pridobiSeznamObvestil(...)
+activate Controller
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže seznam
+
+Admin -> UI: odpre obvestilo
+
+UI -> Controller: pridobiPodrobnostiObvestila(...)
+activate Controller
+
+Controller -> Notifications: najdiObvestilo(...)
+activate Notifications
+Notifications --> Controller: napaka
+deactivate Notifications
+
+Controller --> UI: napaka (ni mogoče naložiti)
+UI --> Admin: opozorilo + možnost ponovnega nalaganja
+
+== Ponovni poskus ==
+
+Admin -> UI: ponovi zahtevo
+UI -> Controller: pridobiPodrobnostiObvestila(...)
+
+activate Controller
+Controller -> Notifications: najdiObvestilo(...)
+activate Notifications
+Notifications --> Controller: podrobnosti
+deactivate Notifications
+
+Controller --> UI: podrobnosti
+deactivate Controller
+
+UI --> Admin: prikaže podrobnosti
+
+Admin -> UI: označi kot obdelano
+
+deactivate UI
+@enduml

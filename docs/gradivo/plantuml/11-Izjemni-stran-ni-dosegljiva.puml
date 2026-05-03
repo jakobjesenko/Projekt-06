@@ -1,0 +1,40 @@
+@startuml
+title E1 - Informacijska stran ni dosegljiva
+
+actor "Gost/Uporabnik" as Visitor
+boundary "Footer" as UI
+control "InformacijeKontroler" as Controller
+entity "InformacijskeStrani" as Pages
+
+Visitor -> UI: klikne povezavo
+activate UI
+
+UI -> Controller: zahtevajInformacijskoStran(stranId)
+activate Controller
+
+Controller -> Pages: najdiVsebino(stranId)
+activate Pages
+Pages --> Controller: napakaPriNalaganjU
+deactivate Pages
+
+Controller --> UI: napaka (stran ni dosegljiva)
+UI --> Visitor: prikaže opozorilo + možnost ponovnega nalaganja
+
+== Ponovni poskus ==
+
+Visitor -> UI: ponovi zahtevo
+UI -> Controller: zahtevajInformacijskoStran(stranId)
+
+activate Controller
+Controller -> Pages: najdiVsebino(stranId)
+activate Pages
+Pages --> Controller: vsebina
+deactivate Pages
+
+Controller --> UI: vsebinaStrani
+deactivate Controller
+
+UI --> Visitor: prikaže vsebino
+
+deactivate UI
+@enduml

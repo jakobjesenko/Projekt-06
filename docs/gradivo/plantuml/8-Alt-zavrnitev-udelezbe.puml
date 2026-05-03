@@ -1,0 +1,36 @@
+@startuml
+title A2 - Zavrnitev udeležbe
+
+actor "Uporabnik" as User
+boundary "PregledSkupineMaska" as UI
+control "OdločitevKontroler" as Controller
+entity "Skupine" as Groups
+entity "Člani" as Members
+
+User -> UI: izbere zavrnitev
+activate UI
+
+UI -> Controller: posodobiStatusUdeležbe(..., "zavrnjeno", jwt)
+activate Controller
+
+Controller -> Groups: preveriVeljavnostSkupine(skupinaId)
+activate Groups
+Groups --> Controller: skupinaVeljavna = da
+deactivate Groups
+
+Controller -> Members: zabeležiOdločitev(..., "zavrnjeno")
+activate Members
+Members --> Controller: odločitevShranjena
+deactivate Members
+
+Controller -> Groups: posodobiStatusOdziva(..., "zavrnjeno")
+activate Groups
+Groups --> Controller: statusPosodobljen
+deactivate Groups
+
+Controller --> UI: uspeh
+deactivate Controller
+
+UI --> User: prikaz zavrnitve udeležbe
+deactivate UI
+@enduml

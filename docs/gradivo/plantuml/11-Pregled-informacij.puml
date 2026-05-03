@@ -1,0 +1,35 @@
+@startuml
+title Diagram zaporedja - Pregled informacij (osnovni tok)
+
+actor "Gost/Uporabnik" as Visitor
+boundary "Footer" as UI
+control "InformacijeKontroler" as Controller
+entity "InformacijskeStrani" as Pages
+
+Visitor -> UI: v footerju klikne povezavo (npr. "Pogoji uporabe")
+activate UI
+
+UI -> Controller: zahtevajInformacijskoStran(stranId)
+activate Controller
+Controller -> Pages: najdiVsebino(stranId)
+activate Pages
+Pages --> Controller: vsebina (HTML/markdown)
+deactivate Pages
+Controller --> UI: vsebinaStrani
+deactivate Controller
+UI --> Visitor: prikaže vsebino strani
+
+opt (uporabnik lahko odpre drugo informacijsko stran)
+    Visitor -> UI: klikne drugo povezavo v footerju
+    UI -> Controller: zahtevajInformacijskoStran(drugiStranId)
+    activate Controller
+    Controller -> Pages: najdiVsebino(drugiStranId)
+    activate Pages
+    Pages --> Controller: vsebina
+    deactivate Pages
+    Controller --> UI: vsebinaStrani
+    deactivate Controller
+    UI --> Visitor: prikaže drugo vsebino
+end
+deactivate UI
+@enduml

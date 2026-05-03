@@ -136,6 +136,147 @@ Znotraj meja sistema so vse komponente: Angular frontend, Node.js/Express REST A
 
 ![Postavitveni Diagram](./gradivo/img/postavitveni_diagram.png "Postavitveni diagram")
 
+**Diagrami za osnovne in alternativne tokove**
+**8. Odločitev o udeležbi**
+
+![Odločitev o udeležbi osnovni](./gradivo/img/8-Odločitev%20o%20udeležbi.png "Odločitev o udeležbi osnovni")
+
+  - Alternativni tok potrditev udeležbe
+
+  ![Odločitev o udeležbi A1](./gradivo/img/8-Alt%20tok%20(potrditev%20udeležbe).png "Odločitev o udeležbi A1")
+
+  - Alternativni tok zavrnitev udeležbe
+
+  ![Odločitev o udeležbi A2](./gradivo/img/8-Alt%20tok%20(zavrnitev%20udeležbe).png "Odločitev o udeležbi A2")
+
+  - Izjemni tok predlog ni več aktiven
+
+  ![Odločitev o udeležbi E1](./gradivo/img/8-Izjemni%20(predlog%20ni%20aktiven).png "Odločitev o udeležbi E1")
+
+**9. Oddaja povratne informacije**
+
+![Oddaja povratne informacije osnovni](./gradivo/img/9-Oddaja%20povratne%20informacije.png "Oddaja povratne informacije osnovni")
+
+  - Alternativni tok oddaja samo ocene
+
+  ![Oddaja povratne informacije A1](./gradivo/img/9-Alt%20tok%20(oddaja%20samo%20ocene).png "Oddaja povratne informacijei A1")
+
+  - Izjemni tok uporabnik je že oddal povratno informacijo
+
+  ![Oddaja povratne informacije E1](./gradivo/img/9-Izjemni%20(podvojena%20oddaja).png "Oddaja povratne informacije E1")
+
+  - Izjemni tok napaka pri shranjevanju
+
+  ![Oddaja povratne informacije E2](./gradivo/img/9-Izjemni%20(napaka%20pri%20shranjevanju).png "Oddaja povratne informacije E2")
+
+**10. Prijava neprimernega vedenja**
+
+![Prijava neprimernega vedenja osnovni](./gradivo/img/10-Prijava%20neprimernega%20vedenja.png "Prijava neprimernega vedenja osnovni")
+
+  - Alternativni tok dopolnitev prijave
+
+  ![Prijava neprimernega vedenja A1](./gradivo/img/10-Alt%20tok%20(dopolnitev%20prijave).png "Prijava neprimernega vedenja A1")
+
+  - Izjemni tok neprimerno izpolnjena prijava
+
+  ![Prijava neprimernega vedenja E1](./gradivo/img/10-Izjemni%20(neveljavni%20podatki).png "Prijava neprimernega vedenja E1")
+
+**11. Pregled informacij**  
+
+![Pregled informacij osnovni](./gradivo/img/11-Pregled%20informacij.png "Pregled informacij osnovni")
+
+  - Alternativni tok branje več informacijskih strani
+
+  ![Pregled informacij A1](./gradivo/img/11-Alt%20tok%20(branje%20več%20info%20strani).png "Pregled informacij A1")
+
+  - Izjemni tok informacijska stran ni dosegljiva
+
+  ![Pregled informacij E1](./gradivo/img/11-Izjemni%20(stran%20ni%20dosegljiva).png "Pregled informacij E1")
+
+**12. Kontaktni obrazec**
+
+![Kontaktni obrazec osnovni](./gradivo/img/12-Kontaktni%20obrazec.png "Kontaktni obrazec osnovni")
+
+  - Alternativni tok dopolnitev obrazca pred oddajo
+
+  ![Kontaktni obrazec A1](./gradivo/img/12-Alt%20tok%20(dopolnitev%20obrazca).png "Kontaktni obrazec A1")
+
+  - Izjemni tok neveljavno izpolnjen kontaktni obrazec
+
+  ![Kontaktni obrazec E1](./gradivo/img/12-Izjemni%20(neveljavni%20podatki).png "Kontaktni obrazec E1")
+
+**13. Upravljanje uporabnikov (administrator)**
+
+![Upravljanje uporabnikov (administrator) osnovni](./gradivo/img/13-Upravljanje%20uporabnikov%20(admin).png "Upravljanje uporabnikov (administrator) osnovni")
+
+  - Alternativni tok opozorilo uporabniku
+
+  ![Upravljanje uporabnikov (administrator) A1](./gradivo/img/13-Alt%20tok%20(opozorilo).png "Upravljanje uporabnikov (administrator) A1")
+
+  - Izjemni tok administrator nima ustreznih pravic
+
+  ![Upravljanje uporabnikov (administrator) E1](./gradivo/img/13-Izjemni%20(nima%20ustreznih%20pravic).png "Upravljanje uporabnikov (administrator) E1")
+
+  - Izjemni tok konflikt stanja računa
+
+  ![Upravljanje uporabnikov (administrator) E2](./gradivo/img/13-Izjemni%20(konflikt%20stanja).png "Upravljanje uporabnikov (administrator) E2")
+
+**14. Pregled kontaktnih obrazcev in prijav neprimernega vedenja**
+
+![Pregled kontaktnih obrazcev in prijav neprimernega vedenja osnovni](./gradivo/img/14-Pregled%20obvestil,%20prijav%20in%20kontaktov.png "Pregled kontaktnih obrazcev in prijav neprimernega vedenja osnovni")
+
+  - Alternativni tok eskalacija obvestila
+
+  ![Pregled kontaktnih obrazcev in prijav neprimernega vedenja A1](./gradivo/img/14-Alt%20tok%20(eskalacija%20obvestila).png "Pregled kontaktnih obrazcev in prijav neprimernega vedenja A1")
+
+  - Alternativni tok eskalacija na upravljanje uporabnika
+
+  ![Pregled kontaktnih obrazcev in prijav neprimernega vedenja A2](./gradivo/img/14-Alt%20tok%20(eskalacija%20na%20upravljanje%20uporabnika).png "Pregled kontaktnih obrazcev in prijav neprimernega vedenja A2")
+
+  - Izjemni tok podrobnosti obvestila niso dosegljive
+
+  ![Pregled kontaktnih obrazcev in prijav neprimernega vedenja E1](./gradivo/img/14-Izjemni%20(podrobnosti%20niso%20dosegljive).png "Pregled kontaktnih obrazcev in prijav neprimernega vedenja E1")
+
+**15. Pregled skupin in chata**
+
+![Pregled skupin in chata osnovni](./gradivo/img/15-Pregled%20skupin%20in%20chata.png "Pregled skupin in chata osnovni")
+
+  - Alternativni tok filtriranje pred vpogledom
+
+  ![Pregled skupin in chata A1](./gradivo/img/15-Alt%20tok%20(filtriranje).png "Pregled skupin in chata A1")
+
+  - Izjemni tok podatki chata niso dosegljivi
+
+  ![Pregled skupin in chata E1](./gradivo/img/15-Izjemni%20(podatki%20chata%20niso%20dosegljivi).png "Pregled skupin in chata E1")
+
+**16. Pregled povratnih informacij (administrator)**
+
+![Pregled povratnih informacij (administrator) osnovni](./gradivo/img/16-Pregled%20povratnih%20info.png "Pregled povratnih informacij (administrator) osnovni")
+
+  - Alternativni tok filtriranje povratnih informacij po skupini
+
+  ![Pregled povratnih informacij (administrator) A1](./gradivo/img/16-Alt%20tok%20(filtriranje).png "Pregled povratnih informacij (administrator) A1")
+
+  - Izjemni tok povratne informacije za skupino niso dosegljive
+
+  ![Pregled povratnih informacij (administrator) E1](./gradivo/img/16-Izjemni%20(povratne%20info%20niso%20dosegljive).png "Pregled povratnih informacij (administrator) E1")
+
+**17. Upravljanje pametne komponente**
+
+![Upravljanje pametne komponente osnovni](./gradivo/img/17-Upravljanje%20pametne%20komponente.png "Upravljanje pametne komponente osnovni")
+
+  - Alternativni tok spremljanje brez spremembe parametrov
+
+  ![Upravljanje pametne komponente A1](./gradivo/img/17-Alt%20tok%20(brez%20spremembe%20parametrov).png "Upravljanje pametne komponente A1")
+
+  - Izjemni tok parametri so izven dovoljenih mej
+
+  ![Upravljanje pametne komponente E1](./gradivo/img/17-Izjemni%20(parametri%20izven%20mej).png "Upravljanje pametne komponente E1")
+
+  - Izjemni tok konflikt sočasnih sprememb
+
+  ![Upravljanje pametne komponente E1](./gradivo/img/17-Izjemni%20(sočasne%20spremembe).png "Upravljanje pametne komponente E1")
+
 - Za vsak pogled zagotovite osrednji diagram (npr. postavitveni ([deployment](https://plantuml.com/deployment-diagram)), paketni ([class](https://plantuml.com/class-diagram)) diagram oz. komponentni ([component](https://plantuml.com/component-diagram)) diagram).
   - Pri predlogu upoštevajte arhitekturne in načrtovalske vzorce.
   - Priporoča se uporaba naslednjih diagramskih tehnik (ne nujno vseh):

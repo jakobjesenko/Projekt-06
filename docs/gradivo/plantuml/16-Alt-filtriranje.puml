@@ -1,0 +1,51 @@
+@startuml
+title A1 - Filtriranje povratnih informacij
+
+actor "Administrator" as Admin
+boundary "AdminSkupineMaska" as UI
+control "AdminPovratneInfoKontroler" as Controller
+entity "Skupine" as Groups
+entity "PovratneInformacije" as Feedback
+
+Admin -> UI: odpre sekcijo "Skupine"
+activate UI
+
+UI -> Controller: pridobiSeznamSkupin(...)
+activate Controller
+Controller -> Groups: najdiVseSkupine()
+activate Groups
+Groups --> Controller: seznamSkupin
+deactivate Groups
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže seznam
+
+== Uporaba filtrov ==
+
+Admin -> UI: nastavi filtre (skupina / obdobje)
+
+UI -> Controller: pridobiPovratneInformacijeZaSkupino(skupinaId, filtri)
+activate Controller
+
+Controller -> Feedback: izračunajPovprečnoOceno(skupinaId, filtri)
+activate Feedback
+Feedback --> Controller: povprečnaOcena
+deactivate Feedback
+
+Controller -> Feedback: pridobiSeznamKomentarjev(skupinaId, filtri)
+activate Feedback
+Feedback --> Controller: komentarji
+deactivate Feedback
+
+Controller -> Groups: pridobiŠteviloOddanihOcen(skupinaId, filtri)
+activate Groups
+Groups --> Controller: število
+deactivate Groups
+
+Controller --> UI: agregiraniPodatki
+deactivate Controller
+
+UI --> Admin: prikaže filtrirane rezultate
+
+deactivate UI
+@enduml

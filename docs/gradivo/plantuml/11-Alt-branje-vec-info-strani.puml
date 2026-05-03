@@ -1,0 +1,38 @@
+@startuml
+title A1 - Branje več informacijskih strani
+
+actor "Gost/Uporabnik" as Visitor
+boundary "Footer" as UI
+control "InformacijeKontroler" as Controller
+entity "InformacijskeStrani" as Pages
+
+Visitor -> UI: klikne prvo povezavo
+activate UI
+
+UI -> Controller: zahtevajInformacijskoStran(stranId1)
+activate Controller
+Controller -> Pages: najdiVsebino(stranId1)
+activate Pages
+Pages --> Controller: vsebina
+deactivate Pages
+Controller --> UI: vsebinaStrani
+deactivate Controller
+UI --> Visitor: prikaže vsebino
+
+== Branje dodatne strani ==
+
+Visitor -> UI: klikne drugo povezavo
+UI -> Controller: zahtevajInformacijskoStran(stranId2)
+activate Controller
+Controller -> Pages: najdiVsebino(stranId2)
+activate Pages
+Pages --> Controller: vsebina
+deactivate Pages
+Controller --> UI: vsebinaStrani
+deactivate Controller
+UI --> Visitor: prikaže drugo vsebino
+
+Visitor -> UI: zapre informacijske strani
+
+deactivate UI
+@enduml

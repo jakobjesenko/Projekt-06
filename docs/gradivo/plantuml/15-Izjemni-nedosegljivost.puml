@@ -1,0 +1,65 @@
+@startuml
+title E1 - Chat ni dosegljiv
+
+actor "Administrator" as Admin
+boundary "AdminSkupineMaska" as UI
+control "AdminSkupineKontroler" as Controller
+entity "Skupine" as Groups
+entity "Člani" as Members
+entity "ChatSporočila" as Chat
+
+Admin -> UI: odpre sekcijo "Skupine"
+activate UI
+
+UI -> Controller: pridobiSeznamVsehSkupin(...)
+activate Controller
+Controller -> Groups: najdiVseSkupine(...)
+activate Groups
+Groups --> Controller: seznam
+deactivate Groups
+Controller --> UI: seznam
+deactivate Controller
+UI --> Admin: prikaže seznam
+
+Admin -> UI: izbere skupino
+
+UI -> Controller: pridobiPodrobnostiSkupineZChatom(...)
+activate Controller
+
+Controller -> Groups: najdiSkupino(...)
+activate Groups
+Groups --> Controller: podatki
+deactivate Groups
+
+Controller -> Members: najdiČlane(...)
+activate Members
+Members --> Controller: člani
+deactivate Members
+
+Controller -> Chat: najdiZgodovinoChat(...)
+activate Chat
+Chat --> Controller: napaka
+deactivate Chat
+
+Controller --> UI: napaka (chat ni dosegljiv)
+UI --> Admin: opozorilo + možnost ponovnega nalaganja
+
+== Ponovni poskus ==
+
+Admin -> UI: ponovno naloži
+
+UI -> Controller: pridobiPodrobnostiSkupineZChatom(...)
+
+activate Controller
+Controller -> Chat: najdiZgodovinoChat(...)
+activate Chat
+Chat --> Controller: sporočila
+deactivate Chat
+
+Controller --> UI: podatki + chat
+deactivate Controller
+
+UI --> Admin: prikaže vpogled
+
+deactivate UI
+@enduml

@@ -1,0 +1,45 @@
+@startuml
+title Diagram zaporedja - Oddaja povratne informacije (osnovni tok)
+
+actor "Uporabnik" as User
+boundary "PovratnaInfoMaska" as UI
+control "PovratneInfoKontroler" as Controller
+entity "PovratneInformacije" as Feedback
+entity "Skupine" as Groups
+
+Sistem -> User: prikaže poziv za oddajo povratne informacije (po srečanju)
+
+User -> UI: odpre obrazec za povratno informacijo
+activate UI
+
+User -> UI: vnese oceno in komentar
+User -> UI: odda obrazec
+
+UI -> Controller: oddajPovratnoInfo(skupinaId, uporabnikId, ocena, komentar, jwtŽeton)
+activate Controller
+
+Controller -> Feedback: preveriŽeOddano(uporabnikId, skupinaId)
+activate Feedback
+Feedback --> Controller: niOddano (da/ne)
+deactivate Feedback
+
+alt žeOddano
+    Controller --> UI: napaka (podvojitev)
+    UI --> User: obvestilo o že oddani povratni informaciji
+else niOddano
+    Controller -> Feedback: shraniPovratnoInfo(ocena, komentar)
+    activate Feedback
+    Feedback --> Controller: shranjeno
+    deactivate Feedback
+    
+    Controller -> Groups: posodobiPovprečnoOceno(skupinaId, novaOcena)
+    activate Groups
+    Groups --> Controller: ocenaPosodobljena
+    deactivate Groups
+    
+    Controller --> UI: uspeh
+    deactivate Controller
+    UI --> User: potrditev oddaje
+end
+deactivate UI
+@enduml
