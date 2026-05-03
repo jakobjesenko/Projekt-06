@@ -108,7 +108,7 @@ Razredni diagram prikazuje strukturo sistema na treh ravneh: mejne razrede (zele
 
 ![Razredni Diagram](./gradivo/img/razredniDiagram.png)
 
-##Arhitektura sistema
+## Arhitektura sistema
 Seznam elementov in skrbnikov:
 | Element | Namen | Skrbnik |
 |---------|-------|---------|
@@ -123,16 +123,16 @@ Seznam elementov in skrbnikov:
 | Krmilniki | Upravljanje različnih delov aplikacije | Leja Petrič |
 | E-mail servis | Pošilja e-maile za verifikacijo profila in ponastavitev gesla | Aleks Gogić |
 
-##Logični pogled (paketni diagram)
+## Logični pogled (paketni diagram)
 ![Paketni Diagram](./gradivo/img/paketni_diagram.png "Paketni diagram")
 
-##Procesni pogled (diagram aktivnosti)
+## Procesni pogled (diagram aktivnosti)
 ![Diagram Aktivnosti](./gradivo/img/diagram_aktivnosti.png "Diagram aktivnosti")
 
-##Razvojni pogled (komponentni diagram)
+## Razvojni pogled (komponentni diagram)
 ![Komponentni Diagram](./gradivo/img/komponentni_diagram.png "Komponentni diagram")
 
-##Fizični pogled (postavitveni diagram)
+## Fizični pogled (postavitveni diagram)
 ![Postavitveni Diagram](./gradivo/img/postavitveni_diagram.png "Postavitveni diagram")
 
 ## Diagrami zaporedja za osnovne in alternativne tokove
