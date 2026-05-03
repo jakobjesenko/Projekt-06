@@ -146,19 +146,19 @@ V nadaljevanju so predstavljeni diagrami zaporedja za primere uporabe od 1 do 7.
 
 **Osnovni tok:** Gost odpre masko za registracijo, izpolni tri korake, sistem validira podatke, ustvari nepotrjen račun in pošlje verifikacijsko povezavo. Gost odpre povezavo in sistem aktivira račun.
 
-![Registracija osnovni](./gradivo/img/osnovni/Registracija%20osnovni.png)
+![Registracija osnovni](./gradivo/img/1-Registracija.png)
 
 **Alternativni tok A1 (popravi vnos v prejšnjem koraku):** Gost med izpolnjevanjem ugotovi, da je treba dopolniti prejšnji korak. Vrne se, popravi podatke, sistem ohrani že veljavne podatke in postopek se nadaljuje.
 
-![Registracija A1](./gradivo/img/alt/Registracija%20-%20Alternativni%20tok%20A1%20(popravi%20vnos%20v%20prejšnjem%20koraku).png)
+![Registracija A1](./gradivo/img/1-Registracija%20-%20Alternativni%20tok%20A1%20(popravi%20vnos%20v%20prejšnjem%20koraku).png)
 
 **Izjemni tok E1 (e-naslov že registriran):** Gost vnese e-naslov, ki že obstaja v sistemu. Sistem zavrne registracijo in prikaže napako. Gost vnese drug e-naslov in ponovno odda obrazec.
 
-![Registracija E1](./gradivo/img/alt/Registracija%20-%20Izjemni%20tok%20E1%20(e-naslov%20že%20registriran).png)
+![Registracija E1](./gradivo/img/1-Registracija%20-%20Izjemni%20tok%20E1%20(e-naslov%20že%20registriran).png)
 
 **Izjemni tok E2 (verifikacijska povezava potekla):** Gost odpre verifikacijsko povezavo po preteku roka. Sistem zavrne aktivacijo. Gost zahteva novo povezavo, sistem jo pošlje in ob odprtju aktivira račun.
 
-![Registracija E2](./gradivo/img/alt/Registracija%20-%20Izjemni%20tok%20E2%20(verifikacijska%20povezava%20potekla).png)
+![Registracija E2](./gradivo/img/1-Registracija%20-%20Izjemni%20tok%20E2%20(verifikacijska%20povezava%20potekla).png)
 
 ---
 
@@ -166,19 +166,19 @@ V nadaljevanju so predstavljeni diagrami zaporedja za primere uporabe od 1 do 7.
 
 **Osnovni tok:** Gost odpre masko za prijavo, vnese e-naslov in geslo, sistem preveri poverilnice, vzpostavi sejo in preusmeri na ustrezno nadzorno ploščo.
 
-![Prijava osnovni](./gradivo/img/osnovni/Prijava%20osnovni.png)
+![Prijava osnovni](./gradivo/img/2-Prijava.png)
 
 **Alternativni tok A1 (prijava administratorja):** Gost vnese poverilnice za administratorski račun. Sistem prepozna vlogo administratorja in preusmeri na administratorsko nadzorno ploščo.
 
-![Prijava A1](./gradivo/img/alt/Prijava%20-%20Alternativni%20tok%20A1%20(prijava%20administratorja).png)
+![Prijava A1](./gradivo/img/2-Prijava%20-%20Alternativni%20tok%20A1%20(prijava%20administratorja).png)
 
 **Izjemni tok E1 (napačno geslo):** Gost vnese napačno geslo. Sistem zavrne prijavo in poveča števec neuspelih poskusov. Gost popravi geslo in se uspešno prijavi.
 
-![Prijava E1](./gradivo/img/alt/Prijava%20-%20Izjemni%20tok%20E1%20(napačno%20geslo).png)
+![Prijava E1](./gradivo/img/2-Prijava%20-%20Izjemni%20tok%20E1%20(napačno%20geslo).png)
 
 **Izjemni tok E2 (račun ni verificiran):** Gost vnese poverilnice neverificiranega računa. Sistem zavrne prijavo in ponudi ponovno pošiljanje verifikacije. Gost potrdi e-pošto in se nato uspešno prijavi.
 
-![Prijava E2](./gradivo/img/alt/Prijava%20-%20Izjemni%20tok%20E2%20(račun%20ni%20verificiran).png)
+![Prijava E2](./gradivo/img/2-Prijava%20-%20Izjemni%20tok%20E2%20(račun%20ni%20verificiran).png)
 
 ---
 
@@ -186,19 +186,19 @@ V nadaljevanju so predstavljeni diagrami zaporedja za primere uporabe od 1 do 7.
 
 **Osnovni tok:** Gost klikne "Pozabljeno geslo", vnese e-naslov, sistem pošlje ponastavitveno povezavo. Gost odpre povezavo, vnese novo geslo, sistem ga shrani in preusmeri na prijavo.
 
-![Ponastavitev gesla osnovni](./gradivo/img/osnovni/Ponastavitev%20gesla%20osnovni.png)
+![Ponastavitev gesla osnovni](./gradivo/img/3-Ponastavitev%20gesla.png)
 
 **Alternativni tok A1 (takojšnja prijava po spremembi gesla):** Po uspešni spremembi gesla sistem uporabnika ne preusmeri samo na prijavo, ampak ga takoj prijavi z novimi poverilnicami.
 
-![Ponastavitev gesla A1](./gradivo/img/alt/Ponastavitev%20gesla%20-%20Alternativni%20tok%20A1%20(takojšnja%20prijava%20po%20spremembi).png)
+![Ponastavitev gesla A1](./gradivo/img/3-Ponastavitev%20gesla%20-%20Alternativni%20tok%20A1%20(takojšnja%20prijava%20po%20spremembi).png)
 
 **Izjemni tok E1 (povezava neveljavna ali potekla):** Gost odpre neveljavno ali poteklo povezavo. Sistem zavrne spremembo in ponudi novo zahtevo. Gost zahteva novo povezavo in nato uspešno spremeni geslo.
 
-![Ponastavitev gesla E1](./gradivo/img/alt/Ponastavitev%20gesla%20-%20Izjemni%20tok%20E1%20(povezava%20neveljavna%20ali%20potekla).png)
+![Ponastavitev gesla E1](./gradivo/img/3-Ponastavitev%20gesla%20-%20Izjemni%20tok%20E1%20(povezava%20neveljavna%20ali%20potekla).png)
 
 **Izjemni tok E2 (gesli se ne ujemata):** Gost vnese novo geslo in potrditev, ki se ne ujemata. Sistem zavrne oddajo. Gost popravi vnos in uspešno spremeni geslo.
 
-![Ponastavitev gesla E2](./gradivo/img/alt/Ponastavitev%20gesla%20-%20Izjemni%20tok%20E2%20(gesli%20se%20ne%20ujemata).png)
+![Ponastavitev gesla E2](./gradivo/img/3-Ponastavitev%20gesla%20-%20Izjemni%20tok%20E2%20(gesli%20se%20ne%20ujemata).png)
 
 ---
 
@@ -206,15 +206,15 @@ V nadaljevanju so predstavljeni diagrami zaporedja za primere uporabe od 1 do 7.
 
 **Osnovni tok:** Akter izbere možnost "Odjava", sistem prekine aktivno sejo in preusmeri na začetno/prijavno stran.
 
-![Odjava osnovni](./gradivo/img/osnovni/Odjava%20osnovni.png)
+![Odjava osnovni](./gradivo/img/4-Odjava.png)
 
 **Alternativni tok A1 (samodejna odjava zaradi neaktivnosti):** Sistem zazna presežen čas neaktivnosti, opozori akterja in po izteku invalidira sejo ter preusmeri na prijavno stran.
 
-![Odjava A1](./gradivo/img/alt/Odjava%20-%20Alternativni%20tok%20A1%20(samodejna%20odjava%20zaradi%20neaktivnosti).png)
+![Odjava A1](./gradivo/img/4-Odjava%20-%20Alternativni%20tok%20A1%20(samodejna%20odjava%20zaradi%20neaktivnosti).png)
 
 **Izjemni tok E1 (seja je že potekla):** Akter izbere "Odjava", vendar je seja že potekla. Sistem ne izvaja dodatnega zaključevanja, vseeno pa izvede preusmeritev.
 
-![Odjava E1](./gradivo/img/alt/Odjava%20-%20Izjemni%20tok%20E1%20(seja%20je%20že%20potekla).png)
+![Odjava E1](./gradivo/img/4-Odjava%20-%20Izjemni%20tok%20E1%20(seja%20je%20že%20potekla).png)
 
 ---
 
@@ -222,19 +222,19 @@ V nadaljevanju so predstavljeni diagrami zaporedja za primere uporabe od 1 do 7.
 
 **Osnovni tok:** Uporabnik odpre profil, spremeni želene podatke, sistem validira in shrani spremembe.
 
-![Urejanje profila osnovni](./gradivo/img/osnovni/Urejanje%20profila%20osnovni.png)
+![Urejanje profila osnovni](./gradivo/img/5-Urejanje%20profila.png)
 
 **Alternativni tok A1 (posodobitev samo enega sklopa):** Uporabnik spremeni le en sklop podatkov (npr. interese). Sistem validira samo spremenjeni sklop in shrani spremembo.
 
-![Urejanje profila A1](./gradivo/img/alt/Urejanje%20profila%20-%20Alternativni%20tok%20A1%20(posodobitev%20samo%20enega%20sklopa).png)
+![Urejanje profila A1](./gradivo/img/5-Urejanje%20profila%20-%20Alternativni%20tok%20A1%20(posodobitev%20samo%20enega%20sklopa).png)
 
 **Izjemni tok E1 (neveljaven format podatkov):** Uporabnik odda neveljaven podatek. Sistem zavrne shranjevanje in označi napačno polje. Uporabnik popravi podatek in uspešno shrani.
 
-![Urejanje profila E1](./gradivo/img/alt/Urejanje%20profila%20-%20Izjemni%20tok%20E1%20(neveljaven%20format%20podatkov).png)
+![Urejanje profila E1](./gradivo/img/5-Urejanje%20profila%20-%20Izjemni%20tok%20E1%20(neveljaven%20format%20podatkov).png)
 
 **Izjemni tok E2 (konflikt sočasnih sprememb):** Uporabnik odda spremembe na zastarelem stanju profila. Sistem zazna konflikt in zahteva osvežitev. Uporabnik osveži podatke, ponovno uredi profil in odda spremembe.
 
-![Urejanje profila E2](./gradivo/img/alt/Urejanje%20profila%20-%20Izjemni%20tok%20E2%20(konflikt%20sočasnih%20sprememb).png)
+![Urejanje profila E2](./gradivo/img/5-Urejanje%20profila%20-%20Izjemni%20tok%20E2%20(konflikt%20sočasnih%20sprememb).png)
 
 ---
 
@@ -242,19 +242,19 @@ V nadaljevanju so predstavljeni diagrami zaporedja za primere uporabe od 1 do 7.
 
 **Osnovni tok:** Uporabnik izbere "Išči skupino", sistem preveri profil, sproži izračun predlogov in prikaže seznam.
 
-![Iskanje skupin osnovni](./gradivo/img/osnovni/Iskanje%20skupin%20osnovni.png)
+![Iskanje skupin osnovni](./gradivo/img/6-Iskanje%20skupin.png)
 
 **Alternativni tok A1 (ponovitev iskanja po posodobitvi profila):** Uporabnik sproži iskanje, nato posodobi profil in ponovno sproži iskanje. Sistem upošteva nove podatke in prikaže osvežen nabor predlogov.
 
-![Iskanje skupin A1](./gradivo/img/alt/Iskanje%20skupin%20-%20Alternativni%20tok%20A1%20(ponovitev%20iskanja%20po%20posodobitvi%20profila).png)
+![Iskanje skupin A1](./gradivo/img/6-Iskanje%20skupin%20-%20Alternativni%20tok%20A1%20(ponovitev%20iskanja%20po%20posodobitvi%20profila).png)
 
 **Izjemni tok E1 (profil ni dovolj izpolnjen):** Sistem preveri profil in ugotovi manjkajoče podatke. Zavrne iskanje in navede manjkajoča polja. Uporabnik dopolni profil in ponovno sproži iskanje.
 
-![Iskanje skupin E1](./gradivo/img/alt/Iskanje%20skupin%20-%20Izjemni%20tok%20E1%20(profil%20ni%20dovolj%20izpolnjen).png)
+![Iskanje skupin E1](./gradivo/img/6-Iskanje%20skupin%20-%20Izjemni%20tok%20E1%20(profil%20ni%20dovolj%20izpolnjen).png)
 
 **Izjemni tok E2 (pametna komponenta nedosegljiva):** Sistem poskusi klic pametne komponente, vendar ta ne uspe. Prikaže obvestilo in možnost ponovnega poskusa. Uporabnik ponovi zahtevo in sistem uspešno vrne predloge.
 
-![Iskanje skupin E2](./gradivo/img/alt/Iskanje%20skupin%20-%20Izjemni%20tok%20E2%20(pametna%20komponenta%20nedosegljiva).png)
+![Iskanje skupin E2](./gradivo/img/6-Iskanje%20skupin%20-%20Izjemni%20tok%20E2%20(pametna%20komponenta%20nedosegljiva).png)
 
 ---
 
@@ -262,26 +262,23 @@ V nadaljevanju so predstavljeni diagrami zaporedja za primere uporabe od 1 do 7.
 
 **Osnovni tok:** Uporabnik odpre izbrano skupino iz seznama predlogov. Sistem prikaže čas, lokacijo, razloge ujemanja in kartice članov. Uporabnik si lahko ogleda kratek profil člana in odpre skupinski chat z zgodovino.
 
-![Pregled skupin in chata osnovni](./gradivo/img/osnovni/Pregled%20skupin%20in%20chata%20osnovni.png)
+![Pregled skupin in chata osnovni](./gradivo/img/7-Pregled%20skupin%20in%20chata.png)
 
 **Alternativni tok A1 (pregled posameznega člana):** Uporabnik klikne ikono člana, sistem odpre kratek profil, uporabnik si ga ogleda in zapre.
 
-![Pregled skupin in chata A1](./gradivo/img/alt/Pregled%20skupin%20in%20chata%20-%20Alternativni%20tok%20A1%20(pregled%20posameznega%20člana).png)
+![Pregled skupin in chata A1](./gradivo/img/7-Pregled%20skupin%20in%20chata%20-%20Alternativni%20tok%20A1%20(pregled%20posameznega%20člana).png)
 
 **Alternativni tok A2 (branje chata brez pošiljanja sporočila):** Uporabnik odpre chat, pregleda zgodovino sporočil in ga zapre brez novega vnosa. Sistem ohrani stanje pogovora nespremenjeno.
 
-![Pregled skupin in chata A2](./gradivo/img/alt/Pregled%20skupin%20in%20chata%20-%20Alternativni%20tok%20A2%20(branje%20chata%20brez%20pošiljanja).png)
+![Pregled skupin in chata A2](./gradivo/img/7-Pregled%20skupin%20in%20chata%20-%20Alternativni%20tok%20A2%20(branje%20chata%20brez%20pošiljanja).png)
 
 **Izjemni tok E1 (podatki niso dosegljivi):** Sistem poskuša prikazati podatke skupine in članov, vendar nalaganje ne uspe. Prikaže opozorilo in možnost ponovnega nalaganja. Uporabnik ponovi in sistem prikaže podatke.
 
-![Pregled skupin in chata E1](./gradivo/img/alt/Pregled%20skupin%20in%20chata%20-%20Izjemni%20tok%20E1%20(podatki%20niso%20dosegljivi).png)
+![Pregled skupin in chata E1](./gradivo/img/7-Pregled%20skupin%20in%20chata%20-%20Izjemni%20tok%20E1%20(podatki%20niso%20dosegljivi).png)
 
 **Izjemni tok E2 (skupina med prikazom postane neveljavna):** Sistem med prikazom zazna, da je skupina postala neveljavna. Zapre pregled skupine in osveži seznam predlogov.
 
-![Pregled skupin in chata E2](./gradivo/img/alt/Pregled%20skupin%20in%20chata%20-%20Izjemni%20tok%20E2%20(skupina%20postane%20neveljavna).png)
-
-
-
+![Pregled skupin in chata E2](./gradivo/img/7-Pregled%20skupin%20in%20chata%20-%20Izjemni%20tok%20E2%20(skupina%20postane%20neveljavna).png)
 
 **8. Odločitev o udeležbi**
 
