@@ -130,7 +130,7 @@ const swaggerDocument = swaggerJsDoc({
     },
     servers: [
       { url: 'http://localhost:3000/api', description: 'DEV' },
-      { url: 'https://dodaj/api', description: 'PROD' },
+      { url: 'https://srecajmose.live/api', description: 'PROD' },
     ],
     components: {
       schemas: {
