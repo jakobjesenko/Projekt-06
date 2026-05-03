@@ -1,0 +1,49 @@
+@startuml
+title Paketni diagram sistema
+
+skinparam linetype ortho
+
+package pogled <<subsystem>> as "Pogled" {
+    card "O nas pogled"
+    card "Admin pogled"
+    card "Chat pogled"
+    card "Kontakt pogled"
+    card "Nadzorna plošča pogled"
+    card "Uredi profil pogled"
+    card "Pozabljeno geslo pogled"
+    card "Faq pogled"
+    card "Gdpr pogled"
+    card "Domov pogled"
+    card "Kako deluje pogled"
+    card "Prijava pogled"
+    card "Ocena pogled"
+    card "Registracija pogled"
+    card "Ponastavi geslo pogled"
+    card "Pogoji pogled"
+}
+
+package krmilnik <<subsystem>> as "Krmilnik" {
+    card "Avtentikacija krmilnik"
+    card "Kontakt krmilnik"
+    card "Srečanje krmilnik" 
+    card "Sporočila krmilnik"
+    card "Ocene krmilnik"
+    card "Prijave krmilnik"
+    card "Predlogi krmilnik"
+    card "Uporabniki krmilnik"
+}
+
+package model <<subsystem>> as "Model" {
+    card "Analitika"
+    card "Kontakt"
+    card "Srečanje"
+    card "Sporočilo"
+    card "Ocena"
+    card "Prijava"
+    card "Uporabnik"
+}
+
+pogled <---> krmilnik
+krmilnik ---> model
+
+@enduml

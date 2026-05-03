@@ -103,6 +103,22 @@ Znotraj meja sistema so vse komponente: Angular frontend, Node.js/Express REST A
 
 ### 4.2 Osrednji arhitekturni pogledi
 
+**Razredni diagram**
+
+![Razredni Diagram](./gradivo/img/razredni_diagram.png "Razredni diagram")
+
+**Logični pogled (paketni diagram)**
+
+![Paketni Diagram](./gradivo/img/paketni_diagram.png "Paketni diagram")
+
+**Razvojni pogled (komponentni diagram)**
+
+![Komponentni Diagram](./gradivo/img/komponentni_diagram.png "Komponentni diagram")
+
+**Fizični pogled (postavitveni diagram)**
+
+![Postavitveni Diagram](./gradivo/img/postavitveni_diagram.png "Postavitveni diagram")
+
 - Za vsak pogled zagotovite osrednji diagram (npr. postavitveni ([deployment](https://plantuml.com/deployment-diagram)), paketni ([class](https://plantuml.com/class-diagram)) diagram oz. komponentni ([component](https://plantuml.com/component-diagram)) diagram).
 
   - Pri predlogu upoštevajte arhitekturne in načrtovalske vzorce.

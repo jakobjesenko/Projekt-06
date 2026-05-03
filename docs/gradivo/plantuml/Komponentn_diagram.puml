@@ -1,0 +1,74 @@
+@startuml
+left to right direction
+skinparam componentStyle uml2
+
+() "Gost" as U1 <<interface>>
+() "Uporabnik" as U2 <<interface>>
+() "Admin" as U3 <<interface>>
+
+() "Aplikacijski vmesnik" as I1 <<interface>>
+() "MongoDB vmesnik" as I2 <<interface>>
+() "Vmesnik za zemljevide" as I3 <<interface>>
+() "Zunanji vmesnik za e-pošto" as I4 <<interface>>
+
+component "OpenStreetMap" as P1
+component "E-poštni servis" as P2
+
+component "Aplikacija" as A1 <<subsystem>> {
+  component "Skupne komponente" as A1.0
+  component "Domov" as A1.9
+  component "Registracija" as A1.1
+  component "Prijava" as A1.2
+  component "Profil" as A1.3
+  component "Nadzorna plošča" as A1.4
+  component "Pregled skupin" as A1.5
+  component "Chat" as A1.6
+  component "Povratne informacije" as A1.7
+  component "Admin nadzorna plošča" as A1.8
+}
+
+component "Aplikacijski strežnik" as S1 <<subsystem>> {
+  component "Express.js strežnik" as S1.1 <<component>>
+  component "Predlog skupin (krmilnik)" as S1.2 <<component>>
+}
+
+component "Podatkovni strežnik" as S2 <<subsystem>> {
+  component "MongoDB podatkovna baza" as S2.1 <<component>>
+}
+
+U1 -- A1.9
+U1 -- A1.1
+U1 -- A1.2
+
+U2 -- A1.3
+U2 -- A1.4
+U2 -- A1.5
+U2 -- A1.6
+U2 -- A1.7
+
+U3 -- A1.8
+
+I1 -- S1.1
+I2 -- S2.1
+P1 )- I3
+P2 )- I4
+
+S1.1 --> S1.2
+S1.1 -( I2
+S1.2 -( I2
+
+A1.0 --( I1
+A1.1 --( I1
+A1.1 --( I3
+A1.2 --( I1
+A1.3 --( I1
+A1.3 --( I3
+A1.4 --( I1
+A1.5 --( I1
+A1.6 --( I1
+A1.7 --( I1
+A1.8 --( I1
+
+S1.1 -( I4
+
+@enduml

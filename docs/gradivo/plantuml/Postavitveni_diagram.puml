@@ -1,0 +1,50 @@
+@startuml Postavitveni_diagram
+left to right direction
+
+node "Osebni računalnik" <<device>> as D1 {
+  node "MacOS" <<OS>> {
+    node "Chrome" <<execution environment>> {
+      artifact "index.html" as A1_1 <<artifact>>
+      node "Spletna aplikacija" as A1_2 <<subsystem>>
+      artifact "Angular komponente" as A1_3 <<artifact>>
+      artifact "app.config.ts" as A1_4 <<artifact>>
+    }
+  }
+}
+
+node "Lokalni strežnik" <<device>> as D2 {
+  node "Node.js" <<execution environment>> {
+    artifact "server.js" as A2_1 <<artifact>>
+    component "Aplikacijski strežnik" as A2_2 <<subsystem>>
+    component "Express.js strežnik" as A2_3 <<component>>
+    artifact "api.js" as A2_4 <<artifact>>
+    component "Predlog skupin (krmilnik)" as A2_5 <<component>>
+    artifact "models.js" as A2_6 <<artifact>>
+  }
+}
+
+node "Oddaljeni strežnik" <<device>> as D3 {
+  node "Linux" <<execution environment>> {
+    artifact "mongod" as A3_1 <<artifact>>
+    component "Podatkovni strežnik" as A3_2 <<subsystem>>
+    component "MongoDB podatkovna baza" as A3_3 <<component>>
+  }
+}
+
+D1 --- D2 : <<HTTPS>>
+D2 --- D3 : <<TCP>>
+
+A1_1 ..> A1_2 : <<manifests>>
+A1_2 ..> A1_3 : <<uses>>
+A1_2 ..> A1_4 : <<uses>>
+
+A2_1 ..> A2_2 : <<manifests>>
+A2_2 ..> A2_3 : <<runs>>
+A2_3 ..> A2_4 : <<runs>>
+A2_3 ..> A2_5 : <<uses>>
+A2_3 ..> A2_6 : <<uses>>
+
+A3_1 ..> A3_2 : <<manifests>>
+A3_2 ..> A3_3 : <<uses>>
+
+@enduml

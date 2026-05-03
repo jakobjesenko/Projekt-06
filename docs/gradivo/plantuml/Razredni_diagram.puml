@@ -1,0 +1,293 @@
+@startuml SrecajmoSe_Class_Diagram
+title Razredni diagram - Srečajmo se (Koncerti.net)
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam shadowing false
+skinparam linetype ortho
+skinparam packageStyle rectangle
+
+' =====================================================
+'  ENTITETE / MODELI (Mongoose sheme)
+' =====================================================
+package "Modeli (api/models)" <<Folder>> {
+
+  class User {
+    + _id : ObjectId
+    + firstName : String
+    + lastName : String
+    + profileImage : String
+    + username : String <<unique>>
+    + birthday : Date
+    + email : String <<unique>>
+    - password : String <<hashed>>
+    + termsAccepted : Boolean
+    + location : Location
+    + interests : String[]
+    + availability : String[]
+    + activeSearch : Boolean
+    + isActive : Boolean
+    + role : Role <<enum: user|admin|guest>>
+    + status : Status <<enum: active|blocked|pending>>
+    + strikes : Number
+    + accountSecurity : AccountSecurity
+    + createdAt : Date
+    + updatedAt : Date
+    --
+    + comparePassword(candidate) : Boolean
+    + getAge() : Number
+    {static} + getPaginatedUsers(opts)
+  }
+
+  class Location <<value object>> {
+    + lat : Number
+    + lng : Number
+    + radius : Number
+  }
+
+  class AccountSecurity <<value object>> {
+    + emailVerified : Boolean
+    + emailVerificationToken : String
+    + emailVerificationExpires : Date
+    + passwordResetToken : String
+    + passwordResetExpires : Date
+  }
+
+  class Meeting {
+    + _id : ObjectId
+    + groupName : String
+    + members : MeetingMember[3..5]
+    + sharedInterests : String[]
+    + matchPercentage : Number (0..100)
+    + venue : Venue
+    + date : Date
+    + status : Status <<enum: draft|upcoming|completed|cancelled>>
+    + createdAt : Date
+    + updatedAt : Date
+    --
+    + setMemberResponse(userId, response)
+    {static} + getPaginatedMeetings(opts)
+  }
+
+  class MeetingMember <<embedded>> {
+    + user : ObjectId <<ref User>>
+    + response : String <<pending|accepted|declined>>
+    + respondedAt : Date
+  }
+
+  class Venue <<value object>> {
+    + address : String
+    + city : String
+    + country : String
+    + coordinates : { lat, lng }
+  }
+
+  class Message {
+    + _id : ObjectId
+    + meeting : ObjectId <<ref Meeting>>
+    + user : ObjectId <<ref User>>
+    + message : String (1..500)
+    + timestamp : Date
+  }
+
+  class Rating {
+    + _id : ObjectId
+    + user : ObjectId <<ref User>>
+    + meeting : ObjectId <<ref Meeting>>
+    + username : String
+    + groupName : String
+    + rating : Number (1..5)
+    + comment : String (max 500)
+    + createdAt : Date
+    + updatedAt : Date
+    --
+    {static} + getPaginatedRatings(opts)
+  }
+
+  class Report {
+    + _id : ObjectId
+    + reporter : ObjectId <<ref User>>
+    + reportedUser : ObjectId <<ref User>>
+    + meeting : ObjectId <<ref Meeting>>
+    + description : String (10..2000)
+    + status : String <<new|in-review|resolved|rejected>>
+    + createdAt : Date
+    + updatedAt : Date
+    --
+    {static} + getPaginatedReports(opts)
+  }
+
+  class Contact {
+    + _id : ObjectId
+    + user : ObjectId <<ref User>>
+    + name : String
+    + lastName : String
+    + email : String
+    + subject : String
+    + message : String (1..5000)
+    + status : String <<new|in-progress|resolved>>
+    + createdAt : Date
+    --
+    {static} + getPaginatedContacts(opts)
+  }
+
+  class Analytic {
+    + _id : ObjectId
+    + date : Date <<unique>>
+    + totalUsers : Number
+    + activeUsers : Number
+    + totalMeetings : Number
+    + activeMeetings : Number
+    + timeframe : String <<daily|weekly|monthly|cumulative>>
+  }
+}
+
+' =====================================================
+'  KONTROLERJI / STORITVE (api/controllers)
+' =====================================================
+package "Kontrolerji (api/controllers)" <<Folder>> {
+
+  class AuthController {
+    + register(req, res)
+    + login(req, res)
+    + logout(req, res)
+    + verifyEmail(req, res)
+    + forgotPassword(req, res)
+    + resetPassword(req, res)
+  }
+
+  class UserController {
+    + getAllUsers(req, res)
+    + activateUser(req, res)
+    + deactivateUser(req, res)
+  }
+
+  class MeetingController {
+    + getAllMeetings(req, res)
+    + createMeeting(req, res)
+    + deleteMeeting(req, res)
+    + getUserConfirmedMeetings(req, res)
+    + confirmMeeting(req, res)
+    + cancelConfirmedMeeting(req, res)
+  }
+
+  class MessageController {
+    + getMeetingMessages(req, res)
+    + sendMessage(req, res)
+    + updateMessage(req, res)
+    + deleteMessage(req, res)
+  }
+
+  class RatingController {
+    + getAllRatings(req, res)
+    + createRating(req, res)
+    + updateRating(req, res)
+    + deleteRating(req, res)
+  }
+
+  class ReportController {
+    + getAllReports(req, res)
+    + createReport(req, res)
+    + updateReportStatus(req, res)
+    + deleteReport(req, res)
+  }
+
+  class ContactController {
+    + getAllContactForms(req, res)
+    + submitContactForm(req, res)
+    + updateContactFormStatus(req, res)
+    + deleteContactForm(req, res)
+  }
+
+  class SuggestionController {
+    + generateSuggestions(req, res)
+  }
+}
+
+' =====================================================
+'  POMOŽNI MODULI (api/utils, middleware)
+' =====================================================
+package "Pomožni moduli" <<Folder>> {
+
+  class JwtUtil <<utility>> {
+    + signToken(payload) : String
+    + verifyToken(token) : Object
+  }
+
+  class EmailUtil <<utility>> {
+    + sendVerificationEmail(user)
+    + sendPasswordResetEmail(user)
+  }
+
+  class AuthMiddleware <<middleware>> {
+    + protect(req, res, next)
+    + restrictTo(...roles)
+  }
+
+  class SocketServer <<infrastructure>> {
+    + io : Server
+    + onConnection(socket)
+    + joinMeetingRoom(meetingId)
+    + leaveMeetingRoom(meetingId)
+  }
+
+  class App <<entry point>> {
+    + app : Express
+    + server : http.Server
+    + initDB()
+  }
+}
+
+' =====================================================
+'  RELACIJE - ENTITETE
+' =====================================================
+
+' Embedded value objects
+User *-- "1" Location : poseduje
+User *-- "1" AccountSecurity : poseduje
+Meeting *-- "1" Venue : poseduje
+Meeting *-- "3..5" MeetingMember : vsebuje
+
+' Reference med entitetami (ObjectId reference)
+MeetingMember "*" --> "1" User : nanaša se na
+
+User "1" <-- "*" Message : pošiljatelj
+Meeting "1" <-- "*" Message : pripada
+
+User "1" <-- "*" Rating : avtor
+Meeting "1" <-- "*" Rating : za srečanje
+
+User "1" <-- "*" Report : reporter
+User "1" <-- "*" Report : reportedUser
+Meeting "1" <-- "*" Report : kontekst
+
+User "0..1" <-- "*" Contact : pošiljatelj
+
+' =====================================================
+'  RELACIJE - KONTROLERJI -> MODELI
+' =====================================================
+AuthController ..> User : uporablja
+AuthController ..> JwtUtil
+AuthController ..> EmailUtil
+
+UserController ..> User
+MeetingController ..> Meeting
+MeetingController ..> User
+MessageController ..> Message
+MessageController ..> Meeting
+MessageController ..> SocketServer : emit
+RatingController ..> Rating
+RatingController ..> Meeting
+ReportController ..> Report
+ReportController ..> User
+ContactController ..> Contact
+SuggestionController ..> User
+SuggestionController ..> Meeting
+
+AuthMiddleware ..> JwtUtil
+AuthMiddleware ..> User
+
+App *-- SocketServer
+App ..> AuthMiddleware
+
+@enduml
