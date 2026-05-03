@@ -19,10 +19,14 @@ Demo uporabnik: Email: ana@demo.com Geslo: demo123
 git clone https://github.com/TPO-2025-2026/Projekt-06
 cd Projekt-06
 git checkout main
+cd src
 npm install
 cd srecajmo-se
 npm install
 ng serve
+"nov terminal"
+pot do /Projekt-06/src
+node server.js
 ```
 Dostop na **http://localhost:4200**
 
