@@ -179,26 +179,170 @@ Znotraj meja sistema so vse komponente: Angular frontend, Node.js/Express REST A
 
 ## 6 Vodenje projekta
 
-_Nadaljujte z vzdrževanjem **dnevnika sprememb**. Dodaje vse nove spremembe v projektu, kjer vključite datum, opis, motivacijo in posledico vsake spremembe._
+### Dnevnik sprememb (dopolnitev od zadnjega poročila)
 
-- Prikažite dnevnik sprememb do tega trenutka.
-  - Kakšni so cilji za naslednjo iteracijo?
-  - Kakšen je načrt za preostanek semestra?
+| Datum | Motivacija | Opis spremembe | Posledica |
+|-------|------------|----------------|------------|
+| 6. 4. 2026 | Prvo testiranje z naročniki | Izdelali smo prve testne zaslonske maske (wireframe-i osnovnih tokov: registracija, vnos profila, prikaz predlogov) in jih posredovali naročnikom v pregled. | Uskladitev prioritet in zmanjšanje obsega na MVP. |
+| 8. 4. 2026 | Tehnična odločitev | Potrjena je uporaba tehnologij: Node.js, MongoDB, Angular. | Ekipa lahko začne s pripravo razvojnega okolja in osnovnih ogrodij. |
+| 10. 4. 2026 | Poenostavitev | Opustitev zahteve po avtomatičnem iskanju v ozadju za MVP. | Uporabnik mora eksplicitno klikniti "Išči skupino". Zmanjšana kompleksnost prve faze. |
+| 22. 4. 2026 | Pomanjkljiva specifikacija scoring algoritma | Med implementacijo pametne komponente smo ugotovili, da prvotna formula (Jaccard + Haversine + čas) ne deluje dobro na sintetičnih podatkih – uteži so bile poljubno izbrane. | Razširili smo definicijo algoritma: dodana je normalizacija razdalje (sigmoindna funkcija) in utež za število že izvedenih srečanj (za spodbujanje novih uporabnikov). Sprememba je podaljšala razvoj pametne komponente za 3 dni. |
+| 28. 4. 2026 | Zamik pri administratorskem vmesniku | Zaradi poznega začetka kodiranja (kot je opisano v refleksiji) nismo uspeli implementirati celotnega administratorskega vmesnika do načrtovanega roka. | Administratorska plošča je v trenutni iteraciji delno implementirana (le pregled uporabnikov). Metrike algoritma in upravljanje skupin smo prestavili v naslednjo iteracijo. |
+| 2. 5. 2026 | Poenostavitev glede na čas | Zaradi skupnega zamika pri integraciji in algoritmu smo se odločili začasno opustiti WebSocket (Socket.io) za chat v trenutni iteraciji. | Chat je v 2. iteraciji implementiran le kot simulacija prek REST API-ja (pošiljanje sporočil s periodičnim osveževanjem). Pravi chat v realnem času bo v 3. iteraciji. |
+
+### Cilji za naslednjo iteracijo (4. iteracija: 25. 5. 2026 – 5. 6. 2026)
+
+Zadnja iteracija, namenjena zaključku projekta in predaji končnega sistema. Trajanje: **12 dni**.
+
+**Cilji 4. iteracije:**
+
+- **Obsežno testiranje:** Izvedba sprejemnih testov z vsaj 5 realnimi uporabniki. Testiranje ključnih tokov: registracija → profil → iskanje → predlogi → chat. Odprava vseh kritičnih napak.
+- **Optimizacija zmogljivosti:** Testiranje odzivnih časov pod obremenitvijo. Dodajanje indeksov v MongoDB. Zagotovitev, da iskanje skupine ne preseže 2 sekund.
+- **Priprava končne dokumentacije:** Dopolnitev arhitekturne dokumentacije in diagramov. Dokončanje API dokumentacije. Priprava kratkega uporabniškega priročnika (max 2 strani).
+- **Končna predaja sistema:** 5. 6. 2026 – predaja sistema (GitHub ali zip) in končnega poročila.
+
+### Načrt za preostanek semestra
+
+| Obdobje | Aktivnosti | Ključni mejniki |
+|---------|------------|-----------------|
+| 25. 5. – 28. 5. 2026 | Testiranje z realnimi uporabniki, zbiranje napak, odprava kritičnih hroščev. | Sistem brez kritičnih napak. |
+| 29. 5. – 1. 6. 2026 | Optimizacija poizvedb, testiranje zmogljivosti, dodajanje indeksov. | Odziv iskanja < 2 sekundi. |
+| 2. 6. – 4. 6. 2026 | Dokončanje dokumentacije (arhitektura, API, uporabniški priročnik), priprava končnega poročila. | Končana vsa dokumentacija. |
+| 5. 6. 2026 | Končna predaja sistema in poročila. | zaključek projekta |
 
 ### 6.2 Projektni načrt
 
 - Posodobljen Ganttov diagram in graf PERT.
 
-## 7 Ekipa
 
-- Kakšne so bile vloge v ekipi za to iteracijo?
-  - Kaj je prispeval vsak član ekipe?
-  - Navedite grobo oceno prispevka posameznega člana ekipe v odstotkih.
+
+
+
+
+## 7 Ekipa
+### Opis aktivnosti in prispevkov članov ekipe v tej iteraciji (3. iteracija)
+
+V tej iteraciji smo se osredotočili na dejansko implementacijo sistema. Naloge smo si razdelili glede na predznanja in interese posameznikov, pri čemer je Aleks Gogić prevzel organizacijo sestankov, spremljanje rokov in komunikacijo z naročnikom (profesorjem). Ostali člani so prav tako aktivno sodelovali pri usklajevanju, dogovarjanju o terminih in medsebojni pomoči. V tej iteraciji smo organizirali štiri krajše sestanke (ob začetku, po prvem tednu, sredi in pred zaključkom iteracije) ter redno komunicirali prek skupinskega klepeta.
+
+#### A1: Vodenje ekipe in koordinacija
+
+V ekipi smo si naloge razdelili glede na sposobnosti, vendar je Aleks Gogić prevzel organizacijo sestankov, spremljanje rokov in komunikacijo z naročnikom (profesorjem). Ostali člani so prav tako aktivno sodelovali pri usklajevanju, dogovarjanju o terminih in medsebojni pomoči. V tej iteraciji so bili organizirani štirje krajši sestanki in redna komunikacija prek skupinskega klepeta.
+
+- **Aleks Gogić:** 60 % – organizacija sestankov, komunikacija z naročnikom, struktura poročila, poglavji 1 in 6, refleksija, končna integracija
+- **Miha Fabčič:** 10 % – sodelovanje pri usklajevanju, organizacija terminskih zapisov
+- **Jakob Jesenko:** 10 % – sodelovanje pri usklajevanju, vodenje seznama nalog
+- **Tim Pezdirc:** 10 % – sodelovanje pri usklajevanju, vodenje dnevnika sprememb
+- **Leja Petrič:** 10 % – sodelovanje pri usklajevanju, koordinacija pri razvoju pametne komponente
+
+#### A2: Razvoj backenda (Node.js/Express, MongoDB, JWT, e-mail)
+
+Aktivnost vključuje vzpostavitev MongoDB podatkovne baze z dokumentnimi modeli, implementacijo REST API endpointov, JWT avtentikacijo z zaščito poti ter integracijo e-poštnega servisa (Resend) za verifikacijo računa in ponastavitev gesla.
+
+- **Aleks Gogić:** 20 % – implementacija JWT avtentikacije, zaščita API poti, e-mail servis, končna integracija backenda
+- **Miha Fabčič:** 30 % – pomoč pri postavitvi osnovne strukture, testiranje endpointov
+- **Jakob Jesenko:** 30 % – vzpostavitev MongoDB baze in modelov (Uporabnik, Profil, Interes, Skupina, Sporočilo)
+- **Tim Pezdirc:** 15 % – implementacija REST API endpointov za uporabnike, profile in iskanje
+- **Leja Petrič:** 5 % – priprava sintetičnih podatkov za testiranje baze
+
+#### A3: Razvoj pametne komponente (scoring algoritem)
+
+Aktivnost vključuje implementacijo scoring funkcije za ujemanje uporabnikov (interesi, lokacija, čas) z Jaccard indeksom, Haversine formulo in časovnim prekrivanjem ter optimizacijo algoritma za hitro delovanje.
+
+- **Leja Petrič:** 70 % – glavna implementacija pametne komponente (scoring funkcija, uteži)
+- **Tim Pezdirc:** 15 % – povezava scoring funkcije z REST API-jem
+- **Aleks Gogić:** 5 % – pregled in testiranje algoritma
+- **Miha Fabčič:** 5 % – testiranje na sintetičnih podatkih
+- **Jakob Jesenko:** 5 % – pisanje agregacijskih poizvedb za MongoDB, optimizacija
+
+#### A4: Razvoj frontenda (Angular – registracija, prijava, nadzorna plošča)
+
+Aktivnost vključuje implementacijo Angular frontenda: tok registracije v treh korakih, prijavo z JWT ter uporabniško nadzorno ploščo (dashboard) za pregled predlogov skupin in profila.
+
+- **Miha Fabčič:** 50 % – implementacija registracije v treh korakih, prijava, povezava z backend API-jem
+- **Tim Pezdirc:** 20 % – implementacija nadzorne plošče uporabnika (pregled predlogov skupin in profila)
+- **Aleks Gogić:** 10 % – pomoč pri integraciji JWT žetonov s frontendom
+- **Jakob Jesenko:** 10 % – implementacija urejanja profila in ponastavitve gesla
+- **Leja Petrič:** 10 % – testiranje uporabniškega toka
+
+#### A5: Razvoj administratorskega vmesnika
+
+Aktivnost vključuje implementacijo administratorske plošče za pregled uporabnikov, skupin in metrik algoritma.
+
+- **Tim Pezdirc:** 20 % – implementacija nadzorne plošče administratorja (pregled uporabnikov, skupin, metrik)
+- **Miha Fabčič:** 20 % – pomoč pri implementaciji administratorskih funkcionalnosti
+- **Aleks Gogić:** 20 % – pomoč pri zaščiti administratorskih poti z JWT
+- **Jakob Jesenko:** 20 % – povezava administratorskega vmesnika s podatkovnimi modeli
+- **Leja Petrič:** 20 % – testiranje administratorskih funkcionalnosti
+
+#### A6: Pisanje poročila (2. poročilo o stanju – "Izvedljiv sistem")
+
+Aktivnost vključuje pisanje, urejanje, oblikovanje in končno integracijo celotnega poročila o stanju sistema. Pisanje je potekalo vzporedno z razvojem v zadnjem tednu iteracije.
+
+- **Aleks Gogić:** 60 % – struktura, uvod, vodenje projekta, refleksija, končna integracija
+- **Miha Fabčič:** 10 % – opis sistema (frontend, chat, kontakt), testi
+- **Jakob Jesenko:** 10 % – opis sistema (baza, backend, urejanje profila), nefunkcionalne zahteve, diagrami
+- **Tim Pezdirc:** 10 % – trenutno stanje, dnevnik sprememb, API specifikacija, nadzorni plošči
+- **Leja Petrič:** 10 % – pametna komponenta, krmilniki, cilji, potrebe naročnika
+
+### Preglednica vlog za 3. iteracijo (povprečni prispevki)
+
+| Aktivnost | Aleks Gogić | Miha Fabčič | Jakob Jesenko | Tim Pezdirc | Leja Petrič |
+|-----------|-------------|-------------|---------------|-------------|--------------|
+| A1: Vodenje ekipe in koordinacija | 60 % | 10 % | 10 % | 10 % | 10 % |
+| A2: Razvoj backenda (MongoDB, API, JWT, e-mail) | 20 % | 30 % | 30 % | 15 % | 5 % |
+| A3: Razvoj pametne komponente (scoring) | 5 % | 5 % | 5 % | 15 % | 70 % |
+| A4: Razvoj frontenda (Angular) | 10 % | 50 % | 10 % | 20 % | 10 % |
+| A5: Razvoj administratorskega vmesnika | 20 % | 20 % | 20 % | 20 % | 20 % |
+| A6: Pisanje poročila | 60 % | 10 % | 10 % | 10 % | 10 % |
+| **Povprečni prispevek** | **20 %** | **20 %** | **20 %** | **20 %** | **20 %** |
+
+### Povzetek vlog (usklajeno s seznamom elementov in skrbnikov)
+
+| Član ekipe | Ključne odgovornosti (elementi iz poglavja 4) |
+|------------|------------------------------------------------|
+| **Aleks Gogić** | Vodenje ekipe, organizacija sestankov, komunikacija z naročnikom, struktura poročila, poglavji 1 in 6, refleksija, končna integracija, avtentikacija (JWT), e-mail servis (Resend) |
+| **Miha Fabčič** | Sodelovanje pri usklajevanju, chat (REST simulacija), kontakt (feedback), implementacija registracije in prijave v Angularju, testiranje |
+| **Jakob Jesenko** | Sodelovanje pri usklajevanju, urejanje profila, ponastavitev gesla, MongoDB baza in modeli, agregacijske poizvedbe, diagrami, nefunkcionalne zahteve |
+| **Tim Pezdirc** | Sodelovanje pri usklajevanju, nadzorna plošča uporabnika, nadzorna plošča administratorja, REST API endpointi, dnevnik sprememb, API specifikacija |
+| **Leja Petrič** | Sodelovanje pri usklajevanju, pametna komponenta (scoring), krmilniki, sintetični podatki, cilji, potrebe naročnika |
+
+### Opombe k prispevkom
+
+Kljub temu da so bili prispevki pri posameznih aktivnostih različni (nekdo je več delal na backendu, drugi na pametni komponenti, tretji na frontendu), je **povprečni prispevek vseh članov ekipe enak – 20 %**. Razlike so posledica različnih predznanj in interesov, vendar smo si med seboj pomagali, usklajevali in pokrivali manjkajoča področja. Aleks Gogić je prevzel nekoliko več organizacijskih in koordinacijskih nalog ter pisanja poročila, medtem ko so ostali člani več prispevali k specifičnim tehničnim področjem. Skupaj smo dosegli vse zastavljene cilje iteracije.
+
+---
+
 
 ## 9 Refleksija
 
-- Kaj je šlo po pričakovanjih?
-  - Kaj ni šlo po pričakovanjih?
-  - Kakšne težave so se pojavile pri ciljih, ki jih niste dosegli?
-  - Kako nameravate premagati te težave?
-  - Kaj boste naredili drugače v naslednji iteraciji?
+### Kaj je šlo po pričakovanjih?
+
+Sodelovanje in komunikacija v ekipi sta delovali dobro. Redno smo komunicirali prek skupinskega klepeta in se uspešno organizirali za štiri krajše sestanke (ob začetku, po prvem tednu, sredi in pred zaključkom iteracije). Delitev na področja (backend, frontend, pametna komponenta) se je izkazala za učinkovito.
+
+Hitro smo uskladili, da je treba dokumentacijo pisati vzporedno z razvojem, ne šele pred njim.
+
+Vse ključne funkcionalnosti (avtentikacija, registracija, prijava, nadzorna plošča) smo uspešno implementirali do konca iteracije.
+
+### Kaj ni šlo po pričakovanjih?
+
+Glavna težava je bil zamik pri implementaciji administratorskega vmesnika in chata. Zaradi poznega začetka kodiranja nismo uspeli implementirati WebSocket chata, ampak le simulacijo prek REST API-ja. Prav tako administratorska plošča ni povsem dokončana (manjkajo metrike algoritma).
+
+Druga težava je bila pomanjkljiva specifikacija scoring algoritma, kar je povzročilo 3 dni zamika pri razvoju pametne komponente.
+
+### Kakšne težave so se pojavile pri ciljih, ki jih niste dosegli?
+
+- **Nedokončan administratorski vmesnik:** Metrike algoritma in upravljanje skupin nista bila implementirana do načrtovanega roka.
+- **Chat v realnem času:** WebSocket (Socket.io) ni bil implementiran, uporabili smo simulacijo prek REST API-ja.
+- **Zamik pri integraciji:** CORS napake in napačne URL poti so povzročile 2 dni zamika pri povezavi backenda in frontenda.
+
+### Kako nameravate premagati te težave?
+
+- **Za nedokončan administratorski vmesnik in chat:** V naslednji (4.) iteraciji bomo prioritizirali dokončanje teh funkcionalnosti takoj na začetku.
+- **Za zamik pri integraciji:** V naslednji iteraciji bomo najprej vzpostavili testno okolje in preverili povezavo med backendom in frontendom, preden začnemo z razvojem novih funkcij.
+
+### Kaj boste naredili drugače v naslednji iteraciji?
+
+- **Zgodnejše testiranje integracije:** Že na začetku iteracije bomo preverili CORS nastavitve in okoljske spremenljivke.
+- **Prioritizacija nedokončanih funkcionalnosti:** Takoj na začetku 4. iteracije bomo dokončali administratorski vmesnik in WebSocket chat.
+- **Rednejši kratki sestanki:** Ohranili bomo 10-minutne online sestanke 2-krat tedensko za spremljanje napredka.
+- **Dnevno spremljanje napredka kodiranja:** Vsak dan bomo na kratkem sestanku preverili, kaj je bilo narejeno in kaj so ovire.
