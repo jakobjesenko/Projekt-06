@@ -106,7 +106,7 @@ Znotraj meja sistema so vse komponente: Angular frontend, Node.js/Express REST A
 **Razredni diagram**
 Razredni diagram prikazuje strukturo sistema na treh ravneh: mejne razrede (zeleni), ki predstavljajo zaslonske maske, kontrolne razrede (rdeči), ki vsebujejo poslovno logiko, in entitetne razrede (modri), ki hranijo podatke. Mejni razredi so vsaka stran v aplikaciji (registracija, prijava, profil, nadzorna plošča, admin plošče). Kontrolni razredi upravljajo procese, kot so registracija, prijava, iskanje skupin in pošiljanje e-pošte. Entitetni razredi predstavljajo trajne podatke: uporabnike, profile, skupine, sporočila, prijave in parametre algoritma. Povezave med razredi so označene s števnostmi (npr. en uporabnik ima en profil, ena skupina ima več članov). Diagram je izhodišče za izvedbo podatkovne baze in programskih razredov.
 
-![Razredni Diagram](./gradivo/plantuml/Razredni_diagram.puml)
+![Razredni Diagram](./gradivo/plantuml/razredniDiagram.png)
 
 **Arhitektura sistema**
 
