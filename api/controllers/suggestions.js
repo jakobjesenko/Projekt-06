@@ -1,4 +1,5 @@
 import User from "../models/users.js";
+import Meeting from "../models/meetings.js";
 
 // ─── Konfiguracija algoritma ─────────────────────────────────────────────
 // score = w1*similarity_interesov + w2*blizina_geografska + w3*prekrivanje_casa
@@ -206,9 +207,25 @@ const generateSuggestions = async (req, res) => {
       return res.status(200).json([]);
     }
 
-    // 1) Pridobi vse potencialne kandidate iz baze
+    // 1) Najdi uporabnike, s katerimi se current user že srečuje (sprejet meeting)
+    const existingMeetings = await Meeting.find({
+      members: { $elemMatch: { user: currentUser._id, response: 'accepted' } },
+      status: { $ne: 'cancelled' },
+    }).select('members').lean();
+
+    const alreadyMetIds = new Set();
+    for (const meeting of existingMeetings) {
+      for (const member of meeting.members) {
+        const id = member.user.toString();
+        if (id !== currentUser._id.toString()) {
+          alreadyMetIds.add(id);
+        }
+      }
+    }
+
+    // 2) Pridobi vse potencialne kandidate iz baze (brez tistih iz obstoječih srečanj)
     const candidates = await User.find({
-      _id: { $ne: currentUser._id },
+      _id: { $ne: currentUser._id, $nin: [...alreadyMetIds] },
       activeSearch: true,
       status: "active",
       isActive: true,
@@ -224,7 +241,7 @@ const generateSuggestions = async (req, res) => {
       return res.status(200).json([]);
     }
 
-    // 2) Izračunaj score za vsakega kandidata glede na trenutnega uporabnika
+    // 3) Izračunaj score za vsakega kandidata glede na trenutnega uporabnika
     const scoredAll = candidates.map((cand) => ({
       user: cand,
       ...computePairScore(currentUser, cand),
@@ -255,7 +272,7 @@ const generateSuggestions = async (req, res) => {
       return res.status(200).json([]);
     }
 
-    // 3) Vzemi pool najboljših kandidatov
+    // 4) Vzemi pool najboljših kandidatov
     const pool = scored.slice(0, CANDIDATE_POOL_SIZE);
 
     // 4) Sestavi skupine: pohlepno izbiraj sidro + najboljše partnerje znotraj poola

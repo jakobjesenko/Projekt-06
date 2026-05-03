@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap, catchError, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export interface User {
   id: string;
@@ -136,16 +137,25 @@ private restoreSession(): void {
     return;
   }
 
+  // Seed the user synchronously from the JWT payload so UI doesn't flash
+  // "logged out" while we wait for /me to come back.
+  const seeded = this.userFromToken(tokenAtStart);
+  if (seeded) {
+    this.currentUserSubject.next(seeded);
+  }
+
   this.http.get<any>(`${this.API}/me?t=${Date.now()}`, {
     withCredentials: true
   }).pipe(
-    catchError(() => {
-      // Only logout if the token is still the same one that failed.
-      // If user logged in meanwhile, do NOT delete the new token.
-      if (this.token === tokenAtStart) {
-        this.logout(false);
+    catchError((err: HttpErrorResponse) => {
+      // Only revoke the session on a definitive auth rejection.
+      // Network errors, 5xx, or CORS failures should NOT wipe a valid token —
+      // that would log the user out just because the backend was briefly unavailable.
+      if (err.status === 401 || err.status === 403) {
+        if (this.token === tokenAtStart) {
+          this.logout(false);
+        }
       }
-
       return of(null);
     })
   ).subscribe(res => {
@@ -176,20 +186,39 @@ private restoreSession(): void {
   }
 
   isTokenExpired(token: string): boolean {
+    const payload = this.decodeToken(token);
+    if (!payload || typeof payload.exp !== 'number') return true;
+    return payload.exp * 1000 < Date.now();
+  }
+
+  private decodeToken(token: string): any | null {
     try {
       const parts = token.split('.');
-      if (parts.length !== 3) return true;
+      if (parts.length !== 3) return null;
 
       // JWT uses base64url encoding (chars - and _). Convert to base64 for atob.
       let b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
       // Pad with '=' to make length a multiple of 4
       while (b64.length % 4) b64 += '=';
 
-      const payload = JSON.parse(atob(b64));
-      return payload.exp * 1000 < Date.now();
+      return JSON.parse(atob(b64));
     } catch {
-      return true;
+      return null;
     }
+  }
+
+  private userFromToken(token: string): User | null {
+    const payload = this.decodeToken(token);
+    if (!payload?.id) return null;
+
+    return {
+      id: payload.id,
+      username: payload.username ?? '',
+      firstName: '',
+      lastName: '',
+      email: payload.email ?? '',
+      role: payload.role ?? 'user'
+    };
   }
 
   resendVerification(email: string) {

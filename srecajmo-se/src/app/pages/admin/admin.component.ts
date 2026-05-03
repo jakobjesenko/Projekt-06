@@ -30,7 +30,7 @@ export class AdminComponent implements OnInit {
     { icon: 'fas fa-users',          value: '...', label: 'Skupaj uporabnikov' },
     { icon: 'fas fa-calendar-check', value: 318,   label: 'Skupaj srečanj' },
     { icon: 'fas fa-star',           value: '4.7', label: 'Povprečna ocena' },
-    { icon: 'fas fa-search',         value: 27,    label: 'Aktivnih iskanj' },
+    { icon: 'fas fa-search',         value: '...', label: 'Aktivnih iskanj' },
   ];
 
   users: AdminUser[] = [];
@@ -50,6 +50,7 @@ export class AdminComponent implements OnInit {
       next: (users) => {
         this.users = users;
         this.stats[0].value = users.length;
+        this.stats[3].value = users.filter(u => u.activeSearch).length;
         this.loading = false;
       },
       error: () => {

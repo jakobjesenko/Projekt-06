@@ -8,13 +8,13 @@ export const protect = async (req, res, next) => {
   try {
     let token;
 
-    // 1. Preveri če token obstaja v cookie-jih
-    if (req.cookies && req.cookies.jwt) {
-      token = req.cookies.jwt;
-    }
-    // 2. Preveri če token obstaja v auth. header (za API klice)
-    else if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    // 1. Prefer the Authorization header when present — it always carries the
+    //    current localStorage token. Fall back to the cookie only when there
+    //    is no header, so browser-native requests (no JS) still work.
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
+    } else if (req.cookies && req.cookies.jwt) {
+      token = req.cookies.jwt;
     }
 
     if (!token) {
@@ -24,7 +24,7 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // 3. Verifikacja tokena
+    // 2. Verifikacija tokena
     const decoded = verifyToken(token);
     if (!decoded) {
       return res.status(401).json({
@@ -33,7 +33,7 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // 4. Preveri če uporabnik še obstaja
+    // 3. Preveri če uporabnik še obstaja
     const user = await User.findById(decoded.id).select('-password');
     if (!user) {
       return res.status(401).json({
@@ -42,7 +42,7 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // 5. Preveri če je uporabnik aktiven
+    // 4. Preveri če je uporabnik aktiven
     if (user.status === 'blocked') {
       return res.status(403).json({
         success: false,
@@ -50,7 +50,7 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // 6. Dovoli dostop do zaščitene route
+    // 5. Dovoli dostop do zaščitene route
     req.user = user;
     next();
   } catch (error) {
