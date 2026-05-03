@@ -568,8 +568,7 @@ Ekipa ne uporablja strogega Scrum procesa, ker bi vsakodnevna formalna srečanja
 | 13. 3. 2026 | Prilagoditev poglavja 6 in načina dela ekipe | Potreba po realnem procesu dela ekipe | Uveden tedenski iterativni pristop z usklajevanjem prek Discorda |
 | 27. 3. 2026 | Prilagoditev COCOMO finančne in časovne ocene na MVP | Povratne informacije iz zagovora (realnejši načrt in jasnost obsega) | Finančna in časovna ocena usklajeni z dejanskim rokom projekta (62 dni) |
 | 30. 3. 2026 | Dopolnitev opisa pametne komponente in administratorskega nadzora | Dodatna zahteva po spremljanju učinkovitosti matching algoritma | Jasneje opredeljene metrike kakovosti in operativno ukrepanje ob poslabšanju |
-
-*(Za vsak vnos vključite datum, opis, motivacijo in posledico spremembe)*
+| 3. 5. 2026 | Iteracija 2: Osnutek sistema - priprava specifikacije zahtev in uporabniških tokov | Potreba po jasni specifikaciji vmesnikov in funkcionalnosti za izvajanje | Dopolnjene funkcionalne in nefunkcionalne zahteve, oblikovane maske uporabniških vmesnikov, definirani primeri uporabe in diagrami aktivnosti |
 
 ---
 

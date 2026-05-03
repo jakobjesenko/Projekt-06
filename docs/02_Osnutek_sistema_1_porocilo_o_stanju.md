@@ -214,7 +214,7 @@ Slika maske: ![Maska za prijavo](gradivo/img/prijava.png)
 
 Maska omogoča začetek postopka obnovitve dostopa do računa.
 
-Slika maske: ![Maska za zahtevo ponastavitve gesla](gradivo/img/pozabljeno geslo.png)
+Slika maske: ![Maska za zahtevo ponastavitve gesla](gradivo/img/pozabljeno_geslo.png)
 
 1. Uporabnik vnese e-naslov računa.
 2. Sistem preveri, ali račun obstaja, in pošlje povezavo za ponastavitev gesla.
@@ -225,7 +225,7 @@ Slika maske: ![Maska za zahtevo ponastavitve gesla](gradivo/img/pozabljeno geslo
 
 Maska omogoča zaključek ponastavitve gesla prek e-poštne povezave.
 
-Slika maske: ![Maska za nastavitev novega gesla](gradivo/img/novo geslo.png)
+Slika maske: ![Maska za nastavitev novega gesla](gradivo/img/novo_geslo.png)
 
 1. Uporabnik odpre veljavno povezavo iz e-pošte.
 2. Uporabnik vnese novo geslo in potrditev gesla.
@@ -236,7 +236,7 @@ Slika maske: ![Maska za nastavitev novega gesla](gradivo/img/novo geslo.png)
 
 Maska združuje ključne funkcije uporabnika po prijavi.
 
-Slika maske: ![Maska uporabniške nadzorne plošče](gradivo/img/uporabniska nadzorna plosca.png)
+Slika maske: ![Maska uporabniške nadzorne plošče](gradivo/img/uporabniska_nadzorna_plosca.png)
 
 1. Leva stran prikazuje kratek profil (slika, ime, priimek, vzdevek, e-pošta), status iskanja skupine in hitra dejanja.
 2. Prikazani so interesi uporabnika ter dostop do urejanja profila.
@@ -247,7 +247,7 @@ Slika maske: ![Maska uporabniške nadzorne plošče](gradivo/img/uporabniska nad
 
 Maska prikazuje predlagane skupine in omogoča hiter pregled članov pred potrditvijo.
 
-Slika maske: ![Maska za predloge skupin](gradivo/img/maska za predlog skupin.png)
+Slika maske: ![Maska za predloge skupin](gradivo/img/maska_za_predlog_skupin.png)
 
 1. Uporabnik vidi seznam predlaganih skupin z osnovnimi podatki, odstotkom ujemanja in ključnimi razlogi za predlog.
 2. Uporabnik lahko pri vsaki predlagani skupini odpre hiter pregled članov skupine.
@@ -259,7 +259,7 @@ Slika maske: ![Maska za predloge skupin](gradivo/img/maska za predlog skupin.png
 
 Maska prikazuje komunikacijo skupine.
 
-Slika maske: ![Maska skupinskega chata](gradivo/img/skupinski chat.png)
+Slika maske: ![Maska skupinskega chata](gradivo/img/skupinski_chat.png)
 
 1. Maska vsebuje osnovne informacije o skupini in seznam članov.
 2. Uporabnik lahko pregleduje zgodovino sporočil.
@@ -308,9 +308,9 @@ Slike mask: ![Maska administratorske nadzorne plošče(uporabniki)](gradivo/img/
 
 Maske pokrivajo strani, dostopne iz noge strani (footer).
 
-Slik mask: ![Maska informacijskih strani in kontakta](gradivo/img/pogoji uporabe.png)
+Slik mask: ![Maska informacijskih strani in kontakta](gradivo/img/pogoji_uporabe.png)
 ![Maska informacijskih strani in kontakta](gradivo/img/fqa.png)
-![Maska informacijskih strani in kontakta](gradivo/img/gdpr.png)
+![Maska informacijskih strani in kontakta](gradivo/img/varstvo_osebnih_podatkov.png)
 ![Maska informacijskih strani in kontakta](gradivo/img/kontakt.png)
 
 1. Maska pogojev uporabe vsebuje opis pogojev uporabe sistema.
