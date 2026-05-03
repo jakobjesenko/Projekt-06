@@ -310,7 +310,6 @@ Aktivnost vključuje pisanje, urejanje, oblikovanje in končno integracijo celot
 
 Kljub temu da so bili prispevki pri posameznih aktivnostih različni (nekdo je več delal na backendu, drugi na pametni komponenti, tretji na frontendu), je **povprečni prispevek vseh članov ekipe enak – 20 %**. Razlike so posledica različnih predznanj in interesov, vendar smo si med seboj pomagali, usklajevali in pokrivali manjkajoča področja. Aleks Gogić je prevzel nekoliko več organizacijskih in koordinacijskih nalog ter pisanja poročila, medtem ko so ostali člani več prispevali k specifičnim tehničnim področjem. Skupaj smo dosegli vse zastavljene cilje iteracije.
 
----
 
 
 ## 9 Refleksija
