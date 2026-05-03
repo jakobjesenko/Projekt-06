@@ -1,0 +1,13 @@
+ADMIN:
+admin@srecajmose.si
+admin123
+
+USERS:
+ana@gmail.com
+AnaAnko1!
+
+cene@gmail.com
+1234
+
+darko@gmail.com
+1234

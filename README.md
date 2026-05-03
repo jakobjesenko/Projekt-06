@@ -2,7 +2,7 @@
 
 |             Dokumentacija              |          Izvorna koda          |           Testni primeri           |
 | :------------------------------------: | :----------------------------: | :--------------------------------: |
-| [:page_with_curl:<br>**`docs`**](docs) | [:computer:<br>**`src`**](src) | [:microscope:<br>**`test`**](test) |
+| [:page_with_curl:<br>**`docs`**](docs) | [:computer:<br>**`src`**](src) | [:microscope:<br>**`test`**](src/test) |
 
 ## Opis dela
 
@@ -61,7 +61,7 @@ Spodnja slika prikazuje okviren terminski načrt pri predmetu, in sicer:
 
 ![Terminski načrt](https://teaching.lavbic.net/plantuml/svg/dPRFJkCm4CRlVWeB3h2LKXhdpw9LXH2mI6XN0gtsHCLXshZ1JMfNjbkMhdW4tee7st6QXZOD3LhrqauztpVpct6KSsD1snIajVJWDzTJ8Kqcg8ItLsqF2EaR-vppCrASk1AGQfZIluHIAwOy5v8NFoZzYLylLQuqFHmpzocYrqhQLHJpdZ7quZB1P6NM1OooLAkvJCfSVZgEnabTCRg-EFr-MQQ3rkffrtNhp5Jat5XLLVS_FgDS6Pvy9D3OP2xIHrjr-aBw9oKzWapb31oxOKt9Qf06_-BIagD7aN0wLieErH-IWqpda79gSZBJGbepWfpJ9ywp_1abmSvr0iy8X9V54eEosn7MOx7N2xrUJ8Mf1zdNdM3azVoc8Di8bj70yrUYhWya9IGzJ7eSniEwwqS7K3TiES2Y3mwGEwqcV6HfiS26hX8OraJ8e5yaVAlcSNQF-ymjpwXOBc02SW9qXe9JRe4U-t6NTR_qJugaimVw2BCPbuQ2tL8zsb5jCEfqVi4omPjX-O8kgCdcCzolJWTTgEK9bni-OEZWod-WEHXi8A8uEjCeURCS2WrO-r8iO8yMszAY89Cr7Mp5MHqPoYKEqFEetwLOeuQHG1QUXz0wdJj4agiKqI3Qp3ghifgYaEF0sKfHjmtMjlwgXnrZveoB01dS9WcKzD4AAgzj9nn9i7SaRld8u1vIjS1BjAEsgko-1dUdi62J26iWSclatAsD4SRowMU1H1MGiCLtZGEdCLDQlRsA7AXoP-LalkqLTyEzHDnjUoVIA5XIOIrKeaqgGGELc-K2UK_4ekHInn8sOuahBASjnciih1rBs8tsOd7Fc7SiR0-Me0LBl8abRC3oGyctL-dkgIl-axlYixRR4zUfP8KFT-jUzR9bnQ9MA2nwXzAWLo89Mv3uh6Ao-zn277pK-C0Dkl7Uyjpz9kGSTOlNZdy0 "Terminski načrt")
 
-V mapi [**`docs`**](docs) so na voljo predloge dokumentov posameznih iteracij, v mapi [**`src`**](src) izvorna koda in v mapi [**`test`**](test) testni primeri.
+V mapi [**`docs`**](docs) so na voljo predloge dokumentov posameznih iteracij, v mapi [**`src`**](src) izvorna koda in v mapi [**`test`**](src/test) testni primeri.
 
 ## Reference
 

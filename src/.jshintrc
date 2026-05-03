@@ -1,0 +1,26 @@
+{
+  "strict": "global",
+  "node": true,
+  "browser": true,
+  "esversion": 11,
+  "multistr": true,
+  "sub": true,
+  "undef": true,
+  "unused": true,
+  "eqeqeq": true,
+  "curly": true,
+  "latedef": "nofunc",
+  "globals": {
+    "module": "readonly",
+    "$": "readonly",
+    "formatPercentage": "readonly",
+    "formatFlag": "readonly",
+    "formatDateOnly": "readonly",
+    "formatCurrency": "readonly",
+    "formatNull": "readonly",
+    "moment": "readonly",
+    "indexArray": "readonly",
+    "getData": "readonly",
+    "round": "readonly"
+  }
+}

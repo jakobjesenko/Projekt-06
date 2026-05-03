@@ -1,0 +1,32 @@
+<div class="content-card">
+  <h1><i class="fas fa-question-circle"></i> Pogosta vprašanja</h1>
+
+  <div class="search-box">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="🔍 Išči po pogostih vprašanjih..."
+      [(ngModel)]="searchTerm"
+    />
+  </div>
+
+  <div id="faqContainer">
+    <div
+      class="faq-item"
+      *ngFor="let item of filteredItems"
+    >
+      <div
+        class="faq-question"
+        [class.active]="item.isOpen"
+        (click)="toggle(item)"
+      >
+        <span>
+          <i [class]="item.icon" style="color: #a78bfa; margin-right: 10px;"></i>
+          {{ item.question }}
+        </span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer" [class.show]="item.isOpen" [innerHTML]="item.answerHtml"></div>
+    </div>
+  </div>
+</div>

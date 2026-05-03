@@ -1,0 +1,22 @@
+<nav class="navbar">
+    <div class="logo" routerLink="/">
+        <div class="logo-icon"><i class="fas fa-hand-peace"></i></div>
+        <span class="logo-text">Srečajmo<span>se</span></span>
+    </div>
+    <div class="nav-buttons">
+        <ng-container *ngIf="user; else loggedOut">
+            <span class="user-greeting">Pozdravljen, {{ user.username }}!</span>
+
+            <button *ngIf="isAdmin" class="btn-ghost" routerLink="/admin">Admin panel</button>
+
+            <button class="btn-ghost" routerLink="/dashboard">Moj profil</button>
+
+            <button class="btn-secondary" (click)="logout()">Odjava</button>
+        </ng-container>
+
+        <ng-template #loggedOut>
+            <button class="btn-ghost" routerLink="/login">Prijava</button>
+            <button class="btn-primary" routerLink="/register">Registracija</button>
+        </ng-template>
+    </div>
+</nav>

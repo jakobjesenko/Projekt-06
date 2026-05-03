@@ -1,0 +1,140 @@
+<div class="register-wizard">
+  <div class="wizard-container">
+
+    <div class="step-header">
+      <i class="fas fa-user-edit"></i>
+      <h2>Uredi profil</h2>
+      <p>Spremeni svoje podatke</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <!-- ── Osebni podatki ─────────────────────────────────────────── -->
+      <div class="form-row">
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> Ime</label>
+          <input type="text" formControlName="firstName" placeholder="Ana" class="form-input">
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-user-tag"></i> Priimek</label>
+          <input type="text" formControlName="lastName" placeholder="Novak" class="form-input">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-at"></i> Uporabniško ime</label>
+        <input type="text" formControlName="username" placeholder="kavoljubec_ana" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-calendar-alt"></i> Datum rojstva</label>
+        <input type="date" formControlName="birthday" class="form-input" [max]="maxBirthday">
+        <small class="form-hint">Stari morate biti vsaj 18 let.</small>
+        <small class="error-message" *ngIf="form.get('birthday')?.touched && form.get('birthday')?.hasError('underage')">
+          Stari morate biti vsaj 18 let.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-envelope"></i> E-pošta</label>
+        <input type="email" formControlName="email" placeholder="ana@email.com" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-lock"></i> Novo geslo <span class="form-hint">(pusti prazno, če ne želiš spremeniti)</span></label>
+        <input type="password" formControlName="password" placeholder="••••••••" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-lock"></i> Potrdi novo geslo</label>
+        <input type="password" formControlName="passwordConfirm" placeholder="••••••••" class="form-input">
+        <small class="error-message" *ngIf="form.hasError('passwordsMismatch') && form.get('passwordConfirm')?.touched">
+          Gesli se ne ujemata.
+        </small>
+      </div>
+
+      <!-- ── Interesi ───────────────────────────────────────────────── -->
+      <div class="form-group">
+        <label><i class="fas fa-heart"></i> Interesi <span class="form-hint">(izberi vsaj 3)</span></label>
+
+        <div class="interests-grid">
+          <label
+            *ngFor="let interest of interestsMaster"
+            class="interest-chip"
+            [class.selected]="isSelected(interest.name)"
+            (click)="toggleInterest(interest.name)">
+            <i class="fas {{ interest.icon }}"></i> {{ interest.name }}
+          </label>
+        </div>
+
+        <small class="error-message"
+          *ngIf="selectedInterests.length > 0 && selectedInterests.length < 3">
+          Izberi vsaj 3 interese.
+        </small>
+      </div>
+
+      <!-- ── Razpoložljivost ────────────────────────────────────────── -->
+      <div class="form-group">
+        <label><i class="fas fa-calendar-week"></i> Kdaj si prost/a?</label>
+
+        <div class="quick-buttons">
+          <button type="button" class="quick-btn" (click)="selectWeeknights()">🌙 Po delavnikih (pon–pet zvečer)</button>
+          <button type="button" class="quick-btn" (click)="selectWeekends()">🎉 Vikendi (sob, ned cel dan)</button>
+          <button type="button" class="quick-btn" (click)="clearAvailability()">🗑 Počisti vse</button>
+        </div>
+
+        <div class="calendar-grid">
+          <div class="calendar-header"></div>
+          <div class="calendar-header day-header" *ngFor="let day of weekdays">{{ day }}</div>
+
+          <ng-container *ngFor="let part of dayPartsWithTimes">
+            <div class="time-label">
+              {{ part.label }}<br>
+              <span class="time-range">{{ part.range }}</span>
+            </div>
+            <button
+              type="button"
+              *ngFor="let day of weekdays"
+              class="calendar-slot"
+              [class.selected-slot]="isAvailabilitySelected(day + '__' + part.key)"
+              (click)="toggleAvailability(day + '__' + part.key)">
+              <span class="slot-time">{{ part.range }}</span>
+            </button>
+          </ng-container>
+        </div>
+
+        <div class="calendar-note">* Klikni na termin za izbiro.</div>
+      </div>
+
+      <!-- ── Lokacija ───────────────────────────────────────────────── -->
+      <div class="form-group">
+        <label><i class="fas fa-location-dot"></i> Tvoja lokacija <span class="form-hint">(klikni na zemljevid)</span></label>
+        <div id="editMap" style="height: 300px; width: 100%; border-radius: 20px; margin-bottom: 1rem;"></div>
+
+        <div class="location-status" *ngIf="locationSelected">
+          <i class="fas fa-check-circle"></i> Lokacija posodobljena
+        </div>
+
+        <div class="radius-control">
+          <label>
+            <i class="fas fa-expand-alt"></i> Radij iskanja:
+            <span>{{ form.get('locationRadius')?.value }}</span> km
+          </label>
+          <input type="range" id="radiusSlider" min="1" max="50" step="1" formControlName="locationRadius">
+          <div class="radius-hint">
+            <i class="fas fa-info-circle"></i> Krog prikazuje območje, kjer si pripravljen/a potovati.
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Gumbi ──────────────────────────────────────────────────── -->
+      <div class="wizard-nav">
+        <button type="button" class="btn-secondary" (click)="cancel()">Prekliči</button>
+        <button type="submit" class="btn-primary">
+          Shrani spremembe <i class="fas fa-save"></i>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
