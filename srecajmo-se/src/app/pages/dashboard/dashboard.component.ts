@@ -38,6 +38,7 @@ interface ConfirmedMeeting {
   id?: string;
   groupName: string;
   members: string[];
+  memberIds?: string[];
   dateTime: string;
   location: string;
 }
@@ -67,6 +68,12 @@ export class DashboardComponent implements OnInit {
   confirmedMeetings: ConfirmedMeeting[] = [];
   loadingSuggestions = false;
 
+  /**
+   * Hrani predloge, ki so trenutno v procesu sprejemanja.
+   * S tem preprečimo večkratni klik, preden backend odgovori.
+   */
+  acceptingSuggestionKeys = new Set<string>();
+
   constructor(
     private readonly authService: AuthService,
     private readonly http: HttpClient
@@ -78,6 +85,7 @@ export class DashboardComponent implements OnInit {
 
   loadSuggestions(userId: string): void {
     if (!userId) return;
+
     this.loadingSuggestions = true;
 
     this.http
@@ -86,7 +94,16 @@ export class DashboardComponent implements OnInit {
       })
       .subscribe({
         next: (data) => {
-          this.suggestions = data || [];
+          const suggestions = data || [];
+
+          /**
+           * Če imamo že naložena potrjena srečanja,
+           * takoj skrijemo predloge, ki so že sprejeti.
+           */
+          this.suggestions = suggestions.filter(
+            (suggestion) => !this.isSuggestionAlreadyAccepted(suggestion)
+          );
+
           this.loadingSuggestions = false;
         },
         error: (err) => {
@@ -124,6 +141,10 @@ export class DashboardComponent implements OnInit {
 
         this.user = dashboardUser;
         this.loading = false;
+
+        if (dashboardUser.id) {
+          this.loadConfirmedMeetings(dashboardUser.id);
+        }
 
         if (dashboardUser.activeSearch && dashboardUser.id) {
           this.loadSuggestions(dashboardUser.id);
@@ -253,6 +274,7 @@ export class DashboardComponent implements OnInit {
       .subscribe({
         next: () => {
           if (!this.user) return;
+
           this.user.activeSearch = newState;
 
           if (newState) {
@@ -273,9 +295,63 @@ export class DashboardComponent implements OnInit {
     date.setHours(18, 0, 0, 0);
     return date;
   }
-  
+
+  private normalizeText(value: string | undefined | null): string {
+    return (value || '')
+      .toLowerCase()
+      .trim()
+      .replaceAll('č', 'c')
+      .replaceAll('š', 's')
+      .replaceAll('ž', 'z')
+      .replace(/\s+/g, ' ');
+  }
+
+  private getSuggestionKey(suggestion: GroupSuggestion): string {
+    const memberNames = [...(suggestion.members || [])]
+      .map((member) => this.normalizeText(member))
+      .sort();
+
+    return [
+      this.normalizeText(suggestion.name),
+      this.normalizeText(suggestion.location),
+      ...memberNames
+    ].join('|');
+  }
+
+  private getConfirmedMeetingKey(meeting: ConfirmedMeeting): string {
+    return this.getMeetingDuplicateKey(meeting);
+  }
+
+  isSuggestionAlreadyAccepted(suggestion: GroupSuggestion): boolean {
+    const suggestionKey = this.getSuggestionKey(suggestion);
+
+    if (this.acceptingSuggestionKeys.has(suggestionKey)) {
+      return true;
+    }
+
+    return this.confirmedMeetings.some((meeting) => {
+      const confirmedKey = this.getConfirmedMeetingKey(meeting);
+      return confirmedKey === suggestionKey;
+    });
+  }
+
   acceptSuggestion(suggestion: GroupSuggestion): void {
     if (!this.user?.id) return;
+
+    const suggestionKey = this.getSuggestionKey(suggestion);
+
+    /**
+     * Če je predlog že sprejet ali trenutno v procesu sprejemanja,
+     * ne pošljemo novega POST requesta.
+     */
+    if (this.isSuggestionAlreadyAccepted(suggestion)) {
+      this.suggestions = this.suggestions.filter(
+        (s) => this.getSuggestionKey(s) !== suggestionKey
+      );
+      return;
+    }
+
+    this.acceptingSuggestionKeys.add(suggestionKey);
 
     const memberIds = suggestion.memberIds || [];
 
@@ -318,22 +394,112 @@ export class DashboardComponent implements OnInit {
     this.http.post<any>('/api/meetings', payload, {
       withCredentials: true
     }).subscribe({
-      next: (meeting) => {
-        this.confirmedMeetings.push({
-          id: meeting._id,
-          groupName: meeting.groupName || suggestion.name,
-          members: suggestion.members,
-          dateTime: meeting.date
-            ? new Date(meeting.date).toLocaleString('sl-SI')
-            : suggestion.time,
-          location: meeting.venue?.address || suggestion.location
-        });
+      next: () => {
+        /**
+         * Predlog odstranimo takoj po uspešnem ustvarjanju.
+         */
+        this.suggestions = this.suggestions.filter(
+          (s) => this.getSuggestionKey(s) !== suggestionKey
+        );
 
-        this.suggestions = this.suggestions.filter(s => s !== suggestion);
+        this.acceptingSuggestionKeys.delete(suggestionKey);
+
+        /**
+         * Namesto da ročno pushamo v confirmedMeetings,
+         * ponovno naložimo realna srečanja iz backenda.
+         * Tako preprečimo podvojena okenca.
+         */
+        if (this.user?.id) {
+          this.loadConfirmedMeetings(this.user.id);
+        }
       },
       error: (err) => {
+        this.acceptingSuggestionKeys.delete(suggestionKey);
+
         console.error('Napaka pri ustvarjanju srečanja:', err);
         console.error('Backend response:', err.error);
+      }
+    });
+  }
+
+  private getMeetingDuplicateKey(meeting: ConfirmedMeeting): string {
+    const memberNames = [...(meeting.members || [])]
+      .map((member) => this.normalizeText(member))
+      .sort();
+
+    return [
+      this.normalizeText(meeting.groupName),
+      this.normalizeText(meeting.location),
+      ...memberNames
+    ].join('|');
+  }
+
+  loadConfirmedMeetings(userId: string): void {
+    if (!userId) return;
+
+    this.http.get<any[]>(`/api/meetings/confirmed/${userId}`, {
+      withCredentials: true
+    }).subscribe({
+      next: (meetings) => {
+        const mappedMeetings: ConfirmedMeeting[] = (meetings || []).map((meeting) => {
+          const members = meeting.members || [];
+
+          const memberNames = members.map((member: any) => {
+            const user = member.user;
+
+            if (typeof user === 'object' && user !== null) {
+              return user.username
+                || `${user.firstName || ''} ${user.lastName || ''}`.trim()
+                || 'Uporabnik';
+            }
+
+            return 'Uporabnik';
+          });
+
+          const memberIds = members
+            .map((member: any) => {
+              const user = member.user;
+
+              if (typeof user === 'object' && user !== null) {
+                return user._id || user.id;
+              }
+
+              return user;
+            })
+            .filter(Boolean)
+            .map(String);
+
+          return {
+            id: meeting._id,
+            groupName: meeting.groupName || 'Srečanje',
+            members: memberNames,
+            memberIds,
+            dateTime: meeting.date
+              ? new Date(meeting.date).toLocaleString('sl-SI')
+              : '',
+            location: meeting.venue?.address || 'Lokacija še ni določena'
+          };
+        });
+
+        const uniqueMeetings = new Map<string, ConfirmedMeeting>();
+
+        for (const meeting of mappedMeetings) {
+          const key = this.getMeetingDuplicateKey(meeting);
+
+          if (!uniqueMeetings.has(key)) {
+            uniqueMeetings.set(key, meeting);
+          }
+        }
+
+        this.confirmedMeetings = Array.from(uniqueMeetings.values());
+
+        this.suggestions = this.suggestions.filter(
+          (suggestion) => !this.isSuggestionAlreadyAccepted(suggestion)
+        );
+      },
+      error: (err) => {
+        console.error('Napaka pri nalaganju potrjenih srečanj:', err);
+        this.confirmedMeetings = [];
       }
     });
   }

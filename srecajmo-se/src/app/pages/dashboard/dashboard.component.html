@@ -157,18 +157,16 @@
           </div>
 
           <div class="group-actions">
-            <button class="btn-primary" (click)="acceptSuggestion(s)">
-              <i class="fas fa-check-circle"></i> Sprejmem predlog
+            <button
+              class="btn-primary"
+              type="button"
+              (click)="acceptSuggestion(s)"
+              [disabled]="isSuggestionAlreadyAccepted(s)"
+            >
+              <i class="fas fa-check-circle"></i>
+              {{ isSuggestionAlreadyAccepted(s) ? 'Že sprejeto' : 'Sprejmem predlog' }}
             </button>
 
-            <button
-              class="btn-secondary"
-              type="button"
-              disabled
-              title="Najprej sprejmi predlog"
-            >
-              <i class="fas fa-comment-dots"></i> Pogovor
-            </button>
           </div>
         </div>
       </ng-container>

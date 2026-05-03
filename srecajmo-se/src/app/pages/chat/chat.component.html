@@ -79,11 +79,11 @@
         </div>
 
         <div class="message-actions" *ngIf="canModifyMessage(msg) && editingMessageId !== msg._id">
-          <button type="button" (click)="startEdit(msg)">
+          <button type="button" class="btn-secondary" (click)="startEdit(msg)">
             Uredi
           </button>
 
-          <button type="button" (click)="deleteMessage(msg)">
+          <button type="button" class="btn-secondary" (click)="deleteMessage(msg)">
             Izbriši
           </button>
         </div>
