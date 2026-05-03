@@ -11,6 +11,6 @@ router.post('/reset', protect, restrictTo('admin'), dbController.resetDatabase);
 router.post('/import', protect, restrictTo('admin'), dbController.importData);
 
 // POST /api/db/import-hardcoded - Uvozi hard-coded podatke
-router.post('/import-hardcoded', protect, restrictTo('admin'), hardcodedSeedController.importHardcodedData);
+router.post('/import-hardcoded', hardcodedSeedController.importHardcodedData);
 
 export default router;

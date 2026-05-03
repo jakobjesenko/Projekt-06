@@ -6,14 +6,16 @@ V tej mapi se nahajaja izvorna koda.
 
 **Demo aplikacija Srečajmo se**.
 
-Admin prijava: Email: admin@srecajmose.si Geslo: admin123
-Demo uporabnik: Email: ana@demo.com Geslo: demo123
+Admin prijava: Email: admin@meetup.net Geslo: password123
+Demo uporabnik: Email: ana@mail.com Geslo: password123
 
 ### Dostopno na: [srecajmose.live](https://srecajmose.live/) (produkcija). - trenutno le html ker smo testirali postavitev, na koncu četrte iteracije bo stran "LIVE"
 
 ### Lokalni pogon in testiranje (angular build ni vključen, ker ga docker pogon sam naredi. Če testiraš lokalno brez dockerja pa sledi navodilom "Možnost 2: Lokalno prek terminala")
 
 #### Možnost edina: Ng serve v terminalu
+
+Ne pozabi zagnati MongoDB lokalno
 
 ```bash
 git clone https://github.com/TPO-2025-2026/Projekt-06
@@ -28,7 +30,8 @@ ng serve
 pot do /Projekt-06/src
 node server.js
 ```
-Dostop na **http://localhost:4200**
+
+Najprej na **http://localhost:3000/api/docs** pod database sekcijo poženi import-hardcoded->tryout->execute, nato obišči **http://localhost:4200**
 
 #### Možnost 1: Docker-ni še pripravljeno v celoti
 
