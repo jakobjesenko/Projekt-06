@@ -1,293 +1,475 @@
-@startuml SrecajmoSe_Class_Diagram
-title Razredni diagram - Srečajmo se (Koncerti.net)
+@startuml
+title Razredni diagram - Sistem za spontana družabna srečanja
 
-skinparam classAttributeIconSize 0
-skinparam classFontStyle bold
-skinparam shadowing false
-skinparam linetype ortho
-skinparam packageStyle rectangle
-
-' =====================================================
-'  ENTITETE / MODELI (Mongoose sheme)
-' =====================================================
-package "Modeli (api/models)" <<Folder>> {
-
-  class User {
-    + _id : ObjectId
-    + firstName : String
-    + lastName : String
-    + profileImage : String
-    + username : String <<unique>>
-    + birthday : Date
-    + email : String <<unique>>
-    - password : String <<hashed>>
-    + termsAccepted : Boolean
-    + location : Location
-    + interests : String[]
-    + availability : String[]
-    + activeSearch : Boolean
-    + isActive : Boolean
-    + role : Role <<enum: user|admin|guest>>
-    + status : Status <<enum: active|blocked|pending>>
-    + strikes : Number
-    + accountSecurity : AccountSecurity
-    + createdAt : Date
-    + updatedAt : Date
-    --
-    + comparePassword(candidate) : Boolean
-    + getAge() : Number
-    {static} + getPaginatedUsers(opts)
-  }
-
-  class Location <<value object>> {
-    + lat : Number
-    + lng : Number
-    + radius : Number
-  }
-
-  class AccountSecurity <<value object>> {
-    + emailVerified : Boolean
-    + emailVerificationToken : String
-    + emailVerificationExpires : Date
-    + passwordResetToken : String
-    + passwordResetExpires : Date
-  }
-
-  class Meeting {
-    + _id : ObjectId
-    + groupName : String
-    + members : MeetingMember[3..5]
-    + sharedInterests : String[]
-    + matchPercentage : Number (0..100)
-    + venue : Venue
-    + date : Date
-    + status : Status <<enum: draft|upcoming|completed|cancelled>>
-    + createdAt : Date
-    + updatedAt : Date
-    --
-    + setMemberResponse(userId, response)
-    {static} + getPaginatedMeetings(opts)
-  }
-
-  class MeetingMember <<embedded>> {
-    + user : ObjectId <<ref User>>
-    + response : String <<pending|accepted|declined>>
-    + respondedAt : Date
-  }
-
-  class Venue <<value object>> {
-    + address : String
-    + city : String
-    + country : String
-    + coordinates : { lat, lng }
-  }
-
-  class Message {
-    + _id : ObjectId
-    + meeting : ObjectId <<ref Meeting>>
-    + user : ObjectId <<ref User>>
-    + message : String (1..500)
-    + timestamp : Date
-  }
-
-  class Rating {
-    + _id : ObjectId
-    + user : ObjectId <<ref User>>
-    + meeting : ObjectId <<ref Meeting>>
-    + username : String
-    + groupName : String
-    + rating : Number (1..5)
-    + comment : String (max 500)
-    + createdAt : Date
-    + updatedAt : Date
-    --
-    {static} + getPaginatedRatings(opts)
-  }
-
-  class Report {
-    + _id : ObjectId
-    + reporter : ObjectId <<ref User>>
-    + reportedUser : ObjectId <<ref User>>
-    + meeting : ObjectId <<ref Meeting>>
-    + description : String (10..2000)
-    + status : String <<new|in-review|resolved|rejected>>
-    + createdAt : Date
-    + updatedAt : Date
-    --
-    {static} + getPaginatedReports(opts)
-  }
-
-  class Contact {
-    + _id : ObjectId
-    + user : ObjectId <<ref User>>
-    + name : String
-    + lastName : String
-    + email : String
-    + subject : String
-    + message : String (1..5000)
-    + status : String <<new|in-progress|resolved>>
-    + createdAt : Date
-    --
-    {static} + getPaginatedContacts(opts)
-  }
-
-  class Analytic {
-    + _id : ObjectId
-    + date : Date <<unique>>
-    + totalUsers : Number
-    + activeUsers : Number
-    + totalMeetings : Number
-    + activeMeetings : Number
-    + timeframe : String <<daily|weekly|monthly|cumulative>>
-  }
+' ========== NASTAVITVE BARV ==========
+skinparam class {
+    BackgroundColor white
+    BorderColor black
 }
 
-' =====================================================
-'  KONTROLERJI / STORITVE (api/controllers)
-' =====================================================
-package "Kontrolerji (api/controllers)" <<Folder>> {
-
-  class AuthController {
-    + register(req, res)
-    + login(req, res)
-    + logout(req, res)
-    + verifyEmail(req, res)
-    + forgotPassword(req, res)
-    + resetPassword(req, res)
-  }
-
-  class UserController {
-    + getAllUsers(req, res)
-    + activateUser(req, res)
-    + deactivateUser(req, res)
-  }
-
-  class MeetingController {
-    + getAllMeetings(req, res)
-    + createMeeting(req, res)
-    + deleteMeeting(req, res)
-    + getUserConfirmedMeetings(req, res)
-    + confirmMeeting(req, res)
-    + cancelConfirmedMeeting(req, res)
-  }
-
-  class MessageController {
-    + getMeetingMessages(req, res)
-    + sendMessage(req, res)
-    + updateMessage(req, res)
-    + deleteMessage(req, res)
-  }
-
-  class RatingController {
-    + getAllRatings(req, res)
-    + createRating(req, res)
-    + updateRating(req, res)
-    + deleteRating(req, res)
-  }
-
-  class ReportController {
-    + getAllReports(req, res)
-    + createReport(req, res)
-    + updateReportStatus(req, res)
-    + deleteReport(req, res)
-  }
-
-  class ContactController {
-    + getAllContactForms(req, res)
-    + submitContactForm(req, res)
-    + updateContactFormStatus(req, res)
-    + deleteContactForm(req, res)
-  }
-
-  class SuggestionController {
-    + generateSuggestions(req, res)
-  }
+' Mejni razredi (boundary) - ZELENA
+skinparam class<<boundary>> {
+    BackgroundColor #90EE90
+    BorderColor #006400
+    FontColor black
 }
 
-' =====================================================
-'  POMOŽNI MODULI (api/utils, middleware)
-' =====================================================
-package "Pomožni moduli" <<Folder>> {
-
-  class JwtUtil <<utility>> {
-    + signToken(payload) : String
-    + verifyToken(token) : Object
-  }
-
-  class EmailUtil <<utility>> {
-    + sendVerificationEmail(user)
-    + sendPasswordResetEmail(user)
-  }
-
-  class AuthMiddleware <<middleware>> {
-    + protect(req, res, next)
-    + restrictTo(...roles)
-  }
-
-  class SocketServer <<infrastructure>> {
-    + io : Server
-    + onConnection(socket)
-    + joinMeetingRoom(meetingId)
-    + leaveMeetingRoom(meetingId)
-  }
-
-  class App <<entry point>> {
-    + app : Express
-    + server : http.Server
-    + initDB()
-  }
+' Kontrolni razredi (control) - RDEČA
+skinparam class<<control>> {
+    BackgroundColor #FF6B6B
+    BorderColor #8B0000
+    FontColor black
 }
 
-' =====================================================
-'  RELACIJE - ENTITETE
-' =====================================================
+' Entitetni razredi (entity) - MODRA
+skinparam class<<entity>> {
+    BackgroundColor #87CEEB
+    BorderColor #00008B
+    FontColor black
+}
 
-' Embedded value objects
-User *-- "1" Location : poseduje
-User *-- "1" AccountSecurity : poseduje
-Meeting *-- "1" Venue : poseduje
-Meeting *-- "3..5" MeetingMember : vsebuje
+' ========== MEJNI RAZREDI (BOUNDARY) - ZELENI ==========
+' Zaslonske maske (uporabniški vmesnik)
+class "RegistracijskaMaska" <<boundary>> {
+    + prikaziKorak1()
+    + prikaziKorak2()
+    + prikaziKorak3()
+    + prikaziNapako(sporocilo: String)
+    + prikaziPotrditev()
+    + preusmeriNaPrijavo()
+}
+class "PrijavnaMaska" <<boundary>> {
+    + prikaziObrazec()
+    + prikaziNapako(sporocilo: String)
+    + preusmeriNaNadzornoPloščo(vloga: String)
+}
+class "PozabljenoGesloMaska" <<boundary>> {
+    + prikaziObrazecZaImejl()
+    + prikaziObrazecZaIzbiroNovegaGesla()
+    + prikaziPotrditev()
+}
+class "ProfilnaMaska" <<boundary>> {
+    + prikaziProfil(profil: Profil)
+    + prikaziNapako(sporocilo: String)
+    + prikaziKonflikt()
+}
+class "NadzornaPlošča" <<boundary>> {
+    + prikaziSeznamPredlogov(predlogi: List<Skupina>)
+    + prikaziIskanjeVTeku()
+    + prikaziNapako(sporocilo: String)
+}
+class "PregledSkupineMaska" <<boundary>> {
+    + prikaziPodatkeSkupine(skupina: Skupina)
+    + prikaziČlane(člani: List<Uporabnik>)
+    + prikaziChat(zgodovina: List<Sporočilo>)
+    + prikaziKratekProfilČlana(profil: Profil)
+    + prikaziKonflikt()
+}
+class "PovratnaInfoMaska" <<boundary>> {
+    + prikaziObrazec()
+    + prikaziPotrditev()
+    + prikaziNapako(sporocilo: String)
+}
+class "KontaktnaMaska" <<boundary>> {
+    + prikaziObrazec()
+    + prikaziPotrditev()
+    + prikaziNapake(polja: List<String>)
+}
+class "AdminUporabnikiMaska" <<boundary>> {
+    + prikaziSeznamUporabnikov(uporabniki: List<Uporabnik>)
+    + prikaziUporabnika(uporabnik: Uporabnik)
+    + prikaziOpozorilnoOznako(uporabnikId: UUID)
+}
+class "AdminObvestilaMaska" <<boundary>> {
+    + prikaziSeznamObvestil(obvestila: List<Obvestilo>)
+    + prikaziPodrobnostiObvestila(podrobnosti: Obvestilo)
+}
+class "AdminSkupineMaska" <<boundary>> {
+    + prikaziSeznamSkupin(skupine: List<Skupina>)
+    + prikaziChatAdmin(skupina: Skupina, chat: List<Sporočilo>)
+    + prikaziFiltre()
+}
+class "AdminPametnaKomponentaMaska" <<boundary>> {
+    + prikaziMetrike(metrike: Metrike)
+    + prikaziParametre(parametri: Parametri)
+    + prikaziPrimerjavoMetrik(primerjava: Map)
+    + prikaziNapako(sporocilo: String)
+}
+class "Footer" <<boundary>> {
+    + prikaziPovezave()
+    + prikaziInformacijskoStran(vsebina: String)
+}
 
-' Reference med entitetami (ObjectId reference)
-MeetingMember "*" --> "1" User : nanaša se na
+' Sistemski vmesnik (API gateway / zunanji servisi)
+class "SistemskiVmesnik" <<boundary>> {
+    + posljiEmail(prejemnik: String, zadeva: String, vsebina: String): Boolean
+    + pokliciGeokodirniAPI(naslov: String): Koordinate
+}
+' Opomba: vmesnik do naprav trenutno ni implementiran (ni potrebe)
 
-User "1" <-- "*" Message : pošiljatelj
-Meeting "1" <-- "*" Message : pripada
+' ========== KONTROLNI RAZREDI (CONTROL) - RDEČI ==========
+class "RegistracijaKontroler" <<control>> {
+    - emailServis: SistemskiVmesnik
+    + registriraj(novUporabnikPodatki: DTO): Response
+    + potrdiRačun(žeton: String): Response
+    + ponovnoPošljiVerifikacijo(eNaslov: String): Response
+}
+class "AvtentikacijaKontroler" <<control>> {
+    + prijavi(eNaslov: String, geslo: String): JWT
+    + odjavi(jwtŽeton: String): Response
+    + preveriPravice(jwtŽeton: String, zahtevanaVloga: String): Boolean
+    + povecajStevecNeuspelihPoskusov(eNaslov: String)
+}
+class "PonastavitevGeslaKontroler" <<control>> {
+    + zahtevajPonastavitev(eNaslov: String): Response
+    + nastaviNovoGeslo(žeton: String, novoGeslo: String): Response
+    + preveriŽeton(žeton: String): Boolean
+}
+class "ProfilKontroler" <<control>> {
+    + pridobiProfil(jwtŽeton: String): Profil
+    + posodobiProfil(jwtŽeton: String, spremembe: DTO): Response
+    + preveriIzpolnjenostProfila(uporabnikId: UUID): Boolean
+}
+class "IskanjeSkupinKontroler" <<control>> {
+    - pametnaKomponenta: PametnaKomponenta
+    + sprožiIskanje(jwtŽeton: String): List<Skupina>
+    + preveriProfilInSproži(uporabnikId: UUID): Response
+}
+class "OdločitevKontroler" <<control>> {
+    + potrdiUdeležbo(skupinaId: UUID, uporabnikId: UUID): Response
+    + zavrniUdeležbo(skupinaId: UUID, uporabnikId: UUID): Response
+    + posodobiStatusUdeležbe(skupinaId: UUID, uporabnikId: UUID, odločitev: String): Response
+}
+class "PovratneInfoKontroler" <<control>> {
+    + oddajPovratnoInfo(skupinaId: UUID, uporabnikId: UUID, ocena: int, komentar: String): Response
+    + preveriŽeOddano(uporabnikId: UUID, skupinaId: UUID): Boolean
+}
+class "PrijaveKontroler" <<control>> {
+    + oddajPrijavo(targetUserId: UUID, skupinaId: UUID, opis: String): Response
+    + dopolniPrijavo(prijavaId: UUID, dodatniOpis: String): Response
+}
+class "KontaktKontroler" <<control>> {
+    + oddajKontaktnoSporočilo(ime: String, priimek: String, eNaslov: String, zadeva: String, vsebina: String): Response
+}
+class "AdminUporabnikiKontroler" <<control>> {
+    + pridobiSeznamUporabnikov(adminJwt: String, stran: int, velikost: int): Page<Uporabnik>
+    + izvediAkcijo(uporabnikId: UUID, tipAkcije: String, adminJwt: String): Response
+    + opozoriUporabnika(uporabnikId: UUID, adminJwt: String): Response
+}
+class "AdminObvestilaKontroler" <<control>> {
+    + pridobiSeznamObvestil(adminJwt: String): List<Obvestilo>
+    + pridobiPodrobnostiObvestila(obvestiloId: UUID): Obvestilo
+    + oznaciKotObdelano(obvestiloId: UUID, tip: String): Response
+    + eskalirajObvestilo(obvestiloId: UUID, adminJwt: String): Response
+}
+class "AdminSkupineKontroler" <<control>> {
+    + pridobiSeznamVsehSkupin(adminJwt: String, filtri: Map): List<Skupina>
+    + pridobiPodrobnostiSkupineZChatom(skupinaId: UUID, adminJwt: String): SkupinaDetailDTO
+}
+class "AdminPovratneInfoKontroler" <<control>> {
+    + pridobiPovratneInformacijeZaSkupino(skupinaId: UUID, adminJwt: String): PovratneInfoDTO
+}
+class "AdminPametnaKontroler" <<control>> {
+    + pridobiMetrikeKakovosti(adminJwt: String): MetrikeDTO
+    + posodobiParametre(noviParametri: Parametri, adminJwt: String): Response
+    + pridobiZgodovinoSprememb(adminJwt: String): List<SpremembaParametrov>
+}
+class "SkupineKontroler" <<control>> {
+    + pridobiPodatkeSkupine(skupinaId: UUID, jwtŽeton: String): Skupina
+    + pridobiZgodovinoChat(skupinaId: UUID, jwtŽeton: String): List<Sporočilo>
+    + posodobiStatusOdziva(skupinaId: UUID, uporabnikId: UUID, status: String)
+}
+class "InformacijeKontroler" <<control>> {
+    + zahtevajInformacijskoStran(stranId: String): String
+}
 
-User "1" <-- "*" Rating : avtor
-Meeting "1" <-- "*" Rating : za srečanje
+' ========== ENTITETNI RAZREDI (ENTITY) - MODRI ==========
+class "Uporabnik" <<entity>> {
+    - id: UUID
+    - eNaslov: String
+    - gesloHash: String
+    - vloga: Vloga (UPORABNIK, ADMINISTRATOR)
+    - status: StatusRacuna (NEPOTRJEN, AKTIVEN, BLOKIRAN, DEAKTIVIRAN)
+    - datumRegistracije: Date
+    - zadnjaPrijava: Date
+    - steviloNeuspelihPrijav: int
+    + preveriGeslo(geslo: String): Boolean
+    + spremeniGeslo(novoGeslo: String)
+    + aktivirajRacun()
+    + blokiraj()
+    + deblokiraj()
+}
 
-User "1" <-- "*" Report : reporter
-User "1" <-- "*" Report : reportedUser
-Meeting "1" <-- "*" Report : kontekst
+class "Profil" <<entity>> {
+    - id: UUID
+    - uporabnikId: UUID
+    - ime: String
+    - priimek: String
+    - interesi: List<Interes>
+    - lokacija: Lokacija
+    - casovnaRazpolozljivost: List<CasovniBlok>
+    - verzija: int
+    + jeIzpolnjen(): Boolean
+    + posodobiInterese(noviInteresi: List<Interes>)
+    + posodobiLokacijo(novaLokacija: Lokacija)
+}
 
-User "0..1" <-- "*" Contact : pošiljatelj
+class "Interes" <<entity>> {
+    - id: UUID
+    - naziv: String
+    - kategorija: String
+}
 
-' =====================================================
-'  RELACIJE - KONTROLERJI -> MODELI
-' =====================================================
-AuthController ..> User : uporablja
-AuthController ..> JwtUtil
-AuthController ..> EmailUtil
+class "Lokacija" <<entity>> {
+    - id: UUID
+    - naslov: String
+    - geoSirina: double
+    - geoDolzina: double
+    + razdaljaDo(druga: Lokacija): double
+}
 
-UserController ..> User
-MeetingController ..> Meeting
-MeetingController ..> User
-MessageController ..> Message
-MessageController ..> Meeting
-MessageController ..> SocketServer : emit
-RatingController ..> Rating
-RatingController ..> Meeting
-ReportController ..> Report
-ReportController ..> User
-ContactController ..> Contact
-SuggestionController ..> User
-SuggestionController ..> Meeting
+class "CasovniBlok" <<entity>> {
+    - id: UUID
+    - danVTednu: int
+    - uraOd: int
+    - uraDo: int
+    + prekrivanjeZ(drugi: CasovniBlok): double
+}
 
-AuthMiddleware ..> JwtUtil
-AuthMiddleware ..> User
+class "Skupina" <<entity>> {
+    - id: UUID
+    - status: StatusSkupine (PREDLOG, AKTIVNA, ZAKLJUCENA, RAZVELJAVLJENA)
+    - casSrecanja: Date
+    - pribliznaLokacija: Lokacija
+    - razlogiUjemanja: String
+    - povprecnaOcena: double
+    - steviloOcen: int
+    + dodajČlana(uporabnikId: UUID)
+    + posodobiStatus(noviStatus: StatusSkupine)
+    + dodajOceno(ocena: int)
+}
 
-App *-- SocketServer
-App ..> AuthMiddleware
+class "ČlanSkupine" <<entity>> {
+    - skupinaId: UUID
+    - uporabnikId: UUID
+    - statusOdziva: StatusOdziva (POTRJENO, ZAVRNJENO, NEOdLOČENO)
+    - datumPridruzitve: Date
+}
+
+class "Sporočilo" <<entity>> {
+    - id: UUID
+    - skupinaId: UUID
+    - posiljateljId: UUID
+    - vsebina: String
+    - casPosiljanja: Date
+    - prebrano: boolean
+}
+
+class "PovratneInformacije" <<entity>> {
+    - id: UUID
+    - skupinaId: UUID
+    - uporabnikId: UUID
+    - ocena: int
+    - komentar: String
+    - datumOddaje: Date
+}
+
+class "Prijava" <<entity>> {
+    - id: UUID
+    - prijaviteljId: UUID
+    - targetUserId: UUID
+    - skupinaId: UUID
+    - opis: String
+    - status: StatusPrijave (NOVA, OBDELANA, ESKALIRANA)
+    - datumPrijave: Date
+}
+
+class "KontaktnoSporočilo" <<entity>> {
+    - id: UUID
+    - ime: String
+    - priimek: String
+    - eNaslov: String
+    - zadeva: String
+    - vsebina: String
+    - obdelano: boolean
+    - datumOddaje: Date
+}
+
+class "Metrike" <<entity>> {
+    - id: UUID
+    - povprecnaOcenaSkupin: double
+    - stopnjaSprejetostiPredlogov: double
+    - povprecenCasIzracuna: double
+    - datumZajema: Date
+}
+
+class "ParametriAlgoritma" <<entity>> {
+    - id: UUID
+    - w1 (interesi): double
+    - w2 (lokacija): double
+    - w3 (čas): double
+    - w4 (izkusnje): double
+    - verzija: int
+    - datumSpremembe: Date
+    - administratorId: UUID
+}
+
+class "ZgodovinaSpremembParametrov" <<entity>> {
+    - id: UUID
+    - administratorId: UUID
+    - stariParametri: ParametriAlgoritma
+    - noviParametri: ParametriAlgoritma
+    - datumSpremembe: Date
+}
+
+class "VerifikacijskiŽeton" <<entity>> {
+    - id: UUID
+    - uporabnikId: UUID
+    - tip: TipZetona (VERIFIKACIJA, PONASTAVITEV_GESLA)
+    - zeton: String
+    - veljavenDo: Date
+    - uporabljen: boolean
+    + jeVeljaven(): Boolean
+}
+
+' ========== POMOŽNI TIPI (ENUM) ==========
+enum Vloga {
+    UPORABNIK
+    ADMINISTRATOR
+}
+
+enum StatusRacuna {
+    NEPOTRJEN
+    AKTIVEN
+    BLOKIRAN
+    DEAKTIVIRAN
+}
+
+enum StatusSkupine {
+    PREDLOG
+    AKTIVNA
+    ZAKLJUCENA
+    RAZVELJAVLJENA
+}
+
+enum StatusOdziva {
+    NEOdLOČENO
+    POTRJENO
+    ZAVRNJENO
+}
+
+enum StatusPrijave {
+    NOVA
+    OBDELANA
+    ESKALIRANA
+}
+
+enum TipZetona {
+    VERIFIKACIJA
+    PONASTAVITEV_GESLA
+}
+
+' ========== ASOCIACIJE IN POVEZAVE ==========
+
+' ===== MEJNI RAZREDI <--> KONTROLNI RAZREDI =====
+RegistracijskaMaska --> RegistracijaKontroler
+PrijavnaMaska --> AvtentikacijaKontroler
+PozabljenoGesloMaska --> PonastavitevGeslaKontroler
+ProfilnaMaska --> ProfilKontroler
+NadzornaPlošča --> IskanjeSkupinKontroler
+PregledSkupineMaska --> SkupineKontroler
+PregledSkupineMaska --> OdločitevKontroler
+PovratnaInfoMaska --> PovratneInfoKontroler
+KontaktnaMaska --> KontaktKontroler
+AdminUporabnikiMaska --> AdminUporabnikiKontroler
+AdminObvestilaMaska --> AdminObvestilaKontroler
+AdminSkupineMaska --> AdminSkupineKontroler
+AdminPametnaKomponentaMaska --> AdminPametnaKontroler
+Footer --> InformacijeKontroler
+PrijavnaMaska --> PrijaveKontroler
+
+' ===== KONTROLNI RAZREDI <--> ENTITETNI RAZREDI =====
+RegistracijaKontroler --> Uporabnik : ustvari, validira
+RegistracijaKontroler --> VerifikacijskiŽeton : generira
+RegistracijaKontroler --> Profil : ustvari
+
+AvtentikacijaKontroler --> Uporabnik : preveri poverilnice
+
+PonastavitevGeslaKontroler --> Uporabnik : preveri, shrani geslo
+PonastavitevGeslaKontroler --> VerifikacijskiŽeton : preveri žeton
+
+ProfilKontroler --> Profil : CRUD
+ProfilKontroler --> Interes : iskanje
+ProfilKontroler --> Lokacija : geokodiranje
+
+IskanjeSkupinKontroler --> Profil : preveri izpolnjenost
+IskanjeSkupinKontroler --> PametnaKomponenta : uporablja
+IskanjeSkupinKontroler --> Skupina : vrni predloge
+
+SkupineKontroler --> Skupina : CRUD
+SkupineKontroler --> ČlanSkupine : upravljanje
+SkupineKontroler --> Sporočilo : chat
+
+OdločitevKontroler --> ČlanSkupine : posodobi status
+
+PovratneInfoKontroler --> PovratneInformacije : CRUD
+
+PrijaveKontroler --> Prijava : CRUD
+
+KontaktKontroler --> KontaktnoSporočilo : shrani
+
+AdminUporabnikiKontroler --> Uporabnik : iskanje, blokiranje, opozarjanje
+
+AdminObvestilaKontroler --> Prijava : pregled
+AdminObvestilaKontroler --> KontaktnoSporočilo : pregled
+
+AdminSkupineKontroler --> Skupina : vpogled
+AdminSkupineKontroler --> Sporočilo : vpogled
+
+AdminPovratneInfoKontroler --> PovratneInformacije : agregacija
+
+AdminPametnaKontroler --> ParametriAlgoritma : upravljanje
+AdminPametnaKontroler --> Metrike : prikaz
+AdminPametnaKontroler --> ZgodovinaSpremembParametrov : beleženje
+
+' ===== ASOCIACIJE MED ENTITETAMI =====
+Uporabnik "1" --> "0..*" Profil : ima
+Uporabnik "1" --> "0..*" ČlanSkupine : je član
+Uporabnik "1" --> "0..*" Sporočilo : pošilja
+Uporabnik "1" --> "0..*" PovratneInformacije : oddaja
+Uporabnik "1" --> "0..*" Prijava : vlagatelj
+Uporabnik "1" --> "0..*" Prijava : tarča
+Uporabnik "1" --> "0..*" VerifikacijskiŽeton : ima
+
+Profil "1" --> "0..*" Interes : vsebuje
+Profil "1" --> "1" Lokacija : ima
+Profil "1" --> "0..*" CasovniBlok : vsebuje
+
+Skupina "1" --> "0..*" ČlanSkupine : vključuje
+Skupina "1" --> "0..*" Sporočilo : vsebuje
+Skupina "1" --> "0..*" PovratneInformacije : prejema
+Skupina "1" --> "1" Lokacija : ima (približno)
+Skupina "1" --> "0..*" Prijava : se nanaša na
+
+ČlanSkupine "0..*" --> "1" Uporabnik : referencira
+ČlanSkupine "0..*" --> "1" Skupina : pripada
+
+' ===== DEDOVANJA (generalizacija) =====
+' Trenutno ni potrebnega dedovanja med entitetami
+
+' ===== ODTVISNOSTI (dependency) =====
+' Pametna komponenta (kot storitev) je odvisna od Profil in Skupina
+IskanjeSkupinKontroler ..> PametnaKomponenta : uporablja
+' Opomba: PametnaKomponenta ni razred v diagramu, je izvedbena podrobnost
+
+' ===== KOMPOZICIJA =====
+' Profil je kompozicija Interesov, Lokacije, CasovnihBlokov - če izbrišemo Profil, izbrišemo tudi te
+Profil *-- Interes
+Profil *-- Lokacija
+Profil *-- CasovniBlok
+
+' Skupina je kompozicija ČlanSkupine in Sporočil
+Skupina *-- ČlanSkupine
+Skupina *-- Sporočilo
 
 @enduml
