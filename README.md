@@ -5,11 +5,23 @@
 Admin prijava: Email: admin@srecajmose.si Geslo: admin123
 Demo uporabnik: Email: ana@demo.com Geslo: demo123
 
-### Dostopno na: [srecajmose.live](https://srecajmose.live/) (produkcija).
+### Dostopno na: [srecajmose.live](https://srecajmose.live/) (produkcija). - trenutno le html ker smo testirali postavitev, na koncu četrte iteracije bo stran "LIVE"
 
 ### Lokalni pogon in testiranje (angular build ni vključen, ker ga docker pogon sam naredi. Če testiraš lokalno brez dockerja pa sledi navodilom "Možnost 2: Lokalno prek terminala")
 
-#### Možnost 1: Docker
+#### Možnost edina: Ng serve v terminalu
+
+```bash
+git clone https://github.com/TPO-2025-2026/Projekt-06
+cd Projekt-06
+git checkout main
+npm install
+cd srecajmo-se
+npm install
+ng serve
+```
+
+#### Možnost 1: Docker-ni še pripravljeno v celoti
 
 Docker build avtomatsko zgradi Angular aplikacijo in zažene Node.js backend.
 Dostop na **http://localhost:3000**
@@ -48,7 +60,7 @@ docker compose down
 
 **Development dostop na http://localhost:3000**
 
-#### Možnost 2: Lokalno prek terminala
+#### Možnost 2: Lokalno prek terminala-ni še pripravljeno v celoti
 
 ```bash
 git clone https://github.com/TPO-2025-2026/Projekt-06

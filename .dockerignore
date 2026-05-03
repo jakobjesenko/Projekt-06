@@ -1,0 +1,14 @@
+.git*
+dockerfile
+docker-compose*
+.dockerignore
+.jshintrc
+package-lock.json
+node_modules
+*.md
+
+# Angular se builda v dockerju
+angular/build
+angular/node_modules
+angular/.angular
+angular/dist

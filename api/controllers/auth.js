@@ -281,11 +281,11 @@ export const register = async (req, res) => {
         radius: locationRadius ? parseInt(locationRadius, 10) : 5,
       },
       accountSecurity: {
-        emailVerified: process.env.NODE_ENV !== 'production',
+        emailVerified: false,
         emailVerificationToken,
         emailVerificationExpires,
       },
-      status: process.env.NODE_ENV === 'production' ? 'pending' : 'active',
+      status: 'pending',
       role: 'user',
       activeSearch: true,
       isActive: true,
