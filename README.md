@@ -5,10 +5,9 @@
 Admin prijava: Email: admin@srecajmose.si Geslo: admin123
 Demo uporabnik: Email: ana@demo.com Geslo: demo123
 
-### Dostopno na: www.srecajmose.live (produkcija).
+### Dostopno na: [srecajmose.live](https://srecajmose.live/) (produkcija).
 
 ### Lokalni pogon in testiranje (angular build ni vključen, ker ga docker pogon sam naredi. Če testiraš lokalno brez dockerja pa sledi navodilom "Možnost 2: Lokalno prek terminala")
-### V primeru napake pri povezovanju na spotify pri testiranju "poveži spotify" ali napake pri plačilu s kartico, nas kontaktirajte, da vaše profile dodamo v testno okolje, ker spotify ne dovoli povezovanja, če niste dodani.
 
 #### Možnost 1: Docker
 
