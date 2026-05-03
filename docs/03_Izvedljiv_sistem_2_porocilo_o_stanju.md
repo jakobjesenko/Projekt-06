@@ -128,6 +128,10 @@ Znotraj meja sistema so vse komponente: Angular frontend, Node.js/Express REST A
 
 ![Paketni Diagram](./gradivo/img/paketni_diagram.png "Paketni diagram")
 
+**Procesni pogled (diagram aktivnosti)**
+
+![Diagram Aktivnosti](./gradivo/img/diagram_aktivnosti.png "Diagram aktivnosti")
+
 **Razvojni pogled (komponentni diagram)**
 
 ![Komponentni Diagram](./gradivo/img/komponentni_diagram.png "Komponentni diagram")
@@ -393,12 +397,13 @@ Zadnja iteracija, namenjena zaključku projekta in predaji končnega sistema. Tr
 
 ### 6.2 Projektni načrt
 
-- Posodobljen Ganttov diagram in graf PERT.
+![Ganttov diagram](./gradivo/img/Gannt3.png "Ganttov diagram")
 
+**Ganttov diagram** (izvorna koda [PlantUML](./gradivo/plantuml/Ganttov_diagram3.puml))
 
+![PERT diagram](./gradivo/img/PERT3.png "PERT diagram")
 
-
-
+**Graf PERT** (izvorna koda [PlantUML](./gradivo/plantuml/PERT_diagram_odvisnosti3.puml))
 
 ## 7 Ekipa
 ### Opis aktivnosti in prispevkov članov ekipe v tej iteraciji (3. iteracija)

@@ -1,0 +1,157 @@
+@startgantt "Ganttov diagram razvoja sistema"
+
+<style>
+ganttDiagram {
+  timeline {
+    LineColor #f2f2f2
+    FontColor gray
+  }
+  task {
+    BackgroundColor #e8f5fd
+    LineColor #5FB8EC
+  }
+  arrow {
+    LineColor #5FB8EC
+  }
+  milestone {
+    BackgroundColor #e8f5fd
+    LineColor #5FB8EC
+  }
+  closed {
+    BackgroundColor #f2f2f2
+    FontColor lightgray
+  }
+}
+</style>
+
+skinparam backgroundColor transparent
+hide footbox
+language sl
+
+project starts the 23rd of February 2026
+saturdays are closed
+sundays are closed
+2026-04-27 is closed
+2026-05-01 is closed
+2026-05-02 is closed
+
+
+
+2026-02-23 to 2026-03-15 is colored in #FFFFCC
+2026-02-28 is colored in #f2f2f2
+2026-03-01 is colored in #f2f2f2
+2026-03-07 is colored in #f2f2f2
+2026-03-08 is colored in #f2f2f2
+2026-03-14 is colored in #f2f2f2
+2026-03-15 is colored in #f2f2f2
+
+2026-03-16 to 2026-04-05 is colored in #FCE5CD
+2026-03-21 is colored in #f2f2f2
+2026-03-22 is colored in #f2f2f2
+2026-03-28 is colored in #f2f2f2
+2026-03-29 is colored in #f2f2f2
+2026-04-04 is colored in #f2f2f2
+2026-04-05 is colored in #f2f2f2
+
+2026-04-06 to 2026-05-03 is colored in #D9FFB3
+2026-04-11 is colored in #f2f2f2
+2026-04-12 is colored in #f2f2f2
+2026-04-18 is colored in #f2f2f2
+2026-04-19 is colored in #f2f2f2
+2026-04-25 is colored in #f2f2f2
+2026-04-26 is colored in #f2f2f2
+2026-04-27 is colored in #f2f2f2
+2026-05-01 is colored in #f2f2f2
+2026-05-02 is colored in #f2f2f2
+2026-05-03 is colored in #f2f2f2
+
+2026-05-04 to 2026-05-24 is colored in #E6F7FF
+2026-05-09 is colored in #f2f2f2
+2026-05-10 is colored in #f2f2f2
+2026-05-16 is colored in #f2f2f2
+2026-05-17 is colored in #f2f2f2
+2026-05-23 is colored in #f2f2f2
+2026-05-24 is colored in #f2f2f2
+
+[Projektno vodenje] as [I0A0] starts 23rd of February 2026 and lasts 64 days
+
+-- 1. Iteracija --
+[Pregled obstoječih rešitev] as [I1A1] starts 23rd of February 2026 and lasts 3 days and is colored in #E4242C
+[Definicija problemske domene] as [I1A2] starts 23rd of February 2026 and lasts 2 days
+[Opredelitev motivacije in namena] as [I1A3] starts at [I1A2]'s end and lasts 2 days
+[Identifikacija ciljne skupine] as [I1A4] starts at [I1A1]'s end and lasts 2 days and is colored in #E4242C
+
+[Identifikacija deležnikov] as [I1A5] starts at [I1A4]'s end and lasts 1 day
+[Opredelitev uporabniških zgodb] as [I1A6] starts at [I1A4]'s end and lasts 3 days
+[Definicija merljivih ciljev] as [I1A7] starts at [I1A4]'s end and lasts 3 days and is colored in #E4242C
+[Validacija ideje z naročnikom] as [I1A8] starts at [I1A7]'s end and lasts 2 days and is colored in #E4242C
+
+[Blokovni diagram in arhitektura] as [I1A9] starts at [I1A8]'s end and lasts 2 days
+[Izbira tehnologij in orodij] as [I1A10] starts at [I1A8]'s end and lasts 2 days and is colored in #E4242C
+[Terminski načrt in PERT graf] as [I1A11] starts at [I1A9]'s end and lasts 2 days
+[COCOMO II ocena stroškov] as [I1A12] starts at [I1A10]'s end and lasts 2 days and is colored in #E4242C
+[Definicija vlog in finalizacija predloga] as [I1A13] starts at [I1A12]'s end and lasts 1 day and is colored in #E4242C
+
+[I1A1] -[#red]-> [I1A4]
+[I1A4] -[#red]-> [I1A7]
+[I1A7] -[#red]-> [I1A8]
+[I1A8] -[#red]-> [I1A10]
+[I1A10] -[#red]-> [I1A12]
+[I1A12] -[#red]-> [I1A13]
+
+[Konec 1. Iteracije] as [M1] happens 16th of March 2026
+
+-- 2. Iteracija --
+[Git repozitorij z vejami] as [I2A1] starts at [I1A13]'s end and lasts 1 day
+[Osnovna projektna struktura] as [I2A2] starts at [I1A13]'s end and lasts 2 days and is colored in #E4242C
+[README z navodili] as [I2A3] starts at [I1A13]'s end and lasts 2 days
+
+[MongoDB shema] as [I2A4] starts at [I2A2]'s end and lasts 3 days
+[REST API (10 endpointov)] as [I2A5] starts at [I2A4]'s start and lasts 6 days and is colored in #E4242C
+[JWT avtentikacija] as [I2A6] starts at [I2A5]'s start and lasts 3 days
+
+[Frontend] as [I2A10] starts at [I2A5]'s end and lasts 3 days
+[Implementacija vseh treh modulov] as [I2A7] starts at [I2A5]'s end and lasts 4 days and is colored in #E4242C
+[Scoring funkcija] as [I2A8] starts at [I2A7]'s start and lasts 2 days
+
+[Integracija z REST API] as [I2A9] starts at [I2A7]'s end and lasts 3 days and is colored in #E4242C
+
+[I1A13] -[#red]-> [I2A2]
+[I2A2] -[#red]-> [I2A5]
+[I2A5] -[#red]-> [I2A8]
+[I2A8] -[#red]-> [I2A9]
+
+[Konec 2. Iteracije] as [M2] happens 6th of April 2026
+
+-- 3. Iteracija --
+
+[Responziven dizajn] as [I3A1] starts at [I2A9]'s end and lasts 4 days and is colored in #E4242C
+
+[Osnovno testiranje UI komponent] as [I3A2] starts at [I3A1]'s end and lasts 3 days
+
+[Integracijski testi ključnih API endpointov] as [I3A3] starts at [I3A1]'s end and lasts 5 days and is colored in #E4242C
+
+[Unit testi (pokritost > 70%)] as [I3A4] starts at [I3A3]'s end and lasts 4 days and is colored in #E4242C
+
+[Funkcionalni testi (3 ključni tokovi)] as [I3A5] starts at [I3A4]'s end and lasts 3 days and is colored in #E4242C
+
+[E2E testi] as [I3A6] starts at [I3A5]'s end and lasts 2 days and is colored in #E4242C
+
+[I2A9] -[#red]-> [I3A1]
+[I3A1] -[#red]-> [I3A3]
+[I3A3] -[#red]-> [I3A4]
+[I3A4] -[#red]-> [I3A5]
+[I3A5] -[#red]-> [I3A6]
+[I3A6] -[#red]-> [I4A1]
+
+[Konec 3. Iteracije] as [M3] happens 4rd of May 2026
+
+-- 4. Iteracija --
+
+[4. Iteracija] as [I4A1] starts at [I3A6]'s end and lasts 15 days and is colored in #E4242C
+
+[I3A6] -[#red]-> [I4A1]
+
+[Končna izdaja sistema] as [M4] happens 25th of May 2026
+
+@endgantt
