@@ -140,7 +140,7 @@ Seznam elementov in skrbnikov:
 
 **Osnovni tok:** Gost odpre masko za registracijo, izpolni tri korake, sistem validira podatke, ustvari nepotrjen račun in pošlje verifikacijsko povezavo. Gost odpre povezavo in sistem aktivira račun.
 
-![Registracija osnovni](./gradivo/img/1-Registracija.png)
+![Registracija osnovni](./gradivo/img/osnovni_tok/1.%20Registracija%20(osnovni%20tok).png)
 
 **Alternativni tok A1 (popravi vnos v prejšnjem koraku):** Gost med izpolnjevanjem ugotovi, da je treba dopolniti prejšnji korak. Vrne se, popravi podatke, sistem ohrani že veljavne podatke in postopek se nadaljuje.
 
@@ -160,7 +160,7 @@ Seznam elementov in skrbnikov:
 
 **Osnovni tok:** Gost odpre masko za prijavo, vnese e-naslov in geslo, sistem preveri poverilnice, vzpostavi sejo in preusmeri na ustrezno nadzorno ploščo.
 
-![Prijava osnovni](./gradivo/img/2-Prijava.png)
+![Prijava osnovni](./gradivo/img/osnovni_tok/2.%20Prijava%20(osnovni%20tok).png)
 
 **Alternativni tok A1 (prijava administratorja):** Gost vnese poverilnice za administratorski račun. Sistem prepozna vlogo administratorja in preusmeri na administratorsko nadzorno ploščo.
 
@@ -180,7 +180,7 @@ Seznam elementov in skrbnikov:
 
 **Osnovni tok:** Gost klikne "Pozabljeno geslo", vnese e-naslov, sistem pošlje ponastavitveno povezavo. Gost odpre povezavo, vnese novo geslo, sistem ga shrani in preusmeri na prijavo.
 
-![Ponastavitev gesla osnovni](./gradivo/img/3-Ponastavitev%20gesla.png)
+![Ponastavitev gesla osnovni](./gradivo/img/osnovni_tok/3.%20Ponastavitev%20gesla%20(osnovni%20tok).png)
 
 **Alternativni tok A1 (takojšnja prijava po spremembi gesla):** Po uspešni spremembi gesla sistem uporabnika ne preusmeri samo na prijavo, ampak ga takoj prijavi z novimi poverilnicami.
 
@@ -200,7 +200,7 @@ Seznam elementov in skrbnikov:
 
 **Osnovni tok:** Akter izbere možnost "Odjava", sistem prekine aktivno sejo in preusmeri na začetno/prijavno stran.
 
-![Odjava osnovni](./gradivo/img/4-Odjava.png)
+![Odjava osnovni](./gradivo/img/osnovni_tok/4.%20Odjava%20(osnovni%20tok).png)
 
 **Alternativni tok A1 (samodejna odjava zaradi neaktivnosti):** Sistem zazna presežen čas neaktivnosti, opozori akterja in po izteku invalidira sejo ter preusmeri na prijavno stran.
 
@@ -216,7 +216,7 @@ Seznam elementov in skrbnikov:
 
 **Osnovni tok:** Uporabnik odpre profil, spremeni želene podatke, sistem validira in shrani spremembe.
 
-![Urejanje profila osnovni](./gradivo/img/5-Urejanje%20profila.png)
+![Urejanje profila osnovni](./gradivo/img/osnovni_tok/5.%20Urejanje%20profila%20(osnovni%20tok).png)
 
 **Alternativni tok A1 (posodobitev samo enega sklopa):** Uporabnik spremeni le en sklop podatkov (npr. interese). Sistem validira samo spremenjeni sklop in shrani spremembo.
 
@@ -236,7 +236,7 @@ Seznam elementov in skrbnikov:
 
 **Osnovni tok:** Uporabnik izbere "Išči skupino", sistem preveri profil, sproži izračun predlogov in prikaže seznam.
 
-![Iskanje skupin osnovni](./gradivo/img/6-Iskanje%20skupin.png)
+![Iskanje skupin osnovni](./gradivo/img/osnovni_tok/6.%20Iskanje%20skupin%20(osnovni%20tok).png)
 
 **Alternativni tok A1 (ponovitev iskanja po posodobitvi profila):** Uporabnik sproži iskanje, nato posodobi profil in ponovno sproži iskanje. Sistem upošteva nove podatke in prikaže osvežen nabor predlogov.
 
@@ -256,7 +256,7 @@ Seznam elementov in skrbnikov:
 
 **Osnovni tok:** Uporabnik odpre izbrano skupino iz seznama predlogov. Sistem prikaže čas, lokacijo, razloge ujemanja in kartice članov. Uporabnik si lahko ogleda kratek profil člana in odpre skupinski chat z zgodovino.
 
-![Pregled skupin in chata osnovni](./gradivo/img/7-Pregled%20skupin%20in%20chata.png)
+![Pregled skupin in chata osnovni](./gradivo/img/osnovni_tok/7.%20Pregled%20skupin%20in%20chata%20(uporabnik,%20osnovni%20tok).png)
 
 **Alternativni tok A1 (pregled posameznega člana):** Uporabnik klikne ikono člana, sistem odpre kratek profil, uporabnik si ga ogleda in zapre.
 
