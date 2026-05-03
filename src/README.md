@@ -24,6 +24,7 @@ cd srecajmo-se
 npm install
 ng serve
 ```
+Dostop na **http://localhost:4200**
 
 #### Možnost 1: Docker-ni še pripravljeno v celoti
 
