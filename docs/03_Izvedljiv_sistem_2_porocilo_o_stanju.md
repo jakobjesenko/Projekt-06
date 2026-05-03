@@ -107,6 +107,23 @@ Znotraj meja sistema so vse komponente: Angular frontend, Node.js/Express REST A
 
 ![Razredni Diagram](./gradivo/img/razredni_diagram.png "Razredni diagram")
 
+**Arhitektura sistema**
+
+  - Seznam elementov in skrbnikov
+
+| Element                         | Namen                                                                      | Skrbnik          |
+|---------------------------------|----------------------------------------------------------------------------|------------------|
+| Nadzorna plošča uporabnika      | Pregled predlogov skupin in profila                                        | Tim Pezdirc      |
+| Nadzorna plošča administratorja | Prikaz statistike platforme (št. uporabnikov, aktivnih iskanj, ...)        | Tim Pezdirc      |
+| Avtentikacija                   | Skrbi za prijavo uporabnikov, preverjanje gesel in generiranje JWT žetonov | Aleks Gogić      |
+| Chat                            | Prikaz klepeta skupine                                                     | Miha Fabčič      |
+| Kontakt                         | Pregled sporočil uporabnikov (feedback)                                    | Miha Fabčič      |
+| Urejanje profila                | Skrbi za urejanje profila (spremembe interesov, lokacije, ...)             | Jakob Jesenko    |
+| Ponastavitev gesla              | Prikaz strani za ponastavitev gesla                                        | Jakob Jesenko    |
+| Pametna komponenta              | Skrbi za predloge skupin na podlagi formule                                | Leja Petrič      |
+| Krmilniki                       | Upravljanje različnih delov aplikacije                                     | Leja Petrič      |
+| E-mail servis                   | Pošilja e-maile za verifikacijo profila in ponastavitev gesla              | Aleks Gogić      |
+
 **Logični pogled (paketni diagram)**
 
 ![Paketni Diagram](./gradivo/img/paketni_diagram.png "Paketni diagram")
