@@ -1,0 +1,86 @@
+@startuml "diagram aktivnosti"
+|Gost|
+start
+split
+:Registracija;
+split again
+:Pogosta vprašanja;
+split again
+:Kontakt;
+split again
+:Pogoji uporabe;
+split again
+:GDPR;
+
+|Uporabnik|
+split again
+:Prijava;
+if (Pozabljeno geslo) then (yes)
+:Ponastavitev gesla;
+else (no)
+endif
+fork
+:Urejanje profila;
+fork again
+:Aktivacija iskanja skupin;
+fork again
+:Sprejem predloga;
+fork again
+:Pogovor v skpini;
+fork again
+:Zavrnitev predloga;
+fork again
+:Ocena skupine;
+fork again
+:Pregled podatkov člana;
+:Prijava člana;
+fork again
+:Odjava;
+end merge
+
+|Administrator|
+split again
+:Admin prijava;
+fork
+:Iskanje uporabnikov;
+fork
+:Pregled podatkov Uporabnika;
+fork again
+:Deaktivacija uporabnika;
+end merge
+fork again
+:Iskanje skupin;
+fork
+:Pogovor v skupini;
+fork again
+:Pregled podatkov skupine;
+fork again
+:Brisanje skupine;
+end merge
+fork again
+:Iskanje ocen skupin;
+:Brisanje ocene;
+fork again
+:Iskanje Prijav;
+fork
+:Pogled opisa prijave;
+fork again
+:Blokiranje uporabnika;
+fork again
+:Označitev kot rešeno;
+end merge
+fork again
+:Iskanje sporočil;
+:Ogled sporočila;
+fork again
+:Ogled pametne komponente;
+:Nastavitev uteži;
+fork again
+:odjava;
+end merge
+|Gost|
+end split
+stop
+
+
+@enduml

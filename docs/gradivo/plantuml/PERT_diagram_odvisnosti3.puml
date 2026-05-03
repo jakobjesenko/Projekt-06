@@ -1,0 +1,104 @@
+@startuml "PERT diagram"
+
+skinparam backgroundColor transparent
+left to right direction
+
+state "Pregled obstoječih rešitev" AS A1 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 0 | 3 | 3 |\n| 0 | 0 | 3 |
+state "Definicija problemske domene" AS A2 : <#e8f5fd,#e8f5fd>| 0 | 2 | 2 |\n| 1 | 1 | 3 |
+state "Opredelitev motivacije in namena" AS A3 : <#e8f5fd,#e8f5fd>| 2 | 2 | 4 |\n| 3 | 1 | 5 |
+state "Identifikacija ciljne skupine" AS A4 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 3 | 2 | 5 |\n| 3 | 0 | 5 |
+state "Identifikacija deležnikov" AS A5 : <#e8f5fd,#e8f5fd>| 5 | 1 | 6 |\n| 7 | 2 | 8 |
+state "Opredelitev uporabniških zgodb" AS A6 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 5 | 3 | 8 |\n| 5 | 0 | 8 |
+state "Definicija merljivih ciljev" AS A7 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 5 | 3 | 8 |\n| 5 | 0 | 8 |
+state "Validacija ideje z naročnikom" AS A8 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 8 | 2 | 10 |\n| 8 | 0 | 10 |
+state "Blokovni diagram in arhitektura" AS A9 : <#e8f5fd,#e8f5fd>| 10 | 2 | 12 |\n| 10 | 0 | 12 |
+state "Izbira tehnologij in orodij" AS A10 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 10 | 2 | 12 |\n| 10 | 0 | 12 |
+state "Terminski plan in PERT graf" AS A11 : <#e8f5fd,#e8f5fd>| 12 | 2 | 14 |\n| 12 | 0 | 14 |
+state "COCOMO II ocena stroškov" AS A12 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 12 | 2 | 14 |\n| 12 | 0 | 14 |
+state "Definicija vlog in finalizacija predlogov" AS A13 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 14 | 1 | 15 |\n| 14 | 0 | 15 |
+
+state "Git repozitorij z vejami" AS A15 : <#e8f5fd,#e8f5fd>| 15 | 1 | 16 |\n| 16 | 1 | 17 |
+state "Osnovna projektna struktura" AS A16 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 15 | 2 | 17 |\n| 15 | 0 | 17 |
+state "README z navodili" AS A17 : <#e8f5fd,#e8f5fd>| 15 | 2 | 17 |\n| 15 | 0 | 17 |
+state "MongoDB shema" AS A18 : <#e8f5fd,#e8f5fd>| 17 | 3 | 20 |\n| 20 | 3 | 23 |
+state "REST API (10 endpointov)" AS A19 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 17 | 6 | 23 |\n| 17 | 0 | 23 |
+state "JWT avtentikacija" AS A20 : <#e8f5fd,#e8f5fd>| 17 | 3 | 20 |\n| 20 | 3 | 23 |
+state "Frontend" AS A21 : <#e8f5fd,#e8f5fd>| 23 | 3 | 26 |\n| 24 | 1 | 27 |
+state "Implementacija vseh treh modulov" AS A22 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 23 | 4 | 27 |\n| 23 | 0 | 27 |
+state "Scoring funkcija" AS A23 : <#e8f5fd,#e8f5fd>| 23 | 2 | 25 |\n| 25 | 2 | 27 |
+state "Integracija z REST API" AS A24 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 27 | 3 | 30 |\n| 27 | 0 | 30 |
+
+state "Responiven dizajn" AS A31 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 30 | 4 | 34 |\n| 30 | 0 | 34 |
+state "Osnovno testiranje UI komponent" AS A32 : <#e8f5fd,#e8f5fd>| 34 | 3 | 37 |\n| 36 | 2 | 39 |
+state "Integracijski testi ključnih API endpointov" AS A33 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 34 | 5 | 39 |\n| 34 | 0 | 39 |
+state "Unit testi (pokritost > 70%)" AS A34 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 39 | 4 | 43 |\n| 39 | 0 | 43 |
+state "Funkcionalni testi (3 ključni tokovi)" AS A35 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 43 | 3 | 46 |\n| 43 | 0 | 46 |
+state "E2E testi" AS A36 #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 46 | 2 | 48 |\n| 46 | 0 | 48 |
+
+state "4. Iteracija" AS A40 : <#e8f5fd,#e8f5fd>| 48 | 14 | 62 |\n| 48 | 0 | 62 |
+
+state "Projektno vodenje" AS A0 : <#e8f5fd,#e8f5fd>| 0 | 62 | 62 |\n| 0 | 0 | 62 |
+
+[*] --> A1
+[*]--> A2
+A2 --> A3
+A1 --> A4
+A3 --> A5
+A3 --> A6
+A3 --> A7
+A4 --> A5
+A4 --> A6
+A4 --> A7
+A5 --> A8
+A6 --> A8
+A7 --> A8
+A8 --> A9
+A8 --> A10
+A9 --> A11
+A9 --> A12
+A10 --> A11
+A10 --> A12
+A11 --> A13
+A12 --> A13
+A13 --> A15
+A13 --> A16
+A13 --> A17
+A15 --> A18
+A15 --> A19
+A15 --> A20
+A16 --> A18
+A16 --> A19
+A16 --> A20
+A17 --> A18
+A17 --> A19
+A17 --> A20
+
+A18 --> A21
+A18 --> A22
+A18 --> A23
+A19 --> A21
+A19 --> A22
+A19 --> A23
+A20 --> A21
+A20 --> A22
+A20 --> A23
+
+A21 --> A24
+A22 --> A24
+A23 --> A24
+
+A24 --> A31
+A31 --> A32
+A31 --> A33
+A32 --> A34
+A33 --> A34
+A34 --> A35
+A35 --> A36
+A36 --> A40
+
+A40 --> [*]
+[*] --> A0
+A0 --> [*]
+
+
+@enduml
