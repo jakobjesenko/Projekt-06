@@ -1,0 +1,40 @@
+services:
+  app:
+    build: .
+    container_name: koncerti-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=docker
+      - PORT=3000
+      - HARDHAT_RPC_URL=http://host.docker.internal:8545
+    # Za development mode z nodemon odkomentiraj spodnje:
+    # volumes:
+    #   - .:/usr/src/app
+    #   - /usr/src/app/node_modules
+    #   - /usr/src/app/angular/build
+    # command: sh -c "npm install && npm run dev"
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: koncertinet # ime baze
+    ports:
+      - "27018:27017" # 27018 je da maste loceno dostop prek kompasa ker ponavadi je lokalna baza na loalhost:27017
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  mongo-data:
+  node_modules:
