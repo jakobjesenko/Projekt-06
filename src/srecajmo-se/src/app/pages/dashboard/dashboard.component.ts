@@ -270,7 +270,7 @@ export class DashboardComponent implements OnInit {
     const endpoint = newState ? 'activate-search' : 'deactivate-search';
 
     this.http
-      .put(`/api/admin/users/${endpoint}/${userId}`, {}, { withCredentials: true })
+      .put(`/api/users/admin/${endpoint}/${userId}`, {}, { withCredentials: true })
       .subscribe({
         next: () => {
           if (!this.user) return;

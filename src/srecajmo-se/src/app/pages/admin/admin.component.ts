@@ -46,7 +46,7 @@ export class AdminComponent implements OnInit {
   loadUsers(): void {
     this.loading = true;
     this.error = '';
-    this.http.get<AdminUser[]>('/api/admin/users/').subscribe({
+    this.http.get<AdminUser[]>('/api/users/admin/').subscribe({
       next: (users) => {
         this.users = users;
         this.stats[0].value = users.length;
@@ -62,8 +62,8 @@ export class AdminComponent implements OnInit {
 
   toggleActive(user: AdminUser): void {
     const url = user.isActive
-      ? `/api/admin/users/${user._id}/deactivate`
-      : `/api/admin/users/${user._id}/activate`;
+      ? `/api/users/admin/${user._id}/deactivate`
+      : `/api/users/admin/${user._id}/activate`;
 
     this.http.put<{ success: boolean; user: AdminUser }>(url, {}).subscribe({
       next: (res) => {

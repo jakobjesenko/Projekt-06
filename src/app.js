@@ -104,9 +104,9 @@ const swaggerDocument = swaggerJsDoc({
   definition: {
     openapi: "3.1.1",
     info: {
-      title: "Koncerti.net API",
+      title: "Srecajmose API",
       version: "1.0.0",
-      description: "REST API za spletno aplikacijo Koncerti.net",
+      description: "REST API za spletno aplikacijo Srecajmose",
     },
     servers: [
       { url: 'http://localhost:3000/api', description: 'DEV' },

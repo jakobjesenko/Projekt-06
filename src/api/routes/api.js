@@ -13,7 +13,7 @@ import dbRouter from "./db.js";
 const apiRouter = Router();
 
 apiRouter.use("/auth", authRouter);
-apiRouter.use("/admin/users", usersRouter);
+apiRouter.use("/users", usersRouter);
 apiRouter.use("/meetings", meetingsRouter);
 apiRouter.use("/ratings", ratingsRouter);
 apiRouter.use("/reports", reportsRouter);

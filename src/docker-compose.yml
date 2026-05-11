@@ -1,7 +1,7 @@
 services:
   app:
     build: .
-    container_name: koncerti-app
+    container_name: srecajmose-app
     ports:
       - "3000:3000"
     depends_on:
@@ -24,7 +24,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: koncertinet # ime baze
+      MONGO_INITDB_DATABASE: srecajmose # ime baze
     ports:
       - "27018:27017" # 27018 je da maste loceno dostop prek kompasa ker ponavadi je lokalna baza na loalhost:27017
     volumes:
