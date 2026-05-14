@@ -16,15 +16,182 @@ const getSessionUser = (user) => ({
   role: user.role,
 });
 
+/**
+ * @openapi
+ * /users/admin:
+ *  get:
+ *   summary: Get all users (admin)
+ *   description: Returns a paginated list of all non-admin users for admin dashboard.
+ *   tags: [Users]
+ *   security:
+ *    - jwt: []
+ *   parameters:
+ *    - name: page
+ *      in: query
+ *      schema:
+ *       type: integer
+ *       minimum: 1
+ *       default: 1
+ *      description: Page number for pagination
+ *    - name: limit
+ *      in: query
+ *      schema:
+ *       type: integer
+ *       minimum: 1
+ *       maximum: 100
+ *       default: 30
+ *      description: Number of items per page
+ *    - name: status
+ *      in: query
+ *      schema:
+ *       type: string
+ *       enum: [active, blocked, pending]
+ *      description: Filter users by status
+ *    - name: search
+ *      in: query
+ *      schema:
+ *       type: string
+ *      description: Search by username, email, first name, or last name
+ *   responses:
+ *    '200':
+ *     description: Successfully retrieved users
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *         data:
+ *          type: array
+ *          items:
+ *           $ref: '#/components/schemas/User'
+ *         pagination:
+ *          type: object
+ *          properties:
+ *           total:
+ *            type: integer
+ *           page:
+ *            type: integer
+ *           totalPages:
+ *            type: integer
+ *       example:
+ *        success: true
+ *        data: []
+ *        pagination:
+ *         total: 0
+ *         page: 1
+ *         totalPages: 0
+ *    '401':
+ *     description: Unauthorized - admin access only
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ *       example:
+ *        success: false
+ *        message: Nimate dovoljenja za ta dejanje.
+ *    '500':
+ *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ *       example:
+ *        success: false
+ *        message: Napaka pri pridobivanju uporabnikov.
+ */
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({ role: { $ne: 'admin' } });
-    res.status(200).json(users);
+    let page = Number.parseInt(req.query.page, 10) || 1;
+    let limit = Number.parseInt(req.query.limit, 10) || 30;
+
+    if (page < 1) page = 1;
+    if (limit < 1) limit = 30;
+    if (limit > 100) limit = 100;
+
+    const offset = (page - 1) * limit;
+
+    const allowedStatuses = ['active', 'blocked', 'pending'];
+    const status = allowedStatuses.includes(req.query.status) ? req.query.status : null;
+    const search = req.query.search || '';
+
+    const query = { role: { $ne: 'admin' } };
+    if (status) {
+      query.status = status;
+    }
+
+    if (search) {
+      query.$or = [
+        { username: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { firstName: { $regex: search, $options: 'i' } },
+        { lastName: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    const [users, totalCount] = await Promise.all([
+      User.find(query)
+        .sort({ createdAt: -1 })
+        .skip(offset)
+        .limit(limit)
+        .lean(),
+      User.countDocuments(query),
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: users,
+      pagination: {
+        total: totalCount,
+        page,
+        totalPages: totalCount > 0 ? Math.ceil(totalCount / limit) : 0,
+      },
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
+/**
+ * @openapi
+ * /users/admin/{userId}/deactivate:
+ *  put:
+ *   summary: Deactivate user (admin)
+ *   description: Deactivates a user account and disables active search.
+ *   tags: [Users]
+ *   security:
+ *    - jwt: []
+ *   parameters:
+ *    - name: userId
+ *      in: path
+ *      required: true
+ *      schema:
+ *       type: string
+ *       pattern: '^[a-fA-F\d]{24}$'
+ *      description: User ID to deactivate
+ *      example: 507f1f77bcf86cd799439011
+ *   responses:
+ *    '200':
+ *     description: User deactivated
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *         user:
+ *          $ref: '#/components/schemas/User'
+ *       example:
+ *        success: true
+ *    '500':
+ *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ */
 const deactivateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
@@ -38,6 +205,45 @@ const deactivateUser = async (req, res) => {
   }
 };
 
+/**
+ * @openapi
+ * /users/admin/{userId}/activate:
+ *  put:
+ *   summary: Activate user (admin)
+ *   description: Activates a user account.
+ *   tags: [Users]
+ *   security:
+ *    - jwt: []
+ *   parameters:
+ *    - name: userId
+ *      in: path
+ *      required: true
+ *      schema:
+ *       type: string
+ *       pattern: '^[a-fA-F\d]{24}$'
+ *      description: User ID to activate
+ *      example: 507f1f77bcf86cd799439011
+ *   responses:
+ *    '200':
+ *     description: User activated
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *         user:
+ *          $ref: '#/components/schemas/User'
+ *       example:
+ *        success: true
+ *    '500':
+ *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ */
 const activateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.userId, { isActive: true }, { new: true });
@@ -47,6 +253,110 @@ const activateUser = async (req, res) => {
   }
 };
 
+/**
+ * @openapi
+ * /users/profile/{userId}:
+ *  put:
+ *   summary: Update user profile (self/admin)
+ *   description: Updates user profile details including interests, availability, and location.
+ *   tags: [Users]
+ *   security:
+ *    - jwt: []
+ *   parameters:
+ *    - name: userId
+ *      in: path
+ *      required: true
+ *      schema:
+ *       type: string
+ *       pattern: '^[a-fA-F\d]{24}$'
+ *      description: User ID to update
+ *      example: 507f1f77bcf86cd799439011
+ *   requestBody:
+ *    required: true
+ *    content:
+ *     application/json:
+ *      schema:
+ *       type: object
+ *       properties:
+ *        firstName:
+ *         type: string
+ *        lastName:
+ *         type: string
+ *        username:
+ *         type: string
+ *        birthday:
+ *         type: string
+ *         format: date
+ *        email:
+ *         type: string
+ *         format: email
+ *        password:
+ *         type: string
+ *        interests:
+ *         type: array
+ *         items:
+ *          type: string
+ *        availability:
+ *         type: array
+ *         items:
+ *          type: string
+ *        location:
+ *         type: object
+ *         properties:
+ *          lat:
+ *           type: number
+ *          lng:
+ *           type: number
+ *          radius:
+ *           type: number
+ *      example:
+ *       firstName: Ana
+ *       lastName: Novak
+ *       username: ana_novak
+ *       birthday: 1995-07-22
+ *       email: ana@mail.com
+ *       interests: [kava, joga]
+ *       availability: ["Pon__zvecer", "Sob__dopoldne"]
+ *       location: { lat: 46.0569, lng: 14.5058, radius: 10 }
+ *   responses:
+ *    '200':
+ *     description: Profile updated
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *         user:
+ *          type: object
+ *       example:
+ *        success: true
+ *    '400':
+ *     description: Bad request
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ *    '404':
+ *     description: User not found
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ *    '409':
+ *     description: Conflict (duplicate username/email)
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ *    '500':
+ *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ */
 export const updateProfile = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -129,6 +439,43 @@ export const updateProfile = async (req, res) => {
   }
 };
 
+/**
+ * @openapi
+ * /users/admin/activate-search/{userId}:
+ *  put:
+ *   summary: Activate search (admin)
+ *   description: Enables active search for a user.
+ *   tags: [Users]
+ *   security:
+ *    - jwt: []
+ *   parameters:
+ *    - name: userId
+ *      in: path
+ *      required: true
+ *      schema:
+ *       type: string
+ *       pattern: '^[a-fA-F\d]{24}$'
+ *      description: User ID
+ *      example: 507f1f77bcf86cd799439011
+ *   responses:
+ *    '200':
+ *     description: Active search enabled
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *         user:
+ *          $ref: '#/components/schemas/User'
+ *    '500':
+ *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ */
 export const activateSearch = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -144,6 +491,43 @@ export const activateSearch = async (req, res) => {
   }
 };
 
+/**
+ * @openapi
+ * /users/admin/deactivate-search/{userId}:
+ *  put:
+ *   summary: Deactivate search (admin)
+ *   description: Disables active search for a user.
+ *   tags: [Users]
+ *   security:
+ *    - jwt: []
+ *   parameters:
+ *    - name: userId
+ *      in: path
+ *      required: true
+ *      schema:
+ *       type: string
+ *       pattern: '^[a-fA-F\d]{24}$'
+ *      description: User ID
+ *      example: 507f1f77bcf86cd799439011
+ *   responses:
+ *    '200':
+ *     description: Active search disabled
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *         user:
+ *          $ref: '#/components/schemas/User'
+ *    '500':
+ *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ */
 export const deactivateSearch = async (req, res) => {
   try {
     const { userId } = req.params;

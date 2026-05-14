@@ -52,5 +52,23 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="admin-pagination" *ngIf="!loading && !error">
+      <button
+        class="pagination-btn"
+        (click)="goToPage(currentPage - 1)"
+        [disabled]="currentPage <= 1">
+        Prejsnja
+      </button>
+      <span class="pagination-info">
+        Stran {{ currentPage }} / {{ totalPages || 1 }}
+      </span>
+      <button
+        class="pagination-btn"
+        (click)="goToPage(currentPage + 1)"
+        [disabled]="totalPages > 0 && currentPage >= totalPages">
+        Naslednja
+      </button>
+    </div>
   </div>
 </div>

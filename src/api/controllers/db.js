@@ -107,13 +107,19 @@ const importData = async (req, res) => {
     console.log('✅ Admin user created:', adminUser._id);
 
     // ── 3. Navadni uporabniki ───────────────────────────────────────────────
-    const rawUsers = generateUsers(30);
+    const userCount = 100;
+    const meetingCount = Math.floor(userCount * 0.6);
+    const messageCount = meetingCount * 8;
+    const reportCount = Math.floor(userCount * 0.2);
+    const contactCount = Math.floor(userCount * 0.25);
+
+    const rawUsers = generateUsers(userCount);
     const users = await User.insertMany(rawUsers);
     console.log(`✅ ${users.length} users imported`);
 
     // ── 4. Meetings ─────────────────────────────────────────────────────────
     // Preden insertamo meetinge, moramo imeti _id-je userjev
-    const rawMeetings = generateMeetings(users, 25);
+    const rawMeetings = generateMeetings(users, meetingCount);
     const meetings = await Meeting.insertMany(rawMeetings);
     console.log(`✅ ${meetings.length} meetings imported`);
 
@@ -134,17 +140,17 @@ const importData = async (req, res) => {
     console.log(`✅ ${ratings.length} ratings imported`);
 
     // ── 6. Messages ─────────────────────────────────────────────────────────
-    const rawMessages = generateMessages(users, meetings, 80);
+    const rawMessages = generateMessages(users, meetings, messageCount);
     const messages = rawMessages.length > 0 ? await Message.insertMany(rawMessages) : [];
     console.log(`✅ ${messages.length} messages imported`);
 
     // ── 7. Reports ──────────────────────────────────────────────────────────
-    const rawReports = generateReports(users, meetings, 10);
+    const rawReports = generateReports(users, meetings, reportCount);
     const reports = rawReports.length > 0 ? await Report.insertMany(rawReports) : [];
     console.log(`✅ ${reports.length} reports imported`);
 
     // ── 8. Contacts ─────────────────────────────────────────────────────────
-    const rawContacts = generateContacts(12);
+    const rawContacts = generateContacts(contactCount);
     const contacts = await Contact.insertMany(rawContacts);
     console.log(`✅ ${contacts.length} contacts imported`);
 

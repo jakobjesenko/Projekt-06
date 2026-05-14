@@ -3,9 +3,13 @@ import Meeting from "../models/meetings.js";
 
 // ─── Konfiguracija algoritma ─────────────────────────────────────────────
 // score = w1*similarity_interesov + w2*blizina_geografska + w3*prekrivanje_casa
-const W_INTERESTS = 0.5;
-const W_GEO = 0.2;
-const W_TIME = 0.3;
+const suggestionConfig = {
+  weights: {
+    interests: 0.5,
+    geo: 0.2,
+    time: 0.3,
+  },
+};
 
 const GROUP_SIZE = 3;            // ciljna velikost skupine (vključno s trenutnim uporabnikom)
 const MIN_GROUP_SIZE = 2;        // minimalna velikost (user + vsaj 1 partner) — fallback če ni dovolj kandidatov
@@ -92,7 +96,9 @@ const computePairScore = (userA, userB) => {
   const sTime = jaccard(userA.availability || [], userB.availability || []);
 
   const score =
-    W_INTERESTS * sInterests + W_GEO * sGeo + W_TIME * sTime;
+    suggestionConfig.weights.interests * sInterests +
+    suggestionConfig.weights.geo * sGeo +
+    suggestionConfig.weights.time * sTime;
 
   return {
     score,
@@ -193,6 +199,242 @@ const formatLocation = (currentUser, members) => {
 
 // ─── Glavni endpoint ────────────────────────────────────────────────────
 
+/**
+ * @openapi
+ * /suggestions/config:
+ *  get:
+ *   summary: Get suggestion scoring config (admin)
+ *   description: Returns the current weights used by the suggestion algorithm.
+ *   tags: [Suggestions]
+ *   security:
+ *    - jwt: []
+ *   responses:
+ *    '200':
+ *     description: Config retrieved
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *         config:
+ *          type: object
+ *          properties:
+ *           weights:
+ *            type: object
+ *            properties:
+ *             interests:
+ *              type: number
+ *             geo:
+ *              type: number
+ *             time:
+ *              type: number
+ *       example:
+ *        success: true
+ *        config:
+ *         weights:
+ *          interests: 0.5
+ *          geo: 0.2
+ *          time: 0.3
+ *    '500':
+ *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ */
+const getSuggestionConfig = async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    config: {
+      weights: { ...suggestionConfig.weights },
+    },
+  });
+};
+
+/**
+ * @openapi
+ * /suggestions/config:
+ *  put:
+ *   summary: Update suggestion scoring config (admin)
+ *   description: Updates the weights used by the suggestion algorithm. If the sum is not 1, weights are normalized.
+ *   tags: [Suggestions]
+ *   security:
+ *    - jwt: []
+ *   requestBody:
+ *    required: true
+ *    content:
+ *     application/json:
+ *      schema:
+ *       type: object
+ *       properties:
+ *        weights:
+ *         type: object
+ *         properties:
+ *          interests:
+ *           type: number
+ *           minimum: 0
+ *           maximum: 1
+ *          geo:
+ *           type: number
+ *           minimum: 0
+ *           maximum: 1
+ *          time:
+ *           type: number
+ *           minimum: 0
+ *           maximum: 1
+ *      example:
+ *       weights:
+ *        interests: 0.55
+ *        geo: 0.2
+ *        time: 0.25
+ *   responses:
+ *    '200':
+ *     description: Config updated
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *         config:
+ *          type: object
+ *       example:
+ *        success: true
+ *        config:
+ *         weights:
+ *          interests: 0.55
+ *          geo: 0.2
+ *          time: 0.25
+ *    '400':
+ *     description: Invalid input
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ */
+const updateSuggestionConfig = async (req, res) => {
+  const weights = req.body?.weights;
+
+  if (!weights || typeof weights !== 'object') {
+    return res.status(400).json({
+      success: false,
+      message: 'Neveljaven payload. Manjka weights objekt.',
+    });
+  }
+
+  const next = {
+    interests: weights.interests ?? suggestionConfig.weights.interests,
+    geo: weights.geo ?? suggestionConfig.weights.geo,
+    time: weights.time ?? suggestionConfig.weights.time,
+  };
+
+  const values = [next.interests, next.geo, next.time];
+  if (values.some((v) => typeof v !== 'number' || Number.isNaN(v) || v < 0 || v > 1)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Teže morajo biti števila med 0 in 1.',
+    });
+  }
+
+  const sum = next.interests + next.geo + next.time;
+  if (sum <= 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vsota teže mora biti večja od 0.',
+    });
+  }
+
+  if (Math.abs(sum - 1) > 0.0001) {
+    next.interests = next.interests / sum;
+    next.geo = next.geo / sum;
+    next.time = next.time / sum;
+  }
+
+  suggestionConfig.weights = next;
+
+  return res.status(200).json({
+    success: true,
+    config: {
+      weights: { ...suggestionConfig.weights },
+    },
+  });
+};
+
+/**
+ * @openapi
+ * /suggestions/{userId}:
+ *  get:
+ *   summary: Generate meeting suggestions
+ *   description: Generates group suggestions for a user based on interests, availability, and location.
+ *   tags: [Suggestions]
+ *   security:
+ *    - jwt: []
+ *   parameters:
+ *    - name: userId
+ *      in: path
+ *      required: true
+ *      schema:
+ *       type: string
+ *       pattern: '^[a-fA-F\d]{24}$'
+ *      description: User ID for which suggestions are generated
+ *      example: 507f1f77bcf86cd799439011
+ *   responses:
+ *    '200':
+ *     description: Suggestions generated successfully
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: array
+ *        items:
+ *         type: object
+ *         properties:
+ *          id:
+ *           type: string
+ *          name:
+ *           type: string
+ *          members:
+ *           type: array
+ *           items:
+ *            type: string
+ *          memberIds:
+ *           type: array
+ *           items:
+ *            type: string
+ *          interests:
+ *           type: array
+ *           items:
+ *            type: string
+ *          time:
+ *           type: string
+ *          location:
+ *           type: string
+ *          matchScore:
+ *           type: integer
+ *       example:
+ *        - id: 507f1f77bcf86cd799439011-1715683200000
+ *          name: "Kava & branje"
+ *          members: ["ana_novak", "marko_kovac"]
+ *          memberIds: ["507f1f77bcf86cd799439011", "507f1f77bcf86cd799439012"]
+ *          interests: ["kava", "branje"]
+ *          time: "petek, zvečer (18:00–24:00)"
+ *          location: "~2.4 km od tebe"
+ *          matchScore: 82
+ *    '404':
+ *     description: User not found
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ *    '500':
+ *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ */
 const generateSuggestions = async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.userId).lean();
@@ -355,4 +597,8 @@ const generateSuggestions = async (req, res) => {
   }
 };
 
-export default { generateSuggestions };
+export default {
+  generateSuggestions,
+  getSuggestionConfig,
+  updateSuggestionConfig,
+};

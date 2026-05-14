@@ -2,8 +2,8 @@
 
 **Demo aplikacija Srečajmo se**.
 
-Admin prijava: Email: admin@srecajmose.si Geslo: admin123
-Demo uporabnik: Email: ana@demo.com Geslo: demo123
+Admin prijava: Email: admin@meetup.net Geslo: password123
+Demo uporabnik: Email: ana@mail.com Geslo: password123
 
 ### Dostopno na: [srecajmose.live](https://srecajmose.live/) (produkcija). - trenutno le html ker smo testirali postavitev, na koncu četrte iteracije bo stran "LIVE"
 
@@ -15,6 +15,7 @@ Demo uporabnik: Email: ana@demo.com Geslo: demo123
 git clone https://github.com/TPO-2025-2026/Projekt-06
 cd Projekt-06
 git checkout main
+cd src
 npm install
 cd srecajmo-se
 npm install
@@ -66,8 +67,9 @@ docker compose down
 git clone https://github.com/TPO-2025-2026/Projekt-06
 cd Projekt-06
 git checkout main
+cd src
 npm install
-cd angular
+cd srecajmo-se
 npm install
 ng build --output-path=build
 cd ..

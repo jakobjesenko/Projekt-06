@@ -1,125 +1,170 @@
 <div class="chat-page">
-  <div class="panel chat-panel">
-    <div class="chat-header">
-      <button type="button" class="btn-secondary" (click)="goBack()">
-        <i class="fas fa-arrow-left"></i> Nazaj
-      </button>
+  <div class="bg-gradient"></div>
 
-      <div>
-        <h2><i class="fas fa-comments"></i> {{ meetingName }}</h2>
-        <p>Klepet za potrjeno srečanje</p>
-      </div>
-    </div>
-
-    <div *ngIf="errorMessage" class="alert alert-error">
-      {{ errorMessage }}
-    </div>
-
-    <div *ngIf="loading" class="chat-loading">
-      Nalaganje sporočil...
-    </div>
-
-    <div
-      class="chat-window"
-      *ngIf="!loading"
-      (scroll)="onScroll($event)"
-    >
-      <div *ngIf="loadingOlder" class="older-loading">
-        Nalaganje starejših sporočil...
-      </div>
-
-      <div *ngIf="noMoreMessages && messages.length > 0" class="older-loading">
-        Ni več starejših sporočil.
-      </div>
-
-      <div
-        class="chat-message"
-        *ngFor="let msg of messages"
-        [class.my-message]="isMyMessage(msg)"
-      >
-        <div class="message-meta">
-          <img
-            *ngIf="msg.userImage"
-            [src]="msg.userImage"
-            alt="Avatar"
-            class="message-avatar"
-          />
-
-          <span class="message-author">
-            {{ msg.username }}
-          </span>
-
-          <span class="message-time">
-            {{ msg.timestamp | date:'short' }}
-          </span>
-        </div>
-
-        <div class="message-bubble" *ngIf="editingMessageId !== msg._id">
-          {{ msg.message }}
-        </div>
-
-        <div class="edit-box" *ngIf="editingMessageId === msg._id">
-          <input
-            type="text"
-            name="editingText"
-            class="form-input"
-            [(ngModel)]="editingText"
-            maxlength="500"
-          />
-
-          <div class="edit-actions">
-            <button type="button" class="btn-primary" (click)="saveEdit(msg)">
-              Shrani
-            </button>
-
-            <button type="button" class="btn-secondary" (click)="cancelEdit()">
-              Prekliči
-            </button>
+  <div class="app-wrapper">
+    <div class="chat-container">
+      <aside class="group-info-panel">
+        <div class="group-header">
+          <div class="group-avatar">
+            <i class="fas fa-users"></i>
+          </div>
+          <h2 class="group-name">{{ meetingName }}</h2>
+          <p class="group-subtitle">Klepet za potrjeno srecanje</p>
+          <div class="group-location">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{ meetingLocation }}</span>
+          </div>
+          <div class="group-time">
+            <i class="fas fa-calendar-alt"></i>
+            <span>{{ meetingDate }}</span>
+          </div>
+          <div class="group-meta">
+            <span class="meta-pill">Sporocila: {{ messages.length }}</span>
+            <span class="meta-pill">Status: aktiven</span>
           </div>
         </div>
 
-        <div class="message-actions" *ngIf="canModifyMessage(msg) && editingMessageId !== msg._id">
-          <button type="button" class="btn-secondary" (click)="startEdit(msg)">
-            Uredi
-          </button>
+        <div class="members-section">
+          <h4><i class="fas fa-user-friends"></i> Clani skupine</h4>
+          <div class="members-list">
+            <div class="member-item" *ngFor="let member of meetingMembers">
+              <div class="member-avatar">
+                {{ getMemberInitials(member) }}
+              </div>
+              <div class="member-info">
+                <div class="member-name">{{ getMemberName(member) }}</div>
+                <div class="member-status" [ngClass]="getMemberStatusClass(member)">
+                  <i class="fas fa-circle"></i>
+                  {{ getMemberStatusText(member) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
 
-          <button type="button" class="btn-secondary" (click)="deleteMessage(msg)">
-            Izbriši
+      <section class="chat-main">
+        <div class="chat-header">
+          <div>
+            <h2><i class="fas fa-comments"></i> {{ meetingName }}</h2>
+            <p>Klepet za potrjeno srecanje</p>
+          </div>
+          <button type="button" class="btn-secondary back-button" (click)="goBack()">
+            <i class="fas fa-arrow-left"></i> Nazaj
           </button>
         </div>
-      </div>
 
-      <div *ngIf="messages.length === 0" class="empty-chat">
-        <i class="fas fa-comment-dots"></i>
-        <h3>Ni še sporočil</h3>
-        <p>Začni pogovor s skupino.</p>
-      </div>
+        <div *ngIf="errorMessage" class="alert alert-error">
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="loading" class="chat-loading">
+          Nalaganje sporocil...
+        </div>
+
+        <div
+          class="chat-window"
+          *ngIf="!loading"
+          (scroll)="onScroll($event)"
+        >
+          <div *ngIf="loadingOlder" class="older-loading">
+            Nalaganje starejsih sporocil...
+          </div>
+
+          <div *ngIf="noMoreMessages && messages.length > 0" class="older-loading">
+            Ni vec starejsih sporocil.
+          </div>
+
+          <div
+            class="chat-message"
+            *ngFor="let msg of messages"
+            [class.my-message]="isMyMessage(msg)"
+          >
+            <div class="message-meta">
+              <img
+                *ngIf="msg.userImage"
+                [src]="msg.userImage"
+                alt="Avatar"
+                class="message-avatar"
+              />
+
+              <span class="message-author">
+                {{ msg.username }}
+              </span>
+
+              <span class="message-time">
+                {{ msg.timestamp | date:'short' }}
+              </span>
+            </div>
+
+            <div class="message-bubble" *ngIf="editingMessageId !== msg._id">
+              {{ msg.message }}
+            </div>
+
+            <div class="edit-box" *ngIf="editingMessageId === msg._id">
+              <input
+                type="text"
+                name="editingText"
+                class="form-input"
+                [(ngModel)]="editingText"
+                maxlength="500"
+              />
+
+              <div class="edit-actions">
+                <button type="button" class="btn-primary" (click)="saveEdit(msg)">
+                  Shrani
+                </button>
+
+                <button type="button" class="btn-secondary" (click)="cancelEdit()">
+                  Preklici
+                </button>
+              </div>
+            </div>
+
+            <div class="message-actions" *ngIf="canModifyMessage(msg) && editingMessageId !== msg._id">
+              <button type="button" class="btn-secondary" (click)="startEdit(msg)">
+                Uredi
+              </button>
+
+              <button type="button" class="btn-secondary" (click)="deleteMessage(msg)">
+                Izbrisi
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="messages.length === 0" class="empty-chat">
+            <i class="fas fa-comment-dots"></i>
+            <h3>Ni se sporocil</h3>
+            <p>Zacni pogovor s skupino.</p>
+          </div>
+        </div>
+
+        <form class="chat-form" (ngSubmit)="sendMessage()" *ngIf="!loading">
+          <input
+            type="text"
+            name="newMessage"
+            class="form-input"
+            placeholder="Napisi sporocilo..."
+            [(ngModel)]="newMessage"
+            maxlength="500"
+            autocomplete="off"
+          />
+
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="sending || !newMessage.trim()"
+          >
+            <span *ngIf="!sending">
+              <i class="fas fa-paper-plane"></i> Poslji
+            </span>
+
+            <span *ngIf="sending">
+              Posiljanje...
+            </span>
+          </button>
+        </form>
+      </section>
     </div>
-
-    <form class="chat-form" (ngSubmit)="sendMessage()" *ngIf="!loading">
-      <input
-        type="text"
-        name="newMessage"
-        class="form-input"
-        placeholder="Napiši sporočilo..."
-        [(ngModel)]="newMessage"
-        maxlength="500"
-        autocomplete="off"
-      />
-
-      <button
-        type="submit"
-        class="btn-primary"
-        [disabled]="sending || !newMessage.trim()"
-      >
-        <span *ngIf="!sending">
-          <i class="fas fa-paper-plane"></i> Pošlji
-        </span>
-
-        <span *ngIf="sending">
-          Pošiljanje...
-        </span>
-      </button>
-    </form>
   </div>
 </div>

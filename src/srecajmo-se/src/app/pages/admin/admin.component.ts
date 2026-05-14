@@ -19,6 +19,16 @@ interface AdminUser {
   activeSearch: boolean;
 }
 
+interface PaginatedUsersResponse {
+  success: boolean;
+  data: AdminUser[];
+  pagination: {
+    total: number;
+    page: number;
+    totalPages: number;
+  };
+}
+
 @Component({
   selector: 'app-admin',
   imports: [CommonModule],
@@ -36,6 +46,12 @@ export class AdminComponent implements OnInit {
   users: AdminUser[] = [];
   loading = true;
   error = '';
+  searchQuery = '';
+  statusFilter = '';
+  currentPage = 1;
+  pageSize = 30;
+  totalPages = 0;
+  totalUsers = 0;
 
   constructor(private http: HttpClient) {}
 
@@ -43,14 +59,33 @@ export class AdminComponent implements OnInit {
     this.loadUsers();
   }
 
-  loadUsers(): void {
+  loadUsers(page = this.currentPage): void {
     this.loading = true;
     this.error = '';
-    this.http.get<AdminUser[]>('/api/users/admin/').subscribe({
-      next: (users) => {
-        this.users = users;
-        this.stats[0].value = users.length;
-        this.stats[3].value = users.filter(u => u.activeSearch).length;
+    const safePage = page < 1 ? 1 : page;
+    const params = new URLSearchParams({
+      page: String(safePage),
+      limit: String(this.pageSize)
+    });
+
+    if (this.searchQuery) {
+      params.set('search', this.searchQuery);
+    }
+
+    if (this.statusFilter) {
+      params.set('status', this.statusFilter);
+    }
+
+    const url = `/api/users/admin/?${params.toString()}`;
+
+    this.http.get<PaginatedUsersResponse>(url).subscribe({
+      next: (res) => {
+        this.users = res.data;
+        this.currentPage = res.pagination.page;
+        this.totalPages = res.pagination.totalPages;
+        this.totalUsers = res.pagination.total;
+        this.stats[0].value = res.pagination.total;
+        this.stats[3].value = res.data.filter(u => u.activeSearch).length;
         this.loading = false;
       },
       error: () => {
@@ -58,6 +93,23 @@ export class AdminComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  searchUsers(): void {
+    this.currentPage = 1;
+    this.loadUsers();
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.statusFilter = '';
+    this.currentPage = 1;
+    this.loadUsers();
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || (this.totalPages > 0 && page > this.totalPages)) return;
+    this.loadUsers(page);
   }
 
   toggleActive(user: AdminUser): void {

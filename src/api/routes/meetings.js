@@ -1,10 +1,14 @@
 import { Router } from "express";
 import meetingsCtrl from "../controllers/meetings.js";
+import { protect } from "../middleware/auth.js";
 
 const meetingsRouter = Router();
 
 // GET /api/meetings
 meetingsRouter.get("/", meetingsCtrl.getAllMeetings);
+
+// GET /api/meetings/:meetingId/chat-context
+meetingsRouter.get("/:meetingId/chat-context", protect, meetingsCtrl.getMeetingChatContext);
 
 // POST /api/meetings
 meetingsRouter.post("/", meetingsCtrl.createMeeting);

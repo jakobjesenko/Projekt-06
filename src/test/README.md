@@ -5,7 +5,7 @@ V tej mapi se nahajajo testi.
 ### Zagon testov:
 
 ```bash
-Projek-06
+Projek-06/src
 ```
 poženi
 

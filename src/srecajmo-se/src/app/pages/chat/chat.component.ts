@@ -2,11 +2,42 @@ import { CommonModule, Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from '../../services/auth.service';
 import { ChatMessage, MessageService } from '../../services/message.service';
 import { SocketService } from '../../services/socket.service';
+
+interface ChatMember {
+  id: string;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+  profileImage?: string;
+  response?: 'pending' | 'accepted' | 'declined';
+  respondedAt?: string | null;
+  status?: string;
+  isActive?: boolean | null;
+}
+
+interface ChatMeeting {
+  id: string;
+  groupName: string;
+  status?: string;
+  date?: string;
+  venue?: {
+    address?: string;
+    city?: string;
+    country?: string;
+  };
+}
+
+interface ChatContextResponse {
+  success: boolean;
+  meeting: ChatMeeting;
+  members: ChatMember[];
+}
 
 @Component({
   selector: 'app-chat',
@@ -18,6 +49,9 @@ import { SocketService } from '../../services/socket.service';
 export class ChatComponent implements OnInit, OnDestroy {
   meetingId = '';
   meetingName = 'Pogovor';
+  meetingLocation = 'Lokacija ni dolocena';
+  meetingDate = 'Termin ni dolocen';
+  meetingMembers: ChatMember[] = [];
 
   messages: ChatMessage[] = [];
   newMessage = '';
@@ -42,7 +76,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     private location: Location,
     private authService: AuthService,
     private messageService: MessageService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +98,36 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.socketService.joinMeetingRoom(this.meetingId);
 
     this.setupSocketListeners();
+    this.loadChatContext();
     this.loadMessages();
+  }
+
+  loadChatContext(): void {
+    this.http.get<ChatContextResponse>(`/api/meetings/${this.meetingId}/chat-context`, {
+      withCredentials: true
+    }).subscribe({
+      next: (response) => {
+        if (!response?.meeting) return;
+
+        this.meetingName = response.meeting.groupName || this.meetingName;
+
+        const venue = response.meeting.venue || {};
+        const locationParts = [venue.address, venue.city].filter(Boolean);
+        this.meetingLocation = locationParts.length
+          ? locationParts.join(', ')
+          : 'Lokacija ni dolocena';
+
+        this.meetingDate = response.meeting.date
+          ? new Date(response.meeting.date).toLocaleString('sl-SI')
+          : 'Termin ni dolocen';
+
+        this.meetingMembers = response.members || [];
+      },
+      error: (err) => {
+        this.errorMessage =
+          err.error?.message || 'Napaka pri nalaganju podatkov srecanja.';
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -238,6 +302,45 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.location.back();
+  }
+
+  getMemberName(member: ChatMember): string {
+    const fullName = `${member.firstName || ''} ${member.lastName || ''}`.trim();
+    return member.username || fullName || 'Uporabnik';
+  }
+
+  getMemberInitials(member: ChatMember): string {
+    const name = this.getMemberName(member).trim();
+    if (!name) return 'U';
+
+    const parts = name.split(' ').filter(Boolean);
+    const initials = parts.length >= 2
+      ? `${parts[0][0]}${parts[1][0]}`
+      : parts[0][0];
+
+    return initials.toUpperCase();
+  }
+
+  getMemberStatusText(member: ChatMember): string {
+    switch (member.response) {
+      case 'accepted':
+        return 'Aktiven';
+      case 'declined':
+        return 'Odsoten';
+      default:
+        return 'V cakanju';
+    }
+  }
+
+  getMemberStatusClass(member: ChatMember): string {
+    switch (member.response) {
+      case 'accepted':
+        return 'member-status-active';
+      case 'declined':
+        return 'member-status-offline';
+      default:
+        return 'member-status-pending';
+    }
   }
 
   private setupSocketListeners(): void {
