@@ -153,12 +153,45 @@ Glavni izzivi projekta so:
 
 ### 1.2 Poudarki
 
-- Izpostavite, kaj ste v okviru projekta dosegli.
+V projektu je ekipa uspešno realizirala vse ključne cilje, postavljene v začetnem predlogu:
+
+1. **Delujoči MVP sistem** – V celoti implementiran sistem za avtomatsko oblikovanje manjših skupin uporabnikov za spontana družabna srečanja, ki vključuje registracijo, profil, iskanje skupin in skupinski chat.
+
+2. **Pametna komponenta z algoritmom** – Razvit in vzpostavljen scoring model, ki kombinira tri ključne kriterije ujemanja: podobnost interesov (Jaccard indeks), geografsko razdaljo (Haversine formula) in časovno prekrivanje uporabnikov. Model stabilno generira predloge skupin in je prototipno kalibriran na testnih podatkih.
+
+3. **Celovita tehnična arhitektura** – Vzpostavljena je bila tristopenjska arhitektura (frontend, backend, baza): Angular SPA za uporabniški vmesnik, Node.js/Express REST API za poslovno logiko, MongoDB za podatke in Socket.io za komunikacijo v realnem času v skupinskih chatih.
+
+4. **Ključni uporabniški tokovi** – Implementirani so bili vsi osnovni tokovi: registracija v treh korakih s e-pošto, prijava z JWT avtentikacijo, iskanje skupin, pregled predlogov z informacijami o članih, potrditev/zavrnitev udeležbe in skupinski chat za usklajevanje srečanja.
+
+5. **Administratorski nadzor** – Razvit je bil administratorski panel z mogočnostmi za upravljanje uporabnikov, pregled prijav neprimernega vedenja, vpogled v skupinski chat, pregled povratnih informacij ter spremljanje ključnih metrik kakovosti algoritma.
+
+6. **Testiranje in validacija** – Sistem je bil testiran z realnimi uporabniki z zbiranjem povratnih informacij in analizo kakovosti oblikovanih skupin, kar je omogočilo iterativno izboljšavo algoritma.
+
+7. **Celovita dokumentacija** – Celoten projekt je dokumentiran z detaljno specifikacijo vmesnikov, primerov uporabe, arhitekturnih pogledov, diagramov zaporedja in tehničnih odločitev, ki omogočajo razumevanje in nadaljnji razvoj sistema.
 
 ### 1.3 Spremembe
 
-- Povzemite vse večje spremembe predloga katerega koli vidika projekta med semestrom.
-- Vključite datum, motivacijo, opis in posledice vsake spremembe.
+Med semestrom je bil projekt deležen večjih sprememb pri fokusiranju obsega in izbiri tehnoloških pristopov, narekanih s povratnimi informacijami mentorja in dejanskimi izkušnjami med razvojem:
+
+**Sprememba 1 – Fokusiranje MVP in izbira algoritmičnega pristopa (februar–marec 2026)**
+- **Motivacija:** Začetni predlog je bil preširok in ambiciozen. Povratna informacija mentorja je poudarila, da je treba drastično zmanjšati obseg in se fokusirati na jedro sistema – algoritemu za oblikovanje manjših skupin na podlagi treh ključnih kriterijev.
+- **Opis:** Namesto razvoja naprednega sistema z mnogimi dodatnimi funkcionalnostmi, uporabniško usmerjenim ojačevanjem in napovedovanjem dogodkov, je ekipa izbala fokusirane tri kriterije (interesi, lokacija, čas). Ključna odločitev: ne graditi novega algoritma iz nič, ampak prilagoditi obstoječe znane pristope (Jaccard indeks za interese, Haversine za geografsko razdaljo, časovno prekrivanje).
+- **Posledice:** Obseg projekta je bil bolj izvedljiv v enem semestru, arhitektura manj kompleksna in verjetnost za validacijo ideje z realnimi uporabniki večja. Ta sprememba je bila ključna za hitrost razvoja in relevantnost rezultatov.
+
+**Sprememba 2 – Detaljne specifikacije vmesnikov in formalnih primerov uporabe (marec 2026)**
+- **Motivacija:** Pred začetkom razvoja je bilo kritično jasno opredeliti natanko, kaj sistema »naredi« in kako se uporabnik giblje skozi sistem. To je bila podlaga za koordinacijo med frontendom in backendom.
+- **Opis:** Ekipa je pripravila podrobne zaslonske maske, 17 formalnih primerov uporabe (z osnovnimi, alternativnimi in izjemnimi tokovi), točno opredelitev vloge gosta (neprijavljeni uporabnik), administratorskih funkcij in zunanjaga API vmesnikov (geokodiranje, e-pošta).
+- **Posledice:** Specifikacija je postala »resnica sistema« in podlaga za ves razvoj. Vmesniki so bili dosljedno implementirani po teh specifikacijah, kar je zmanjšalo potrebo po spremembah med razvojem in pospešilo produkcijo delujočega prototipa.
+
+**Sprememba 3 – Preprost scoring pristop namesto LLM za pametno komponento (februar 2026)**
+- **Motivacija:** Povratna informacija je jasno navedla, da je za MVP LLM (jezikovni model) nepotreban in da je preprost, numeričnih scoring pristop boljši: hitrejši za razvoj, bolj pregleden za kalibriranje in bolj kontroliran pri kvaliteti predlogov.
+- **Opis:** Ekipa je razvila preprost model: `score = w1 * similarity_interesov + w2 * geografska_razdalja + w3 * casovno_prekrivanje`, ki ga je mogoče enostavno razširiti z novimi kriteriji in kalibrirati na podlagi povratnih informacij iz testiranja.
+- **Posledice:** Algoritem je hitro zaživel v produkciji (3. teden april), prototipna testiranja z realnimi uporabniki so pokazala primerno delovanje, uteži pa so se iterativno prilagajale na podlagi povratnih informacij.
+
+**Sprememba 4 – Strike sistem kot razširitev varnostnega mehanizma (maj 2026)**
+- **Motivacija:** Med razvojem je ekipa ugotovila potrebo po dodatnem mehanizmu za obravnavo neprimernega vedenja in zaščito varnosti uporabnikov.
+- **Opis:** Predlagan je bil »strike sistem«, pri katerem uporabnik prejme do tri opozorila. Z vsakim strike-om je status vidno označen, s tretjim pa je uporabnik blokiran. Algoritem oblikovanja skupin razporeja uporabnike brez strike-ov posebej od tistih z 1 ali 2 strike-a.
+- **Posledice:** Strike sistem je bil prototipno implementiran kot razširitev nad jedrom MVP. Ker nismo prejeli dodatne povratne informacije nanj, ga obravnavamo kot nadgradnjo za naslednje iteracije, osnoven sistem pa ima že implementirane prijave neprimernega vedenja in administrativno obravnavo.
 
 ## 2 Potrebe naročnika
 
