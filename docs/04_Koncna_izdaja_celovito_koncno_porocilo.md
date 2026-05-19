@@ -282,6 +282,69 @@ Kot **uporabnik** želim **prijaviti neprimerno vedenje drugih članov skupine a
 - Glede **na to, da sem opazil neprimerno vedenje**, ko **kliknem na gumb za prijavo in vnesem opis incidenta**, potem **je prijava poslana administratorju sistema in prejemem potrditev o prejetju prijave**.
 - Glede **na to, da je bila oddana prijava**, ko **administrator pregleda prijavo**, potem **lahko ukrepa (opozorilo, začasna prepoved, izbris uporabnika) glede na resnost incidenta**.
 
+---
+
+**Uporabniška zgodba 7: Prijava v sistem**
+
+Kot **registrirani uporabnik** želim **se prijavi v sistem s svojimi poverilnicami**, da **dostopam do svojega profila, predlogov skupin in ostalih funkcionalnosti**.
+
+*Testi sprejemljivosti:*
+- Glede **na to, da sem registrirani uporabnik**, ko **vnesem pravilno e-pošto in geslo ter kliknem prijavo**, potem **sem uspešno prijavljen in vidim svojo nadzorno ploščo s predlogi skupin**.
+- Glede **na to, da sem registrirani uporabnik**, ko **vnesem napačno geslo**, potem **sistem prikaže jasno opozorilo o napačnih poverilnicah in omogoči nov poskus**.
+- Glede **na to, da moj račun ni verificiran**, ko **poskušam prijaviti**, potem **sistem zavrne prijavo z opozorilom, da moram prvo potrditi e-pošto**.
+
+---
+
+**Uporabniška zgodba 8: Ponastavitev gesla**
+
+Kot **uporabnik, ki sem pozabil geslo** želim **obnoviti dostop do računa prek ponastavitve gesla**, da **se ponovno prijavim v sistem**.
+
+*Testi sprejemljivosti:*
+- Glede **na to, da sem pozabil geslo**, ko **kliknem na "Pozabljeno geslo" in vnesem svojo e-pošto**, potem **sistem pošlje povezavo za ponastavitev gesla in prikaže potrditev**.
+- Glede **na to, da sem prejel povezavo za ponastavitev**, ko **odprem povezavo in vnesem novo geslo in potrdim**, potem **je novo geslo shranjeno in se lahko prijavim s to geslom**.
+- Glede **na to, da je povezava za ponastavitev potekla**, ko **poskušam uporabiti staro povezavo**, potem **sistem prikaže opozorilo in ponudi novo pošiljanje povezave**.
+
+---
+
+**Uporabniška zgodba 9: Skupinski chat pred srečanjem**
+
+Kot **član potrjene skupine** želim **komunicirati s člani skupine v skupinskem chatu**, da **uskladim podrobnosti srečanja in se bolje spoznam z drugimi člani**.
+
+*Testi sprejemljivosti:*
+- Glede **na to, da je skupino potvrjena in imam dostop do chata**, ko **odprem skupinski chat**, potem **vidim vse člane skupine in lahko pošiljam ter prejemam sporočila**.
+- Glede **na to, da sem v skupinskem chatu**, ko **pošljem sporočilo**, potem **je moje sporočilo takoj vidno vsem članom in je označeno z mojim imenom**.
+- Glede **na to, da imam dostop do skupinskega chata**, ko **pregledam zgodovino sporočil**, potem **vidim vsa prejšnja sporočila članov in kontekst naše komunikacije**.
+
+---
+
+**Uporabniška zgodba 10: Odjava iz sistema**
+
+Kot **prijavljen uporabnik** želim **se varno odjaviti iz sistema**, da **zaščitim svoj račun in drugimi prepravim dostop do sistema**.
+
+*Testi sprejemljivosti:*
+- Glede **na to, da sem prijavljen uporabnik**, ko **kliknem na "Odjava"**, potem **je moja seja zaključena in sem preusmerjen na začetno ali prijavno stran**.
+- Glede **na to, da sem neaktiven dalj časa**, ko **sistem zazna dolgotrajno neaktivnost**, potem **me opozori in po izteku časa avtomatično odjavi ter preusmerim na prijavno stran**.
+
+---
+
+**Uporabniška zgodba 11: Pregled informacijskih strani in pogostih vprašanj**
+
+Kot **gost ali uporabnik** želim **dostopati do informacijskih strani in pogostih vprašanj**, da **se seznanim s pogoji uporabe, varstvom osebnih podatkov in drugimi informacijami**.
+
+*Testi sprejemljivosti:*
+- Glede **na to, da sem na spletni strani**, ko **kliknem na povezave v nogi (Pogosto vprašana vprašanja, Pogoji uporabe, Varstvo podatkov, Kontakt)**, potem **je vsaka stran dostopna in vsebuje pričakovano vsebino**.
+- Glede **na to, da sem na informacijski strani**, ko **pregledam vsebino**, potem **so informacije jasne, dobro organizirane in dostopne**.
+
+---
+
+**Uporabniška zgodba 12: Kontakt s podporo in pošiljanje povratne informacije**
+
+Kot **gost ali uporabnik** želim **poslati sporočilo ali povratno informacijo sistemu**, da **podelim svoje mnenje, vprašanja ali predloge za izboljšanje**.
+
+*Testi sprejemljivosti:*
+- Glede **na to, da želim poslati sporočilo**, ko **odprem masko za kontakt in izpolnim ime, e-pošto, zadevo in sporočilo**, potem **je moje sporočilo uspešno poslano in prejemem potrditev**.
+- Glede **na to, da sem poslal sporočilo**, ko **čakam potrditve**, potem **prejemem elektronsko pošto, ki potrjuje prejem mojega sporočila**.
+
 ### 2.2 Funkcionalne zahteve
 
 Sistem mora podpirati celoten uporabniški tok od prvega obiska do zaključka srečanja. Gost mora imeti dostop do začetne strani, informacijskih vsebin v nogi ter možnosti registracije, prijave in začetka ponastavitve gesla. Registracija mora potekati v treh jasnih korakih (osnovni podatki, interesi v obliki "tagov", lokacija z opcijo autocomplete in časovna razpoložljivost), po oddaji pa mora sistem poslati verifikacijsko povezavo za aktivacijo računa. Prijavljen uporabnik mora lahko urejati profil, sprožiti iskanje skupin, pregledati predloge in za vsak predlog odpreti hiter pregled članov skupine pred odločitvijo.
