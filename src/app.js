@@ -160,7 +160,7 @@ app.get("/api/swagger.json", (req, res) => {
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const angularDistPath = join(__dirname, "build", "browser");
+const angularDistPath = join(__dirname, "srecajmo-se", "dist", "srecajmo-se", "browser");
 
 app.use(express.static(angularDistPath, {
   index: false

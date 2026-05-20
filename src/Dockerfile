@@ -6,15 +6,15 @@ FROM node:24.11-alpine AS angular-builder
 WORKDIR /angular
 
 # Kopiraj package datoteke za Angular
-COPY angular/package*.json ./
+COPY srecajmo-se/package*.json ./
 
 # Namesti Angular odvisnosti (--legacy-peer-deps zaradi ng2-charts compatibility)
 RUN npm install --legacy-peer-deps
 
 # Kopiraj Angular source kodo
-COPY angular/ ./
+COPY srecajmo-se/ ./
 
-# Zgradi Angular aplikacijo (output bo v /angular/build)
+# Zgradi Angular aplikacijo (output bo v /angular/dist/srecajmo-se)
 RUN npm run build
 
 # ============================================
@@ -38,7 +38,7 @@ RUN npm install --legacy-peer-deps
 COPY . .
 
 # Kopiraj zgrajeno Angular aplikacijo iz prvega stage-a
-COPY --from=angular-builder /angular/build /usr/src/app/angular/build
+COPY --from=angular-builder /angular/dist/srecajmo-se /usr/src/app/srecajmo-se/dist/srecajmo-se
 
 # Nastavi environment spremenljivke
 ENV NODE_ENV=docker
@@ -46,4 +46,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # Zaženi aplikacijo
-CMD ["node", "./server"]
+CMD ["node", "server.js"]
