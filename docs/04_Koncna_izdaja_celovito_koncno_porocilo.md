@@ -1937,11 +1937,133 @@ V smislu podobnosti so člani ekipe razvijali spletno aplikacijo, konkretno ravn
 
 **Opomba k odstotkom:** Prispevki so približno enakomerni, ker so vloge fleksibilne in vsi sodelujejo pri dokumentaciji, testiranju in code reviewih. Projekt manager in tester imata nekoliko nižji odstotek, ker njun prispevek ni izključno v kodo, vendar sta ključna za organizacijo in kakovost. Po potrebi se odstotki ob koncu projekta prilagodijo dejanskemu stanju.
 
-## 8 Omejitve in tveganja
+## 8. Omejitve in tveganja
 
-- Ali so bile kakšne družbene, etične, politične ali pravne omejitve?
-- Ali ste imeli dostop do podatkov, storitev in virov, ki ste jih potrebovali?
-- Ali je bilo še kaj drugega, kar ste potrebovali?
+### 8.1 Omejitve, dostop do virov in odprta vprašanja
+
+#### Ali so bile kakšne družbene, etične, politične ali pravne omejitve?
+
+**Da, identificirali smo naslednje omejitve** in zanje pripravili ustrezne pristope:
+
+- **Zasebnost podatkov in GDPR:** sistem obdeluje interese, lokacijo in razpoložljivost uporabnikov.
+  - *Pristop:* minimalno zbiranje podatkov, anonimizacija lokacije (mesto/okraj), funkcionalnosti izvoz/izbris podatkov.
+- **Varnost uporabnikov na srečanjih:** možna neprimerna vedenja ali incidenti.
+  - *Pristop:* sistem prijav, možnost blokade uporabnikov, priporočila za srečanja v javnih prostorih.
+- **Nediskriminatornost algoritma:** algoritem ne sme uporabljati zaščitenih osebnih značilnosti.
+  - *Pristop:* ujemanje temelji na interesih, lokaciji in času; brez diskriminatornih filtrov.
+- **Politične omejitve:** trenutno ni prepoznanih posebnih političnih omejitev za MVP.
+
+#### Dostop do podatkov, storitev in virov
+
+**Testni uporabniki:** predviden dostop prek študentov FRI in osebnih kontaktov.
+
+**Podatkovna baza in gostovanje:** uporaba brezplačnih razvojnih okolij in lokalne alternative.
+
+**Geokodiranje in obvestila:** javne ali freemium storitve, z lokalnim fallback pristopom.
+
+#### Ali smo imeli dostop do podatkov, storitev in virov, ki smo jih potrebovali?
+
+**Da, večinoma.** Podrobneje:
+
+| Vir | Potreben? | Dostop? | Opomba |
+|-----|-----------|---------|--------|
+| Testni uporabniki | Da | Da | Zagotovljenih 20+ uporabnikov prek študentov FRI |
+| MongoDB gostovanje | Da | Da | MongoDB Atlas (brezplačni tier) |
+| Backend gostovanje | Da | Da | Render / Vercel (brezplačni tier) |
+| Geokodiranje | Da | Da | Nominatim (OpenStreetMap, brezplačno) |
+| Obvestila (email) | Da | Da | Nodemailer + Gmail SMTP |
+| Mentorjeva povratna informacija | Da | Da | Redni tedenski sestanki |
+
+Težav pri dostopu ni bilo, saj smo izbrali samo brezplačne storitve, ki zadostujejo za MVP.
+
+#### Ali je bilo še kaj drugega, kar smo potrebovali?
+
+Med izvedbo projekta smo ugotovili, da potrebujemo še naslednje:
+
+- **Dostop do realnih podatkov o razpoložljivosti in interesih** – simulirani podatki niso popolnoma odražali realnega vedenja uporabnikov. V prihodnje bi bilo smiselno izvesti anketo med potencialnimi uporabniki pred razvojem.
+- **Mehanizem za pridobivanje povratnih informacij o kakovosti skupin** – omogočil bi iterativno izboljšanje algoritma med samo evalvacijo.
+- **Podrobnejša tehnična dokumentacija za deployment** – postavitev produkcijskega okolja je vzela več časa kot pričakovano.
+
+**Druge potrebe:**
+
+- Potrditev razpoložljivosti vsaj 20 testnih uporabnikov za beta fazo.
+- Tedenski časovni vložek članov ekipe (okvirno 10–15 ur na člana).
+- Redna mentorska povratna informacija v iteracijah.
+
+---
+
+### 8.2 Identifikacija tveganj
+
+| Tveganje | Opis | Tip/vrsta | Na kaj vpliva |
+|----------|------|-----------|---------------|
+| T1 | Nizka kakovost oblikovanih skupin (slab matching) | Tehnologija | Izdelek, projekt |
+| T2 | Premalo testnih uporabnikov za relevantno evalvacijo | Ljudje | Projekt, posel |
+| T3 | Tehnične težave pri implementaciji (algoritem, API, deployment) | Tehnologija | Projekt, izdelek |
+| T4 | Časovne zamude pri izvedbi iteracij | Organizacija | Projekt, posel |
+| T5 | Cold-start problem (premalo aktivnih uporabnikov na začetku) | Zahteve | Izdelek, posel |
+| T6 | Varnostni incidenti pri uporabniških srečanjih | Ljudje | Posel, izdelek |
+| T7 | Neskladnost z GDPR in pravnimi zahtevami | Zahteve | Posel, projekt |
+| T8 | Izpad enega ali več članov ekipe | Ljudje | Projekt |
+
+---
+
+### 8.3 Analiza tveganj
+
+| Tveganje | Opis | Tip/vrsta | Na kaj vpliva | Verjetnost | Učinki/posledice |
+|----------|------|-----------|---------------|------------|------------------|
+| T1 | Nizka kakovost oblikovanih skupin | Tehnologija | Izdelek, projekt | Srednja | Resne – uporabniki zapustijo aplikacijo |
+| T2 | Premalo testnih uporabnikov | Ljudje | Projekt, posel | Srednja | Resne – ne moremo ovrednotiti algoritma |
+| T3 | Tehnične težave pri implementaciji | Tehnologija | Projekt, izdelek | Srednja | Resne – zamude, slabša kakovost |
+| T4 | Časovne zamude iteracij | Organizacija | Projekt, posel | Srednja | Resne – ogrožen rok oddaje |
+| T5 | Cold-start problem | Zahteve | Izdelek, posel | Visoka | Dopustne – zmanjšamo kriterije |
+| T6 | Varnostni incidenti | Ljudje | Posel, izdelek | Nizka | Usodne – pravne posledice, sloves |
+| T7 | Neskladnost z GDPR | Zahteve | Posel, projekt | Nizka | Resne – globe, prepoved delovanja |
+| T8 | Izpad članov ekipe | Ljudje | Projekt | Nizka | Resne – prerazporeditev nalog, zamude |
+
+#### Matrika izpostavljenosti tveganj
+
+| Verjetnost \ Učinek | Neznatni | Dopustni | Resni | Usodni |
+|---------------------|----------|----------|-------|--------|
+| Visoka              |          | **T5**   |       |        |
+| Srednja             |          |          | T1, T2, T3, T4 |   |
+| Nizka               |          |          | T7, T8 | **T6** |
+| Zelo nizka          |          |          |       |        |
+
+**Legenda:** Tveganja v rdečem polju (T6) zahtevajo takojšnje ukrepanje. Tveganja v oranžnem polju (T1–T4, T7–T8) so visoko prioritetna.
+
+#### Rangiranje tveganj po prioriteti (od najbolj kritičnega do najmanj kritičnega)
+
+Na podlagi kombinacije verjetnosti in učinkov smo tveganja rangirali:
+
+| Rang | Tveganje | Verjetnost | Učinek | Obrazložitev |
+|------|----------|------------|--------|--------------|
+| 1 | T6 – Varnostni incidenti | Nizka | Usodne | Posledice so lahko katastrofalne (pravne, sloves) |
+| 2 | T1 – Nizka kakovost skupin | Srednja | Resne | Neposreden vpliv na uporabniško izkušnjo |
+| 3 | T2 – Premalo testnih uporabnikov | Srednja | Resne | Onemogoča validacijo algoritma |
+| 4 | T3 – Tehnične težave | Srednja | Resne | Ogroža izvedbo projekta |
+| 5 | T4 – Časovne zamude | Srednja | Resne | Ogroža rok oddaje |
+| 6 | T7 – Neskladnost z GDPR | Nizka | Resne | Pravne posledice |
+| 7 | T8 – Izpad članov ekipe | Nizka | Resne | Zamude, prerazporeditev |
+| 8 | T5 – Cold-start problem | Visoka | Dopustne | Rešljivo z začasnimi ukrepi |
+
+---
+
+### 8.4 Načrtovanje tveganj
+
+| Tveganje | Opis strategije | Vrsta strategije |
+|----------|----------------|------------------|
+| T1 | Iterativno testiranje algoritma, primerjava metrik podobnosti, prilagajanje uteži na podlagi povratnih informacij. | Minimize |
+| T2 | Zgodnji recruitment testnih uporabnikov, sodelovanje s študentskimi skupnostmi, priprava rezervnega scenarija s sintetičnimi podatki. | Minimize |
+| T3 | Zgodnje tehnično prototipiranje kritičnih komponent, code review, redno mentorsko usklajevanje, alternativna tehnična rešitev ob blokadi. | Minimize |
+| T4 | Tedensko spremljanje napredka, jasne prioritete MVP, časovne rezerve in prerazporeditev nalog ob zamudah. | Minimize |
+| T5 | Začetna aktivacija manjše skupine uporabnikov, rahlo razširjeni kriteriji iskanja v začetni fazi, obvestila ob novih ujemanjih. | Minimize |
+| T6 | **Strategija izogibanja:** pravila varnega srečevanja, prijava incidentov, blokada uporabnikov, jasno zapisani pogoji uporabe. <br><br>**Krizni načrt (če do incidenta pride):** <br>1. Uporabnik prijavi incident prek vgrajenega obrazca. <br>2. Sistem samodejno blokira prijavljenega uporabnika do ročnega pregleda. <br>3. Projektni manager v 24 urah pregleda prijavo in se po potrebi posvetuje z mentorjem. <br>4. Ob potrjeni kršitvi se uporabnik trajno blokira in zabeleži v interni dnevnik. <br>5. V primeru nezakonitega ravnanja se obvesti pristojne organe. | Avoid + Contingency |
+| T7 | Vgradnja GDPR zahtev v funkcionalnost (izvoz/izbris), omejitev obsega podatkov, pregled dokumentacije zasebnosti pred izdajo. | Avoid |
+| T8 | Delitev znanja, sprotna dokumentacija, backup nosilci nalog in zamenljivost vlog. | Minimize |
+
+#### Spremljanje tveganj med projektom
+
+Tveganja smo pregledovali na vsakem tedenskem sestanku in po potrebi posodabljali verjetnosti ter strategije. Nobeno od identificiranih tveganj se med izvedbo ni realiziralo v polni meri.
 
 ## 9 Refleksija
 
