@@ -1777,21 +1777,165 @@ Merila preverjamo z naslednjimi postopki:
 
 - Finančni načrt projekta po metodi COCOMO II.
 
-## 7 Ekipa
+## 7. Ekipa
 
 ### 7.1 Predznanje
 
-- Kakšno je bilo predznanje ekipe?
-  - Kakšne predhodne delovne izkušnje pri razvoju programske opreme?
-  - Je kateri član ekipe že razvil kaj podobnega?
-  - Ali so bila orodja ekipi znana ali nova?
+#### Predhodne izkušnje ekipe
+
+**Aleks Gogić**
+
+- **Izkušnje s podatkovnimi bazami:**
+  - Dobro poznavanje relacijskih in nerelacijskih podatkovnih baz.
+  - Praktične izkušnje na samostojnem projektu in seminarski nalogi s področja SQL in MongoDB.
+  - Osnovno do srednje poznavanje vektorskih baz, uporabljeno pri projektu z LLM RAG pristopom.
+- **Razvoj programske opreme:**
+  - Backend razvoj v okolju Node.js.
+  - Frontend razvoj v Angularju.
+  - Izkušnje z razvojem spletne aplikacije (fakultetni projekt spletne trgovine), kjer so bile uporabljene komponente od uporabniškega vmesnika do strežniške logike in podatkovne plasti.
+- **Relevantnost za ta projekt:**
+  - Znanje SQL/MongoDB je neposredno uporabno pri modeliranju uporabnikov, interesov, razpoložljivosti in rezultatov ujemanja.
+  - Izkušnje z Node.js in Angularjem omogočajo hitrejšo izdelavo MVP (API + spletni vmesnik).
+  - Poznavanje vektorskih pristopov pomaga pri delu s podobnostjo interesov in pripravi podatkov za pametno komponento.
+
+**Jakob Jesenko**
+
+- **Izkušnje s podatkovnimi bazami:**
+  - Znanje o relacijskih in nerelacijskih podatkovnih bazah.
+  - Praktične izkušnje z bazami MongoDB in SQL.
+- **Razvoj programske opreme:**
+  - Backend razvoj v okolju Node.js.
+  - Praktične izkušnje na skupinskem projektu s skladom MEAN.
+  - Znanje o razvoju in testiranju algoritmov.
+- **Relevantnost za ta projekt:**
+  - Znanje SQL/MongoDB je neposredno uporabno pri modeliranju uporabnikov, interesov, razpoložljivosti in rezultatov ujemanja.
+  - Izkušnje z Node.js za razvoj backenda.
+  - Znanje o razvoju algoritmov je uporabno za implementacijo ključnih funkcionalnosti (algoritem za razporejanje).
+
+**Leja Petrič**
+
+- **Izkušnje s podatkovnimi bazami:**
+  - Dobro poznavanje podatkovnih baz MongoDB in MySQL.
+  - Praktične izkušnje z načrtovanjem in uporabo podatkovnih baz pri projektih spletnih aplikacij.
+- **Razvoj programske opreme:**
+  - Razvoj spletne aplikacije spletne trgovine v PHP z uporabo REST API.
+  - Razvoj mobilne aplikacije v Java v okolju Android Studio.
+  - Izkušnje z razvojem spletnih aplikacij s tehnologijama Node.js in Angular (fakultetni projekt in samostojni projekt).
+  - Razvoj spletne strani v okviru fakultetnega projekta.
+- **Relevantnost za ta projekt:**
+  - Znanje MongoDB in MySQL je uporabno pri načrtovanju in implementaciji podatkovne baze sistema.
+  - Izkušnje z REST API pomagajo pri razvoju komunikacije med frontend in backend delom aplikacije.
+  - Poznavanje Node.js in Angular omogoča sodelovanje pri razvoju spletnega vmesnika in strežniške logike.
+
+**Tim Pezdirc**
+
+- **Izkušnje s podatkovnimi bazami:**
+  - Poznavanje relacijskih in nerelacijskih podatkovnih baz.
+  - Izkušnje z bazami SQL in MongoDB na projektih in seminarskih nalogah.
+- **Razvoj programske opreme:**
+  - Backend razvoj z uporabo Node.js in C# (.NET).
+  - Razvoj REST API-jev za spletne aplikacije in implementacija komunikacije med storitvami z uporabo gRPC.
+  - Frontend razvoj z uporabo ogrodja Angular.
+- **Relevantnost za ta projekt:**
+  - Znanje SQL in MongoDB je uporabno za načrtovanje in implementacijo podatkovnega modela.
+  - Izkušnje z Node.js in C# so uporabne pri razvoju backend storitev in REST API-ja.
+  - Znanje Angularja omogoča razvoj sodobnega uporabniškega vmesnika.
+
+**Miha Fabčič**
+
+- **Izkušnje s podatkovnimi bazami:**
+  - Dobro poznavanje podatkovnih baz MongoDB in PostgreSQL.
+  - Praktične izkušnje z načrtovanjem in uporabo podatkovnih baz pri razvoju spletnih aplikacij.
+- **Razvoj programske opreme:**
+  - Backend razvoj z uporabo Node.js in Java (Spring Boot).
+  - Razvoj REST API storitev z uporabo Node.js in Spring Boot ter implementacija komunikacije med storitvami z uporabo gRPC.
+  - Razvoj frontend aplikacij z uporabo ogrodja Angular.
+- **Relevantnost za ta projekt:**
+  - Znanje PostgreSQL in MongoDB omogoča učinkovito načrtovanje in implementacijo podatkovnega modela.
+  - Izkušnje z Node.js in Spring Boot so uporabne za razvoj zanesljivih backend storitev in API-jev.
+  - Znanje Angularja omogoča razvoj odzivnega uporabniškega vmesnika.
+
+#### Skupno predznanje ekipe
+
+- **Programski jeziki:** JavaScript, Java, C, C++, PHP
+- **Frameworki:** Angular
+- **Orodja:** Git, Docker, Postman
+- **Metodologije:** MVC arhitektura
+
+#### Ali je kateri član ekipe že razvil kaj podobnega?
+
+Noben član ekipe še ni razvil aplikacije za združevanje ljudi v skupine (group formation/matching system). Ekipa je sicer razvijala spletne aplikacije (spletna trgovina, RAG projekt), vendar brez implementacije algoritmov za priporočanje skupin na podlagi interesov ali razpoložljivosti. To področje je za ekipo novo.
+
+#### Nova področja za ekipo
+
+- Algoritmi za oblikovanje skupin (recommendation systems)
+- Vektorska podobnost in metrike podobnosti (Cosine Similarity, Jaccard Index)
+
+V smislu podobnosti so člani ekipe razvijali spletno aplikacijo, konkretno ravno take aplikacije za združevanje ljudi pa ne.
+
+#### Znana in nova orodja
+
+| Tip orodja | Orodja |
+|------------|--------|
+| **Znana orodja** | Git, GitHub, Node.js, Angular, MongoDB, Postman, Docker, MVC arhitektura |
+| **Nova orodja** | Nobeno od načrtovanih orodij ni popolnoma novo za vse člane. Vektorske baze (za RAG) so delno nove za večino, razen za enega člana. Algoritmi za podobnost (Cosine Similarity, Jaccard Index) so teoretično znani, praktično pa jih ekipa še ni uporabljala za ta namen. |
+
+---
 
 ### 7.2 Vloge
 
-- Kakšne so bile vloge članov ekipe pri projektu?
-- Kaj je prispeval vsak član ekipe?
-- Za določitev posameznih prispevkov uporabite kataloge elementov.
-- Navedite grobo oceno prispevka posameznega člana ekipe v odstotkih.
+#### Razdelitev vlog pri projektu
+
+| Ime člana | Glavna vloga | Odgovornosti | Sekundarne vloge |
+|-----------|--------------|--------------|------------------|
+| Miha Fabčič | Backend Developer | Razvoj REST API, integracija s podatkovno bazo, implementacija poslovne logike, sodelovanje pri dokumentaciji | Code reviews, testiranje |
+| Aleks Gogić | Algorithm Engineer | Razvoj in optimizacija algoritma za oblikovanje skupin, evalvacija kakovosti, sodelovanje pri dokumentaciji | Backend podpora, testiranje |
+| Jakob Jesenko | Frontend Developer | Razvoj uporabniškega vmesnika (Angular), UX/UI design, integracija z API-jem, sodelovanje pri dokumentaciji | Testiranje, dokumentacija |
+| Leja Petrič | DevOps / Tester | Postavitev CI/CD, testiranje (unit, integration, E2E), deployment, sodelovanje pri dokumentaciji | Backend podpora, dokumentacija |
+| Tim Pezdirc | Project Manager | Vodenje projekta, usklajevanje ekipe, spremljanje napredka, priprava dokumentacije | Frontend/Backend podpora |
+
+**Opomba:** Vloge so lahko fleksibilne in se prekrivajo. Vsak član lahko prispeva k različnim področjem glede na potrebe projekta.
+
+#### Skupne odgovornosti vseh članov
+
+- Sodelovanje na tedenskih sestankih
+- Code reviews (vsaj 1 član pregleda vsak pull request)
+- Pisanje dokumentacije (inline komentarji, README, uporabniški priročnik)
+- Testiranje (pisanje testov za lastne module)
+- Priprava predstavitev in poročil
+
+#### Prispevki članov po katalogu elementov
+
+| Član | Backend razvoj | Frontend razvoj | Algoritmi | Baze | Testiranje | Dokumentacija | DevOps/CI/CD | Vodenje |
+|------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Miha Fabčič | X | | | X | X | X | | |
+| Aleks Gogić | X | | X | | X | X | | |
+| Jakob Jesenko | | X | | | X | X | | |
+| Leja Petrič | | | | | X | X | X | |
+| Tim Pezdirc | | | | | | X | | X |
+
+**Legenda:** X – član je aktivno prispeval na tem področju.
+
+#### Opis prispevkov po članih
+
+- **Miha Fabčič:** Razvoj REST API, implementacija poslovne logike, integracija s podatkovno bazo, pisanje backend testov, code reviews, sodelovanje pri dokumentaciji.
+- **Aleks Gogić:** Implementacija algoritma za oblikovanje skupin, priprava metrik podobnosti (Cosine/Jaccard), evalvacija kakovosti ujemanja, backend podpora pri API-ju, testiranje, dokumentacija.
+- **Jakob Jesenko:** Razvoj Angular komponent, UX/UI design, integracija frontend-backend (HTTP klient), priprava uporabniškega priročnika, testiranje.
+- **Leja Petrič:** Postavitev CI/CD (GitHub Actions), pisanje E2E in integracijskih testov, deployment, vzdrževanje dokumentacije, backend podpora.
+- **Tim Pezdirc:** Vodenje sestankov, razporejanje nalog, priprava poročil in predstavitev, usklajevanje ekipe, pomoč pri frontend/backend kjer primanjkuje, dokumentacija.
+
+#### Groba ocena prispevka posameznega člana ekipe (v odstotkih)
+
+| Član | Ocena prispevka |
+|------|:---------------:|
+| Miha Fabčič | 21 % |
+| Aleks Gogić | 21 % |
+| Jakob Jesenko | 20 % |
+| Leja Petrič | 19 % |
+| Tim Pezdirc | 19 % |
+| **Skupaj** | **100 %** |
+
+**Opomba k odstotkom:** Prispevki so približno enakomerni, ker so vloge fleksibilne in vsi sodelujejo pri dokumentaciji, testiranju in code reviewih. Projekt manager in tester imata nekoliko nižji odstotek, ker njun prispevek ni izključno v kodo, vendar sta ključna za organizacijo in kakovost. Po potrebi se odstotki ob koncu projekta prilagodijo dejanskemu stanju.
 
 ## 8 Omejitve in tveganja
 
