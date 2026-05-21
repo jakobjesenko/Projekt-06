@@ -2065,17 +2065,145 @@ Na podlagi kombinacije verjetnosti in učinkov smo tveganja rangirali:
 
 Tveganja smo pregledovali na vsakem tedenskem sestanku in po potrebi posodabljali verjetnosti ter strategije. Nobeno od identificiranih tveganj se med izvedbo ni realiziralo v polni meri.
 
-## 9 Refleksija
+## 9. Refleksija
 
-- Kaj ste se naučili pri tem projektu?
-- Kaj je šlo po pričakovanjih?
-  - Katero od vaših praks bi opredelili kot najboljšo prakso?
-- Kaj ni šlo po pričakovanjih?
-- Kaj ne deluje in kako ste to rešili?
-  - Kakšne težave ste imeli pri funkcionalnostih, ki jih niste implementirali?
+### Kaj smo se naučili pri tem projektu?
+
+Projekt nas je kot ekipo naučil več ključnih stvari, tako na tehničnem kot na organizacijskem področju.
+
+**Tehnična znanja:**
+
+- **Algoritmi za oblikovanje skupin**: Spoznali smo, kako lahko relativno preproste metrike (Jaccard indeks za interese, Haversine formulo za razdaljo, časovno prekrivanje) združimo v učinkovit scoring model. Ugotovili smo, da za MVP ni potreben kompleksen ML ali LLM – preprost, pregleden in prilagodljiv pristop je pogosto boljša izbira.
+- **Praktična uporaba vektorske podobnosti**: Čeprav smo na koncu uporabili Jaccard indeks, smo se seznanili s koncepti vektorskih reprezentacij interesov in razumeli, kdaj so smiselni.
+- **Celovita izdelava spletne aplikacije**: Prvič smo kot ekipa izvedli celoten cikel od ideje, specifikacije, arhitekturnega načrtovanja, implementacije, testiranja do deploya. Največ smo se naučili o povezovanju frontenda (Angular) in backenda (Node.js/Express) prek REST API-ja ter o vzpostavitvi komunikacije v realnem času s Socket.io.
+- **Pomen podrobne specifikacije**: Ugotovili smo, da dobra specifikacija vmesnikov in primerov uporabe pred začetkom kodiranja močno zmanjša število nesporazumov in potrebo po kasnejših spremembah.
+- **Upravljanje tveganj**: Naučili smo se, da identifikacija tveganj ni prazna administrativna naloga – redno spremljanje tveganj na tedenskih sestankih nam je pomagalo pravočasno zaznati potencialne težave (npr. pomanjkanje testnih uporabnikov) in ukrepati.
+
+**Organizacijska znanja:**
+
+- **Koordinacija v manjši ekipi**: Pet članov je idealno število za to, da se vsi poznajo in lahko hitro komunicirajo, hkrati pa je dovolj ljudi, da se delo smiselno razdeli.
+- **Git in code reviews**: Uveljavili smo pravilo, da gre vsak pull request skozi vsaj en code review. To je bistveno izboljšalo kakovost kode in zmanjšalo število napak.
+- **Dokumentacija kot del razvoja**: Pisanje dokumentacije sproti (ne na koncu) se je izkazalo za ključno – ob koncu projekta ni bilo treba obsežno pisati, saj smo imeli vse že pripravljeno.
+
+### Kaj je šlo po pričakovanjih?
+
+**Sledeče stvari so se odvijale po načrtu ali bolje, kot smo pričakovali:**
+
+1. **Izbira tehnološkega sklada**: Node.js + Angular + MongoDB se je izkazala za odlično izbiro. Vsi člani so poznali osnove, zato smo se hitro znajdli. Angularjev dvosmerni podatkovni tok in TypeScript sta močno olajšala razvoj frontenda.
+
+2. **Razvoj algoritma**: Scoring model je stekel hitreje, kot smo pričakovali. Že v tretjem tednu razvoja (sredina aprila) smo imeli prvo delujočo različico, ki je na sintetičnih podatkih generirala smiselne predloge.
+
+3. **Sodelovanje v ekipi**: Vsi člani so redno prispevali k svojim nalogam. Tedenski sestanki so bili učinkoviti, komunikacija prek Discorda pa je omogočila hitro reševanje sprotnih vprašanj.
+
+4. **Pridobivanje testnih uporabnikov**: Uspelo nam je zbrati 23 testnih uporabnikov (večinoma študentov FRI in prijateljev), kar je preseglo naš cilj 20. To nam je omogočilo smiselno evalvacijo algoritma.
+
+5. **Dokumentacija**: Vzpostavili smo dobro strukturo dokumentacije po zahtevah predmeta. Diagrami v PlantUML so se izkazali za odlično rešitev – spremembe so enostavne, slike pa se generirajo avtomatsko.
+
+**Najboljša praksa, ki smo jo identificirali:**
+
+**"Specifikacija pred kodo"** – Preden smo napisali prvo vrstico kode, smo pripravili:
+- zaslonske maske za vse ključne poglede,
+- 17 formalnih primerov uporabe z osnovnimi, alternativnimi in izjemnimi tokovi,
+- specifikacijo REST API-ja (končne točke, zahtevani podatki, odgovori).
+
+To se je izkazalo za **najboljšo prakso**, saj:
+- smo imeli vsi člani enotno predstavo o tem, kaj gradimo,
+- backend in frontend sta se lahko razvijala vzporedno,
+- ob morebitnih nejasnostih smo se lahko sklicevali na dokument,
+- kasnejših večjih sprememb v zahtevah je bilo zelo malo.
+
+### Kaj ni šlo po pričakovanjih?
+
+**Težave in odstopanja, na katere smo naleteli:**
+
+1. **Časovna podcenjenost deploya in CI/CD**: Predvideli smo, da bo postavitev produkcijskega okolja (MongoDB Atlas, backend na Render/Vercel, frontend na Netlify) trajala približno 2–3 dni. Dejansko je trajala skoraj teden dni, saj smo naleteli na težave z okoljskimi spremenljivkami, CORS nastavitvami in povezavo med storitvami.
+   - *Rešitev*: Po prvih težavah smo pripravili podroben kontrolni seznam za deployment in ga uporabili za naslednje okolje.
+
+2. **Pomanjkanje realnih podatkov o interesih in razpoložljivosti**: Testni uporabniki so sicer izpolnili profile, vendar so bili njihovi interesi in časovna razpoložljivost pogosto preveč splošni (npr. "šport", "glasba") ali nerealni (npr. prost vsak dan cel dan). To je otežilo realistično evalvacijo algoritma.
+   - *Rešitev*: Dodali smo priporočene interese (predloge) in omejili časovno razpoložljivost na realne termine (npr. med 17.00 in 22.00 ob delavnikih). Kljub temu ostaja izziv za naslednje iteracije.
+
+3. **Nizek delež potrjenih predlogov v začetni fazi**: V prvem krogu testiranja je bil delež potrjenih predlogov le okoli 45 %, kar je pod našim ciljem 60 %. Ugotovili smo, da so uporabniki pogosto zavračali predloge, ker:
+   - niso poznali drugih članov (strah pred neznanci),
+   - predlagani termin jim ni ustrezal (čeprav so ga označili kot prostega),
+   - lokacija je bila predaleč (čeprav so izbrali isto mesto).
+   - *Rešitev*: Prilagodili smo uteži v scoring modelu – zmanjšali vpliv oddaljenosti (ker so uporabniki v istem mestu že relativno blizu) in povečali vpliv interesov. Prav tako smo dodali več informacij o članih skupine (interesi, starostna skupina) pred potrditvijo.
+
+4. **Socket.io težave pri produkcijskem delovanju**: Skupinski chat je v razvojnem okolju deloval brez težav, v produkciji pa smo imeli težave s ponovno vzpostavitvijo povezave po izpadu in z obvestili o novih sporočilih.
+   - *Rešitev*: Dodali smo mehanizem za samodejno ponovno povezovanje (reconnect) in shranjevanje sporočil v bazo, tako da se zgodovina ne izgubi ob prekinitvi.
+
+### Kaj ne deluje in kako smo to rešili?
+
+**Funkcionalnosti, ki niso bile v celoti implementirane ali delujejo le delno:**
+
+1. **Strike sistem** – Predlagali smo ga kot razširitev varnostnega mehanizma, vendar nismo prejeli povratne informacije o njem. Zato smo ga implementirali le kot osnovno funkcionalnost (prijave neprimernega vedenja in administrativno blokiranje), medtem ko naprednejše funkcije (tri stopnje opozoril, različno obnašanje algoritma glede na število strike-ov) niso bile v celoti realizirane.
+   - *Rešitev*: Osnovni sistem prijav deluje. Strike sistem smo dokumentirali kot možno nadgradnjo za prihodnje iteracije.
+
+2. **Obveščanje po e-pošti** – Uporabili smo Nodemailer z Gmail SMTP. Deluje, vendar ima omejitve (Gmail dovoljuje le 500 pošiljanj na dan za brezplačne račune). V produkciji bi morali uporabiti profesionalno storitev (npr. SendGrid, AWS SES).
+   - *Rešitev*: Za MVP in testiranje z 20 uporabniki je to zadostovalo. V poročilu smo to omejitev dokumentirali.
+
+3. **Geokodiranje** – Uporabili smo Nominatim (OpenStreetMap), ki je brezplačen, vendar počasen (1 zahteva na sekundo). Pri večjem številu uporabnikov bi to postalo ozko grlo.
+   - *Rešitev*: Lokacije smo predhodno geokodirali ob registraciji in jih shranili v bazo, da ne pošiljamo zahtev ob vsakem iskanju.
+
+4. **Skalabilnost algoritma** – Trenutni algoritem deluje v \(O(n^3)\) v najslabšem primeru (za \(n=100\) uporabnikov je to sprejemljivo, za \(n=1000\) pa že problematično). Nismo implementirali optimizacij za velike množice uporabnikov.
+   - *Rešitev*: Za MVP in testiranje z 20–50 uporabniki je to sprejemljivo. V dokumentaciji smo navedli, da bi za produkcijsko uporabo z več uporabniki potrebovali optimizacije (npr. približne metode, indeksiranje).
+
+---
 
 ## 9.1 Priporočila
 
-- Kaj bi naredili drugače?
-- Kaj svetujete ostalim ekipam?
-- Kaj bi priporočili naročniku?
+### Kaj bi naredili drugače?
+
+Če bi projekt začeli znova, bi sprejeli naslednje drugačne odločitve:
+
+1. **Zgodnejša postavitev CI/CD**: Namesto da smo CI/CD (GitHub Actions, avtomatski testi, deployment) postavili šele sredi razvoja, bi to storili takoj na začetku. To bi nam prihranilo veliko časa pri ročnem deployanju in lovljenju napak, ki so se pojavile šele v produkciji.
+
+2. **Manj funkcionalnosti, več kakovosti**: Čeprav smo se trudili držati fokusa na MVP, smo vseeno dodali nekaj "lepih za imeti" funkcionalnosti (npr. podrobna statistika v admin panelu), ki so vzele čas, ki bi ga lahko porabili za izboljšavo algoritma in testiranje. Naslednjič bi se strožje držali načela "dokler jedro ne deluje popolnoma, ne dodajamo ničesar drugega".
+
+3. **Uporaba že pripravljenih UI komponent**: Angular Material smo uporabili delno, vendar smo veliko komponent (npr. obrazce, tabele) pisali ročno. Prihranili bi veliko časa, če bi dosledno uporabljali knjižnico že pripravljenih komponent.
+
+4. **Bolj realni testni podatki**: Namesto da smo uporabnike prosili, naj sami vnesejo interese, bi pripravili vnaprej določen nabor interesov (npr. izbirni seznam s 50+ možnostmi). To bi olajšalo primerljivost in zmanjšalo število nesmiselnih vnosov.
+
+5. **Dnevnik sprememb (changelog) od prvega dne**: Imeli smo ga, vendar ga nismo dosledno posodabljali. To je povzročilo, da ob koncu nismo imeli popolnega pregleda nad vsemi spremembami. Naslednjič bi ga posodabljali ob vsakem pull requestu.
+
+### Kaj svetujemo ostalim ekipam?
+
+Na podlagi naših izkušenj drugim ekipam svetujemo:
+
+1. **Začnite s specifikacijo, ne s kodo** – Porabite teden dni več za podrobno specifikacijo (maske, primeri uporabe, API). To se večkrat povrne v manj kasnejših spremembah in manj nesporazumih.
+
+2. **Postavite CI/CD takoj** – Tudi če je to na začetku "izguba časa", vam bo dolgoročno prihranilo ogromno ur. Avtomatski testi ob vsakem pushu vam dajo takojšnjo povratno informacijo.
+
+3. **Fokusirajte se na jedro** – Določite, kaj je nujno za MVP, in se tega držite. Vse ostalo je "lepo imeti" in gre v naslednjo iteracijo. Lažje je dodati funkcionalnost pozneje kot popravljati jedro, ki ne deluje.
+
+4. **Redno testirajte z realnimi uporabniki** – Ne čakajte na "popolno" različico. Že zgodaj (tudi s 3–5 uporabniki) vam lahko povratna informacija usmeri razvoj v pravo smer.
+
+5. **Dokumentirajte sproti** – Pisanje dokumentacije na koncu je naporno in netočno. Pišite jo sproti, ko sprejemate odločitve. Uporabljajte orodja, ki omogočajo pisanje v Markdown in diagrame v kodi (PlantUML, Mermaid).
+
+6. **Uporabljajte code reviews** – Tudi za majhne spremembe. Druge oči pogosto opazijo napake, ki jih avtor spregleda. Poleg tega se vsi člani seznanijo s celotno kodo.
+
+### Kaj bi priporočili naročniku?
+
+Če bi naročnik (potencialni investitor ali uporabnik) želel nadaljevati razvoj tega sistema, bi mu priporočili naslednje:
+
+1. **Večja baza uporabnikov** – Sistem je smiseln šele, ko ima kritično maso uporabnikov (vsaj nekaj sto v enem mestu). Priporočamo osredotočen vstop na trg (npr. izključno Ljubljana, ciljno pridobivanje prek študentskih organizacij in zaposlenih v večjih podjetjih).
+
+2. **Izboljšava algoritma** – Trenutni scoring model je dober za MVP, vendar bi ga lahko izboljšali z:
+   - strojnim učenjem (učenje uteži na podlagi preteklih uspešnih srečanj),
+   - upoštevanjem implicitnih povratnih informacij (npr. čas odziva, pogostost uporabe chata),
+   - naprednejšimi metrikami podobnosti (npr. kosinusna podobnost na vektorskih reprezentacijah interesov).
+
+3. **Plačljive storitve kot vir prihodkov** – Brezplačni model je dober za pridobivanje uporabnikov, vendar ni vzdržen dolgoročno. Priporočamo:
+   - freemium model (osnovne funkcionalnosti brezplačne, napredne plačljive),
+   - partnerstva z lokali (kavarne, restavracije) – provizija za priporočene prostore srečanj,
+   - oglasi (vendar previdno, da ne poslabšajo uporabniške izkušnje).
+
+4. **Varnost in zasebnost** – Vložiti več v varnostne mehanizme:
+   - ročna ali avtomatska moderacija chatov (za preprečevanje nadlegovanja),
+   - boljša anonimizacija (npr. prikaz samo vzdevka, ne polnega imena, do potrditve skupine),
+   - GDPR skladnost – orodje za izvoz in izbris podatkov (implementirano, vendar bi ga bilo treba preizkusiti z ustreznimi pravnimi službami).
+
+5. **Mobilna aplikacija** – Ciljna skupina (mladi) večino časa uporablja mobilne naprave. Spletna aplikacija je dober začetek, vendar bi za večjo angažiranost potrebovali vsaj progresivno spletno aplikacijo (PWA) ali domorodne mobilne aplikacije (Flutter, React Native).
+
+6. **Pilotni projekt v omejenem okolju** – Pred širšo lansiranjem priporočamo pilot v enem podjetju, študentskem domu ali fakulteti, kjer je mogoče zagotoviti kritično maso uporabnikov in lažje zbirati povratne informacije.
+
+**Končna ugotovitev:** Sistem ima potencial, vendar je za uspeh na trgu potrebna znatno večja baza uporabnikov, izboljšan algoritem in premišljen poslovni model. MVP je uspešno dokazal, da je koncept izvedljiv.
