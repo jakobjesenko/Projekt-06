@@ -317,6 +317,20 @@ const cancelConfirmedMeeting = async (req, res) => {
   }
 };
 
+const getMeetingById = async (req, res) => {
+  try {
+    const meeting = await Meeting.findById(req.params.meetingId).lean();
+
+    if (!meeting) {
+      return res.status(404).json({ message: 'Meeting ne obstaja.' });
+    }
+
+    res.status(200).json(meeting);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 /**
  * @openapi
  * /meetings/{meetingId}/chat-context:
@@ -502,6 +516,7 @@ export default {
   getMeetingChatContext,
   createMeeting,
   deleteMeeting,
+  getMeetingById,
   getUserConfirmedMeetings,
   confirmMeeting,
   cancelConfirmedMeeting

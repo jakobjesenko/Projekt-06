@@ -33,7 +33,8 @@ export const routes: Routes = [
   { path: 'terms',      component: TermsComponent },
   { path: 'chat/:meetingId', component: ChatComponent, canActivate: [AuthGuard] },
   { path: 'chat', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'rating',     component: RatingComponent },
+  { path: 'rating/:meetingId', component: RatingComponent, canActivate: [AuthGuard] },
+  { path: 'rating', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'reset-password', component: ResetPasswordComponent },
 
   { path: 'location',   redirectTo: 'dashboard' },

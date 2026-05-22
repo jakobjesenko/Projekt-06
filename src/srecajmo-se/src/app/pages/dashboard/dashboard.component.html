@@ -166,7 +166,6 @@
               <i class="fas fa-check-circle"></i>
               {{ isSuggestionAlreadyAccepted(s) ? 'Že sprejeto' : 'Sprejmem predlog' }}
             </button>
-
           </div>
         </div>
       </ng-container>
@@ -235,6 +234,24 @@
                 title="To srečanje še nima ID-ja za klepet"
               >
                 <i class="fas fa-comment-dots"></i> Pogovor
+              </button>
+
+              <button
+                class="btn-primary"
+                *ngIf="meeting.id && isMeetingFinished(meeting)"
+                [routerLink]="['/rating', meeting.id]"
+              >
+                <i class="fas fa-star"></i> Oceni
+              </button>
+
+              <button
+                class="btn-primary"
+                *ngIf="meeting.id && !isMeetingFinished(meeting)"
+                type="button"
+                disabled
+                title="Srečanje lahko oceniš šele po koncu"
+              >
+                <i class="fas fa-star"></i> Oceni po srečanju
               </button>
             </div>
           </div>
