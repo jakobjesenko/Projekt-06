@@ -1,0 +1,76 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
+
+    timeout-minutes: 10
+
+    defaults:
+      run:
+        working-directory: ./src
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: "npm"
+          cache-dependency-path: ./src/package-lock.json
+
+      - name: Create .env file for tests
+        run: |
+          cat > .env << EOF
+          NAME=srecajmose
+          GESLO=${{secrets.GESLO}}
+          MONGODB_ATLAS_URI=mongodb+srv://srecajmose:${{secrets.GESLO}}@cluster0.fyfpgrm.mongodb.net/
+          MONGODB_DOCKER_URI=mongodb://${{secrets.MONGO_INITDB_ROOT_USERNAME}}:${{secrets.MONGO_INITDB_ROOT_PASSWORD}}@mongodb:27017/srecajmose?authSource=${{secrets.MONGO_INITDB_ROOT_USERNAME}}
+
+          MONGO_INITDB_ROOT_USERNAME=${{secrets.MONGO_INITDB_ROOT_USERNAME}}
+          MONGO_INITDB_ROOT_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}}
+          MONGO_INITDB_DATABASE=srecajmose
+
+
+          NODE_ENV=development
+
+          PORT=3000
+
+
+          RESEND_API_KEY=${{secrets.RESEND_API_KEY}}
+          EMAIL_FROM=ekipa@srecajmose.live
+          APP_URL=http://localhost:3000
+          BASE_URL=http://localhost:3000
+          EOF
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Run integration tests
+        run: npm run test:integration
+
+      # - name: setup angular
+      #   uses: actions/setup-node@v5
+      #   with:
+      #     node-version: "24"
+      #     cache: "npm"
+      #     cache-dependency-path: ./src/srecajmo-se/package-lock.json
+
+      # - name: test angular
+      #   working-directory: ./src/srecajmo-se
+      #   run: |
+      #     npm ci
+
+      #     npm run test:ci

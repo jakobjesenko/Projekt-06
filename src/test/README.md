@@ -7,6 +7,7 @@ V tej mapi se nahajajo testi.
 ```bash
 Projek-06/src
 ```
+
 poženi
 
 ```bash
@@ -19,8 +20,17 @@ npm run test:integration
 ```bash
 Projek-06/src/srecajmo-se
 ```
+
 poženi
 
 ```bash
 npm run test:ci
 ```
+
+### Lokalna izvedba CI:
+
+```bash
+act --secret-file ./.env
+```
+
+[act tool](https://github.com/nektos/act)
