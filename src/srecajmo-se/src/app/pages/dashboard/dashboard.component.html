@@ -192,6 +192,10 @@
         <p>Srečanja, ki si jih potrdil/a</p>
       </div>
 
+      <div *ngIf="meetingActionError" class="alert alert-error">
+        {{ meetingActionError }}
+      </div>
+
       <div class="suggestions-grid">
         <ng-container *ngIf="confirmedMeetings.length > 0; else noMeetings">
           <div class="group-card" *ngFor="let meeting of confirmedMeetings">
@@ -256,6 +260,16 @@
                 title="Srečanje lahko oceniš šele po koncu"
               >
                 <i class="fas fa-star"></i> Oceni po srečanju
+              </button>
+              <button
+                class="btn-secondary"
+                *ngIf="meeting.id"
+                type="button"
+                [disabled]="isLeavingMeeting(meeting)"
+                (click)="leaveMeeting(meeting)"
+              >
+                <i class="fas fa-sign-out-alt"></i>
+                {{ isLeavingMeeting(meeting) ? 'Zapuščam...' : 'Zapusti srečanje' }}
               </button>
             </div>
           </div>

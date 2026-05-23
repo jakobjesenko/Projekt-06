@@ -70,6 +70,9 @@ export class DashboardComponent implements OnInit {
   loadingSuggestions = false;
   searchToggleError = '';
 
+  leavingMeetingIds = new Set<string>();
+  meetingActionError = '';
+
   /**
    * Hrani predloge, ki so trenutno v procesu sprejemanja.
    * S tem preprečimo večkratni klik, preden backend odgovori.
@@ -527,5 +530,49 @@ export class DashboardComponent implements OnInit {
     }
 
     return meetingDate < new Date();
+  }
+
+  leaveMeeting(meeting: ConfirmedMeeting): void {
+    if (!meeting.id || !this.user?.id) return;
+
+    const meetingId = meeting.id;
+
+    const confirmed = confirm(
+      `Ali res želiš zapustiti srečanje "${meeting.groupName}"?`
+    );
+
+    if (!confirmed) return;
+
+    this.meetingActionError = '';
+    this.leavingMeetingIds.add(meetingId);
+
+    this.http.delete<{ success: boolean; message?: string }>(
+      `/api/meetings/${meetingId}/leave`,
+      { withCredentials: true }
+    ).subscribe({
+      next: () => {
+        this.leavingMeetingIds.delete(meetingId);
+
+        this.confirmedMeetings = this.confirmedMeetings.filter(
+          (m) => m.id !== meetingId
+        );
+
+        if (this.user?.activeSearch && this.user.id) {
+          this.loadSuggestions(this.user.id);
+        }
+      },
+      error: (err) => {
+        this.leavingMeetingIds.delete(meetingId);
+
+        console.error('Napaka pri zapuščanju srečanja:', err);
+
+        this.meetingActionError =
+          err.error?.message || 'Napaka pri zapuščanju srečanja.';
+      }
+    });
+  }
+
+  isLeavingMeeting(meeting: ConfirmedMeeting): boolean {
+    return !!meeting.id && this.leavingMeetingIds.has(meeting.id);
   }
 }

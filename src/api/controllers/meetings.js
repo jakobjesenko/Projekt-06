@@ -207,8 +207,12 @@ const getAllMeetings = async (req, res) => {
  *  post:
  *   summary: Create a meeting
  *   description: >
- *    Creates a new meeting. If a meeting with the same group name and same members
- *    already exists, the existing meeting is returned instead of creating a duplicate.
+ *    Creates a new meeting. If a meeting with the same group name and the same
+ *    members already exists, the existing meeting is returned instead of creating
+ *    a duplicate. If an incoming member previously had response `declined` in the
+ *    existing meeting, their response may be changed back to `accepted` or to the
+ *    response provided in the request body. If the meeting was `cancelled` and has
+ *    enough active members again, it may be reactivated to `upcoming`.
  *   tags: [Meetings]
  *   requestBody:
  *    required: true
@@ -241,17 +245,23 @@ const getAllMeetings = async (req, res) => {
  *       status: "upcoming"
  *   responses:
  *    '201':
- *     description: Meeting created
+ *     description: New meeting created
  *     content:
  *      application/json:
  *       schema:
  *        $ref: '#/components/schemas/Meeting'
  *    '200':
- *     description: Existing duplicate meeting returned
+ *     description: Existing duplicate meeting returned and possibly reactivated
  *     content:
  *      application/json:
  *       schema:
  *        $ref: '#/components/schemas/Meeting'
+ *    '404':
+ *     description: Duplicate meeting reference no longer exists
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
  *    '500':
  *     description: Server error
  *     content:
@@ -278,8 +288,44 @@ const createMeeting = async (req, res) => {
       });
 
       if (duplicate) {
+        const existingMeeting = await Meeting.findById(duplicate._id);
+
+        if (!existingMeeting) {
+          return res.status(404).json({
+            success: false,
+            message: "Srečanje ne obstaja.",
+          });
+        }
+
+        const incomingMembers = req.body.members || [];
+
+        for (const incomingMember of incomingMembers) {
+          const incomingUserId = String(incomingMember.user);
+
+          const existingMember = existingMeeting.members.find(
+            (member) => String(member.user) === incomingUserId
+          );
+
+          if (existingMember && existingMember.response === "declined") {
+            existingMember.response = incomingMember.response || "accepted";
+            existingMember.respondedAt = new Date();
+          }
+        }
+
+        if (existingMeeting.status === "cancelled") {
+          const activeMembersCount = existingMeeting.members.filter(
+            (member) => member.response !== "declined"
+          ).length;
+
+          if (activeMembersCount >= 2) {
+            existingMeeting.status = "upcoming";
+          }
+        }
+
+        await existingMeeting.save();
+
         const populatedDuplicate = await populateMeetingMembers(
-          Meeting.findById(duplicate._id)
+          Meeting.findById(existingMeeting._id)
         ).lean();
 
         return res.status(200).json(populatedDuplicate);
@@ -353,8 +399,10 @@ const deleteMeeting = async (req, res) => {
  *  get:
  *   summary: Get confirmed meetings for user
  *   description: >
- *    Retrieves meetings where the given user is a member. Past upcoming meetings
- *    may be automatically marked as completed before returning the response.
+ *    Retrieves meetings where the given user is a member and their member response
+ *    is not `declined`. This means meetings that the user has left are not returned.
+ *    Past upcoming meetings may be automatically marked as `completed` before
+ *    returning the response. Members may be returned as populated user objects.
  *   tags: [Meetings]
  *   parameters:
  *    - name: userId
@@ -387,7 +435,12 @@ const getUserConfirmedMeetings = async (req, res) => {
 
     const meetings = await populateMeetingMembers(
       Meeting.find({
-        "members.user": req.params.userId,
+        members: {
+          $elemMatch: {
+            user: req.params.userId,
+            response: { $ne: "declined" }
+          }
+        }
       }).sort({ date: 1 })
     ).lean();
 
@@ -792,6 +845,138 @@ const getCompletedMeetingsCount = async (req, res) => {
   }
 };
 
+/**
+ * @openapi
+ * /meetings/{meetingId}/leave:
+ *  delete:
+ *   summary: Leave a meeting
+ *   description: >
+ *    Marks the currently authenticated user's meeting response as `declined`.
+ *    The user is not physically removed from the members array, so meeting history
+ *    is preserved and the Meeting schema minimum member validation remains valid.
+ *    The meeting will no longer be returned by `/meetings/confirmed/{userId}` for
+ *    that user. If fewer than 2 active members remain, the meeting is marked as
+ *    `cancelled`. If the same user accepts the same meeting suggestion again later,
+ *    `/meetings` can reactivate their response from `declined` to `accepted`.
+ *   tags: [Meetings]
+ *   security:
+ *    - jwt: []
+ *   parameters:
+ *    - name: meetingId
+ *      in: path
+ *      required: true
+ *      schema:
+ *       type: string
+ *       pattern: '^[a-fA-F\\d]{24}$'
+ *      description: MongoDB ObjectId of the meeting
+ *      example: 507f1f77bcf86cd799439015
+ *   responses:
+ *    '200':
+ *     description: User successfully left the meeting
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *          example: true
+ *         message:
+ *          type: string
+ *          example: Uspešno ste zapustili srečanje.
+ *         meeting:
+ *          $ref: '#/components/schemas/Meeting'
+ *    '401':
+ *     description: Unauthorized - user is not logged in
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ *    '403':
+ *     description: User is not a member of this meeting
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ *    '404':
+ *     description: Meeting not found
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ *    '500':
+ *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ */
+const leaveMeeting = async (req, res) => {
+  try {
+    const { meetingId } = req.params;
+    const userId = req.user?._id || req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Niste prijavljeni.",
+      });
+    }
+
+    const meeting = await Meeting.findById(meetingId);
+
+    if (!meeting) {
+      return res.status(404).json({
+        success: false,
+        message: "Srečanje ne obstaja.",
+      });
+    }
+
+    const userIdString = String(userId);
+
+    const member = meeting.members.find((member) => {
+      return String(member.user) === userIdString;
+    });
+
+    if (!member) {
+      return res.status(403).json({
+        success: false,
+        message: "Niste član tega srečanja.",
+      });
+    }
+
+    member.response = "declined";
+    member.respondedAt = new Date();
+
+    const activeMembersCount = meeting.members.filter(
+      (member) => member.response !== "declined"
+    ).length;
+
+    if (activeMembersCount < 2) {
+      meeting.status = "cancelled";
+    }
+
+    await meeting.save();
+
+    const populatedMeeting = await populateMeetingMembers(
+      Meeting.findById(meeting._id)
+    ).lean();
+
+    return res.status(200).json({
+      success: true,
+      message: "Uspešno ste zapustili srečanje.",
+      meeting: populatedMeeting,
+    });
+  } catch (err) {
+    console.error("Leave meeting error:", err);
+
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 export default {
   getAllMeetings,
   getMeetingChatContext,
@@ -802,4 +987,5 @@ export default {
   confirmMeeting,
   cancelConfirmedMeeting,
   getCompletedMeetingsCount,
+  leaveMeeting,
 };

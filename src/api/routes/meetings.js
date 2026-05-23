@@ -16,6 +16,8 @@ meetingsRouter.get("/:meetingId/chat-context", protect, meetingsCtrl.getMeetingC
 // POST /api/meetings
 meetingsRouter.post("/", meetingsCtrl.createMeeting);
 
+meetingsRouter.delete("/:meetingId/leave", protect, meetingsCtrl.leaveMeeting);
+
 // DELETE /api/meetings/:meetingId
 meetingsRouter.delete("/:meetingId", meetingsCtrl.deleteMeeting);
 
