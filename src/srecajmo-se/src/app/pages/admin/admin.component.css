@@ -242,3 +242,30 @@
   color: #cbd5e1;
   border: 1px solid rgba(148, 163, 184, 0.35);
 }
+
+.meeting-status {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.meeting-status-draft {
+  background: rgba(148, 163, 184, 0.15);
+  color: #cbd5e1;
+}
+
+.meeting-status-upcoming {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+}
+
+.meeting-status-completed {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.meeting-status-cancelled {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}

@@ -308,6 +308,7 @@ meetingSchema.statics.getPaginatedMeetings = async function ({
 
   const [meetings, totalCount] = await Promise.all([
     this.find(query)
+      .populate('members.user', 'username firstName lastName email profileImage')
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)

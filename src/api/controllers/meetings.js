@@ -1,12 +1,53 @@
 import Meeting from "../models/meetings.js";
-import ConfirmedMeeting from "../models/meetings.js";
+
+// ─── Helpers ─────────────────────────────────────────────────────────────
+
+const MEETING_POPULATE =
+  "username firstName lastName email profileImage status isActive";
+
+const updatePastMeetingsToCompleted = async () => {
+  await Meeting.updateMany(
+    {
+      status: "upcoming",
+      date: { $lt: new Date() },
+    },
+    {
+      $set: {
+        status: "completed",
+        updatedAt: new Date(),
+      },
+    }
+  );
+};
+
+const populateMeetingMembers = (query) => {
+  return query.populate("members.user", MEETING_POPULATE);
+};
+
+const getMemberIdsFromBody = (members = []) => {
+  return members
+    .map((member) => member?.user)
+    .filter(Boolean)
+    .map(String)
+    .sort();
+};
+
+const sameMembers = (a = [], b = []) => {
+  if (a.length !== b.length) return false;
+  return a.every((id, index) => id === b[index]);
+};
+
+// ─── Vsa srečanja ────────────────────────────────────────────────────────
 
 /**
  * @openapi
  * /meetings:
  *  get:
  *   summary: Get all meetings
- *   description: Returns a paginated list of meetings.
+ *   description: >
+ *    Returns a paginated list of meetings. Past meetings with status `upcoming`
+ *    may be automatically changed to `completed` before the response is returned.
+ *    Members may be returned as populated user objects.
  *   tags: [Meetings]
  *   parameters:
  *    - name: page
@@ -28,13 +69,13 @@ import ConfirmedMeeting from "../models/meetings.js";
  *      in: query
  *      schema:
  *       type: string
- *       enum: [pending, confirmed, canceled]
+ *       enum: [draft, upcoming, completed, cancelled]
  *      description: Filter meetings by status
  *    - name: search
  *      in: query
  *      schema:
  *       type: string
- *      description: Search by title, description, or location
+ *      description: Search by group name, venue, city, or shared interests
  *    - name: dateFrom
  *      in: query
  *      schema:
@@ -57,6 +98,7 @@ import ConfirmedMeeting from "../models/meetings.js";
  *        properties:
  *         success:
  *          type: boolean
+ *          example: true
  *         data:
  *          type: array
  *          items:
@@ -66,17 +108,13 @@ import ConfirmedMeeting from "../models/meetings.js";
  *          properties:
  *           total:
  *            type: integer
+ *            example: 12
  *           page:
  *            type: integer
+ *            example: 1
  *           totalPages:
  *            type: integer
- *       example:
- *        success: true
- *        data: []
- *        pagination:
- *         total: 0
- *         page: 1
- *         totalPages: 0
+ *            example: 2
  *    '500':
  *     description: Server error
  *     content:
@@ -84,9 +122,10 @@ import ConfirmedMeeting from "../models/meetings.js";
  *       schema:
  *        $ref: '#/components/schemas/ErrorMessage'
  */
-// Vsa srečanja
 const getAllMeetings = async (req, res) => {
   try {
+    await updatePastMeetingsToCompleted();
+
     let page = Number.parseInt(req.query.page, 10) || 1;
     let limit = Number.parseInt(req.query.limit, 10) || 30;
 
@@ -94,21 +133,56 @@ const getAllMeetings = async (req, res) => {
     if (limit < 1) limit = 30;
     if (limit > 100) limit = 100;
 
-    const allowedStatuses = ['pending', 'confirmed', 'canceled'];
-    const status = allowedStatuses.includes(req.query.status) ? req.query.status : null;
+    const offset = (page - 1) * limit;
 
-    const options = {
-      page,
-      limit,
-      status,
-      search: req.query.search || '',
-      dateFrom: req.query.dateFrom || null,
-      dateTo: req.query.dateTo || null,
-    };
+    const allowedStatuses = ["draft", "upcoming", "completed", "cancelled"];
+    const status = allowedStatuses.includes(req.query.status)
+      ? req.query.status
+      : null;
 
-    const { meetings, totalCount } = await Meeting.getPaginatedMeetings(options);
+    const search = req.query.search || "";
+    const dateFrom = req.query.dateFrom || null;
+    const dateTo = req.query.dateTo || null;
 
-    res.status(200).json({
+    const query = {};
+
+    if (status) {
+      query.status = status;
+    }
+
+    if (dateFrom || dateTo) {
+      query.date = {};
+
+      if (dateFrom) {
+        query.date.$gte = new Date(dateFrom);
+      }
+
+      if (dateTo) {
+        query.date.$lte = new Date(dateTo);
+      }
+    }
+
+    if (search) {
+      query.$or = [
+        { groupName: { $regex: search, $options: "i" } },
+        { "venue.address": { $regex: search, $options: "i" } },
+        { "venue.city": { $regex: search, $options: "i" } },
+        { sharedInterests: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const [meetings, totalCount] = await Promise.all([
+      populateMeetingMembers(
+        Meeting.find(query)
+          .sort({ createdAt: -1 })
+          .skip(offset)
+          .limit(limit)
+      ).lean(),
+
+      Meeting.countDocuments(query),
+    ]);
+
+    return res.status(200).json({
       success: true,
       data: meetings,
       pagination: {
@@ -118,16 +192,23 @@ const getAllMeetings = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };
+
+// ─── Ustvari srečanje ────────────────────────────────────────────────────
 
 /**
  * @openapi
  * /meetings:
  *  post:
  *   summary: Create a meeting
- *   description: Creates a new meeting.
+ *   description: >
+ *    Creates a new meeting. If a meeting with the same group name and same members
+ *    already exists, the existing meeting is returned instead of creating a duplicate.
  *   tags: [Meetings]
  *   requestBody:
  *    required: true
@@ -135,9 +216,38 @@ const getAllMeetings = async (req, res) => {
  *     application/json:
  *      schema:
  *       $ref: '#/components/schemas/Meeting'
+ *      example:
+ *       groupName: "Kava & Glasba"
+ *       members:
+ *        - user: "507f1f77bcf86cd799439011"
+ *          response: "accepted"
+ *          respondedAt: "2026-04-11T14:30:00Z"
+ *        - user: "507f191e810c19729de860ea"
+ *          response: "pending"
+ *          respondedAt: null
+ *        - user: "507f191e810c19729de860eb"
+ *          response: "pending"
+ *          respondedAt: null
+ *       sharedInterests: ["Kava", "Glasba"]
+ *       matchPercentage: 73
+ *       venue:
+ *        address: "~0.2 km od tebe"
+ *        city: "Ljubljana"
+ *        country: "Slovenia"
+ *        coordinates:
+ *         lat: 46.0569
+ *         lng: 14.5058
+ *       date: "2026-05-10T18:00:00Z"
+ *       status: "upcoming"
  *   responses:
  *    '201':
  *     description: Meeting created
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/Meeting'
+ *    '200':
+ *     description: Existing duplicate meeting returned
  *     content:
  *      application/json:
  *       schema:
@@ -149,16 +259,50 @@ const getAllMeetings = async (req, res) => {
  *       schema:
  *        $ref: '#/components/schemas/ErrorMessage'
  */
-// Ustvari srečanje
 const createMeeting = async (req, res) => {
   try {
+    const incomingMemberIds = getMemberIdsFromBody(req.body.members);
+
+    if (incomingMemberIds.length > 0) {
+      const possibleDuplicates = await Meeting.find({
+        groupName: req.body.groupName,
+        "members.user": { $all: incomingMemberIds },
+      }).lean();
+
+      const duplicate = possibleDuplicates.find((meeting) => {
+        const existingMemberIds = (meeting.members || [])
+          .map((member) => String(member.user))
+          .sort();
+
+        return sameMembers(existingMemberIds, incomingMemberIds);
+      });
+
+      if (duplicate) {
+        const populatedDuplicate = await populateMeetingMembers(
+          Meeting.findById(duplicate._id)
+        ).lean();
+
+        return res.status(200).json(populatedDuplicate);
+      }
+    }
+
     const meeting = new Meeting(req.body);
     await meeting.save();
-    res.status(201).json(meeting);
+
+    const populatedMeeting = await populateMeetingMembers(
+      Meeting.findById(meeting._id)
+    ).lean();
+
+    return res.status(201).json(populatedMeeting);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };
+
+// ─── Izbriši srečanje ────────────────────────────────────────────────────
 
 /**
  * @openapi
@@ -173,8 +317,8 @@ const createMeeting = async (req, res) => {
  *      required: true
  *      schema:
  *       type: string
- *       pattern: '^[a-fA-F\d]{24}$'
- *      description: Meeting ID
+ *       pattern: '^[a-fA-F\\d]{24}$'
+ *      description: MongoDB ObjectId of the meeting
  *      example: 507f1f77bcf86cd799439015
  *   responses:
  *    '204':
@@ -186,22 +330,31 @@ const createMeeting = async (req, res) => {
  *       schema:
  *        $ref: '#/components/schemas/ErrorMessage'
  */
-// Izbriši srečanje
 const deleteMeeting = async (req, res) => {
   try {
     await Meeting.findByIdAndDelete(req.params.meetingId);
-    res.status(204).json({ success: true });
+
+    return res.status(204).json({
+      success: true,
+    });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };
+
+// ─── Potrjena srečanja uporabnika ────────────────────────────────────────
 
 /**
  * @openapi
  * /meetings/confirmed/{userId}:
  *  get:
- *   summary: Get meetings for user
- *   description: Retrieves meetings where the user is a member.
+ *   summary: Get confirmed meetings for user
+ *   description: >
+ *    Retrieves meetings where the given user is a member. Past upcoming meetings
+ *    may be automatically marked as completed before returning the response.
  *   tags: [Meetings]
  *   parameters:
  *    - name: userId
@@ -209,12 +362,12 @@ const deleteMeeting = async (req, res) => {
  *      required: true
  *      schema:
  *       type: string
- *       pattern: '^[a-fA-F\d]{24}$'
- *      description: User ID
+ *       pattern: '^[a-fA-F\\d]{24}$'
+ *      description: MongoDB ObjectId of the user
  *      example: 507f1f77bcf86cd799439011
  *   responses:
  *    '200':
- *     description: Successfully retrieved meetings
+ *     description: Successfully retrieved user meetings
  *     content:
  *      application/json:
  *       schema:
@@ -228,20 +381,26 @@ const deleteMeeting = async (req, res) => {
  *       schema:
  *        $ref: '#/components/schemas/ErrorMessage'
  */
-// Potrjena srečanja uporabnika
 const getUserConfirmedMeetings = async (req, res) => {
   try {
-    const meetings = await Meeting.find({
-      'members.user': req.params.userId
-    })
-      .populate('members.user', 'username firstName lastName profileImage')
-      .lean();
+    await updatePastMeetingsToCompleted();
 
-    res.status(200).json(meetings);
+    const meetings = await populateMeetingMembers(
+      Meeting.find({
+        "members.user": req.params.userId,
+      }).sort({ date: 1 })
+    ).lean();
+
+    return res.status(200).json(meetings);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };
+
+// ─── Potrdi srečanje ─────────────────────────────────────────────────────
 
 /**
  * @openapi
@@ -270,16 +429,25 @@ const getUserConfirmedMeetings = async (req, res) => {
  *       schema:
  *        $ref: '#/components/schemas/ErrorMessage'
  */
-// Potrdi srečanje
 const confirmMeeting = async (req, res) => {
   try {
-    const confirmed = new ConfirmedMeeting(req.body);
+    const confirmed = new Meeting(req.body);
     await confirmed.save();
-    res.status(201).json(confirmed);
+
+    const populatedMeeting = await populateMeetingMembers(
+      Meeting.findById(confirmed._id)
+    ).lean();
+
+    return res.status(201).json(populatedMeeting);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };
+
+// ─── Prekliči potrjeno srečanje ──────────────────────────────────────────
 
 /**
  * @openapi
@@ -294,8 +462,8 @@ const confirmMeeting = async (req, res) => {
  *      required: true
  *      schema:
  *       type: string
- *       pattern: '^[a-fA-F\d]{24}$'
- *      description: Meeting ID
+ *       pattern: '^[a-fA-F\\d]{24}$'
+ *      description: MongoDB ObjectId of the meeting
  *      example: 507f1f77bcf86cd799439015
  *   responses:
  *    '204':
@@ -307,22 +475,29 @@ const confirmMeeting = async (req, res) => {
  *       schema:
  *        $ref: '#/components/schemas/ErrorMessage'
  */
-// Prekliči potrjeno srečanje
 const cancelConfirmedMeeting = async (req, res) => {
   try {
-    await ConfirmedMeeting.findByIdAndDelete(req.params.meetingId);
-    res.status(204).json({ success: true });
+    await Meeting.findByIdAndDelete(req.params.meetingId);
+
+    return res.status(204).json({
+      success: true,
+    });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };
 
-/*
+// ─── Pridobi srečanje po ID ──────────────────────────────────────────────
+
+/**
  * @openapi
  * /meetings/{meetingId}:
  *  get:
  *   summary: Get meeting by ID
- *   description: Retrieves a meeting by its ID.
+ *   description: Retrieves a meeting by its ID. Members may be returned as populated user objects.
  *   tags: [Meetings]
  *   parameters:
  *    - name: meetingId
@@ -330,8 +505,8 @@ const cancelConfirmedMeeting = async (req, res) => {
  *      required: true
  *      schema:
  *       type: string
- *       pattern: '^[a-fA-F\d]{24}$'
- *      description: Meeting ID
+ *       pattern: '^[a-fA-F\\d]{24}$'
+ *      description: MongoDB ObjectId of the meeting
  *      example: 507f1f77bcf86cd799439015
  *   responses:
  *    '200':
@@ -346,21 +521,38 @@ const cancelConfirmedMeeting = async (req, res) => {
  *      application/json:
  *       schema:
  *        $ref: '#/components/schemas/ErrorMessage'
+ *    '500':
+ *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
  */
-
 const getMeetingById = async (req, res) => {
   try {
-    const meeting = await Meeting.findById(req.params.meetingId).lean();
+    await updatePastMeetingsToCompleted();
+
+    const meeting = await populateMeetingMembers(
+      Meeting.findById(req.params.meetingId)
+    ).lean();
 
     if (!meeting) {
-      return res.status(404).json({ message: 'Meeting ne obstaja.' });
+      return res.status(404).json({
+        success: false,
+        message: "Meeting ne obstaja.",
+      });
     }
 
-    res.status(200).json(meeting);
+    return res.status(200).json(meeting);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };
+
+// ─── Chat context ────────────────────────────────────────────────────────
 
 /**
  * @openapi
@@ -377,7 +569,7 @@ const getMeetingById = async (req, res) => {
  *      required: true
  *      schema:
  *       type: string
- *       pattern: '^[a-fA-F\d]{24}$'
+ *       pattern: '^[a-fA-F\\d]{24}$'
  *      description: Meeting ID
  *      example: 507f1f77bcf86cd799439015
  *   responses:
@@ -399,6 +591,7 @@ const getMeetingById = async (req, res) => {
  *            type: string
  *           status:
  *            type: string
+ *            enum: [draft, upcoming, completed, cancelled]
  *           date:
  *            type: string
  *            format: date-time
@@ -477,21 +670,24 @@ const getMeetingById = async (req, res) => {
  */
 const getMeetingChatContext = async (req, res) => {
   try {
+    await updatePastMeetingsToCompleted();
+
     const { meetingId } = req.params;
 
-    const meeting = await Meeting.findById(meetingId)
-      .populate('members.user', 'username firstName lastName profileImage status isActive')
-      .lean();
+    const meeting = await populateMeetingMembers(
+      Meeting.findById(meetingId)
+    ).lean();
 
     if (!meeting) {
       return res.status(404).json({
         success: false,
-        message: 'Srečanje ni najdeno.'
+        message: "Srečanje ni najdeno.",
       });
     }
 
-    const requesterId = String(req.user?._id || '');
-    const isAdmin = req.user?.role === 'admin';
+    const requesterId = String(req.user?._id || "");
+    const isAdmin = req.user?.role === "admin";
+
     const isMember = (meeting.members || []).some((member) => {
       const memberId = member.user?._id || member.user;
       return String(memberId) === requesterId;
@@ -500,7 +696,7 @@ const getMeetingChatContext = async (req, res) => {
     if (!isAdmin && !isMember) {
       return res.status(403).json({
         success: false,
-        message: 'Nimate dovoljenja za ta sestanek.'
+        message: "Nimate dovoljenja za ta sestanek.",
       });
     }
 
@@ -509,15 +705,15 @@ const getMeetingChatContext = async (req, res) => {
       const memberId = user._id || member.user;
 
       return {
-        id: memberId ? String(memberId) : '',
-        username: user.username || '',
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
-        profileImage: user.profileImage || '',
-        response: member.response || 'pending',
+        id: memberId ? String(memberId) : "",
+        username: user.username || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        profileImage: user.profileImage || "",
+        response: member.response || "pending",
         respondedAt: member.respondedAt || null,
-        status: user.status || '',
-        isActive: typeof user.isActive === 'boolean' ? user.isActive : null
+        status: user.status || "",
+        isActive: typeof user.isActive === "boolean" ? user.isActive : null,
       };
     });
 
@@ -530,28 +726,31 @@ const getMeetingChatContext = async (req, res) => {
         date: meeting.date,
         venue: meeting.venue,
         matchPercentage: meeting.matchPercentage,
-        sharedInterests: meeting.sharedInterests
+        sharedInterests: meeting.sharedInterests,
       },
-      members
+      members,
     });
   } catch (err) {
     return res.status(500).json({
       success: false,
-      message: err.message
+      message: err.message,
     });
   }
 };
+
+// ─── Število zaključenih srečanj ─────────────────────────────────────────
 
 /**
  * @openapi
  * /meetings/stats/completed:
  *  get:
- *   summary: Count meetings already finished by date
- *   description: Returns the number of meetings whose date is in the past.
+ *   summary: Count completed meetings
+ *   description: >
+ *    Updates past upcoming meetings to completed and returns the number of completed meetings.
  *   tags: [Meetings]
  *   responses:
  *    '200':
- *     description: Successfully computed completed meetings count
+ *     description: Successfully counted completed meetings
  *     content:
  *      application/json:
  *       schema:
@@ -559,6 +758,7 @@ const getMeetingChatContext = async (req, res) => {
  *        properties:
  *         success:
  *          type: boolean
+ *          example: true
  *         data:
  *          type: object
  *          properties:
@@ -567,16 +767,28 @@ const getMeetingChatContext = async (req, res) => {
  *            example: 5
  *    '500':
  *     description: Server error
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
  */
 const getCompletedMeetingsCount = async (req, res) => {
   try {
-    const count = await Meeting.countDocuments({ date: { $lt: new Date() } });
+    await updatePastMeetingsToCompleted();
+
+    const count = await Meeting.countDocuments({
+      status: "completed",
+    });
+
     return res.status(200).json({
       success: true,
       data: { count },
     });
   } catch (err) {
-    return res.status(500).json({ success: false, message: err.message });
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };
 

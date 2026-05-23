@@ -28,6 +28,12 @@
     </button>
     <button
       class="admin-tab-btn"
+      [class.active]="activeTab === 'meetings'"
+      (click)="setActiveTab('meetings')">
+      <i class="fas fa-calendar-check"></i> Srečanja
+    </button>
+    <button
+      class="admin-tab-btn"
       [class.active]="activeTab === 'reports'"
       (click)="setActiveTab('reports')">
       <i class="fas fa-flag"></i> Prijave
@@ -288,6 +294,134 @@
       </button>
     </div>
   </div>  
+
+  <!-- Meetings Table -->
+  <div class="admin-table-container" *ngIf="activeTab === 'meetings'">
+    <h3><i class="fas fa-calendar-check"></i> Srečanja</h3>
+
+    <div style="margin-bottom: 0.75rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+      <input
+        type="text"
+        class="form-input"
+        style="max-width: 280px;"
+        placeholder="Išči po imenu, lokaciji ali interesih..."
+        [(ngModel)]="meetingSearch"
+        (keyup.enter)="searchMeetings()"
+      />
+
+      <select
+        class="reports-filter-select"
+        [(ngModel)]="meetingStatusFilter"
+        (change)="searchMeetings()"
+      >
+        <option value="">Vsi statusi</option>
+        <option value="draft">Osnutek</option>
+        <option value="upcoming">Prihajajoče</option>
+        <option value="completed">Končano</option>
+        <option value="cancelled">Preklicano</option>
+      </select>
+
+      <button class="btn-secondary" type="button" (click)="searchMeetings()">
+        <i class="fas fa-search"></i> Išči
+      </button>
+
+      <button class="btn-secondary" type="button" (click)="clearMeetingFilters()">
+        <i class="fas fa-times"></i> Počisti
+      </button>
+
+      <span style="margin-left: auto; font-size: 0.9rem; color: #94a3b8;">
+        Skupaj: {{ meetingsTotal }}
+      </span>
+    </div>
+
+    <div *ngIf="meetingsLoading" class="table-status">Nalaganje srečanj...</div>
+    <div *ngIf="meetingsError" class="table-status table-error">{{ meetingsError }}</div>
+
+    <table class="admin-table" *ngIf="!meetingsLoading && !meetingsError && meetings.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ime skupine</th>
+          <th>Člani</th>
+          <th>Lokacija</th>
+          <th>Datum/Čas</th>
+          <th>Ujemanje</th>
+          <th>Status</th>
+          <th>Akcije</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let meeting of meetings; let i = index">
+          <td>{{ i + 1 + ((meetingsPage - 1) * meetingsPageSize) }}</td>
+
+          <td>
+            <i class="fas fa-users"></i>
+            {{ meeting.groupName }}
+          </td>
+
+          <td>
+            {{ getMeetingMembers(meeting) }}
+          </td>
+
+          <td>
+            <i class="fas fa-map-marker-alt"></i>
+            {{ getMeetingLocation(meeting) }}
+          </td>
+
+          <td>
+            <i class="fas fa-calendar"></i>
+            {{ getMeetingDate(meeting) }}
+          </td>
+
+          <td>
+            {{ meeting.matchPercentage || 0 }}%
+          </td>
+
+          <td>
+            <span class="meeting-status" [ngClass]="getMeetingStatusClass(meeting.status)">
+              {{ getMeetingStatusLabel(meeting.status) }}
+            </span>
+          </td>
+
+          <td>
+            <button
+              class="deactivate-btn"
+              type="button"
+              [disabled]="meetingActionInProgress[meeting._id]"
+              (click)="deleteMeeting(meeting)"
+            >
+              <i class="fas fa-trash"></i> Izbriši
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!meetingsLoading && !meetingsError && meetings.length === 0" class="table-status">
+      Ni srečanj za izbrane filtre.
+    </div>
+
+    <div class="admin-pagination" *ngIf="!meetingsLoading && !meetingsError && meetingsTotalPages > 1">
+      <button
+        class="pagination-btn"
+        (click)="goToMeetingsPage(meetingsPage - 1)"
+        [disabled]="meetingsPage <= 1">
+        Prejsnja
+      </button>
+
+      <span class="pagination-info">
+        Stran {{ meetingsPage }} / {{ meetingsTotalPages || 1 }}
+      </span>
+
+      <button
+        class="pagination-btn"
+        (click)="goToMeetingsPage(meetingsPage + 1)"
+        [disabled]="meetingsTotalPages > 0 && meetingsPage >= meetingsTotalPages">
+        Naslednja
+      </button>
+    </div>
+  </div>
 
   <!-- Reports Table -->
   <div class="admin-table-container" *ngIf="activeTab === 'reports'">

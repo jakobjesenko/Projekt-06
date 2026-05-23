@@ -115,6 +115,50 @@ interface PaginatedRatingsResponse {
   };
 }
 
+interface AdminMeetingMember {
+  user?: {
+    _id?: string;
+    id?: string;
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  } | string;
+  response?: 'pending' | 'accepted' | 'declined';
+  respondedAt?: string | null;
+}
+
+interface AdminMeeting {
+  _id: string;
+  groupName: string;
+  members: AdminMeetingMember[];
+  sharedInterests?: string[];
+  matchPercentage?: number;
+  venue?: {
+    address?: string;
+    city?: string;
+    country?: string;
+    coordinates?: {
+      lat?: number;
+      lng?: number;
+    };
+  };
+  date?: string;
+  status: 'draft' | 'upcoming' | 'completed' | 'cancelled';
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+interface PaginatedMeetingsResponse {
+  success: boolean;
+  data: AdminMeeting[];
+  pagination: {
+    total: number;
+    page: number;
+    totalPages: number;
+  };
+}
+
 @Component({
   selector: 'app-admin',
   imports: [CommonModule, FormsModule],
@@ -129,13 +173,17 @@ export class AdminComponent implements OnInit {
     { icon: 'fas fa-search',         value: '...', label: 'Aktivnih iskanj' },
   ];
 
-activeTab: 'weights' | 'users' | 'reports' | 'ratings' = 'users';
+activeTab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports' = 'users';
 
-setActiveTab(tab: 'weights' | 'users' | 'reports' | 'ratings'): void {
+setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports'): void {
   this.activeTab = tab;
 
-  if (tab === 'ratings' && this.ratings.length === 0) {
-    this.loadRatings();
+  if (tab === 'meetings' && this.meetings.length === 0) {
+    this.loadMeetings();
+  }
+
+  if (tab === 'ratings' && this.ratings?.length === 0) {
+    this.loadRatings?.();
   }
 }
 
@@ -175,6 +223,17 @@ setActiveTab(tab: 'weights' | 'users' | 'reports' | 'ratings'): void {
   ratingFilter: '' | number = '';
   ratingSearch = '';
 
+  meetings: AdminMeeting[] = [];
+  meetingsLoading = false;
+  meetingsError = '';
+  meetingsPage = 1;
+  meetingsPageSize = 20;
+  meetingsTotalPages = 0;
+  meetingsTotal = 0;
+  meetingSearch = '';
+  meetingStatusFilter = '';
+  meetingActionInProgress: Record<string, boolean> = {};
+
   constructor(private http: HttpClient) {}
 
   // selection for bulk actions
@@ -187,6 +246,7 @@ setActiveTab(tab: 'weights' | 'users' | 'reports' | 'ratings'): void {
     this.loadCompletedMeetings();
     this.loadReports();
     this.loadRatings();
+    this.loadMeetings();
   }
 
   loadReports(page = this.reportsPage): void {
@@ -548,5 +608,144 @@ setActiveTab(tab: 'weights' | 'users' | 'reports' | 'ratings'): void {
 
   getStars(rating: number): string {
     return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+  }
+
+  loadMeetings(page = this.meetingsPage): void {
+    this.meetingsLoading = true;
+    this.meetingsError = '';
+
+    const safePage = page < 1 ? 1 : page;
+
+    const params = new URLSearchParams({
+      page: String(safePage),
+      limit: String(this.meetingsPageSize)
+    });
+
+    if (this.meetingSearch.trim()) {
+      params.set('search', this.meetingSearch.trim());
+    }
+
+    if (this.meetingStatusFilter) {
+      params.set('status', this.meetingStatusFilter);
+    }
+
+    this.http.get<PaginatedMeetingsResponse>(`/api/meetings?${params.toString()}`).subscribe({
+      next: (res) => {
+        this.meetings = res.data || [];
+        this.meetingsPage = res.pagination.page;
+        this.meetingsTotalPages = res.pagination.totalPages;
+        this.meetingsTotal = res.pagination.total;
+        this.stats[1].value = res.pagination.total;
+        this.meetingsLoading = false;
+      },
+      error: (err) => {
+        console.error('Napaka pri nalaganju srečanj:', err);
+        this.meetingsError = 'Napaka pri nalaganju srečanj.';
+        this.meetingsLoading = false;
+      }
+    });
+  }
+
+  searchMeetings(): void {
+    this.meetingsPage = 1;
+    this.loadMeetings();
+  }
+
+  clearMeetingFilters(): void {
+    this.meetingSearch = '';
+    this.meetingStatusFilter = '';
+    this.meetingsPage = 1;
+    this.loadMeetings();
+  }
+
+  goToMeetingsPage(page: number): void {
+    if (page < 1 || (this.meetingsTotalPages > 0 && page > this.meetingsTotalPages)) return;
+    this.loadMeetings(page);
+  }
+
+  deleteMeeting(meeting: AdminMeeting): void {
+    if (!confirm(`Ali želiš izbrisati srečanje "${meeting.groupName}"?`)) {
+      return;
+    }
+
+    this.meetingActionInProgress[meeting._id] = true;
+
+    this.http.delete(`/api/meetings/${meeting._id}`).subscribe({
+      next: () => {
+        this.meetingActionInProgress[meeting._id] = false;
+        this.loadMeetings();
+      },
+      error: (err) => {
+        console.error('Napaka pri brisanju srečanja:', err);
+        this.meetingActionInProgress[meeting._id] = false;
+        this.meetingsError = 'Napaka pri brisanju srečanja.';
+      }
+    });
+  }
+
+  getMeetingMembers(meeting: AdminMeeting): string {
+    const members = meeting.members || [];
+
+    if (members.length === 0) return '—';
+
+    return members.map((member) => {
+      const user = member.user;
+
+      if (typeof user === 'object' && user !== null) {
+        return user.username ||
+          `${user.firstName || ''} ${user.lastName || ''}`.trim() ||
+          user._id ||
+          'Uporabnik';
+      }
+
+      return user || 'Uporabnik';
+    }).join(', ');
+  }
+
+  getMeetingLocation(meeting: AdminMeeting): string {
+    const venue = meeting.venue;
+
+    if (!venue) return '—';
+
+    if (venue.address && venue.city) {
+      return `${venue.address}, ${venue.city}`;
+    }
+
+    if (venue.address) return venue.address;
+    if (venue.city) return venue.city;
+
+    return '—';
+  }
+
+  getMeetingDate(meeting: AdminMeeting): string {
+    if (!meeting.date) return '—';
+
+    return new Date(meeting.date).toLocaleString('sl-SI', {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  getMeetingStatusLabel(status: string): string {
+    switch (status) {
+      case 'draft': return 'Osnutek';
+      case 'upcoming': return 'Prihajajoče';
+      case 'completed': return 'Končano';
+      case 'cancelled': return 'Preklicano';
+      default: return status || '—';
+    }
+  }
+
+  getMeetingStatusClass(status: string): string {
+    switch (status) {
+      case 'draft': return 'meeting-status-draft';
+      case 'upcoming': return 'meeting-status-upcoming';
+      case 'completed': return 'meeting-status-completed';
+      case 'cancelled': return 'meeting-status-cancelled';
+      default: return '';
+    }
   }
 }
