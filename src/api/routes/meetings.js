@@ -28,4 +28,6 @@ meetingsRouter.post("/confirm", meetingsCtrl.confirmMeeting);
 // DELETE /api/meetings/confirm/:meetingId
 meetingsRouter.delete("/confirm/:meetingId", meetingsCtrl.cancelConfirmedMeeting);
 
+meetingsRouter.get('/:meetingId', meetingsCtrl.getMeetingById);
+
 export default meetingsRouter;

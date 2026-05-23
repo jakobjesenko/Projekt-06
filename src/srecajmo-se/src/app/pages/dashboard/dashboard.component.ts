@@ -38,9 +38,10 @@ interface ConfirmedMeeting {
   id?: string;
   groupName: string;
   members: string[];
-  memberIds?: string[];
   dateTime: string;
+  rawDate?: string;
   location: string;
+  status?: string;
 }
 
 @Component({
@@ -482,7 +483,12 @@ export class DashboardComponent implements OnInit {
             dateTime: meeting.date
               ? new Date(meeting.date).toLocaleString('sl-SI')
               : '',
-            location: meeting.venue?.address || 'Lokacija še ni določena'
+            rawDate: meeting.date,
+            location:
+              meeting.venue?.address ||
+              meeting.venue?.city ||
+              'Lokacija še ni določena',
+            status: meeting.status
           };
         });
 
@@ -507,5 +513,19 @@ export class DashboardComponent implements OnInit {
         this.confirmedMeetings = [];
       }
     });
+  }
+
+  isMeetingFinished(meeting: ConfirmedMeeting): boolean {
+    if (meeting.status === 'completed') return true;
+
+    if (!meeting.rawDate) return false;
+
+    const meetingDate = new Date(meeting.rawDate);
+
+    if (Number.isNaN(meetingDate.getTime())) {
+      return false;
+    }
+
+    return meetingDate < new Date();
   }
 }

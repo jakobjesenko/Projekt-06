@@ -1,4 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AuthService } from '../../../services/auth.service';
+import { of } from 'rxjs';
 
 import { HeaderComponent } from './header.component';
 
@@ -8,7 +12,10 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent]
+      imports: [HeaderComponent, HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        { provide: AuthService, useValue: { currentUser: null, isLoggedIn: false, logout: jasmine.createSpy(), currentUser$: of(null) } }
+      ]
     })
     .compileComponents();
 
