@@ -101,6 +101,124 @@ describe('AdminComponent', () => {
     expect(user.activeSearch).toBeTrue();
   });
 
+  it('setActiveTab loads meetings and ratings lazily', () => {
+    spyOn(component, 'loadMeetings');
+    spyOn(component, 'loadRatings');
+
+    component.setActiveTab('meetings');
+    expect(component.activeTab).toBe('meetings');
+    expect(component.loadMeetings).toHaveBeenCalled();
+
+    component.setActiveTab('ratings');
+    expect(component.activeTab).toBe('ratings');
+    expect(component.loadRatings).toHaveBeenCalled();
+  });
+
+  it('loadReports applies status filter and updates report state', () => {
+    const reportsResponse = {
+      success: true,
+      data: [
+        {
+          _id: 'r1',
+          reporter: { _id: 'u1', username: 'ana' },
+          reportedUser: { _id: 'u2', username: 'bojan', strikes: 2 },
+          meeting: { _id: 'm1', groupName: 'Skupina' },
+          description: 'Opis',
+          status: 'new',
+          createdAt: '2026-05-01T10:00:00.000Z',
+          updatedAt: '2026-05-01T10:00:00.000Z'
+        }
+      ],
+      pagination: { total: 1, page: 2, totalPages: 3 }
+    };
+
+    httpSpy.get.and.callFake((url: string) => {
+      if (url.startsWith('/api/reports?')) return of(reportsResponse);
+      return of({ success: true, data: users, pagination: { total: 2, page: 1, totalPages: 1 } });
+    });
+
+    component.reportStatusFilter = 'resolved';
+    component.reportsPage = 2;
+    component.loadReports();
+
+    expect(httpSpy.get).toHaveBeenCalledWith('/api/reports?page=2&limit=20&status=resolved');
+    expect(component.reports.length).toBe(1);
+    expect(component.reportsTotal).toBe(1);
+    expect(component.reportsPage).toBe(2);
+    expect(component.reportsTotalPages).toBe(3);
+    expect(component.reportsLoading).toBeFalse();
+  });
+
+  it('updateReportStatus refreshes reports and users when resolved', () => {
+    spyOn(component, 'loadReports');
+    spyOn(component, 'loadUsers');
+    component.updateReportStatus({ _id: 'r1' } as any, 'resolved');
+
+    expect(httpSpy.put).toHaveBeenCalledWith(
+      '/api/reports/r1/status',
+      'status=resolved',
+      jasmine.objectContaining({ headers: jasmine.any(Object) })
+    );
+    expect(component.loadReports).toHaveBeenCalled();
+    expect(component.loadUsers).toHaveBeenCalled();
+    expect(component.reportActionInProgress['r1']).toBeFalse();
+  });
+
+  it('loadMeetings and loadRatings map filters into query params', () => {
+    const meetingResponse = {
+      success: true,
+      data: [
+        {
+          _id: 'm1',
+          groupName: 'Srecanje',
+          members: [{ user: { _id: 'u1', username: 'ana' } }],
+          venue: { address: 'Trg 1', city: 'Ljubljana' },
+          date: '2026-05-10T18:00:00.000Z',
+          status: 'upcoming'
+        }
+      ],
+      pagination: { total: 1, page: 1, totalPages: 1 }
+    };
+
+    const ratingsResponse = {
+      success: true,
+      data: [
+        {
+          _id: 'ra1',
+          meeting: 'm1',
+          user: 'u1',
+          rating: 5,
+          comment: 'Super'
+        }
+      ],
+      pagination: { total: 1, page: 1, totalPages: 1 }
+    };
+
+    httpSpy.get.and.callFake((url: string) => {
+      if (url.startsWith('/api/meetings?')) return of(meetingResponse);
+      if (url.startsWith('/api/ratings?')) return of(ratingsResponse);
+      return of({ success: true, data: users, pagination: { total: 2, page: 1, totalPages: 1 } });
+    });
+
+    component.meetingSearch = 'trg';
+    component.meetingStatusFilter = 'upcoming';
+    component.loadMeetings();
+
+    expect(httpSpy.get).toHaveBeenCalledWith('/api/meetings?page=1&limit=20&search=trg&status=upcoming');
+    expect(component.meetings.length).toBe(1);
+    expect(component.meetingsTotal).toBe(1);
+    expect(component.meetingsLoading).toBeFalse();
+
+    component.ratingSearch = 'super';
+    component.ratingFilter = 5;
+    component.loadRatings();
+
+    expect(httpSpy.get).toHaveBeenCalledWith('/api/ratings?page=1&limit=20&rating=5&search=super');
+    expect(component.ratings.length).toBe(1);
+    expect(component.ratingsTotal).toBe(1);
+    expect(component.ratingsLoading).toBeFalse();
+  });
+
   it('renders bulk controls and updates selected count through checkbox interaction', () => {
     fixture.detectChanges();
 

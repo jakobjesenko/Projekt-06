@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { of, Subject } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ChatComponent } from './chat.component';
@@ -51,6 +51,8 @@ describe('ChatComponent', () => {
     members: [{ id: 'user1', firstName: 'A', lastName: 'B' }]
   }));
 
+  const httpPostSpy = jasmine.createSpy('httpPost');
+
   const routerSpy = { navigate: jasmine.createSpy('navigate') };
 
   beforeEach(async () => {
@@ -65,7 +67,7 @@ describe('ChatComponent', () => {
         { provide: SocketService, useValue: socketServiceStub },
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => meetingId } } } },
-        { provide: HttpClient, useValue: { get: httpGetSpy } }
+        { provide: HttpClient, useValue: { get: httpGetSpy, post: httpPostSpy } }
       ]
     }).compileComponents();
 
@@ -136,7 +138,7 @@ describe('ChatComponent', () => {
         { provide: SocketService, useValue: socketServiceStub },
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: routeStub },
-        { provide: HttpClient, useValue: { get: httpGetSpy } }
+        { provide: HttpClient, useValue: { get: httpGetSpy, post: httpPostSpy } }
       ]
     }).compileComponents();
 
@@ -162,7 +164,7 @@ describe('ChatComponent', () => {
         { provide: SocketService, useValue: socketServiceStub },
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => meetingId } } } },
-        { provide: HttpClient, useValue: { get: httpGetSpy } }
+        { provide: HttpClient, useValue: { get: httpGetSpy, post: httpPostSpy } }
       ]
     }).compileComponents();
 
@@ -214,5 +216,102 @@ describe('ChatComponent', () => {
     component.deleteMessage(message1);
 
     expect(messageServiceStub.deleteMessage).not.toHaveBeenCalled();
+  });
+
+  it('canReportMember excludes the current user', () => {
+    fixture.detectChanges();
+
+    expect(component.canReportMember({ id: 'user2' } as any)).toBeTrue();
+    expect(component.canReportMember({ id: 'user1' } as any)).toBeFalse();
+  });
+
+  it('openReportModal and closeReportModal reset report state', () => {
+    fixture.detectChanges();
+
+    const member = { id: 'user2', username: 'user2' } as any;
+    component.reportReason = 'Spam ali oglaševanje';
+    component.reportDescription = 'nekaj';
+    component.reportError = 'err';
+    component.reportSuccess = 'ok';
+
+    component.openReportModal(member);
+
+    expect(component.reportingMember).toBe(member);
+    expect(component.reportReason).toBe('');
+    expect(component.reportDescription).toBe('');
+    expect(component.reportError).toBe('');
+    expect(component.reportSuccess).toBe('');
+
+    component.reportSubmitting = true;
+    component.closeReportModal();
+    expect(component.reportingMember).toBe(member);
+
+    component.reportSubmitting = false;
+    component.closeReportModal();
+
+    expect(component.reportingMember).toBeNull();
+    expect(component.reportReason).toBe('');
+    expect(component.reportDescription).toBe('');
+  });
+
+  it('submitReport validates input before posting', () => {
+    fixture.detectChanges();
+
+    httpPostSpy.calls.reset();
+
+    component.reportingMember = { id: 'user2', username: 'user2' } as any;
+    component.reportReason = '';
+
+    component.submitReport();
+    expect(component.reportError).toBe('Izberite razlog prijave.');
+    expect(httpPostSpy).not.toHaveBeenCalled();
+
+    component.reportReason = 'Drugo';
+    component.reportDescription = 'short';
+    component.submitReport();
+    expect(component.reportError).toContain('vsaj 10 znakov');
+    expect(httpPostSpy).not.toHaveBeenCalled();
+  });
+
+  it('submitReport posts report and closes modal after success', fakeAsync(() => {
+    fixture.detectChanges();
+
+    component.reportingMember = { id: 'user2', username: 'user2' } as any;
+    component.reportReason = 'Žaljiv jezik in nadlegovanje';
+    component.reportDescription = 'Neprimerno vedenje v klepetu';
+
+    httpPostSpy.and.returnValue(of({ success: true }));
+
+    component.submitReport();
+
+    expect(httpPostSpy).toHaveBeenCalledWith(
+      '/api/reports',
+      {
+        reportedUser: 'user2',
+        meeting: meetingId,
+        description: 'Žaljiv jezik in nadlegovanje: Neprimerno vedenje v klepetu'
+      },
+      { withCredentials: true }
+    );
+    expect(component.reportSubmitting).toBeFalse();
+    expect(component.reportSuccess).toBe('Prijava uspešno poslana administratorju.');
+
+    tick(1500);
+    expect(component.reportingMember).toBeNull();
+  }));
+
+  it('submitReport shows backend error message', () => {
+    fixture.detectChanges();
+
+    component.reportingMember = { id: 'user2', username: 'user2' } as any;
+    component.reportReason = 'Spam ali oglaševanje';
+    component.reportDescription = 'opis dovolj dolg';
+
+    httpPostSpy.and.returnValue(throwError(() => ({ error: { error: 'Napaka pri prijavi.' } })));
+
+    component.submitReport();
+
+    expect(component.reportSubmitting).toBeFalse();
+    expect(component.reportError).toBe('Napaka pri prijavi.');
   });
 });

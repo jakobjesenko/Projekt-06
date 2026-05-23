@@ -22,7 +22,8 @@ describe('DashboardComponent', () => {
     httpSpy = {
       get: jasmine.createSpy('get'),
       put: jasmine.createSpy('put'),
-      post: jasmine.createSpy('post')
+      post: jasmine.createSpy('post'),
+      delete: jasmine.createSpy('delete')
     };
 
     await TestBed.configureTestingModule({
@@ -201,4 +202,51 @@ describe('DashboardComponent', () => {
 
     expect(router.url).toBe('/rating/m1');
   }));
+
+  it('leaveMeeting calls backend, removes meeting and reloads suggestions when activeSearch', () => {
+    const meeting = {
+      id: 'm1',
+      groupName: 'Skupina A',
+      members: ['Ana', 'Bojan'],
+      location: 'Trg 1',
+      rawDate: new Date().toISOString(),
+      status: 'upcoming'
+    } as any;
+
+    component.user = { id: 'u1', activeSearch: true } as any;
+    component.confirmedMeetings = [meeting];
+    spyOn(window, 'confirm').and.returnValue(true);
+    spyOn(component, 'loadSuggestions');
+
+    httpSpy.delete.and.returnValue(of({ success: true, message: 'OK' }));
+
+    component.leaveMeeting(meeting);
+
+    expect(httpSpy.delete).toHaveBeenCalledWith('/api/meetings/m1/leave', { withCredentials: true });
+    expect(component.leavingMeetingIds.has('m1')).toBeFalse();
+    expect(component.confirmedMeetings.length).toBe(0);
+    expect(component.loadSuggestions).toHaveBeenCalledWith('u1');
+    expect(component.meetingActionError).toBe('');
+  });
+
+  it('leaveMeeting stores backend error message on failure', () => {
+    const meeting = {
+      id: 'm2',
+      groupName: 'Skupina B',
+      members: ['Ana', 'Bojan'],
+      location: 'Trg 2',
+      rawDate: new Date().toISOString(),
+      status: 'upcoming'
+    } as any;
+
+    component.user = { id: 'u1', activeSearch: false } as any;
+    spyOn(window, 'confirm').and.returnValue(true);
+
+    httpSpy.delete.and.returnValue(throwError(() => ({ error: { message: 'Ne gre' } })));
+
+    component.leaveMeeting(meeting);
+
+    expect(component.leavingMeetingIds.has('m2')).toBeFalse();
+    expect(component.meetingActionError).toBe('Ne gre');
+  });
 });
