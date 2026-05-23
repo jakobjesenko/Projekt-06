@@ -103,8 +103,6 @@ describe('More integration flows', () => {
     const fixture = TestBed.createComponent(AdminComponent);
     const comp = fixture.componentInstance;
 
-    fixture.detectChanges();
-
     // call loadUsers explicitly to trigger the HTTP request
     comp.loadUsers();
 
@@ -140,6 +138,43 @@ describe('More integration flows', () => {
     tick();
 
     expect(comp.loading).toBeFalse();
+  }));
+
+  it('resolving a report refreshes reports and users', fakeAsync(() => {
+    const fixture = TestBed.createComponent(AdminComponent);
+    const comp = fixture.componentInstance;
+
+    // prepare a single report item and call the action
+    comp.reports = [
+      { _id: 'r1', reporter: null, reportedUser: { _id: 'u1', username: 'u1', strikes: 0 }, meeting: null, description: 'Issue', status: 'new', createdAt: '', updatedAt: '' }
+    ];
+
+    comp.updateReportStatus(comp.reports[0] as any, 'resolved');
+
+    // Expect PUT to update report status
+    const putReq = httpMock.expectOne('/api/reports/r1/status');
+    expect(putReq.request.method).toBe('PUT');
+    // body is urlencoded string
+    expect(putReq.request.body).toBe('status=resolved');
+
+    putReq.flush({ success: true, data: { ...comp.reports[0], status: 'resolved' } });
+    tick();
+
+    // After resolving, component should reload reports
+    const reportsReq = httpMock.expectOne(req => req.url.includes('/api/reports'));
+    expect(reportsReq.request.method).toBe('GET');
+    reportsReq.flush({ success: true, data: [], pagination: { total: 0, page: 1, totalPages: 0 } });
+
+    // And also reload users so strikes are visible
+    const usersReq = httpMock.expectOne(req => req.url.includes('/api/users/admin'));
+    expect(usersReq.request.method).toBe('GET');
+    usersReq.flush({ success: true, data: [ { _id: 'u1', username: 'u1', isActive: true, activeSearch: false, strikes: 1 } ], pagination: { total: 1, page: 1, totalPages: 1 } });
+
+    tick();
+
+    expect(comp.reportActionInProgress['r1']).toBeFalse();
+    expect(comp.users.length).toBe(1);
+    expect(comp.users[0].strikes).toBe(1);
   }));
 
 });

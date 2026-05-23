@@ -1,7 +1,7 @@
 import assert from 'assert';
 import request from 'supertest';
 import User from '../../api/models/users.js';
-import { createTestApp, createUser } from './helpers.js';
+import { authHeaderFor, createAdmin, createTestApp, createUser } from './helpers.js';
 
 const app = createTestApp();
 
@@ -251,6 +251,11 @@ describe('Users integration', () => {
   });
 
   it('activates and deactivates search flag', async () => {
+    const admin = await createAdmin({
+      email: 'admin-search@test.com',
+      username: 'admin_search',
+    });
+
     const user = await createUser({
       email: 'search@test.com',
       username: 'search_user',
@@ -258,12 +263,14 @@ describe('Users integration', () => {
 
     const activate = await request(app)
       .put(`/api/users/admin/activate-search/${user._id}`)
+      .set(authHeaderFor(admin))
       .send({});
 
     assert.strictEqual(activate.status, 200);
 
     const deactivate = await request(app)
       .put(`/api/users/admin/deactivate-search/${user._id}`)
+      .set(authHeaderFor(admin))
       .send({});
 
     assert.strictEqual(deactivate.status, 200);

@@ -2,6 +2,7 @@ import assert from 'assert';
 import request from 'supertest';
 import Meeting from '../../api/models/meetings.js';
 import Report from '../../api/models/reports.js';
+import User from '../../api/models/users.js';
 import { createTestApp, createUser, createAdmin, authHeaderFor } from './helpers.js';
 
 const app = createTestApp();
@@ -190,6 +191,62 @@ describe('Reports integration', () => {
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.body.success, true);
     assert.strictEqual(res.body.data.status, 'in-review');
+  });
+
+  it('resolving a report increments strikes on reported user', async () => {
+    const admin = await createAdmin();
+    const members = [await createUser(), await createUser(), await createUser()];
+    const meeting = await createMeetingWithMembers(members);
+
+    const report = await Report.create({
+      reporter: members[0]._id,
+      reportedUser: members[1]._id,
+      meeting: meeting._id,
+      description: 'Neprimerno vedenje v skupini.',
+      status: 'new',
+    });
+
+    const res = await request(app)
+      .put(`/api/reports/${report._id}/status`)
+      .set(authHeaderFor(admin))
+      .send({ status: 'resolved' });
+
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.success, true);
+
+    const reported = await User.findById(members[1]._id).lean();
+    assert.strictEqual(reported.strikes, 1);
+  });
+
+  it('resolving a report that gives third strike blocks the user', async () => {
+    const admin = await createAdmin();
+    const reportedUser = await createUser({ strikes: 2 });
+    const other = await createUser();
+    // Meeting model requires at least 3 members; add a third participant
+    const third = await createUser();
+    const meeting = await createMeetingWithMembers([reportedUser, other, third]);
+
+    const report = await Report.create({
+      reporter: other._id,
+      reportedUser: reportedUser._id,
+      meeting: meeting._id,
+      description: 'Ponovno neprimerno vedenje.',
+      status: 'new',
+    });
+
+    const res = await request(app)
+      .put(`/api/reports/${report._id}/status`)
+      .set(authHeaderFor(admin))
+      .send({ status: 'resolved' });
+
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.success, true);
+
+    const reported = await User.findById(reportedUser._id).lean();
+    assert.strictEqual(reported.strikes, 3);
+    assert.strictEqual(reported.status, 'blocked');
+    assert.strictEqual(reported.activeSearch, false);
+    assert.strictEqual(reported.isActive, false);
   });
 
   it('rejects invalid report status update', async () => {
