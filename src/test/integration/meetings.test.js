@@ -28,6 +28,16 @@ const createMeetingDoc = async (members) => {
   });
 };
 
+const createPastMeetingDoc = async (members) => {
+  const meeting = await createMeetingDoc(members);
+  await Meeting.updateOne(
+    { _id: meeting._id },
+    { $set: { date: new Date(Date.now() - 24 * 60 * 60 * 1000), status: 'upcoming' } }
+  );
+
+  return Meeting.findById(meeting._id);
+};
+
 describe('Meetings integration', () => {
   it('creates a meeting', async () => {
     const userA = await createUser();
@@ -71,6 +81,33 @@ describe('Meetings integration', () => {
     assert.ok(Array.isArray(res.body.data));
   });
 
+  it('returns meeting by id', async () => {
+    const members = [await createUser(), await createUser(), await createUser()];
+    const meeting = await createMeetingDoc(members);
+
+    const res = await request(app)
+      .get(`/api/meetings/${meeting._id}`);
+
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body._id, meeting._id.toString());
+    assert.strictEqual(res.body.members.length, 3);
+  });
+
+  it('returns completed meetings count and completes past upcoming meetings', async () => {
+    const members = [await createUser(), await createUser(), await createUser()];
+    const meeting = await createPastMeetingDoc(members);
+
+    const res = await request(app)
+      .get('/api/meetings/stats/completed');
+
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.success, true);
+    assert.strictEqual(res.body.data.count, 1);
+
+    const reloaded = await Meeting.findById(meeting._id).lean();
+    assert.strictEqual(reloaded.status, 'completed');
+  });
+
   it('returns confirmed meetings for user', async () => {
     const members = [await createUser(), await createUser(), await createUser()];
     const meeting = await createMeetingDoc(members);
@@ -81,6 +118,38 @@ describe('Meetings integration', () => {
     assert.strictEqual(res.status, 200);
     assert.ok(Array.isArray(res.body));
     assert.strictEqual(res.body[0]._id, meeting._id.toString());
+  });
+
+  it('creates and cancels a confirmed meeting', async () => {
+    const members = [await createUser(), await createUser(), await createUser()];
+
+    const createRes = await request(app)
+      .post('/api/meetings/confirm')
+      .send({
+        groupName: 'Confirmed Meeting',
+        members: members.map((user) => ({ user: user._id, response: 'accepted', respondedAt: new Date() })),
+        sharedInterests: ['kava'],
+        matchPercentage: 77,
+        venue: {
+          address: 'Confirm Street 1',
+          city: 'Ljubljana',
+          country: 'Slovenia',
+          coordinates: { lat: 46.05, lng: 14.5 },
+        },
+        date: futureDate(),
+        status: 'upcoming',
+      });
+
+    assert.strictEqual(createRes.status, 201);
+    assert.ok(createRes.body._id);
+
+    const cancelRes = await request(app)
+      .delete(`/api/meetings/confirm/${createRes.body._id}`);
+
+    assert.strictEqual(cancelRes.status, 204);
+
+    const missing = await Meeting.findById(createRes.body._id);
+    assert.strictEqual(missing, null);
   });
 
   it('returns chat context for meeting members', async () => {
@@ -129,6 +198,26 @@ describe('Meetings integration', () => {
 
     assert.strictEqual(res.status, 403);
     assert.strictEqual(res.body.success, false);
+  });
+
+  it('allows a member to leave meeting and cancels when fewer than 2 active members remain', async () => {
+    const members = [await createUser(), await createUser(), await createUser()];
+    const meeting = await createMeetingDoc(members);
+
+    const firstLeave = await request(app)
+      .delete(`/api/meetings/${meeting._id}/leave`)
+      .set(authHeaderFor(members[0]));
+
+    assert.strictEqual(firstLeave.status, 200);
+    assert.strictEqual(firstLeave.body.success, true);
+    assert.strictEqual(firstLeave.body.meeting.members.find((member) => member.user._id === members[0]._id.toString()).response, 'declined');
+
+    const secondLeave = await request(app)
+      .delete(`/api/meetings/${meeting._id}/leave`)
+      .set(authHeaderFor(members[1]));
+
+    assert.strictEqual(secondLeave.status, 200);
+    assert.strictEqual(secondLeave.body.meeting.status, 'cancelled');
   });
 
   it('allows admin to access chat context', async () => {
