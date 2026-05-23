@@ -31,6 +31,7 @@ Dostop na **http://localhost:3000**
 git clone https://github.com/TPO-2025-2026/Projekt-06
 cd Projekt-06
 git checkout main
+cd src
 ```
 
 **Zagon z Docker (build Angular + Node.js + MongoDB):**

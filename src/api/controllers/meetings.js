@@ -317,6 +317,37 @@ const cancelConfirmedMeeting = async (req, res) => {
   }
 };
 
+/*
+ * @openapi
+ * /meetings/{meetingId}:
+ *  get:
+ *   summary: Get meeting by ID
+ *   description: Retrieves a meeting by its ID.
+ *   tags: [Meetings]
+ *   parameters:
+ *    - name: meetingId
+ *      in: path
+ *      required: true
+ *      schema:
+ *       type: string
+ *       pattern: '^[a-fA-F\d]{24}$'
+ *      description: Meeting ID
+ *      example: 507f1f77bcf86cd799439015
+ *   responses:
+ *    '200':
+ *     description: Meeting retrieved
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/Meeting'
+ *    '404':
+ *     description: Meeting not found
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/components/schemas/ErrorMessage'
+ */
+
 const getMeetingById = async (req, res) => {
   try {
     const meeting = await Meeting.findById(req.params.meetingId).lean();

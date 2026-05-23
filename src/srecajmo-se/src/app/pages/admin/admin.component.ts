@@ -55,6 +55,9 @@ export class AdminComponent implements OnInit {
 
   constructor(private http: HttpClient) {}
 
+  // selection for bulk actions
+  selectedIds: Set<string> = new Set();
+
   ngOnInit(): void {
     this.loadUsers();
   }
@@ -123,6 +126,44 @@ export class AdminComponent implements OnInit {
           user.isActive = res.user.isActive;
           user.activeSearch = res.user.activeSearch;
         }
+      }
+    });
+  }
+
+  toggleSelect(user: AdminUser): void {
+    if (this.selectedIds.has(user._id)) this.selectedIds.delete(user._id);
+    else this.selectedIds.add(user._id);
+  }
+
+  toggleSelectAll(ev: Event): void {
+    const checked = (ev.target as HTMLInputElement).checked;
+    if (checked) {
+      this.users.forEach(u => this.selectedIds.add(u._id));
+    } else {
+      this.selectedIds.clear();
+    }
+  }
+
+  bulkActivate(): void {
+    const ids = Array.from(this.selectedIds);
+    ids.forEach(id => {
+      const user = this.users.find(u => u._id === id);
+      if (user && !user.isActive) {
+        this.http.put(`/api/users/admin/${id}/activate`, {}).subscribe((res: any) => {
+          if (res?.success) user.isActive = true;
+        });
+      }
+    });
+  }
+
+  bulkDeactivate(): void {
+    const ids = Array.from(this.selectedIds);
+    ids.forEach(id => {
+      const user = this.users.find(u => u._id === id);
+      if (user && user.isActive) {
+        this.http.put(`/api/users/admin/${id}/deactivate`, {}).subscribe((res: any) => {
+          if (res?.success) user.isActive = false;
+        });
       }
     });
   }

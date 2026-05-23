@@ -15,6 +15,11 @@
   <!-- Users Table -->
   <div class="admin-table-container">
     <h3><i class="fas fa-users"></i> Uporabniki</h3>
+    <div style="margin-bottom: 0.5rem; display:flex; gap:0.5rem; align-items:center;">
+      <button class="btn-small" (click)="bulkActivate()">Aktiviraj izbrane</button>
+      <button class="btn-small" (click)="bulkDeactivate()">Deaktiviraj izbrane</button>
+      <span style="margin-left:auto; font-size:0.9rem; color:#666;">Izbranih: {{ selectedIds?.size || 0 }}</span>
+    </div>
 
     <div *ngIf="loading" class="table-status">Nalaganje...</div>
     <div *ngIf="error" class="table-status table-error">{{ error }}</div>
@@ -22,6 +27,7 @@
     <table class="admin-table" *ngIf="!loading && !error">
       <thead>
         <tr>
+          <th><input type="checkbox" (change)="toggleSelectAll($event)" [checked]="users?.length && selectedIds?.size === users.length" /></th>
           <th>ID</th>
           <th>Uporabnik</th>
           <th>E-pošta</th>
@@ -32,6 +38,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let user of users">
+          <td><input type="checkbox" [checked]="selectedIds.has(user._id)" (change)="toggleSelect(user)" /></td>
           <td>{{ user._id }}</td>
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
