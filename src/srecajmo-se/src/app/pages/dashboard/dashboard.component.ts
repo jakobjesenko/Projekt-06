@@ -67,6 +67,7 @@ export class DashboardComponent implements OnInit {
   suggestions: GroupSuggestion[] = [];
   confirmedMeetings: ConfirmedMeeting[] = [];
   loadingSuggestions = false;
+  searchToggleError = '';
 
   /**
    * Hrani predloge, ki so trenutno v procesu sprejemanja.
@@ -269,6 +270,8 @@ export class DashboardComponent implements OnInit {
     const newState = !this.user.activeSearch;
     const endpoint = newState ? 'activate-search' : 'deactivate-search';
 
+    this.searchToggleError = '';
+
     this.http
       .put(`/api/users/admin/${endpoint}/${userId}`, {}, { withCredentials: true })
       .subscribe({
@@ -285,6 +288,8 @@ export class DashboardComponent implements OnInit {
         },
         error: (err) => {
           console.error('Napaka pri spremembi iskanja:', err);
+          this.searchToggleError =
+            err?.error?.message || 'Napaka pri spremembi iskanja.';
         }
       });
   }

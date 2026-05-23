@@ -458,14 +458,38 @@ const updateReportStatus = async (req, res) => {
 	}
 
 	try {
-		const updatedReport = await Report.findByIdAndUpdate(
-			reportId,
-			{ status, updatedAt: Date.now() },
-			{ new: true, runValidators: true },
-		);
+		const existingReport = await Report.findById(reportId);
 
-		if (!updatedReport) {
+		if (!existingReport) {
 			return res.status(404).json({ error: 'Prijava ne obstaja.' });
+		}
+
+		const wasResolved = existingReport.status === 'resolved';
+
+		existingReport.status = status;
+		existingReport.updatedAt = Date.now();
+		const updatedReport = await existingReport.save();
+
+		// Ko admin potrdi prijavo, dodaj strike prijavljenemu uporabniku
+		if (!wasResolved && status === 'resolved') {
+			const reportedUser = await User.findById(existingReport.reportedUser);
+
+			if (reportedUser) {
+				const currentStrikes = reportedUser.strikes || 0;
+
+				if (currentStrikes < 3) {
+					reportedUser.strikes = currentStrikes + 1;
+
+					// Pri tretjem strajku se uporabnika deaktivira od iskanja
+					if (reportedUser.strikes >= 3) {
+						reportedUser.status = 'blocked';
+						reportedUser.isActive = false;
+						reportedUser.activeSearch = false;
+					}
+
+					await reportedUser.save();
+				}
+			}
 		}
 
 		return res.status(200).json({ success: true, data: updatedReport });

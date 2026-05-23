@@ -479,6 +479,31 @@ export const updateProfile = async (req, res) => {
 export const activateSearch = async (req, res) => {
   try {
     const { userId } = req.params;
+
+    const requester = req.user;
+    const isAdmin = requester?.role === 'admin';
+    if (!isAdmin && String(requester?._id) !== String(userId)) {
+      return res.status(403).json({
+        success: false,
+        message: 'Nimate dovoljenja za to dejanje.',
+      });
+    }
+
+    const target = await User.findById(userId).select('isActive');
+    if (!target) {
+      return res.status(404).json({
+        success: false,
+        message: 'Uporabnik ne obstaja.',
+      });
+    }
+
+    if (!target.isActive) {
+      return res.status(409).json({
+        success: false,
+        message: 'Deaktivirani ste. Za ponovno aktivacijo iskanja kontaktirajte administratorja.',
+      });
+    }
+
     const user = await User.findByIdAndUpdate(userId, { activeSearch: true }, { new: true });
 
     if (req.session?.user) {
@@ -531,7 +556,23 @@ export const activateSearch = async (req, res) => {
 export const deactivateSearch = async (req, res) => {
   try {
     const { userId } = req.params;
+
+    const requester = req.user;
+    const isAdmin = requester?.role === 'admin';
+    if (!isAdmin && String(requester?._id) !== String(userId)) {
+      return res.status(403).json({
+        success: false,
+        message: 'Nimate dovoljenja za to dejanje.',
+      });
+    }
+
     const user = await User.findByIdAndUpdate(userId, { activeSearch: false }, { new: true });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Uporabnik ne obstaja.',
+      });
+    }
 
     if (req.session?.user) {
       req.session.user.activeSearch = false;
@@ -651,9 +692,11 @@ export const addStrike = async (req, res) => {
 
     user.strikes = currentStrikes + 1;
 
-    // Avtomatski blokira uporabnika na tretjem strajku
-    if (user.strikes === 3) {
+    // Pri tretjem strajku se uporabnika deaktivira od iskanja
+    if (user.strikes >= 3) {
       user.status = 'blocked';
+      user.isActive = false;
+      user.activeSearch = false;
     }
 
     const updatedUser = await user.save();

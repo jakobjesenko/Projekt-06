@@ -1,5 +1,6 @@
 import { Router } from "express";
 import usersCtrl from "../controllers/users.js";
+import { protect } from "../middleware/auth.js";
 
 const usersRouter = Router();
 
@@ -15,10 +16,10 @@ usersRouter.put("/admin/:userId/deactivate", usersCtrl.deactivateUser);
 usersRouter.put("/admin/:userId/activate", usersCtrl.activateUser);
 
 // PUT /api/users/admin/activate-search/:userId
-usersRouter.put('/admin/activate-search/:userId', usersCtrl.activateSearch);
+usersRouter.put('/admin/activate-search/:userId', protect, usersCtrl.activateSearch);
 
 // PUT /api/users/admin/deactivate-search/:userId
-usersRouter.put('/admin/deactivate-search/:userId', usersCtrl.deactivateSearch);
+usersRouter.put('/admin/deactivate-search/:userId', protect, usersCtrl.deactivateSearch);
 
 // POST /api/users/admin/strikes/:userId
 usersRouter.post('/admin/strikes/:userId', usersCtrl.addStrike);

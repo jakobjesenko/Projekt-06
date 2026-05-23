@@ -466,11 +466,15 @@ const generateSuggestions = async (req, res) => {
     }
 
     // 2) Pridobi vse potencialne kandidate iz baze (brez tistih iz obstoječih srečanj)
+    // Uporabniki se ujemajo samo s tistimi z enakim številom strikov (0-0, 1-1, 2-2).
+    // 3 strike pomeni blokado in tak uporabnik tako ali tako ni "active".
+    const currentStrikes = currentUser.strikes || 0;
     const candidates = await User.find({
       _id: { $ne: currentUser._id, $nin: [...alreadyMetIds] },
       activeSearch: true,
       status: "active",
       isActive: true,
+      strikes: currentStrikes,
     }).lean();
 
     console.log(

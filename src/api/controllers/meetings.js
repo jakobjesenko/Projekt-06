@@ -497,6 +497,44 @@ const getMeetingChatContext = async (req, res) => {
   }
 };
 
+/**
+ * @openapi
+ * /meetings/stats/completed:
+ *  get:
+ *   summary: Count meetings already finished by date
+ *   description: Returns the number of meetings whose date is in the past.
+ *   tags: [Meetings]
+ *   responses:
+ *    '200':
+ *     description: Successfully computed completed meetings count
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *         data:
+ *          type: object
+ *          properties:
+ *           count:
+ *            type: integer
+ *            example: 5
+ *    '500':
+ *     description: Server error
+ */
+const getCompletedMeetingsCount = async (req, res) => {
+  try {
+    const count = await Meeting.countDocuments({ date: { $lt: new Date() } });
+    return res.status(200).json({
+      success: true,
+      data: { count },
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 export default {
   getAllMeetings,
   getMeetingChatContext,
@@ -504,5 +542,6 @@ export default {
   deleteMeeting,
   getUserConfirmedMeetings,
   confirmMeeting,
-  cancelConfirmedMeeting
+  cancelConfirmedMeeting,
+  getCompletedMeetingsCount,
 };

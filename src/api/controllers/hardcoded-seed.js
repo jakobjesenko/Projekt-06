@@ -440,7 +440,7 @@ const importHardcodedData = async (req, res) => {
           country: 'Slovenia',
           coordinates: { lat: 46.0527, lng: 14.5105 },
         },
-        date: new Date('2026-05-20T10:00:00Z'),
+        date: new Date('2026-06-20T10:00:00Z'),
         status: 'upcoming',
       },
       {

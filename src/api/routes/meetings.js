@@ -7,6 +7,9 @@ const meetingsRouter = Router();
 // GET /api/meetings
 meetingsRouter.get("/", meetingsCtrl.getAllMeetings);
 
+// GET /api/meetings/stats/completed
+meetingsRouter.get("/stats/completed", meetingsCtrl.getCompletedMeetingsCount);
+
 // GET /api/meetings/:meetingId/chat-context
 meetingsRouter.get("/:meetingId/chat-context", protect, meetingsCtrl.getMeetingChatContext);
 

@@ -66,6 +66,22 @@ export class ChatComponent implements OnInit, OnDestroy {
   editingMessageId: string | null = null;
   editingText = '';
 
+  reportingMember: ChatMember | null = null;
+  reportReason = '';
+  reportDescription = '';
+  reportSubmitting = false;
+  reportError = '';
+  reportSuccess = '';
+
+  readonly reportReasons: string[] = [
+    'Žaljiv jezik in nadlegovanje',
+    'Spam ali oglaševanje',
+    'Neprimerna vsebina ali fotografije',
+    'Lažni profil',
+    'Goljufivo vedenje',
+    'Drugo',
+  ];
+
   private newMessageSub?: Subscription;
   private updateMessageSub?: Subscription;
   private deleteMessageSub?: Subscription;
@@ -330,6 +346,79 @@ export class ChatComponent implements OnInit, OnDestroy {
       default:
         return 'V cakanju';
     }
+  }
+
+  canReportMember(member: ChatMember): boolean {
+    const myId = this.authService.currentUser?.id;
+    return !!myId && member.id !== myId;
+  }
+
+  openReportModal(member: ChatMember): void {
+    this.reportingMember = member;
+    this.reportReason = '';
+    this.reportDescription = '';
+    this.reportError = '';
+    this.reportSuccess = '';
+  }
+
+  closeReportModal(): void {
+    if (this.reportSubmitting) return;
+    this.reportingMember = null;
+    this.reportReason = '';
+    this.reportDescription = '';
+    this.reportError = '';
+    this.reportSuccess = '';
+  }
+
+  submitReport(): void {
+    if (!this.reportingMember || this.reportSubmitting) return;
+
+    if (!this.reportReason) {
+      this.reportError = 'Izberite razlog prijave.';
+      return;
+    }
+
+    const trimmedDescription = this.reportDescription.trim();
+
+    if (this.reportReason === 'Drugo' && trimmedDescription.length < 10) {
+      this.reportError = 'Pri razlogu "Drugo" mora opis vsebovati vsaj 10 znakov.';
+      return;
+    }
+
+    const combined = trimmedDescription
+      ? `${this.reportReason}: ${trimmedDescription}`
+      : this.reportReason;
+
+    if (combined.length < 10 || combined.length > 2000) {
+      this.reportError = 'Opis prijave mora imeti med 10 in 2000 znaki.';
+      return;
+    }
+
+    this.reportSubmitting = true;
+    this.reportError = '';
+    this.reportSuccess = '';
+
+    const payload = {
+      reportedUser: this.reportingMember.id,
+      meeting: this.meetingId,
+      description: combined,
+    };
+
+    this.http.post<{ success: boolean; data?: any; error?: string }>(
+      '/api/reports',
+      payload,
+      { withCredentials: true }
+    ).subscribe({
+      next: () => {
+        this.reportSubmitting = false;
+        this.reportSuccess = 'Prijava uspešno poslana administratorju.';
+        setTimeout(() => this.closeReportModal(), 1500);
+      },
+      error: (err) => {
+        this.reportSubmitting = false;
+        this.reportError = err.error?.error || err.error?.message || 'Napaka pri pošiljanju prijave.';
+      }
+    });
   }
 
   getMemberStatusClass(member: ChatMember): string {

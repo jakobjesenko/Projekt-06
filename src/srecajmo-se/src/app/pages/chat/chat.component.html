@@ -38,6 +38,15 @@
                   {{ getMemberStatusText(member) }}
                 </div>
               </div>
+              <button
+                *ngIf="canReportMember(member)"
+                type="button"
+                class="report-btn"
+                title="Prijavi uporabnika"
+                (click)="openReportModal(member)"
+              >
+                <i class="fas fa-flag"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -165,6 +174,83 @@
           </button>
         </form>
       </section>
+    </div>
+  </div>
+
+  <div class="report-modal-overlay" *ngIf="reportingMember" (click)="closeReportModal()">
+    <div class="report-modal" (click)="$event.stopPropagation()">
+      <div class="report-modal-header">
+        <h3><i class="fas fa-flag"></i> Prijavi uporabnika</h3>
+        <button
+          type="button"
+          class="report-close"
+          (click)="closeReportModal()"
+          [disabled]="reportSubmitting"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <p class="report-target">
+        Prijavljaš uporabnika: <strong>{{ getMemberName(reportingMember) }}</strong>
+      </p>
+
+      <div class="report-reasons">
+        <label class="report-reason-option" *ngFor="let reason of reportReasons">
+          <input
+            type="radio"
+            name="reportReason"
+            [value]="reason"
+            [(ngModel)]="reportReason"
+            [disabled]="reportSubmitting"
+          />
+          <span>{{ reason }}</span>
+        </label>
+      </div>
+
+      <label class="report-description-label" for="reportDescriptionInput">
+        Dodaten opis
+        <span *ngIf="reportReason === 'Drugo'" class="required">(obvezno)</span>
+        <span *ngIf="reportReason !== 'Drugo'" class="optional">(neobvezno)</span>
+      </label>
+      <textarea
+        id="reportDescriptionInput"
+        name="reportDescription"
+        class="report-textarea"
+        rows="4"
+        maxlength="2000"
+        placeholder="Opiši, kaj se je zgodilo..."
+        [(ngModel)]="reportDescription"
+        [disabled]="reportSubmitting"
+      ></textarea>
+
+      <div *ngIf="reportError" class="alert alert-error report-alert">
+        {{ reportError }}
+      </div>
+
+      <div *ngIf="reportSuccess" class="alert report-success">
+        {{ reportSuccess }}
+      </div>
+
+      <div class="report-actions">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="closeReportModal()"
+          [disabled]="reportSubmitting"
+        >
+          Prekliči
+        </button>
+        <button
+          type="button"
+          class="btn-primary"
+          (click)="submitReport()"
+          [disabled]="reportSubmitting || !reportReason"
+        >
+          <i class="fas fa-paper-plane"></i>
+          {{ reportSubmitting ? 'Pošiljanje...' : 'Pošlji prijavo' }}
+        </button>
+      </div>
     </div>
   </div>
 </div>

@@ -7,6 +7,9 @@ const ratingsRouter = Router();
 // GET /api/ratings
 ratingsRouter.get('/', protect, restrictTo('admin'), ratingsCtrl.getAllRatings);
 
+// GET /api/ratings/average
+ratingsRouter.get('/average', protect, restrictTo('admin'), ratingsCtrl.getRatingsAverage);
+
 // POST /api/ratings
 ratingsRouter.post('/', protect, restrictTo('admin', 'user'), ratingsCtrl.createRating);
 

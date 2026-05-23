@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
 interface StatCard {
@@ -17,6 +18,7 @@ interface AdminUser {
   location?: { lat?: number; lng?: number; radius?: number };
   isActive: boolean;
   activeSearch: boolean;
+  strikes?: number;
 }
 
 interface PaginatedUsersResponse {
@@ -29,19 +31,87 @@ interface PaginatedUsersResponse {
   };
 }
 
+interface SuggestionWeights {
+  interests: number;
+  geo: number;
+  time: number;
+}
+
+interface SuggestionConfigResponse {
+  success: boolean;
+  config: { weights: SuggestionWeights };
+}
+
+interface RatingsAverageResponse {
+  success: boolean;
+  data: { average: number; count: number };
+}
+
+interface CompletedMeetingsResponse {
+  success: boolean;
+  data: { count: number };
+}
+
+interface ReportUserRef {
+  _id: string;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  strikes?: number;
+  status?: string;
+  isActive?: boolean;
+  activeSearch?: boolean;
+}
+
+interface ReportMeetingRef {
+  _id: string;
+  groupName?: string;
+  date?: string;
+}
+
+type ReportStatus = 'new' | 'in-review' | 'resolved' | 'rejected';
+
+interface AdminReport {
+  _id: string;
+  reporter: ReportUserRef | string | null;
+  reportedUser: ReportUserRef | string | null;
+  meeting: ReportMeetingRef | string | null;
+  description: string;
+  status: ReportStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface PaginatedReportsResponse {
+  success: boolean;
+  data: AdminReport[];
+  pagination: {
+    total: number;
+    page: number;
+    totalPages: number;
+  };
+}
+
 @Component({
   selector: 'app-admin',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })
 export class AdminComponent implements OnInit {
   stats: StatCard[] = [
     { icon: 'fas fa-users',          value: '...', label: 'Skupaj uporabnikov' },
-    { icon: 'fas fa-calendar-check', value: 318,   label: 'Skupaj srečanj' },
-    { icon: 'fas fa-star',           value: '4.7', label: 'Povprečna ocena' },
+    { icon: 'fas fa-calendar-check', value: '...', label: 'Skupaj srečanj' },
+    { icon: 'fas fa-star',           value: '...', label: 'Povprečna ocena' },
     { icon: 'fas fa-search',         value: '...', label: 'Aktivnih iskanj' },
   ];
+
+  activeTab: 'weights' | 'users' | 'reports' = 'users';
+
+  setActiveTab(tab: 'weights' | 'users' | 'reports'): void {
+    this.activeTab = tab;
+  }
 
   users: AdminUser[] = [];
   loading = true;
@@ -53,10 +123,224 @@ export class AdminComponent implements OnInit {
   totalPages = 0;
   totalUsers = 0;
 
+  weights: SuggestionWeights = { interests: 0.5, geo: 0.2, time: 0.3 };
+  weightsLoading = false;
+  weightsSaving = false;
+  weightsError = '';
+  weightsSuccess = '';
+
+  reports: AdminReport[] = [];
+  reportsLoading = false;
+  reportsError = '';
+  reportStatusFilter: '' | ReportStatus = 'new';
+  reportsPage = 1;
+  reportsPageSize = 20;
+  reportsTotalPages = 0;
+  reportsTotal = 0;
+  reportActionInProgress: Record<string, boolean> = {};
+
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loadWeights();
+    this.loadAverageRating();
+    this.loadCompletedMeetings();
+    this.loadReports();
+  }
+
+  loadReports(page = this.reportsPage): void {
+    this.reportsLoading = true;
+    this.reportsError = '';
+
+    const safePage = page < 1 ? 1 : page;
+    const params = new URLSearchParams({
+      page: String(safePage),
+      limit: String(this.reportsPageSize),
+    });
+
+    if (this.reportStatusFilter) {
+      params.set('status', this.reportStatusFilter);
+    }
+
+    this.http.get<PaginatedReportsResponse>(`/api/reports?${params.toString()}`).subscribe({
+      next: (res) => {
+        this.reports = res.data || [];
+        this.reportsPage = res.pagination.page;
+        this.reportsTotalPages = res.pagination.totalPages;
+        this.reportsTotal = res.pagination.total;
+        this.reportsLoading = false;
+      },
+      error: () => {
+        this.reportsError = 'Napaka pri nalaganju prijav.';
+        this.reportsLoading = false;
+      }
+    });
+  }
+
+  onReportStatusFilterChange(): void {
+    this.reportsPage = 1;
+    this.loadReports();
+  }
+
+  goToReportsPage(page: number): void {
+    if (page < 1 || (this.reportsTotalPages > 0 && page > this.reportsTotalPages)) return;
+    this.loadReports(page);
+  }
+
+  updateReportStatus(report: AdminReport, status: 'resolved' | 'rejected' | 'in-review'): void {
+    if (this.reportActionInProgress[report._id]) return;
+
+    this.reportActionInProgress[report._id] = true;
+
+    const body = new URLSearchParams();
+    body.set('status', status);
+
+    this.http.put<{ success: boolean; data: AdminReport }>(
+      `/api/reports/${report._id}/status`,
+      body.toString(),
+      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+    ).subscribe({
+      next: () => {
+        this.reportActionInProgress[report._id] = false;
+        this.loadReports();
+        // Refresh user list so the strike/deactivation change is visible
+        if (status === 'resolved') {
+          this.loadUsers();
+        }
+      },
+      error: () => {
+        this.reportActionInProgress[report._id] = false;
+        this.reportsError = 'Napaka pri posodabljanju statusa prijave.';
+      }
+    });
+  }
+
+  getReportUserLabel(ref: ReportUserRef | string | null): string {
+    if (!ref) return '—';
+    if (typeof ref === 'string') return ref;
+    return ref.username || `${ref.firstName || ''} ${ref.lastName || ''}`.trim() || ref._id;
+  }
+
+  getReportUserStrikes(ref: ReportUserRef | string | null): number | string {
+    if (!ref || typeof ref === 'string') return '—';
+    return ref.strikes ?? 0;
+  }
+
+  getReportMeetingLabel(ref: ReportMeetingRef | string | null): string {
+    if (!ref) return '—';
+    if (typeof ref === 'string') return ref;
+    return ref.groupName || ref._id;
+  }
+
+  getReportStatusLabel(status: ReportStatus): string {
+    switch (status) {
+      case 'new': return 'Nova';
+      case 'in-review': return 'V pregledu';
+      case 'resolved': return 'Potrjena';
+      case 'rejected': return 'Zavrnjena';
+      default: return status;
+    }
+  }
+
+  getReportStatusClass(status: ReportStatus): string {
+    switch (status) {
+      case 'new': return 'report-status-new';
+      case 'in-review': return 'report-status-review';
+      case 'resolved': return 'report-status-resolved';
+      case 'rejected': return 'report-status-rejected';
+      default: return '';
+    }
+  }
+
+  loadCompletedMeetings(): void {
+    this.http.get<CompletedMeetingsResponse>('/api/meetings/stats/completed').subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.stats[1].value = res.data.count;
+        }
+      },
+      error: () => {
+        this.stats[1].value = '—';
+      }
+    });
+  }
+
+  loadAverageRating(): void {
+    this.http.get<RatingsAverageResponse>('/api/ratings/average').subscribe({
+      next: (res) => {
+        if (res.success) {
+          const avg = res.data.average;
+          this.stats[2].value = res.data.count > 0 ? avg.toFixed(1) : '—';
+        }
+      },
+      error: () => {
+        this.stats[2].value = '—';
+      }
+    });
+  }
+
+  loadWeights(): void {
+    this.weightsLoading = true;
+    this.weightsError = '';
+    this.http.get<SuggestionConfigResponse>('/api/suggestions/config').subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.weights = { ...res.config.weights };
+        }
+        this.weightsLoading = false;
+      },
+      error: () => {
+        this.weightsError = 'Napaka pri nalaganju uteži.';
+        this.weightsLoading = false;
+      }
+    });
+  }
+
+  saveWeights(): void {
+    this.weightsSaving = true;
+    this.weightsError = '';
+    this.weightsSuccess = '';
+
+    const values = [this.weights.interests, this.weights.geo, this.weights.time];
+    if (values.some(v => typeof v !== 'number' || Number.isNaN(v) || v < 0 || v > 1)) {
+      this.weightsError = 'Uteži morajo biti števila med 0 in 1.';
+      this.weightsSaving = false;
+      return;
+    }
+
+    const sum = values.reduce((a, b) => a + b, 0);
+    if (sum <= 0) {
+      this.weightsError = 'Vsota uteži mora biti večja od 0.';
+      this.weightsSaving = false;
+      return;
+    }
+
+    this.http.put<SuggestionConfigResponse>('/api/suggestions/config', {
+      weights: this.weights
+    }).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.weights = { ...res.config.weights };
+          this.weightsSuccess = 'Uteži uspešno posodobljene (normalizirane na vsoto 1).';
+        }
+        this.weightsSaving = false;
+      },
+      error: (err) => {
+        this.weightsError = err?.error?.message || 'Napaka pri shranjevanju uteži.';
+        this.weightsSaving = false;
+      }
+    });
+  }
+
+  resetWeights(): void {
+    this.weights = { interests: 0.5, geo: 0.2, time: 0.3 };
+    this.weightsSuccess = '';
+    this.weightsError = '';
+  }
+
+  get weightsSum(): number {
+    return (this.weights.interests || 0) + (this.weights.geo || 0) + (this.weights.time || 0);
   }
 
   loadUsers(page = this.currentPage): void {

@@ -282,6 +282,192 @@
 	color: #94a3b8;
 }
 
+.report-btn {
+	background: rgba(239, 68, 68, 0.15);
+	border: 1px solid rgba(239, 68, 68, 0.3);
+	color: #fecaca;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	font-size: 0.8rem;
+	transition: all 0.2s ease;
+	flex-shrink: 0;
+}
+
+.report-btn:hover {
+	background: rgba(239, 68, 68, 0.35);
+	color: #fff;
+	transform: scale(1.05);
+}
+
+.report-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(2, 6, 23, 0.7);
+	backdrop-filter: blur(6px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100;
+	padding: 1rem;
+	animation: fadeInUp 0.2s ease;
+}
+
+.report-modal {
+	background: #0f172a;
+	border: 1px solid rgba(129, 140, 248, 0.3);
+	border-radius: 24px;
+	padding: 1.75rem;
+	max-width: 480px;
+	width: 100%;
+	max-height: 90vh;
+	overflow-y: auto;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.report-modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.report-modal-header h3 {
+	margin: 0;
+	color: #ffffff;
+	font-size: 1.2rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.report-modal-header h3 i {
+	color: #f87171;
+}
+
+.report-close {
+	background: rgba(51, 65, 85, 0.6);
+	border: none;
+	color: #cbd5e1;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.2s ease;
+}
+
+.report-close:hover {
+	background: rgba(71, 85, 105, 0.8);
+	color: #fff;
+}
+
+.report-target {
+	color: #cbd5e1;
+	margin: 0 0 1rem;
+	font-size: 0.9rem;
+}
+
+.report-target strong {
+	color: #ffffff;
+}
+
+.report-reasons {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+.report-reason-option {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0.6rem 0.85rem;
+	background: #1e293b;
+	border: 1px solid rgba(129, 140, 248, 0.15);
+	border-radius: 12px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	color: #e2e8f0;
+	font-size: 0.9rem;
+}
+
+.report-reason-option:hover {
+	border-color: rgba(129, 140, 248, 0.4);
+	background: rgba(30, 41, 59, 1);
+}
+
+.report-reason-option input[type="radio"] {
+	accent-color: #818cf8;
+	cursor: pointer;
+}
+
+.report-description-label {
+	display: block;
+	color: #cbd5e1;
+	font-size: 0.9rem;
+	margin-bottom: 0.4rem;
+}
+
+.report-description-label .required {
+	color: #f87171;
+	margin-left: 0.3rem;
+	font-size: 0.8rem;
+}
+
+.report-description-label .optional {
+	color: #94a3b8;
+	margin-left: 0.3rem;
+	font-size: 0.8rem;
+}
+
+.report-textarea {
+	width: 100%;
+	background: #1e293b;
+	border: 2px solid #334155;
+	border-radius: 16px;
+	color: #f1f5f9;
+	padding: 0.75rem 1rem;
+	font-family: inherit;
+	font-size: 0.9rem;
+	resize: vertical;
+	transition: all 0.2s ease;
+}
+
+.report-textarea:focus {
+	outline: none;
+	border-color: #a78bfa;
+	box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.2);
+}
+
+.report-alert {
+	margin: 0.75rem 0 0;
+}
+
+.report-success {
+	margin: 0.75rem 0 0;
+	background: rgba(34, 197, 94, 0.15);
+	border: 1px solid rgba(34, 197, 94, 0.3);
+	color: #bbf7d0;
+	padding: 0.75rem 1rem;
+	border-radius: 14px;
+	font-size: 0.9rem;
+}
+
+.report-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.6rem;
+	margin-top: 1rem;
+}
+
 .chat-main {
 	background: rgba(15, 23, 42, 0.95);
 	backdrop-filter: blur(10px);

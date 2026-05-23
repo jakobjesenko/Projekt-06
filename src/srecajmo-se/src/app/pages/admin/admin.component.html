@@ -12,8 +12,97 @@
     </div>
   </div>
 
+  <!-- Tab Navigation -->
+  <div class="admin-tabs">
+    <button
+      class="admin-tab-btn"
+      [class.active]="activeTab === 'weights'"
+      (click)="setActiveTab('weights')">
+      <i class="fas fa-sliders-h"></i> Uteži
+    </button>
+    <button
+      class="admin-tab-btn"
+      [class.active]="activeTab === 'users'"
+      (click)="setActiveTab('users')">
+      <i class="fas fa-users"></i> Uporabniki
+    </button>
+    <button
+      class="admin-tab-btn"
+      [class.active]="activeTab === 'reports'"
+      (click)="setActiveTab('reports')">
+      <i class="fas fa-flag"></i> Prijave
+    </button>
+  </div>
+
+  <!-- Suggestion scoring weights -->
+  <div class="admin-table-container weights-panel" *ngIf="activeTab === 'weights'">
+    <h3><i class="fas fa-sliders-h"></i> Uteži za priporočilni algoritem</h3>
+    <p class="weights-desc">
+      Skupna formula: <code>score = w<sub>interesi</sub> · sim(interesi) + w<sub>geo</sub> · sim(lokacija) + w<sub>cas</sub> · sim(razpolozljivost)</code>.
+      Vsota uteži bo ob shranjevanju normalizirana na 1.
+    </p>
+
+    <div *ngIf="weightsLoading" class="table-status">Nalaganje uteži...</div>
+
+    <div class="weights-grid" *ngIf="!weightsLoading">
+      <label class="weight-field">
+        <span class="weight-label"><i class="fas fa-heart"></i> Interesi</span>
+        <input
+          type="number"
+          min="0"
+          max="1"
+          step="0.05"
+          [(ngModel)]="weights.interests"
+          name="interests"
+          class="weight-input" />
+      </label>
+
+      <label class="weight-field">
+        <span class="weight-label"><i class="fas fa-map-marker-alt"></i> Lokacija</span>
+        <input
+          type="number"
+          min="0"
+          max="1"
+          step="0.05"
+          [(ngModel)]="weights.geo"
+          name="geo"
+          class="weight-input" />
+      </label>
+
+      <label class="weight-field">
+        <span class="weight-label"><i class="fas fa-clock"></i> Razpolozljivost</span>
+        <input
+          type="number"
+          min="0"
+          max="1"
+          step="0.05"
+          [(ngModel)]="weights.time"
+          name="time"
+          class="weight-input" />
+      </label>
+    </div>
+
+    <div class="weights-sum" *ngIf="!weightsLoading">
+      Trenutna vsota: <strong>{{ weightsSum | number:'1.2-2' }}</strong>
+      <span *ngIf="weightsSum !== 1" class="weights-hint">(bo normalizirana na 1)</span>
+    </div>
+
+    <div class="weights-actions" *ngIf="!weightsLoading">
+      <button class="activate-btn" (click)="saveWeights()" [disabled]="weightsSaving">
+        <i class="fas fa-save"></i>
+        {{ weightsSaving ? 'Shranjujem...' : 'Shrani uteži' }}
+      </button>
+      <button class="deactivate-btn" (click)="resetWeights()" [disabled]="weightsSaving">
+        <i class="fas fa-undo"></i> Privzete vrednosti
+      </button>
+    </div>
+
+    <div *ngIf="weightsError" class="table-status table-error">{{ weightsError }}</div>
+    <div *ngIf="weightsSuccess" class="table-status weights-success">{{ weightsSuccess }}</div>
+  </div>
+
   <!-- Users Table -->
-  <div class="admin-table-container">
+  <div class="admin-table-container" *ngIf="activeTab === 'users'">
     <h3><i class="fas fa-users"></i> Uporabniki</h3>
 
     <div *ngIf="loading" class="table-status">Nalaganje...</div>
@@ -26,6 +115,7 @@
           <th>Uporabnik</th>
           <th>E-pošta</th>
           <th>Lokacija</th>
+          <th>Strikes</th>
           <th>Status</th>
           <th>Akcije</th>
         </tr>
@@ -36,6 +126,11 @@
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
           <td>{{ formatLocation(user.location) }}</td>
+          <td>
+            <span class="strikes-badge" [ngClass]="'strikes-' + (user.strikes || 0)">
+              {{ user.strikes || 0 }} / 3
+            </span>
+          </td>
           <td>
             <span [class]="user.isActive ? 'status-badge-active' : 'status-badge-inactive'">
               {{ user.isActive ? 'Aktiven' : 'Deaktiviran' }}
@@ -67,6 +162,103 @@
         class="pagination-btn"
         (click)="goToPage(currentPage + 1)"
         [disabled]="totalPages > 0 && currentPage >= totalPages">
+        Naslednja
+      </button>
+    </div>
+  </div>
+
+  <!-- Reports Table -->
+  <div class="admin-table-container" *ngIf="activeTab === 'reports'">
+    <h3><i class="fas fa-flag"></i> Prijave uporabnikov</h3>
+
+    <div class="reports-filter">
+      <label for="reportStatusFilter">Filter statusa:</label>
+      <select
+        id="reportStatusFilter"
+        [(ngModel)]="reportStatusFilter"
+        (change)="onReportStatusFilterChange()"
+        class="reports-filter-select"
+      >
+        <option value="new">Nove</option>
+        <option value="in-review">V pregledu</option>
+        <option value="resolved">Potrjene</option>
+        <option value="rejected">Zavrnjene</option>
+        <option value="">Vse</option>
+      </select>
+      <span class="reports-count">Skupaj: {{ reportsTotal }}</span>
+    </div>
+
+    <div *ngIf="reportsLoading" class="table-status">Nalaganje prijav...</div>
+    <div *ngIf="reportsError" class="table-status table-error">{{ reportsError }}</div>
+
+    <table class="admin-table" *ngIf="!reportsLoading && !reportsError && reports.length > 0">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Prijavitelj</th>
+          <th>Prijavljeni</th>
+          <th>Strikes</th>
+          <th>Srečanje</th>
+          <th>Opis</th>
+          <th>Status</th>
+          <th>Akcije</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of reports">
+          <td>{{ report.createdAt | date:'short' }}</td>
+          <td>{{ getReportUserLabel(report.reporter) }}</td>
+          <td>{{ getReportUserLabel(report.reportedUser) }}</td>
+          <td>{{ getReportUserStrikes(report.reportedUser) }} / 3</td>
+          <td>{{ getReportMeetingLabel(report.meeting) }}</td>
+          <td class="report-description-cell">{{ report.description }}</td>
+          <td>
+            <span class="report-status" [ngClass]="getReportStatusClass(report.status)">
+              {{ getReportStatusLabel(report.status) }}
+            </span>
+          </td>
+          <td class="report-actions-cell">
+            <button
+              *ngIf="report.status !== 'resolved'"
+              class="activate-btn"
+              [disabled]="reportActionInProgress[report._id]"
+              (click)="updateReportStatus(report, 'resolved')"
+              title="Potrdi prijavo (uporabnik dobi strike)"
+            >
+              <i class="fas fa-check-circle"></i> Potrdi
+            </button>
+            <button
+              *ngIf="report.status !== 'rejected'"
+              class="deactivate-btn"
+              [disabled]="reportActionInProgress[report._id]"
+              (click)="updateReportStatus(report, 'rejected')"
+              title="Zavrni prijavo"
+            >
+              <i class="fas fa-times-circle"></i> Zavrni
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!reportsLoading && !reportsError && reports.length === 0" class="table-status">
+      Ni prijav za izbrani filter.
+    </div>
+
+    <div class="admin-pagination" *ngIf="!reportsLoading && !reportsError && reportsTotalPages > 1">
+      <button
+        class="pagination-btn"
+        (click)="goToReportsPage(reportsPage - 1)"
+        [disabled]="reportsPage <= 1">
+        Prejsnja
+      </button>
+      <span class="pagination-info">
+        Stran {{ reportsPage }} / {{ reportsTotalPages || 1 }}
+      </span>
+      <button
+        class="pagination-btn"
+        (click)="goToReportsPage(reportsPage + 1)"
+        [disabled]="reportsTotalPages > 0 && reportsPage >= reportsTotalPages">
         Naslednja
       </button>
     </div>

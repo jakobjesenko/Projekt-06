@@ -138,6 +138,9 @@ reportSchema.statics.getPaginatedReports = async function ({
 			.sort({ createdAt: -1 })
 			.skip(offset)
 			.limit(limit)
+			.populate("reporter", "username firstName lastName email")
+			.populate("reportedUser", "username firstName lastName email strikes status isActive activeSearch")
+			.populate("meeting", "groupName date")
 			.lean(),
 		this.countDocuments(query),
 	]);
