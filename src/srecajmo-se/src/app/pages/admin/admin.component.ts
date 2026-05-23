@@ -93,6 +93,28 @@ interface PaginatedReportsResponse {
   };
 }
 
+interface AdminRating {
+  _id: string;
+  user: string;
+  meeting: string;
+  username: string;
+  groupName: string;
+  rating: number;
+  comment?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+interface PaginatedRatingsResponse {
+  success: boolean;
+  data: AdminRating[];
+  pagination: {
+    total: number;
+    page: number;
+    totalPages: number;
+  };
+}
+
 @Component({
   selector: 'app-admin',
   imports: [CommonModule, FormsModule],
@@ -107,11 +129,15 @@ export class AdminComponent implements OnInit {
     { icon: 'fas fa-search',         value: '...', label: 'Aktivnih iskanj' },
   ];
 
-  activeTab: 'weights' | 'users' | 'reports' = 'users';
+activeTab: 'weights' | 'users' | 'reports' | 'ratings' = 'users';
 
-  setActiveTab(tab: 'weights' | 'users' | 'reports'): void {
-    this.activeTab = tab;
+setActiveTab(tab: 'weights' | 'users' | 'reports' | 'ratings'): void {
+  this.activeTab = tab;
+
+  if (tab === 'ratings' && this.ratings.length === 0) {
+    this.loadRatings();
   }
+}
 
   users: AdminUser[] = [];
   loading = true;
@@ -139,6 +165,16 @@ export class AdminComponent implements OnInit {
   reportsTotal = 0;
   reportActionInProgress: Record<string, boolean> = {};
 
+  ratings: AdminRating[] = [];
+  ratingsLoading = false;
+  ratingsError = '';
+  ratingsPage = 1;
+  ratingsPageSize = 20;
+  ratingsTotalPages = 0;
+  ratingsTotal = 0;
+  ratingFilter: '' | number = '';
+  ratingSearch = '';
+
   constructor(private http: HttpClient) {}
 
   // selection for bulk actions
@@ -150,6 +186,7 @@ export class AdminComponent implements OnInit {
     this.loadAverageRating();
     this.loadCompletedMeetings();
     this.loadReports();
+    this.loadRatings();
   }
 
   loadReports(page = this.reportsPage): void {
@@ -455,5 +492,61 @@ export class AdminComponent implements OnInit {
   formatLocation(location?: { lat?: number; lng?: number }): string {
     if (!location || location.lat == null) return '—';
     return `${location.lat.toFixed(2)}, ${location.lng?.toFixed(2)}`;
+  }
+
+  loadRatings(page = this.ratingsPage): void {
+    this.ratingsLoading = true;
+    this.ratingsError = '';
+
+    const safePage = page < 1 ? 1 : page;
+
+    const params = new URLSearchParams({
+      page: String(safePage),
+      limit: String(this.ratingsPageSize)
+    });
+
+    if (this.ratingFilter) {
+      params.set('rating', String(this.ratingFilter));
+    }
+
+    if (this.ratingSearch.trim()) {
+      params.set('search', this.ratingSearch.trim());
+    }
+
+    this.http.get<PaginatedRatingsResponse>(`/api/ratings?${params.toString()}`).subscribe({
+      next: (res) => {
+        this.ratings = res.data || [];
+        this.ratingsPage = res.pagination.page;
+        this.ratingsTotalPages = res.pagination.totalPages;
+        this.ratingsTotal = res.pagination.total;
+        this.ratingsLoading = false;
+      },
+      error: (err) => {
+        console.error('Napaka pri nalaganju ocen:', err);
+        this.ratingsError = 'Napaka pri nalaganju ocen.';
+        this.ratingsLoading = false;
+      }
+    });
+  }
+
+  searchRatings(): void {
+    this.ratingsPage = 1;
+    this.loadRatings();
+  }
+
+  clearRatingFilters(): void {
+    this.ratingFilter = '';
+    this.ratingSearch = '';
+    this.ratingsPage = 1;
+    this.loadRatings();
+  }
+
+  goToRatingsPage(page: number): void {
+    if (page < 1 || (this.ratingsTotalPages > 0 && page > this.ratingsTotalPages)) return;
+    this.loadRatings(page);
+  }
+
+  getStars(rating: number): string {
+    return '★'.repeat(rating) + '☆'.repeat(5 - rating);
   }
 }

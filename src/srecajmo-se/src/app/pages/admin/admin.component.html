@@ -32,6 +32,12 @@
       (click)="setActiveTab('reports')">
       <i class="fas fa-flag"></i> Prijave
     </button>
+    <button
+      class="admin-tab-btn"
+      [class.active]="activeTab === 'ratings'"
+      (click)="setActiveTab('ratings')">
+      <i class="fas fa-star"></i> Ocene
+    </button>
   </div>
 
   <!-- Suggestion scoring weights -->
@@ -173,6 +179,115 @@
       </button>
     </div>
   </div>
+
+  <!-- Ratings Table -->
+  <div class="admin-table-container" *ngIf="activeTab === 'ratings'">
+    <h3><i class="fas fa-star"></i> Ocene srečanj</h3>
+
+    <div style="margin-bottom: 0.75rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+      <input
+        type="text"
+        class="form-input"
+        style="max-width: 280px;"
+        placeholder="Išči po uporabniku, skupini ali komentarju"
+        [(ngModel)]="ratingSearch"
+        (keyup.enter)="searchRatings()"
+      />
+
+      <select
+        class="reports-filter-select"
+        [(ngModel)]="ratingFilter"
+        (change)="searchRatings()"
+      >
+        <option value="">Vse ocene</option>
+        <option [ngValue]="5">5 zvezdic</option>
+        <option [ngValue]="4">4 zvezdice</option>
+        <option [ngValue]="3">3 zvezdice</option>
+        <option [ngValue]="2">2 zvezdici</option>
+        <option [ngValue]="1">1 zvezdica</option>
+      </select>
+
+      <button class="btn-secondary" type="button" (click)="searchRatings()">
+        <i class="fas fa-search"></i> Išči
+      </button>
+
+      <button class="btn-secondary" type="button" (click)="clearRatingFilters()">
+        <i class="fas fa-times"></i> Počisti
+      </button>
+
+      <span style="margin-left: auto; font-size: 0.9rem; color: #94a3b8;">
+        Skupaj: {{ ratingsTotal }}
+      </span>
+    </div>
+
+    <div *ngIf="ratingsLoading" class="table-status">Nalaganje ocen...</div>
+    <div *ngIf="ratingsError" class="table-status table-error">{{ ratingsError }}</div>
+
+    <table class="admin-table" *ngIf="!ratingsLoading && !ratingsError && ratings.length > 0">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Uporabnik</th>
+          <th>Srečanje</th>
+          <th>Ocena</th>
+          <th>Komentar</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let rating of ratings">
+          <td>
+            {{ rating.createdAt ? (rating.createdAt | date:'short') : '—' }}
+          </td>
+
+          <td>
+            {{ rating.username || rating.user }}
+          </td>
+
+          <td>
+            {{ rating.groupName || rating.meeting }}
+          </td>
+
+          <td>
+            <span class="rating-stars">
+              {{ getStars(rating.rating) }}
+            </span>
+            <span style="margin-left: 0.4rem;">
+              {{ rating.rating }}/5
+            </span>
+          </td>
+
+          <td class="report-description-cell">
+            {{ rating.comment || 'Brez komentarja' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!ratingsLoading && !ratingsError && ratings.length === 0" class="table-status">
+      Ni ocen za izbrane filtre.
+    </div>
+
+    <div class="admin-pagination" *ngIf="!ratingsLoading && !ratingsError && ratingsTotalPages > 1">
+      <button
+        class="pagination-btn"
+        (click)="goToRatingsPage(ratingsPage - 1)"
+        [disabled]="ratingsPage <= 1">
+        Prejsnja
+      </button>
+
+      <span class="pagination-info">
+        Stran {{ ratingsPage }} / {{ ratingsTotalPages || 1 }}
+      </span>
+
+      <button
+        class="pagination-btn"
+        (click)="goToRatingsPage(ratingsPage + 1)"
+        [disabled]="ratingsTotalPages > 0 && ratingsPage >= ratingsTotalPages">
+        Naslednja
+      </button>
+    </div>
+  </div>  
 
   <!-- Reports Table -->
   <div class="admin-table-container" *ngIf="activeTab === 'reports'">
