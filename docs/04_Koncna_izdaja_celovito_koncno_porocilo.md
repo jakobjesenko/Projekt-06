@@ -2223,7 +2223,7 @@ Sistem uporablja tudi zunanje storitve, predvsem e-poštni servis za verifikacij
 ### Število vrstic kode
 
 - Število vrstic (demo aplikacija): 2500
-- Število vrstic kode aplikacije: 
+- Število vrstic kode aplikacije: okrog 22.000
 
 ## 6 Vodenje projekta
 
