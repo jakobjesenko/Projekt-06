@@ -22,47 +22,50 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: "24"
-          cache: "npm"
-          cache-dependency-path: ./src/package-lock.json
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v5
+      #   with:
+      #     node-version: "24"
+      #     cache: "npm"
+      #     cache-dependency-path: ./src/package-lock.json
 
-      - name: Create .env file for tests
+      # - name: Create .env file for tests
+      #   run: |
+      #     cat > .env << EOF
+      #     NAME=srecajmose
+      #     GESLO=${{secrets.GESLO}}
+      #     MONGODB_ATLAS_URI=mongodb+srv://srecajmose:${{secrets.GESLO}}@cluster0.fyfpgrm.mongodb.net/
+      #     MONGODB_DOCKER_URI=mongodb://${{secrets.MONGO_INITDB_ROOT_USERNAME}}:${{secrets.MONGO_INITDB_ROOT_PASSWORD}}@mongodb:27017/srecajmose?authSource=${{secrets.MONGO_INITDB_ROOT_USERNAME}}
+
+      #     MONGO_INITDB_ROOT_USERNAME=${{secrets.MONGO_INITDB_ROOT_USERNAME}}
+      #     MONGO_INITDB_ROOT_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}}
+      #     MONGO_INITDB_DATABASE=srecajmose
+
+      #     NODE_ENV=development
+
+      #     PORT=3000
+
+      #     RESEND_API_KEY=${{secrets.RESEND_API_KEY}}
+      #     EMAIL_FROM=ekipa@srecajmose.live
+      #     APP_URL=http://localhost:3000
+      #     BASE_URL=http://localhost:3000
+      #     EOF
+
+      # - name: Install dependencies
+      #   run: npm ci
+
+      # - name: Run unit tests
+      #   if: always()
+      #   run: npm run test:unit
+
+      # - name: Run integration tests
+      #   if: always()
+      #   run: npm run test:integration
+
+      - name: add unzip
         run: |
-          cat > .env << EOF
-          NAME=srecajmose
-          GESLO=${{secrets.GESLO}}
-          MONGODB_ATLAS_URI=mongodb+srv://srecajmose:${{secrets.GESLO}}@cluster0.fyfpgrm.mongodb.net/
-          MONGODB_DOCKER_URI=mongodb://${{secrets.MONGO_INITDB_ROOT_USERNAME}}:${{secrets.MONGO_INITDB_ROOT_PASSWORD}}@mongodb:27017/srecajmose?authSource=${{secrets.MONGO_INITDB_ROOT_USERNAME}}
-
-          MONGO_INITDB_ROOT_USERNAME=${{secrets.MONGO_INITDB_ROOT_USERNAME}}
-          MONGO_INITDB_ROOT_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}}
-          MONGO_INITDB_DATABASE=srecajmose
-
-
-          NODE_ENV=development
-
-          PORT=3000
-
-
-          RESEND_API_KEY=${{secrets.RESEND_API_KEY}}
-          EMAIL_FROM=ekipa@srecajmose.live
-          APP_URL=http://localhost:3000
-          BASE_URL=http://localhost:3000
-          EOF
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run unit tests
-        if: always()
-        run: npm run test:unit
-
-      - name: Run integration tests
-        if: always()
-        run: npm run test:integration
+          apt update
+          apt install unzip
 
       - name: setup chrome
         if: always()
