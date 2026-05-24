@@ -5,6 +5,10 @@ FROM node:24.11-alpine AS angular-builder
 
 WORKDIR /angular
 
+# Puppeteer is only needed for tests, not for production Angular build.
+# Skip Chromium download to avoid long/stalled docker builds.
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+
 # Kopiraj package datoteke za Angular
 COPY srecajmo-se/package*.json ./
 
@@ -34,8 +38,13 @@ COPY package*.json ./
 # Namesti backend odvisnosti
 RUN npm install --legacy-peer-deps
 
-# Kopiraj backend kodo
-COPY . .
+# Kopiraj samo backend datoteke, ki jih runtime potrebuje
+COPY app.js ./
+COPY server.js ./
+COPY api ./api
+COPY public ./public
+COPY data ./data
+COPY uporabniki.txt ./uporabniki.txt
 
 # Kopiraj zgrajeno Angular aplikacijo iz prvega stage-a
 COPY --from=angular-builder /angular/dist/srecajmo-se /usr/src/app/srecajmo-se/dist/srecajmo-se
