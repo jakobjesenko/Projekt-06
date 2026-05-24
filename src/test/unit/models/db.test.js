@@ -12,6 +12,7 @@ describe('DB module (db.js)', () => {
   let originalNodeEnv;
   let originalAtlasUri;
   let originalDockerUri;
+  let originalMongoUri;
 
   const importDb = async () => {
     const suffix = `${Date.now()}-${Math.random()}`;
@@ -22,6 +23,7 @@ describe('DB module (db.js)', () => {
     originalNodeEnv = process.env.NODE_ENV;
     originalAtlasUri = process.env.MONGODB_ATLAS_URI;
     originalDockerUri = process.env.MONGODB_DOCKER_URI;
+    originalMongoUri = process.env.MONGODB_URI;
 
     connectStub = sinon.stub(mongoose, 'connect');
     onStub = sinon.stub(mongoose.connection, 'on');
@@ -56,11 +58,18 @@ describe('DB module (db.js)', () => {
     } else {
       process.env.MONGODB_DOCKER_URI = originalDockerUri;
     }
+
+    if (originalMongoUri === undefined) {
+      delete process.env.MONGODB_URI;
+    } else {
+      process.env.MONGODB_URI = originalMongoUri;
+    }
   });
 
   it('uses local MongoDB URI by default (non-production)', async () => {
     process.env.NODE_ENV = 'test';
     delete process.env.MONGODB_ATLAS_URI;
+    delete process.env.MONGODB_URI;
 
     await importDb();
 

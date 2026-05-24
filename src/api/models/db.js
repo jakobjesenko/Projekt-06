@@ -1,6 +1,9 @@
 // api/models/db.js
 import dotenv from "dotenv";
-dotenv.config();
+// Don't load .env during tests to avoid overriding test-controlled env vars
+if (process.env.NODE_ENV !== 'test') {
+  dotenv.config();
+}
 
 import mongoose from "mongoose";
 
