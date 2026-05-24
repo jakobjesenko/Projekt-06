@@ -2219,25 +2219,32 @@ Sistem uporablja tudi zunanje storitve, predvsem e-poštni servis za verifikacij
 
 ### Katere teste ste izvedli in ocena ustreznosti testov
 
-V projektu smo do tega trenutka izvedli predvsem dve skupini avtomatiziranih testov: **API teste v mapi `src/test`** in **Angular teste v `src/srecajmo-se/src/app/**/*.spec.ts`**. **E2E testi** so predvideni kot naslednji korak in bodo dopolnili obstoječo testno osnovo z dejanskim klikanjem po aplikaciji v brskalniku.
+V projektu smo do trenutne faze izvedli predvsem dve skupini avtomatiziranih testov: backend API teste v mapi `src/test` ter Angular unit in integration teste v `src/srecajmo-se/src/app/**/*.spec.ts`. Poleg že izvedenih testov smo pripravili in deloma implementirali tudi E2E (end-to-end) testiranje, ki predstavlja naslednji korak pri preverjanju celotnega delovanja sistema skozi dejanski uporabniški vmesnik v brskalniku.
 
-Na strani backenda smo preverjali modelno in integracijsko plast. Med **unit testi** smo pokrili validacijo modelov za uporabnike, srečanja, sporočila, ocene, prijave, kontakte, analitiko ter pomožne storitve za JWT in e-pošto. To pomeni, da so bile preverjene ključne omejitve shem, privzete vrednosti, osnovne metode modelov in robni primeri, kot so podvojeni vnosi, neveljavna polja ter hashiranje gesel. Med **integracijskimi testi** smo preverili glavne REST tokove za avtentikacijo, uporabnike, srečanja, sporočila, ocene, prijave, kontakt in predloge. Posebej smo dodali teste za nova srečanja in admin tokove pri prijavah, vključno z logiko strike-ov in blokade uporabnika ob tretji potrjeni prijavi. Backend testni sklop trenutno potrjuje, da so ključni endpointi skladni z implementacijo in da osnovni poslovni tokovi delujejo na realni podatkovni plasti v in-memory MongoDB okolju.
+Na strani backenda smo preverjali predvsem modelno in integracijsko plast sistema. Med unit testi smo pokrili validacijo modelov za uporabnike, srečanja, sporočila, ocene, prijave, kontakte, analitiko ter pomožne storitve za JWT avtentikacijo in pošiljanje e-pošte. Testi preverjajo ključne omejitve shem, privzete vrednosti, pravilno hashiranje gesel ter robne primere, kot so podvojeni vnosi, neveljavna polja in napačni podatki. Med integracijskimi testi smo preverili glavne REST tokove za avtentikacijo, uporabnike, srečanja, sporočila, ocene, prijave, kontaktni obrazec in predloge skupin. Posebej smo testirali administratorske tokove pri obravnavi prijav, vključno z logiko strike-ov in blokado uporabnika ob tretji potrjeni prijavi. Backend testni sklop tako potrjuje pravilno delovanje ključnih endpointov in osnovnih poslovnih procesov v izoliranem in-memory MongoDB okolju.
 
-Na strani frontenda smo izvedli **Angular unit in integration teste** za glavne komponente in storitve uporabniškega ter administratorskega dela. Pokriti so bili tokovi registracije, prijave, ponastavitve gesla, dashboarda, urejanja profila, FAQ, chata, ocenjevanja, kontaktnega obrazca, admin pregleda uporabnikov, prijav, srečanj, ocen in nastavitev algoritma. V testih smo preverili prikaz podatkov, validacijo obrazcev, pošiljanje HTTP zahtev, odziv na napake, preklapljanje tabov, osveževanje podatkov po admin akcijah ter uporabniški tok zapustitve srečanja in oddaje prijave v chatu. Tudi frontend testni sklop je trenutno avtomatiziran in ponovljiv.
+Na strani frontenda smo izvedli Angular unit in integration teste za glavne komponente uporabniškega in administratorskega dela aplikacije. Pokriti so bili tokovi registracije, prijave, ponastavitve gesla, dashboarda, urejanja profila, FAQ strani, skupinskega chata, oddaje ocen, kontaktnega obrazca ter administratorskih pregledov uporabnikov, prijav, srečanj, ocen in nastavitev algoritma pametne komponente. V testih smo preverjali pravilno validacijo obrazcev, prikaz podatkov, pošiljanje HTTP zahtev, odziv sistema na napake, preklapljanje administratorskih tabov, osveževanje podatkov po akcijah administratorja ter uporabniške tokove, kot sta zapustitev srečanja in prijava neprimernega vedenja v chatu. Frontend testni sklop je avtomatiziran, ponovljiv in primeren za regresijsko testiranje po nadaljnjem razvoju sistema.
 
-Ocena ustreznosti testov je **dobra za trenutno fazo projekta**, ker pokrivajo najpomembnejše poslovne tokove in večino kritičnih robnih primerov na backendu in frontendu. Testi so primerni za regresijsko preverjanje po spremembah kode, saj hitro ujamejo napake v modelih, API pogodbah in komponentni logiki. Vendar še niso popolni: trenutno še **ne pokrivajo celotnega end-to-end toka v pravem brskalniku** od registracije do zaključka srečanja, prav tako ne preverjajo uporabniške izkušnje skozi dejanski UI, večjih integracijskih scenarijev med več komponentami hkrati in nefunkcionalnih lastnosti, kot so zmogljivost, obremenitev ter različno vedenje v več brskalnikih. Zato bodo E2E testi pomemben naslednji korak in bodo dopolnili obstoječo, že razmeroma dobro pokrito avtomatizirano testno osnovo.
+Poleg unit in integration testov smo izvedli tudi del E2E testov v pravem brskalniškem okolju. Implementirani in uspešno preverjeni so bili predvsem scenariji prijave uporabnika ter administratorskega pregleda in obravnave prijav. Pri tem smo preverili pravilno delovanje uporabniškega prijavnega toka, preusmeritev na dashboard po uspešni avtentikaciji ter administratorski tok reševanja prijav in posodabljanja statusov uporabnikov. Ostali E2E scenariji so pripravljeni v obliki testne matrike in predstavljajo osnovo za nadaljnjo implementacijo celovitih uporabniških testov.
+
+| E2E scenarij | Status | Namen | Predpogoji | Potek testa | Pričakovani rezultat |
+|---|---|---|---|---|---|
+| Registracija uporabnika | V pripravi | Preveriti celoten registracijski tok | Aplikacija je zagnana, uporabnik še nima računa | Uporabnik odpre začetno stran, izvede registracijo skozi vse 3 korake in odda obrazec | Račun je uspešno ustvarjen in uporabnik prejme potrditev ali preusmeritev na prijavo |
+| Prijava in dostop do dashboarda | Izvedeno | Preveriti prijavni tok in prehod v uporabniški del sistema | Obstaja veljaven uporabniški račun | Uporabnik vnese e-pošto in geslo ter odda prijavni obrazec | Sistem uporabnika uspešno prijavi in preusmeri na dashboard |
+| Iskanje skupine in potrditev predloga | V pripravi | Preveriti glavni tok iskanja skupin | Uporabnik je prijavljen in ima izpolnjen profil | Uporabnik sproži iskanje skupine, pregleda predlog in potrdi udeležbo | Predlog se premakne med potrjena srečanja |
+| Skupinski chat | V pripravi | Preveriti komunikacijo znotraj potrjene skupine | Uporabnik ima potrjeno srečanje | Uporabnik odpre chat, pregleda zgodovino in pošlje novo sporočilo | Sporočilo se uspešno prikaže v chatu |
+| Zapustitev srečanja | V pripravi | Preveriti odstranitev uporabnika iz skupine | Uporabnik ima potrjeno srečanje | Uporabnik izbere možnost zapustitve srečanja in potrdi akcijo | Srečanje se odstrani iz potrjenih srečanj |
+| Admin: pregled in rešitev prijave | Izvedeno | Preveriti administratorski tok obravnave prijav | Administrator je prijavljen in obstaja prijava | Administrator odpre prijavo in jo označi kot rešeno | Status prijave se posodobi, uporabniku pa se po potrebi doda strike oziroma blokada |
+
+Ocena ustreznosti izvedenih testov je za trenutno fazo razvoja dobra, saj pokrivajo večino ključnih poslovnih tokov in pomembnih robnih primerov tako na backendu kot na frontendu. Testi omogočajo učinkovito regresijsko preverjanje po spremembah kode ter hitro zaznavanje napak v modelih, API pogodbah in komponentni logiki. Delno implementirani E2E testi dodatno potrjujejo pravilno delovanje ključnih uporabniških in administratorskih scenarijev skozi dejanski uporabniški vmesnik. Kljub temu testna pokritost še ni popolna. Trenutno še niso implementirani vsi načrtovani E2E scenariji, prav tako še niso pokrite nefunkcionalne lastnosti sistema, kot so zmogljivost, obremenitveno testiranje in primerjava delovanja v različnih brskalnikih. Nadaljnja implementacija E2E testov zato predstavlja pomemben naslednji korak pri zagotavljanju kakovosti sistema.
 
 
 ### Število vrstic kode
 
 - Število vrstic (demo aplikacija): 2500
-- Število vrstic kode aplikacije: 
+- Število vrstic kode aplikacije: okrog 22.000
 
 ## 6 Vodenje projekta
-
-- Opišite uporabljen razvojni proces.
-- Kateri so bili ključni dogodki med projektom? Vključite tudi datume.
-- Še kaj drugega?
 
 **Razvojni proces**: Iterativni razvoj po tedenskih "rezinah" (1 teden)
 
@@ -2265,10 +2272,6 @@ Ekipa ne uporablja strogega Scrum procesa, ker bi vsakodnevna formalna srečanja
 | 2. 5. 2026 | Poenostavitev glede na čas | Zaradi skupnega zamika pri integraciji in algoritmu smo se odločili začasno opustiti WebSocket (Socket.io) za chat v trenutni iteraciji. | Chat je v 2. iteraciji implementiran le kot simulacija prek REST API-ja (pošiljanje sporočil s periodičnim osveževanjem). Pravi chat v realnem času bo v 3. iteraciji. |
 
 ### 6.1 Usklajevanje ekipe
-
-- Kdaj in kako pogosto se je ekipa sestajala?
-- Kako ste komunicirali?
-- Kaj ste dosegli med sestanki?
 
 **Razporeditev dela:**
 - Delo razdelimo po tedenskih rezinah z jasno določenimi nalogami za vsakega člana.
@@ -2298,9 +2301,308 @@ Ekipa ne uporablja strogega Scrum procesa, ker bi vsakodnevna formalna srečanja
 
 - Povzetek razdelitve projekta na aktivnosti s seznamom izdelkov, vključno z Ganttovim diagramom in grafom PERT.
 
+**Razdelitev projekta na aktivnosti in izdelki:**
+
+Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka aktivnost je opisana z oznako, datumom začetka in konca, trajanjem, imenom, opisom, obsegom, cilji, odvisnostmi od ostalih aktivnosti, omejitvami, rezultati ter informacijo o tem, ali je na kritični poti.
+
+---
+
+**Aktivnost A1: Analiza problema in definicija projektne ideje**
+
+| **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
+|:---:|:---:|:---:|:---:|:---:|
+| A1 | 23. 2. 2026 | 27. 2. 2026 | 5 delovnih dni |  Da |
+
+- **Ime**: Analiza problema in definicija projektne ideje
+- **Opis**: Ekipa analizira obstoječe rešitve (Tinder, Bumble, Meetup, Timeleft, We3, 222), identificira problemsko domeno socialne izolacije v urbanih okoljih ter definira projektno idejo, motivacijo in namen sistema.
+- **Obseg aktivnosti**: Pregled in primerjava vsaj 5 sorodnih aplikacij; definicija problemske domene; opredelitev motivacije, namena in smernic projekta; identifikacija ciljne skupine in končnih uporabnikov.
+- **Cilji aktivnosti**: Jasno opredeljena projektna ideja z dokumentirano primerjavo sorodnih rešitev in definirano dodano vrednostjo predlagane rešitve.
+- **Odvisnost od ostalih aktivnosti**: Ni odvisna od nobene aktivnosti.
+- **Omejitve**: Časovna omejitev 1 teden; dostop le do javno dostopnih informacij o sorodnih platformah.
+- **Rezultati**: Dokumentirana analiza problemske domene (poglavje 0 in 1), primerjalna analiza sorodnih rešitev.
+
+---
+
+**Aktivnost A2: Analiza zahtev in definicija ciljev projekta**
+
+| **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
+|:---:|:---:|:---:|:---:|:---:|
+| A2 | 2. 3. 2026 | 6. 3. 2026 | 5 delovnih dni |  Da |
+
+- **Ime**: Analiza zahtev in definicija ciljev projekta
+- **Opis**: Definicija potreb in zahtev deležnikov, oblikovanje 6 uporabniških zgodb s testi sprejemljivosti ter določitev merljivih projektnih ciljev. Validacija ideje z zunanjim naročnikom (asistentom predmeta TPO).
+- **Obseg aktivnosti**: Identifikacija primarnih in sekundarnih deležnikov; opredelitev 6 uporabniških zgodb; definicija 6 merljivih projektnih ciljev (C1–C6); merila uspeha in validacija z naročnikom.
+- **Cilji aktivnosti**: Dokumentirane in validirane zahteve sistema z merljivimi cilji, pripravljene za načrtovanje implementacije.
+- **Odvisnost od ostalih aktivnosti**: A1 (razumevanje problemske domene in sorodnih rešitev).
+- **Omejitve**: Časovna omejitev 1 teden; dostop do zunanjega naročnika za validacijo.
+- **Rezultati**: Poglavje 2 (Potrebe naročnika), poglavje 3 (Cilji projekta), 6 uporabniških zgodb s testi sprejemljivosti, povratna informacija naročnika.
+
+---
+
+**Aktivnost A3: Načrt sistema in projektno vodenje**
+
+| **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
+|:---:|:---:|:---:|:---:|:---:|
+| A3 | 9. 3. 2026 | 16. 3. 2026 | 6 delovnih dni |  Da |
+
+- **Ime**: Načrt sistema in projektno vodenje
+- **Opis**: Oblikovanje arhitekture sistema, izbira tehnologij (Node.js, MongoDB, Angular), določitev projektnega pristopa, vodenja in komunikacije; priprava Ganttovega diagrama in PERT grafa; COCOMO II finančna ocena; definicija vlog in odgovornosti. **Vse mora biti zaključeno do 16. 3. 2026 (oddaja predloga projekta).**
+- **Obseg aktivnosti**: Blokovni diagram sistema; definicija tehnologij, orodij in knjižnic; terminski načrt (Gantt.puml – vključno s točnimi datumi); PERT graf za analizo kritične poti (PERT.puml); COCOMO II ocena stroškov; definicija vlog in odgovornosti ter projektnega pristopa; finalizacija celotnega predloga projekta.
+- **Cilji aktivnosti**: Celoten predlog projekta z dokumentiranim načrtom implementacije, terminskim načrtom in finančno oceno, oddan 16. 3. 2026.
+- **Odvisnost od ostalih aktivnosti**: A1, A2.
+- **Omejitve**: Vsi diagrami (Gantt, PERT, COCOMO II) morajo biti dokončani pred oddajo 16. 3.; znanje ekipe o razpoložljivih tehnologijah in razvojnih pristopih.
+- **Rezultati**: Celoten predlog projekta (ta dokument), Ganttov diagram (Gantt.puml), PERT graf (PERT.puml), COCOMO II ocena.
+
+---
+
+**Aktivnost A4: Postavitev razvojnega okolja**
+
+| **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
+|:---:|:---:|:---:|:---:|:---:|
+| A4 | 23. 3. 2026 | 27. 3. 2026 | 5 delovnih dni |  Da |
+
+- **Ime**: Postavitev razvojnega okolja in projektne infrastrukture
+- **Opis**: Inicializacija Git repozitorija s strukturiranimi vejami (main, develop, feature), konfiguracija Docker razvojnega okolja, vzpostavitev CI/CD pipeline (GitHub Actions) ter določitev osnovne projektne strukture Node.js in Angular aplikacije.
+- **Obseg aktivnosti**: Git repozitorij z vejami; Docker in docker-compose konfiguracija; CI/CD z avtomatiziranimi testi ob vsaki spremembi; osnovna projektna struktura (backend, frontend, tests); README z navodili za vzpostavitev.
+- **Cilji aktivnosti**: Delujoče, standardizirano razvojno okolje za vse člane ekipe z avtomatizirano CI/CD integracijo.
+- **Odvisnost od ostalih aktivnosti**: A3 (odločitve o tehnologijah in arhitekturi).
+- **Omejitve**: Poznavanje DevOps orodij; brezplačni tir oblačnih storitev.
+- **Rezultati**: Git repozitorij, Docker konfiguracija, CI/CD pipeline, osnovna projektna struktura.
+
+---
+
+**Aktivnost A5: Implementacija podatkovne baze in backend API**
+
+| **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
+|:---:|:---:|:---:|:---:|:---:|
+| A5 | 30. 3. 2026 | 10. 4. 2026 | 10 delovnih dni |  Ne |
+
+- **Ime**: Implementacija podatkovne baze in backend REST API
+- **Opis**: Modeliranje in implementacija MongoDB podatkovne baze ter razvoj REST API za registracijo, prijavo in CRUD operacije za uporabniške profile (interesi, lokacija, časovna razpoložljivost) z JWT avtentikacijo.
+- **Obseg aktivnosti**: MongoDB sheme (uporabniki, interesi, lokacija, razpoložljivost, srečanja); REST API z vsaj 10 endpointi; JWT avtentikacija; validacija vhodnih podatkov; unit testi za ključne endpointe.
+- **Cilji aktivnosti**: Delujoč backend, ki podpira registracijo, prijavo in vse CRUD operacije za profil – osnova za integracijo algoritma in frontenda.
+- **Odvisnost od ostalih aktivnosti**: A4 (razvojno okolje).
+- **Omejitve**: Časovna omejitev 2 tedna; zahteva poznavanje Node.js in MongoDB.
+- **Rezultati**: Delujoč REST API, MongoDB sheme, unit testi API endpointov, Postman kolekcija.
+
+---
+
+**Aktivnost A6: Razvoj algoritma za oblikovanje skupin**
+
+| **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
+|:---:|:---:|:---:|:---:|:---:|
+| A6 | 30. 3. 2026 | 24. 4. 2026 | 20 delovnih dni |  Da |
+
+- **Ime**: Razvoj algoritma za oblikovanje skupin
+- **Opis**: Razvoj jedrne komponente sistema – algoritma za oblikovanje skupin na podlagi scoring funkcije `score = w1 * similarity + w2 * distance + w3 * time_overlap`. Vključuje modul za podobnost interesov (Cosine Similarity), modul za geografsko razdaljo in modul za časovno usklajevanje, z iterativno optimizacijo uteži na sintetičnih podatkih.
+- **Obseg aktivnosti**: Implementacija vseh treh modulov; definicija in implementacija scoring funkcije; testiranje na sintetičnih podatkih (100+ profilov); primerjava metrik (Cosine Similarity, Jaccard Index); optimizacija uteži glede na testne rezultate.
+- **Cilji aktivnosti**: Delujoč algoritem z dokumentiranimi utežmi, ki dosega: povprečna podobnost interesov > 0,6, geografska razdalja < 10 km, časovno prekrivanje > 2 uri.
+- **Odvisnost od ostalih aktivnosti**: A4, A5 (osnovna podatkovna baza za testne podatke).
+- **Omejitve**: Časovna omejitev 4 tedne; zahteva ekspertizo pri algoritmih podobnosti; tveganje nizke kakovosti skupin.
+- **Rezultati**: Algoritem za oblikovanje skupin z dokumentiranimi utežmi, unit testi algoritma, evalvacijska poročila na testnih podatkih.
+
+---
+
+**Aktivnost A7: Razvoj uporabniškega vmesnika**
+
+| **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
+|:---:|:---:|:---:|:---:|:---:|
+| A7 | 30. 3. 2026 | 17. 4. 2026 | 15 delovnih dni |  Ne |
+
+- **Ime**: Razvoj uporabniškega vmesnika (Angular)
+- **Opis**: Razvoj Angular spletne aplikacije s ključnimi maskami: registracija, prijava, upravljanje profila (interesi, lokacija, časovna razpoložljivost), prikaz predlaganih skupin in oddaja povratnih informacij. Integracija z backend API.
+- **Obseg aktivnosti**: Angular aplikacija z vsaj 6 maskami; integracija z REST API; responziven dizajn; osnovno testiranje UI komponent.
+- **Cilji aktivnosti**: Intuitiven UI, ki omogoča registracijo in prejem predlogov skupin v manj kot 5 minutah (cilj C4).
+- **Odvisnost od ostalih aktivnosti**: A4, A5 (API mora biti vsaj delno funkcionalen).
+- **Omejitve**: Časovna omejitev 3 tedne; zahteva izkušnje z Angular-jem; UX mora biti intuitiven in enostaven.
+- **Rezultati**: Delujoča Angular aplikacija integrirana z backend API; end-to-end tok od registracije do predloga skupin.
+
+---
+
+**Aktivnost A8: Celovito testiranje sistema**
+
+| **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
+|:---:|:---:|:---:|:---:|:---:|
+| A8 | 27. 4. 2026 | 8. 5. 2026 | 10 delovnih dni |  Da |
+
+- **Ime**: Celovito testiranje sistema
+- **Opis**: Sistematično testiranje vseh komponent: unit testi za algoritem in API, integracijski testi, funkcionalni testi ključnih tokov ter end-to-end testi. Odpravljanje napak in stabilizacija sistema.
+- **Obseg aktivnosti**: Unit testi (pokritost > 70%); integracijski testi za vse ključne API endpointe; funkcionalni testi za vsaj 3 ključne tokove (registracija, iskanje skupin, povratne informacije); E2E testi.
+- **Cilji aktivnosti**: Stabilen sistem brez kritičnih napak, z dokumentirano pokritostjo testov, pripravljen za testiranje z realnimi uporabniki.
+- **Odvisnost od ostalih aktivnosti**: A5, A6, A7 (vsi razvojni moduli morajo biti dokončani).
+- **Omejitve**: Časovna omejitev 2 tedna; treba je pokriti vse kritične funkcionalnosti.
+- **Rezultati**: Testna poročila, dokumentirana pokritost testov, seznam in odprava napak, stabilna verzija sistema.
+
+---
+
+**Aktivnost A9: Testiranje z realnimi uporabniki**
+
+| **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
+|:---:|:---:|:---:|:---:|:---:|
+| A9 | 11. 5. 2026 | 22. 5. 2026 | 10 delovnih dni |  Da |
+
+- **Ime**: Testiranje z realnimi uporabniki (alfa in beta)
+- **Opis**: Dvofazno testiranje z realnimi uporabniki: alfa testiranje z manjšo skupino (5–10 oseb) za kvalitativne povratne informacije in iterativne popravke, nato beta testiranje z večjo skupino (20+ oseb) za zbiranje kvantitativnih metrik kakovosti skupin in zadovoljstva.
+- **Obseg aktivnosti**: Alfa testiranje (5–10 testnih uporabnikov, kvalitativne povratne informacije, iterativne izboljšave); beta testiranje (20+ uporabnikov, kvantitativne metrike); analiza ocen predlaganih skupin; merjenje dejansko izvedenih srečanj.
+- **Cilji aktivnosti**: Potrditev ciljev C3–C6: > 70% zadovoljstvo uporabnikov, > 60% dejansko izvedenih srečanj, < 5 minut od registracije do predloga skupin.
+- **Odvisnost od ostalih aktivnosti**: A8 (stabilen sistem brez kritičnih napak).
+- **Omejitve**: Dostop do 20+ testnih uporabnikov; čas usklajevanja srečanj; skladnost z GDPR.
+- **Rezultati**: Evalvacijska poročila, statistike zadovoljstva uporabnikov, evidenca izvedenih srečanj, seznam prioritetnih izboljšav za finalizacijo.
+
+---
+
+**Aktivnost A10: Optimizacija, dokumentacija in predstavitev**
+
+| **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
+|:---:|:---:|:---:|:---:|:---:|
+| A10 | 20. 5. 2026 | 25. 5. 2026 | 4 delovnih dni |  Da |
+
+- **Ime**: Optimizacija, dokumentacija in predstavitev projekta
+- **Opis**: Implementacija prioritetnih izboljšav na podlagi beta testiranja, poliranje UI, odpravljanje preostalih napak, priprava celovite končne dokumentacije (arhitekturni načrt, opis algoritma, tehnično poročilo) in priprava zaključne predstavitve.
+- **Obseg aktivnosti**: Implementacija vsaj 3 prioritetnih izboljšav iz beta testiranja; poliranje UI; finalna dokumentacija sistema; analiza in sinteza rezultatov evalvacijske študije; zaključna predstavitev.
+- **Cilji aktivnosti**: Finalna, stabilna verzija sistema z dokumentacijo; uspešna zaključna predstavitev projekta.
+- **Odvisnost od ostalih aktivnosti**: A9; aktivnost se v zaključnem delu lahko delno izvaja vzporedno z zadnjimi dnevi beta testiranja.
+- **Omejitve**: Časovna omejitev 2 tedna; prioritizacija izboljšav glede na razpoložljiv čas.
+- **Rezultati**: Finalna verzija sistema, celovito končno poročilo, zaključna predstavitev projekta.
+
+---
+
+
+![Ganttov diagram](./gradivo/img/Gantt123.png)
+**Ganttov diagram**
+
+
+![PERT diagram](./gradivo/img/PERT.png "PERT diagram")
+**Graf PERT**
+
+
+
 ### 6.3 Finančni načrt
 
-- Finančni načrt projekta po metodi COCOMO II.
+Dekompozicija na funkcijske točke
+
+Na podlagi specifikacije (8 zaslonskih mask + administratorski vmesnik) identificiram funkcionalnosti:
+
+| Vrsta FP | Ime funkcionalnosti | Objekt | Določitev obsega | Utež |
+| :--- | :--- | :--- | :--- | :--- |
+| **EI (External Input)** | | | | |
+| EI1 | Registracija (3 koraki) | zaslon | AVG (3-koračni obrazec) | 4 |
+| EI2 | Prijava v sistem | zaslon | LOW (enostaven vnos) | 3 |
+| EI3 | Urejanje profila | zaslon | AVG (nekaj polj) | 4 |
+| EI4 | Aktivacija iskanja (gumb) | zaslon | LOW (en gumb) | 3 |
+| EI5 | Sprejem/zavrnitev skupine | zaslon | LOW (dva gumba) | 3 |
+| EI6 | Oddajanje ocene po srečanju | zaslon | AVG (ocene in komentar) | 4 |
+| EI7 | Administratorski vnos (interesi) | zaslon | LOW | 3 |
+| **EQ (External Query)** | | | | |
+| EQ1 | Osnovna stran (prijavljen uporabnik) | zaslon | AVG (agregacija podatkov) | 4 |
+| EQ2 | Prikaz predlagane skupine | zaslon | AVG (prikaz profilov) | 4 |
+| EQ3 | Prikaz potrjenih/preteklih srečanj | poročilo | AVG (seznam s filtri) | 4 |
+| **EO (External Output)** | | | | |
+| EO1 | Prikaz lokacije na zemljevidu | izhod | AVG (integracija z API) | 5 |
+| EO2 | Administrativno poročilo (statistika) | poročilo | AVG (grafi, števci) | 5 |
+| **ILF (Internal Logical File)** | | | | |
+| ILF1 | Uporabnik (in povezane tabele) | baza | AVG (> 5 tabel) | 10 |
+| ILF2 | Srečanje (in članstva, lokacije) | baza | AVG (> 5 tabel) | 10 |
+| ILF3 | Ocene | baza | LOW | 7 |
+| **EIF (External Interface File)** | | | | |
+| EIF1 | Zemljevid (Google Maps / OpenStreetMap) | zunanji sistem | AVG | 7 |
+
+Izračun funkcijskih točk (FP)
+
+Seštevek uteži:
+
+| Kategorija | Vsota uteži |
+| :--- | :--- |
+| EI (7 funkcionalnosti) | 4+3+4+3+3+4+3 = 24 |
+| EQ (3 funkcionalnosti) | 4+4++4 = 12 |
+| EO (2 funkcionalnosti) | 5+5 = 10 |
+| ILF (3 tabele) | 10+10+7 = 27 |
+| EIF (1 zunanji sistem) | 7 |
+| **SKUPAJ FP** | **80** |
+
+Skupno število funkcijskih točk = **80**.
+
+Pretvorba v vrstice kode (SLOC) za JavaScript
+
+Po tabeli QSM 2014 za JavaScript: `1 FP = 47 SLOC` (povprečje).
+
+`size = FP × SLOC_JavaScript = 80 × 47 = 3.760 SLOC`
+
+`size_KSLOC =3.760 / 1000 = **3,76 KSLOC**`
+
+Izračun parametra B (Eksponent)
+
+Na podlagi ocene projektne skupine (upoštevajoč, da gre za študentski projekt):
+
+| Dejavnik | Opis | Vrednost | Utež (wᵢ) |
+| :--- | :--- | :--- | :--- |
+| PREC (Precedenčnost) | Nizka (Nov projekt, nekaj izkušenj) | Nizka | 4 |
+| FLEX (Fleksibilnost) | Visoka (Študenti lahko prilagajajo) | Visoka | 2 |
+| RESL (Obvladovanje tveganj) | Nizka (Omejene izkušnje s tveganji) | Nizka | 4 |
+| TEAM (Uigranost skupine) | Zelo nizka (Nova, neuigrana skupina) | Zelo nizka | 5 |
+| PMAT (Zrelost procesa) | Zelo nizka (CMM Level 1) | Zelo nizka | 5 |
+| **SKUPAJ** | | | **20** |
+
+Formula: `B = 1.01 + 0.01 × ∑wi`
+
+`B = 1.01 + 0.01 × 20 = 1.01 + 0,20 = **1,21**`
+
+Izračun parametra M (Množitelji napora)
+
+Realna ocena za študentski projekt z uporabo JavaScript/Node.js:
+
+| Dejavnik | Opis | Ocena | Utež | Obrazložitev |
+| :--- | :--- | :--- | :--- | :--- |
+| PERS | Sposobnost osebja | Nizka | 1,12* | Študenti, omejene izkušnje |
+| PREX | Izkušnje s platformo | Nizka | 1,10* | Omejene izkušnje z JS ekosistemom |
+| RCPX | Zanesljivost in kompleksnost | Nominalna | 1,00 | Srednje kompleksen projekt |
+| RUSE | Zahteve za ponovno uporabo | Zelo nizka | 0,91* | Koda se ne bo ponovno uporabljala |
+| PDIF | Težavnost platforme | Nominalna | 1,00 | Standardni JS/Node.js |
+| SCED | Časovni pritisk | Nominalna | 1,00 | Privzeto |
+| FCIL | Orodja in komunikacija | Visoka | 0,90* | Sodobna orodja, GitHub, Discord |
+
+Izračun M:
+
+`M = 1,12 × 1,10 × 1,00 × 0,91 × 1,00 × 1,00 × 0,90 = **1,01**`
+
+Končni izračun časovne zahtevnosti
+
+Formula: `effort_PM = A × size^B × M`, kjer je `A = 2,94`.
+
+Izračun potence `size^B`:
+- `size_KSLOC = 3,76`
+- `B = 1,21`
+- `size^B = 4,97`
+
+Vstavimo v formulo:
+
+`effort_PM = 2,94 × 4,97 × 1,01 = **14,75 PM**`
+
+Preračun v študentske dni in koledarski čas
+
+**Predpostavke:**
+- 1 človek-mesec (PM) = 160 ur (standard)
+- Študentski delovni dan = 5 ur (popravljeno)
+- Število študentov = 5 (predpostavka za projekt TPO)
+
+**Izračun:**
+- Napor iz Cocomo 2 pretvorjen v ČD = 295 ČD
+- Pretvorba ČD v ŠČD = 472 ŠČD 
+
+### 6.4 Končni rezultati
+
+| Parameter | Vrednost |
+| :--- | :--- |
+| Funkcijske točke (FP) | 80 |
+| Ocenjeno število vrstic kode (SLOC) | 3.76 |
+| Velikost v KSLOC | 3,76 KSLOC |
+| Eksponent B | 1,21 |
+| Množitelji napora M | 1,01 |
+| Človek-meseci (profesionalni, referenčna COCOMO ocena) | 14,75 PM |
+| Študentski dnevi | ~472 ŠČD |
+| Ocena stroškov | 472 ŠČD * 10 € => 4720 €
+
+![COCOMO II ocena](./gradivo/img/cocomo-ii-ocena.png)
 
 ## 7. Ekipa
 
