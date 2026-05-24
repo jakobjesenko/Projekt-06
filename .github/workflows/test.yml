@@ -12,7 +12,7 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.49.0-noble
 
-    timeout-minutes: 10
+    timeout-minutes: 30
 
     defaults:
       run:
@@ -65,13 +65,10 @@ jobs:
         run: npm run test:integration
 
       - name: setup chrome
+        if: always()
         uses: browser-actions/setup-chrome@v2
         with:
           install-dependencies: true
-
-      - run: |
-          chrome --version
-          which chrome
 
       - name: setup angular
         if: always()
