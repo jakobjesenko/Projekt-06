@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-<<<<<<< HEAD
-import { HttpClient } from '@angular/common/http';
-
-=======
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
 import { ContactService, ContactRecord } from '../../services/contact.service';
 
->>>>>>> development
 interface StatCard {
   icon: string;
   value: string | number;
@@ -26,8 +21,6 @@ interface AdminUser {
   location?: { lat?: number; lng?: number; radius?: number };
   isActive: boolean;
   activeSearch: boolean;
-<<<<<<< HEAD
-=======
   strikes?: number;
 }
 
@@ -181,47 +174,18 @@ interface PaginatedContactsResponse {
     page: number;
     totalPages: number;
   };
->>>>>>> development
 }
 
 @Component({
   selector: 'app-admin',
-<<<<<<< HEAD
-  imports: [CommonModule],
-=======
+  standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
->>>>>>> development
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })
 export class AdminComponent implements OnInit {
   stats: StatCard[] = [
     { icon: 'fas fa-users',          value: '...', label: 'Skupaj uporabnikov' },
-<<<<<<< HEAD
-    { icon: 'fas fa-calendar-check', value: 318,   label: 'Skupaj srečanj' },
-    { icon: 'fas fa-star',           value: '4.7', label: 'Povprečna ocena' },
-    { icon: 'fas fa-search',         value: '...', label: 'Aktivnih iskanj' },
-  ];
-
-  users: AdminUser[] = [];
-  loading = true;
-  error = '';
-
-  constructor(private http: HttpClient) {}
-
-  ngOnInit(): void {
-    this.loadUsers();
-  }
-
-  loadUsers(): void {
-    this.loading = true;
-    this.error = '';
-    this.http.get<AdminUser[]>('/api/admin/users/').subscribe({
-      next: (users) => {
-        this.users = users;
-        this.stats[0].value = users.length;
-        this.stats[3].value = users.filter(u => u.activeSearch).length;
-=======
     { icon: 'fas fa-calendar-check', value: '...', label: 'Skupaj srečanj' },
     { icon: 'fas fa-star',           value: '...', label: 'Povprečna ocena' },
     { icon: 'fas fa-search',         value: '...', label: 'Aktivnih iskanj' },
@@ -685,7 +649,6 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports' | 'co
         this.totalUsers = res.pagination.total;
         this.stats[0].value = res.pagination.total;
         this.stats[3].value = res.data.filter(u => u.activeSearch).length;
->>>>>>> development
         this.loading = false;
       },
       error: () => {
@@ -695,12 +658,6 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports' | 'co
     });
   }
 
-<<<<<<< HEAD
-  toggleActive(user: AdminUser): void {
-    const url = user.isActive
-      ? `/api/admin/users/${user._id}/deactivate`
-      : `/api/admin/users/${user._id}/activate`;
-=======
   searchUsers(): void {
     this.currentPage = 1;
     this.loadUsers();
@@ -722,7 +679,6 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports' | 'co
     const url = user.isActive
       ? `/api/users/admin/${user._id}/deactivate`
       : `/api/users/admin/${user._id}/activate`;
->>>>>>> development
 
     this.http.put<{ success: boolean; user: AdminUser }>(url, {}).subscribe({
       next: (res) => {
@@ -734,8 +690,6 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports' | 'co
     });
   }
 
-<<<<<<< HEAD
-=======
   toggleSelect(user: AdminUser): void {
     if (this.selectedIds.has(user._id)) this.selectedIds.delete(user._id);
     else this.selectedIds.add(user._id);
@@ -774,13 +728,10 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports' | 'co
     });
   }
 
->>>>>>> development
   formatLocation(location?: { lat?: number; lng?: number }): string {
     if (!location || location.lat == null) return '—';
     return `${location.lat.toFixed(2)}, ${location.lng?.toFixed(2)}`;
   }
-<<<<<<< HEAD
-=======
 
   loadRatings(page = this.ratingsPage): void {
     this.ratingsLoading = true;
@@ -976,5 +927,4 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports' | 'co
       default: return '';
     }
   }
->>>>>>> development
 }

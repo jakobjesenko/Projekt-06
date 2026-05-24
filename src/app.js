@@ -1,6 +1,7 @@
 import express from "express";
 import session from "express-session";
 import http from "node:http";
+import { existsSync } from "node:fs";
 import { verifyToken } from "./api/utils/jwt.js";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -160,13 +161,24 @@ app.get("/api/swagger.json", (req, res) => {
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const angularDistPath = join(__dirname, "srecajmo-se", "dist", "srecajmo-se", "browser");
+const angularPathCandidates = [
+  join(__dirname, "srecajmo-se", "build", "browser"),
+  join(__dirname, "srecajmo-se", "dist", "srecajmo-se", "browser"),
+];
 
-app.use(express.static(angularDistPath, {
-  index: false
-}));
+const angularDistPath = angularPathCandidates.find((path) => existsSync(join(path, "index.html")));
+
+if (angularDistPath) {
+  app.use(express.static(angularDistPath, {
+    index: false
+  }));
+}
 
 app.get(/^\/(?!api).*/, (req, res) => {
+  if (!angularDistPath) {
+    return res.status(500).send("Angular build not found. Run 'ng build --output-path=build' in src/srecajmo-se.");
+  }
+
   res.sendFile(join(angularDistPath, "index.html"));
 });
 

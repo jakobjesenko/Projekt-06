@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-contact',
-  imports: [],
-=======
 import { CommonModule, Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -15,13 +8,10 @@ import { ContactService } from '../../services/contact.service';
   selector: 'app-contact',
   standalone: true,
   imports: [CommonModule, FormsModule],
->>>>>>> development
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.css'
 })
 export class ContactComponent {
-<<<<<<< HEAD
-=======
   name = '';
   lastName = '';
   email = '';
@@ -90,6 +80,5 @@ export class ContactComponent {
   goBack(): void {
     this.location.back();
   }
->>>>>>> development
 
 }

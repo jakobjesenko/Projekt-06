@@ -1,25 +1,15 @@
-<<<<<<< HEAD
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-=======
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
->>>>>>> development
 
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-<<<<<<< HEAD
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [LoginComponent]
-=======
   let authMock: any;
   let routerSpy: any;
 
@@ -36,28 +26,22 @@ describe('LoginComponent', () => {
       providers: [
         { provide: AuthService, useValue: authMock }
       ]
->>>>>>> development
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-<<<<<<< HEAD
-=======
     // create a spy on the Router provided by RouterTestingModule
     const router = TestBed.inject(Router);
     spyOn(router, 'navigate');
     routerSpy = router;
 
->>>>>>> development
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-<<<<<<< HEAD
-=======
 
   it('shows validation error when email or password missing', () => {
     component.email = '';
@@ -104,5 +88,4 @@ describe('LoginComponent', () => {
     component.resendVerification();
     expect(authMock.resendVerification).toHaveBeenCalledWith('a@b.com');
   });
->>>>>>> development
 });

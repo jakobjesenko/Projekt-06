@@ -1,8 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-
-import { AdminComponent } from './admin.component';
-=======
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
@@ -10,27 +6,10 @@ import { HttpClient } from '@angular/common/http';
 
 import { AdminComponent } from './admin.component';
 import { ContactService } from '../../services/contact.service';
->>>>>>> development
 
 describe('AdminComponent', () => {
   let component: AdminComponent;
   let fixture: ComponentFixture<AdminComponent>;
-<<<<<<< HEAD
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AdminComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(AdminComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-=======
   let httpSpy: any;
   let contactSpy: any;
 
@@ -332,6 +311,5 @@ describe('AdminComponent', () => {
 
   it('formatLocation formats coordinates', () => {
     expect(component.formatLocation({ lat: 12.3456, lng: 78.9 })).toBe('12.35, 78.90');
->>>>>>> development
   });
 });

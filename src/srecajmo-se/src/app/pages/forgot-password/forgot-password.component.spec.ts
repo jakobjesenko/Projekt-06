@@ -1,25 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-=======
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { throwError } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
->>>>>>> development
 
 import { ForgotPasswordComponent } from './forgot-password.component';
 
 describe('ForgotPasswordComponent', () => {
   let component: ForgotPasswordComponent;
   let fixture: ComponentFixture<ForgotPasswordComponent>;
-<<<<<<< HEAD
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ForgotPasswordComponent]
-=======
   let authSpy: any;
 
   beforeEach(async () => {
@@ -31,7 +22,6 @@ describe('ForgotPasswordComponent', () => {
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => null } }, params: of({}) } },
         { provide: AuthService, useValue: authSpy }
       ]
->>>>>>> development
     })
     .compileComponents();
 
@@ -43,8 +33,6 @@ describe('ForgotPasswordComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-<<<<<<< HEAD
-=======
 
   it('shows validation error when email is empty', () => {
     component.email = '   ';
@@ -73,5 +61,4 @@ describe('ForgotPasswordComponent', () => {
     expect(component.loading).toBeFalse();
     expect(component.errorMessage).toBe('Napaka');
   });
->>>>>>> development
 });

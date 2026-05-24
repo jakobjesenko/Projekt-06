@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-rating',
-  imports: [],
-  templateUrl: './rating.component.html',
-  styleUrl: './rating.component.css'
-})
-export class RatingComponent {
-
-}
-=======
 import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -237,4 +224,3 @@ export class RatingComponent implements OnInit {
     this.location.back();
   }
 }
->>>>>>> development

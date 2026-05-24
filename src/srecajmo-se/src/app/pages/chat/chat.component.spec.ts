@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ChatComponent } from './chat.component';
-=======
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -13,27 +8,11 @@ import { ChatComponent } from './chat.component';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from '../../services/message.service';
 import { SocketService } from '../../services/socket.service';
->>>>>>> development
 
 describe('ChatComponent', () => {
   let component: ChatComponent;
   let fixture: ComponentFixture<ChatComponent>;
 
-<<<<<<< HEAD
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ChatComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(ChatComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-=======
   const meetingId = 'meeting-1';
 
   const authStub = {
@@ -334,6 +313,5 @@ describe('ChatComponent', () => {
 
     expect(component.reportSubmitting).toBeFalse();
     expect(component.reportError).toBe('Napaka pri prijavi.');
->>>>>>> development
   });
 });

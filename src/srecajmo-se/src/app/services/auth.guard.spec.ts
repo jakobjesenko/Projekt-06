@@ -1,20 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-import { CanActivateFn } from '@angular/router';
-
-import { authGuard } from './auth.guard';
-
-describe('authGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => authGuard(...guardParameters));
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
-
-  it('should be created', () => {
-    expect(executeGuard).toBeTruthy();
-=======
 import { PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -68,6 +52,5 @@ describe('AuthGuard', () => {
     expect(res).toBeFalse();
     expect(logoutSpy).toHaveBeenCalledWith(false);
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
->>>>>>> development
   });
 });

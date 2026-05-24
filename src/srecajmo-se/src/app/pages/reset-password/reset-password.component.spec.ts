@@ -1,25 +1,15 @@
-<<<<<<< HEAD
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-=======
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
->>>>>>> development
 
 import { ResetPasswordComponent } from './reset-password.component';
 
 describe('ResetPasswordComponent', () => {
   let component: ResetPasswordComponent;
   let fixture: ComponentFixture<ResetPasswordComponent>;
-<<<<<<< HEAD
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ResetPasswordComponent]
-=======
   let authSpy: any;
   let router: Router;
 
@@ -32,24 +22,18 @@ describe('ResetPasswordComponent', () => {
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => null }, queryParamMap: { get: () => null } }, params: of({}) } },
         { provide: AuthService, useValue: authSpy }
       ]
->>>>>>> development
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(ResetPasswordComponent);
     component = fixture.componentInstance;
-<<<<<<< HEAD
-=======
     router = TestBed.inject(Router);
->>>>>>> development
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-<<<<<<< HEAD
-=======
 
   it('sets errorMessage on init when token is missing', () => {
     expect(component.errorMessage).toBe('Manjka token za ponastavitev gesla.');
@@ -127,5 +111,4 @@ describe('ResetPasswordComponent', () => {
     expect(component.loading).toBeFalse();
     expect(component.errorMessage).toBe('Reset failed');
   });
->>>>>>> development
 });

@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { RatingComponent } from './rating.component';
-=======
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -13,27 +8,10 @@ import { By } from '@angular/platform-browser';
 
 import { RatingComponent } from './rating.component';
 import { RatingService } from '../../services/rating.service';
->>>>>>> development
 
 describe('RatingComponent', () => {
   let component: RatingComponent;
   let fixture: ComponentFixture<RatingComponent>;
-<<<<<<< HEAD
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [RatingComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(RatingComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-=======
   let httpSpy: any;
   let ratingSpy: any;
   let routerSpy: any;
@@ -248,6 +226,5 @@ describe('RatingComponent', () => {
   it('goBack calls location.back', () => {
     component.goBack();
     expect(locationSpy.back).toHaveBeenCalled();
->>>>>>> development
   });
 });

@@ -1,24 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-
-import { ContactComponent } from './contact.component';
-=======
 import { Location } from '@angular/common';
 import { of } from 'rxjs';
 
 import { ContactComponent } from './contact.component';
 import { ContactService } from '../../services/contact.service';
->>>>>>> development
 
 describe('ContactComponent', () => {
   let component: ContactComponent;
   let fixture: ComponentFixture<ContactComponent>;
-<<<<<<< HEAD
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ContactComponent]
-=======
   let nativeElement: HTMLElement;
   let contactServiceSpy: jasmine.SpyObj<ContactService>;
   let locationSpy: jasmine.SpyObj<Location>;
@@ -44,24 +33,18 @@ describe('ContactComponent', () => {
         { provide: ContactService, useValue: contactServiceSpy },
         { provide: Location, useValue: locationSpy }
       ]
->>>>>>> development
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(ContactComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-<<<<<<< HEAD
-=======
     nativeElement = fixture.nativeElement as HTMLElement;
->>>>>>> development
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-<<<<<<< HEAD
-=======
 
   it('renders the contact form fields and submit button', () => {
     expect(nativeElement.querySelector('h1')?.textContent).toContain('Piši nam');
@@ -107,5 +90,4 @@ describe('ContactComponent', () => {
     expect(emailLink?.getAttribute('href')).toBe('mailto:info@srecajmose.si');
     expect(emailLink?.textContent).toContain('info@srecajmose.si');
   });
->>>>>>> development
 });

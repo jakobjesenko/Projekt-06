@@ -16,11 +16,12 @@ import { ChatComponent } from './pages/chat/chat.component';
 import { RatingComponent } from './pages/rating/rating.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { AuthGuard } from './services/auth.guard';
+import { GuestGuard } from './services/guest.guard';
 
 export const routes: Routes = [
   { path: '',           component: HomeComponent },
-  { path: 'login',      component: LoginComponent },
-  { path: 'register',   component: RegisterComponent },
+  { path: 'login',      component: LoginComponent, canActivate: [GuestGuard] },
+  { path: 'register',   component: RegisterComponent, canActivate: [GuestGuard] },
   { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'profile/edit', component: EditProfileComponent, canActivate: [AuthGuard] },
   { path: 'admin',      component: AdminComponent, canActivate: [AuthGuard], data: { role: 'admin' } },

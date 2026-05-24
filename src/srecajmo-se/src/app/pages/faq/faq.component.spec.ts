@@ -1,20 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-=======
 import { Router } from '@angular/router';
->>>>>>> development
 
 import { FaqComponent } from './faq.component';
 
 describe('FaqComponent', () => {
   let component: FaqComponent;
   let fixture: ComponentFixture<FaqComponent>;
-<<<<<<< HEAD
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [FaqComponent]
-=======
   let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
@@ -24,23 +15,16 @@ describe('FaqComponent', () => {
     await TestBed.configureTestingModule({
       imports: [FaqComponent],
       providers: [{ provide: Router, useValue: routerSpy }]
->>>>>>> development
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(FaqComponent);
     component = fixture.componentInstance;
-<<<<<<< HEAD
-    fixture.detectChanges();
-=======
->>>>>>> development
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-<<<<<<< HEAD
-=======
 
   it('filters items by question and keywords', () => {
     expect(component.filteredItems.length).toBe(component.items.length);
@@ -92,5 +76,4 @@ describe('FaqComponent', () => {
     expect(event.preventDefault).toHaveBeenCalled();
     expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/gdpr');
   });
->>>>>>> development
 });

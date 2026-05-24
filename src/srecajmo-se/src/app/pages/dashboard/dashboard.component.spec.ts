@@ -1,8 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-
-import { DashboardComponent } from './dashboard.component';
-=======
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
@@ -12,27 +8,10 @@ import { HttpClient } from '@angular/common/http';
 
 import { DashboardComponent } from './dashboard.component';
 import { AuthService } from '../../services/auth.service';
->>>>>>> development
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
-<<<<<<< HEAD
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [DashboardComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(DashboardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-=======
   let authSpy: any;
   let httpSpy: any;
   let router: Router;
@@ -269,6 +248,5 @@ describe('DashboardComponent', () => {
 
     expect(component.leavingMeetingIds.has('m2')).toBeFalse();
     expect(component.meetingActionError).toBe('Ne gre');
->>>>>>> development
   });
 });

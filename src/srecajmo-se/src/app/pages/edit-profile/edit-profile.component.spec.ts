@@ -1,22 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-=======
 import { HttpClient } from '@angular/common/http';
 import { PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
->>>>>>> development
 
 import { EditProfileComponent } from './edit-profile.component';
 
 describe('EditProfileComponent', () => {
   let component: EditProfileComponent;
   let fixture: ComponentFixture<EditProfileComponent>;
-<<<<<<< HEAD
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [EditProfileComponent]
-=======
   let routerSpy: jasmine.SpyObj<Router>;
   let httpSpy: jasmine.SpyObj<HttpClient>;
 
@@ -37,20 +28,11 @@ describe('EditProfileComponent', () => {
         { provide: HttpClient, useValue: httpSpy },
         { provide: PLATFORM_ID, useValue: 'server' }
       ]
->>>>>>> development
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(EditProfileComponent);
     component = fixture.componentInstance;
-<<<<<<< HEAD
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-=======
     localStorage.clear();
     sessionStorage.clear();
   });
@@ -201,5 +183,4 @@ describe('EditProfileComponent', () => {
   it('returns null when no stored user exists', () => {
     expect((component as any).getStoredUser()).toBeNull();
   });
->>>>>>> development
 });

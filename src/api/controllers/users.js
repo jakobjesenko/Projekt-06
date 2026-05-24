@@ -16,12 +16,6 @@ const getSessionUser = (user) => ({
   role: user.role,
 });
 
-<<<<<<< HEAD
-const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find({ role: { $ne: 'admin' } });
-    res.status(200).json(users);
-=======
 /**
  * @openapi
  * /users/admin:
@@ -154,14 +148,11 @@ const getAllUsers = async (req, res) => {
         totalPages: totalCount > 0 ? Math.ceil(totalCount / limit) : 0,
       },
     });
->>>>>>> development
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-<<<<<<< HEAD
-=======
 /**
  * @openapi
  * /users/admin/{userId}/deactivate:
@@ -201,7 +192,6 @@ const getAllUsers = async (req, res) => {
  *       schema:
  *        $ref: '#/components/schemas/ErrorMessage'
  */
->>>>>>> development
 const deactivateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
@@ -215,8 +205,6 @@ const deactivateUser = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-=======
 /**
  * @openapi
  * /users/admin/{userId}/activate:
@@ -256,7 +244,6 @@ const deactivateUser = async (req, res) => {
  *       schema:
  *        $ref: '#/components/schemas/ErrorMessage'
  */
->>>>>>> development
 const activateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.userId, { isActive: true }, { new: true });
@@ -266,8 +253,6 @@ const activateUser = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-=======
 /**
  * @openapi
  * /users/profile/{userId}:
@@ -372,7 +357,6 @@ const activateUser = async (req, res) => {
  *       schema:
  *        $ref: '#/components/schemas/ErrorMessage'
  */
->>>>>>> development
 export const updateProfile = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -455,11 +439,6 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-export const activateSearch = async (req, res) => {
-  try {
-    const { userId } = req.params;
-=======
 /**
  * @openapi
  * /users/admin/activate-search/{userId}:
@@ -525,7 +504,6 @@ export const activateSearch = async (req, res) => {
       });
     }
 
->>>>>>> development
     const user = await User.findByIdAndUpdate(userId, { activeSearch: true }, { new: true });
 
     if (req.session?.user) {
@@ -538,12 +516,6 @@ export const activateSearch = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-export const deactivateSearch = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const user = await User.findByIdAndUpdate(userId, { activeSearch: false }, { new: true });
-=======
 /**
  * @openapi
  * /users/admin/deactivate-search/{userId}:
@@ -601,7 +573,6 @@ export const deactivateSearch = async (req, res) => {
         message: 'Uporabnik ne obstaja.',
       });
     }
->>>>>>> development
 
     if (req.session?.user) {
       req.session.user.activeSearch = false;
@@ -613,8 +584,6 @@ export const deactivateSearch = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-=======
 /**
  * @openapi
  * /users/admin/strikes/{userId}:
@@ -1126,7 +1095,6 @@ export const updateUserStatus = async (req, res) => {
   }
 };
 
->>>>>>> development
 export default {
   getAllUsers,
   deactivateUser,
@@ -1134,11 +1102,8 @@ export default {
   updateProfile,
   activateSearch,
   deactivateSearch,
-<<<<<<< HEAD
-=======
   addStrike,
   getUserStrikes,
   updateStrikes,
   updateUserStatus
->>>>>>> development
 };

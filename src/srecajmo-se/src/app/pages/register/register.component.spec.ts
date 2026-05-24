@@ -1,35 +1,14 @@
-<<<<<<< HEAD
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-=======
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpClient } from '@angular/common/http';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
->>>>>>> development
 
 import { RegisterComponent } from './register.component';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
-<<<<<<< HEAD
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [RegisterComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(RegisterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-=======
   let http: HttpClient;
 
   beforeEach(async () => {
@@ -116,5 +95,4 @@ describe('RegisterComponent', () => {
     expect(component.currentStep).toBe(1);
     expect(component.selectedInterests.length).toBe(0);
   }));
->>>>>>> development
 });

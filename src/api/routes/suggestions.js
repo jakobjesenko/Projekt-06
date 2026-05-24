@@ -1,10 +1,5 @@
 import { Router } from "express";
 import suggestionsCtrl from "../controllers/suggestions.js";
-<<<<<<< HEAD
-
-const suggestionsRouter = Router();
-
-=======
 import { protect, restrictTo } from '../middleware/auth.js';
 
 const suggestionsRouter = Router();
@@ -25,7 +20,6 @@ suggestionsRouter.put(
 	suggestionsCtrl.updateSuggestionConfig,
 );
 
->>>>>>> development
 // GET /api/suggestions/:userId
 suggestionsRouter.get("/:userId", suggestionsCtrl.generateSuggestions);
 

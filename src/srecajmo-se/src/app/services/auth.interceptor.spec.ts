@@ -1,20 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-import { HttpInterceptorFn } from '@angular/common/http';
-
-import { authInterceptor } from './auth.interceptor';
-
-describe('authInterceptor', () => {
-  const interceptor: HttpInterceptorFn = (req, next) => 
-    TestBed.runInInjectionContext(() => authInterceptor(req, next));
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
-
-  it('should be created', () => {
-    expect(interceptor).toBeTruthy();
-=======
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
@@ -74,6 +58,5 @@ describe('AuthInterceptor', () => {
 
     const req = httpMock.expectOne('/api/protected');
     req.flush({ error: 'unauth' }, { status: 401, statusText: 'Unauthorized' });
->>>>>>> development
   });
 });
