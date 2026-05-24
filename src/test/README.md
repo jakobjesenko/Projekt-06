@@ -30,7 +30,7 @@ npm run test:ci
 ### Lokalna izvedba CI:
 
 ```bash
-act --secret-file ./.env
+act --secret-file ./src/.env
 ```
 
 [act tool](https://github.com/nektos/act)

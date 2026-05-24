@@ -11,7 +11,7 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.49.0-noble
 
-    timeout-minutes: 10
+    timeout-minutes: 30
 
     defaults:
       run:
@@ -56,21 +56,37 @@ jobs:
         run: npm ci
 
       - name: Run unit tests
+        if: always()
         run: npm run test:unit
 
       - name: Run integration tests
+        if: always()
         run: npm run test:integration
 
-      # - name: setup angular
-      #   uses: actions/setup-node@v5
-      #   with:
-      #     node-version: "24"
-      #     cache: "npm"
-      #     cache-dependency-path: ./src/srecajmo-se/package-lock.json
+      - name: add unzip
+        run: |
+          apt update
+          apt install unzip
 
-      # - name: test angular
-      #   working-directory: ./src/srecajmo-se
-      #   run: |
-      #     npm ci
+      - name: setup chrome
+        if: always()
+        uses: browser-actions/setup-chrome@v2
+        with:
+          install-dependencies: true
 
-      #     npm run test:ci
+      - name: setup angular
+        if: always()
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: "npm"
+          cache-dependency-path: ./src/srecajmo-se/package-lock.json
+
+      - name: test angular
+        if: always()
+        working-directory: ./src/srecajmo-se
+        run: |
+          npm ci
+          npm run test:ci
+        env:
+          CHROME_BIN: /opt/hostedtoolcache/setup-chrome/chrome/stable/x64/chrome

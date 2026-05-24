@@ -7,8 +7,12 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+<<<<<<< HEAD
     "test:ci": "node ./scripts/run-tests-headless.js",
     "test:e2e": "node ./scripts/run-e2e.js",
+=======
+    "test:ci": "npx ng test --watch=false --browsers=ChromeHeadlessNoSandbox",
+>>>>>>> d47461c7696fe1673b3e69abad4389dba01b3ebc
     "serve:ssr:srecajmo-se": "node dist/srecajmo-se/server/server.mjs"
   },
   "private": true,
