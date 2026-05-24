@@ -421,6 +421,24 @@
 
           <td>
             <button
+              class="btn-secondary"
+              *ngIf="meeting._id"
+              [routerLink]="['/chat', meeting._id]"
+            >
+              <i class="fas fa-comment-dots"></i> Pogovor
+            </button>
+
+            <button
+              class="btn-secondary"
+              *ngIf="!meeting._id"
+              type="button"
+              disabled
+              title="To srečanje še nima ID-ja za klepet"
+            >
+              <i class="fas fa-comment-dots"></i> Pogovor
+            </button>
+
+            <button
               class="deactivate-btn"
               type="button"
               [disabled]="meetingActionInProgress[meeting._id]"
