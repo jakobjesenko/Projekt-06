@@ -2262,14 +2262,20 @@ Ekipa ne uporablja strogega Scrum procesa, ker bi vsakodnevna formalna srečanja
 
 ### Dnevnik sprememb
 
+Projekt je potekal od 23. 2. 2026 do 24. 5. 2026.
+
 | Datum | Motivacija | Opis spremembe | Posledica |
 |-------|------------|----------------|------------|
-| 6. 4. 2026 | Prvo testiranje z naročniki | Izdelali smo prve testne zaslonske maske (wireframe-i osnovnih tokov: registracija, vnos profila, prikaz predlogov) in jih posredovali naročnikom v pregled. | Uskladitev prioritet in zmanjšanje obsega na MVP. |
-| 8. 4. 2026 | Tehnična odločitev | Potrjena je uporaba tehnologij: Node.js, MongoDB, Angular. | Ekipa lahko začne s pripravo razvojnega okolja in osnovnih ogrodij. |
-| 10. 4. 2026 | Poenostavitev | Opustitev zahteve po avtomatičnem iskanju v ozadju za MVP. | Uporabnik mora eksplicitno klikniti "Išči skupino". Zmanjšana kompleksnost prve faze. |
-| 22. 4. 2026 | Pomanjkljiva specifikacija scoring algoritma | Med implementacijo pametne komponente smo ugotovili, da prvotna formula (Jaccard + Haversine + čas) ne deluje dobro na sintetičnih podatkih – uteži so bile poljubno izbrane. | Razširili smo definicijo algoritma: dodana je normalizacija razdalje (sigmoindna funkcija) in utež za število že izvedenih srečanj (za spodbujanje novih uporabnikov). Sprememba je podaljšala razvoj pametne komponente za 3 dni. |
-| 28. 4. 2026 | Zamik pri administratorskem vmesniku | Zaradi poznega začetka kodiranja (kot je opisano v refleksiji) nismo uspeli implementirati celotnega administratorskega vmesnika do načrtovanega roka. | Administratorska plošča je v trenutni iteraciji delno implementirana (le pregled uporabnikov). Metrike algoritma in upravljanje skupin smo prestavili v naslednjo iteracijo. |
-| 2. 5. 2026 | Poenostavitev glede na čas | Zaradi skupnega zamika pri integraciji in algoritmu smo se odločili začasno opustiti WebSocket (Socket.io) za chat v trenutni iteraciji. | Chat je v 2. iteraciji implementiran le kot simulacija prek REST API-ja (pošiljanje sporočil s periodičnim osveževanjem). Pravi chat v realnem času bo v 3. iteraciji. |
+| 1. 3. 2026 | Začetek projekta | Formalni začetek projekta, vzpostavitev Git repozitorija in osnovne strukture projekta. | Ekipna razdelitev vlog, priprava razvojnega okolja in načrt za iteracije. |
+| 6. 4. 2026 | Prvo testiranje z naročniki | Predstavili smo prve zaslonske maske (wireframe-i osnovnih tokov: registracija, vnos profila, prikaz predlogov) naročniku in zbrali povratne informacije. | Uskladitev prioritet in zmanjšanje obsega na MVP; korigiran načrt razvoja. |
+| 8. 4. 2026 | Tehnična odločitev | Izbira tehnologij za MVP: Node.js (backend), MongoDB (baza), Angular (frontend). | Priprava razvojnega okolja in začetek implementacije jedrnih modulov. |
+| 10. 4. 2026 | Poenostavitev obsega | Opustitev avtomatskega iskanja v ozadju za MVP. | Iskanje skupin se sproži eksplicitno s strani uporabnika (gumb "Išči skupino"); zmanjšana časovna zahtevnost razvoja. |
+| 22. 4. 2026 | Izboljšava scoring algoritma | Na testnih podatkih smo prilagodili scoring: uvedli normalizacijo razdalje in dodatno utež za število preteklih srečanj. | Bolj stabilne ocene ujemanja; razvoj pametne komponente podaljšan za približno 3 dni. |
+| 28. 4. 2026 | Zamuda pri administratorskem vmesniku | Delni zamik razvoja administratorske plošče zaradi preusmeritve virov na jedrne uporabniške tokove. | Administratorski vmesnik je delno implementiran (pregled uporabnikov); napredne funkcije (metrike, upravljanje skupin) prestavljene v naslednjo iteracijo. |
+| 2. 5. 2026 | Sprememba implementacije chata | Zaradi časovnih omejitev je bil realno‑časni chat začasno implementiran kot REST‑polling namesto WebSocket povezave. | Funkcionalnost chata je na voljo kot simulacija; polni realno‑časni Socket.io chat je načrtovan za naslednjo iteracijo. |
+| 12. 5. 2026 | Posodobitev plana | Posodobitev PERT grafa in Ganttovega diagrama, uskladitev terminskega načrta z dejanskim tempom razvoja. | Posodobljeni diagrami so vključeni v gradivo (gradivo/plantuml), razporedi so usklajeni z dnevnikom sprememb. |
+| 20. 5. 2026 | Testni napredek | Izvedeni so enotni in integracijski testi; delno implementirani E2E scenariji (prijava, admin obravnava prijav). | Pripravljena testna matrika za preostale E2E scenarije; dodatno testiranje nefunkcionalnih lastnosti še ni izvedeno. |
+| 24. 5. 2026 | Zadnji popravki na admin strani | Izvedeni so bili še zadnji popravki aplikacije na administratorskem delu (admin side), predvsem stabilizacija prikazov in manjši UX popravki. | Administratorski del je funkcionalno zaključen in pripravljen za končno oddajo. |
 
 ### 6.1 Usklajevanje ekipe
 

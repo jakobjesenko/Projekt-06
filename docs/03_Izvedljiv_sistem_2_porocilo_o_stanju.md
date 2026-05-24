@@ -556,7 +556,7 @@ V okviru unit testiranja smo preverjali manjše, izolirane funkcije za generiran
 | 28. 4. 2026 | Zamik pri administratorskem vmesniku | Zaradi poznega začetka kodiranja (kot je opisano v refleksiji) nismo uspeli implementirati celotnega administratorskega vmesnika do načrtovanega roka. | Administratorska plošča je v trenutni iteraciji delno implementirana (le pregled uporabnikov). Metrike algoritma in upravljanje skupin smo prestavili v naslednjo iteracijo. |
 | 2. 5. 2026 | Poenostavitev glede na čas | Zaradi skupnega zamika pri integraciji in algoritmu smo se odločili začasno opustiti WebSocket (Socket.io) za chat v trenutni iteraciji. | Chat je v 2. iteraciji implementiran le kot simulacija prek REST API-ja (pošiljanje sporočil s periodičnim osveževanjem). Pravi chat v realnem času bo v 3. iteraciji. |
 
-### Cilji za naslednjo iteracijo (4. iteracija: 25. 5. 2026 – 5. 6. 2026)
+### Cilji za naslednjo iteracijo (4. iteracija: 5. 5. 2026 – 20. 5. 2026)
 
 Zadnja iteracija, namenjena zaključku projekta in predaji končnega sistema. Trajanje: **12 dni**.
 

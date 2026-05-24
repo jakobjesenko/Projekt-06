@@ -1434,8 +1434,8 @@ Na podlagi Ganttovega diagrama bo 3. iteracija trajala 18 dni (od 6. aprila do 4
 | 6. 4. – 19. 4. 2026 | Razvoj scoring funkcije, optimizacija algoritma, integracija backend–frontend | Delujoča pametna komponenta |
 | 20. 4. – 26. 4. 2026 | Implementacija administratorskega vmesnika, osnovnega chata, prvi sprejemni testi | Administratorska plošča, chat |
 | 27. 4. – 4. 5. 2026 | Testiranje, odpravljanje napak, priprava 3. poročila o stanju | Konec 3. iteracije (4. 5.) |
-| 5. 5. – 24. 5. 2026 | 4. iteracija (15 dni): Končna integracija, optimizacija, obsežno testiranje, priprava končne dokumentacije | Končna izdaja sistema (25. 5.) |
-| 25. 5. 2026 | Predaja sistema in končnega poročila | Zaključek projekta |
+| 5. 5. – 20. 5. 2026 | 4. iteracija (12 dni): Končna integracija, optimizacija, obsežno testiranje, priprava končne dokumentacije | Končna izdaja sistema (20. 5.) |
+| 20. 5. 2026 | Predaja sistema in končnega poročila | Zaključek projekta |
 
 ### 6.2 Projektni načrt
 

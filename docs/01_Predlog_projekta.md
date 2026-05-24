@@ -791,7 +791,7 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 | **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
 |:---:|:---:|:---:|:---:|:---:|
-| A9 | 11. 5. 2026 | 22. 5. 2026 | 10 delovnih dni |  Da |
+| A9 | 11. 5. 2026 | 15. 5. 2026 | 5 delovnih dni |  Da |
 
 - **Ime**: Testiranje z realnimi uporabniki (alfa in beta)
 - **Opis**: Dvofazno testiranje z realnimi uporabniki: alfa testiranje z manjšo skupino (5–10 oseb) za kvalitativne povratne informacije in iterativne popravke, nato beta testiranje z večjo skupino (20+ oseb) za zbiranje kvantitativnih metrik kakovosti skupin in zadovoljstva.
@@ -807,7 +807,7 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 
 | **Oznaka** | **Datum začetka** | **Datum konca** | **Trajanje** | **Na kritični poti** |
 |:---:|:---:|:---:|:---:|:---:|
-| A10 | 20. 5. 2026 | 25. 5. 2026 | 4 delovnih dni |  Da |
+| A10 | 18. 5. 2026 | 20. 5. 2026 | 3 delovnih dni |  Da |
 
 - **Ime**: Optimizacija, dokumentacija in predstavitev projekta
 - **Opis**: Implementacija prioritetnih izboljšav na podlagi beta testiranja, poliranje UI, odpravljanje preostalih napak, priprava celovite končne dokumentacije (arhitekturni načrt, opis algoritma, tehnično poročilo) in priprava zaključne predstavitve.
