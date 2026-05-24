@@ -207,6 +207,7 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports'): voi
   reportsLoading = false;
   reportsError = '';
   reportStatusFilter: '' | ReportStatus = 'new';
+  reportSearch = '';
   reportsPage = 1;
   reportsPageSize = 20;
   reportsTotalPages = 0;
@@ -263,6 +264,10 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports'): voi
       params.set('status', this.reportStatusFilter);
     }
 
+    if (this.reportSearch.trim()) {
+      params.set('search', this.reportSearch.trim());
+    }
+
     this.http.get<PaginatedReportsResponse>(`/api/reports?${params.toString()}`).subscribe({
       next: (res) => {
         this.reports = res.data || [];
@@ -279,6 +284,18 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports'): voi
   }
 
   onReportStatusFilterChange(): void {
+    this.reportsPage = 1;
+    this.loadReports();
+  }
+
+  searchReports(): void {
+    this.reportsPage = 1;
+    this.loadReports();
+  }
+
+  clearReportFilters(): void {
+    this.reportSearch = '';
+    this.reportStatusFilter = 'new';
     this.reportsPage = 1;
     this.loadReports();
   }
