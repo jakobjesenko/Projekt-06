@@ -2219,6 +2219,14 @@ Sistem uporablja tudi zunanje storitve, predvsem e-poštni servis za verifikacij
 
 ### Katere teste ste izvedli in ocena ustreznosti testov
 
+V projektu smo do tega trenutka izvedli predvsem dve skupini avtomatiziranih testov: **API teste v mapi `src/test`** in **Angular teste v `src/srecajmo-se/src/app/**/*.spec.ts`**. **E2E testi** so predvideni kot naslednji korak in bodo dopolnili obstoječo testno osnovo z dejanskim klikanjem po aplikaciji v brskalniku.
+
+Na strani backenda smo preverjali modelno in integracijsko plast. Med **unit testi** smo pokrili validacijo modelov za uporabnike, srečanja, sporočila, ocene, prijave, kontakte, analitiko ter pomožne storitve za JWT in e-pošto. To pomeni, da so bile preverjene ključne omejitve shem, privzete vrednosti, osnovne metode modelov in robni primeri, kot so podvojeni vnosi, neveljavna polja ter hashiranje gesel. Med **integracijskimi testi** smo preverili glavne REST tokove za avtentikacijo, uporabnike, srečanja, sporočila, ocene, prijave, kontakt in predloge. Posebej smo dodali teste za nova srečanja in admin tokove pri prijavah, vključno z logiko strike-ov in blokade uporabnika ob tretji potrjeni prijavi. Backend testni sklop trenutno potrjuje, da so ključni endpointi skladni z implementacijo in da osnovni poslovni tokovi delujejo na realni podatkovni plasti v in-memory MongoDB okolju.
+
+Na strani frontenda smo izvedli **Angular unit in integration teste** za glavne komponente in storitve uporabniškega ter administratorskega dela. Pokriti so bili tokovi registracije, prijave, ponastavitve gesla, dashboarda, urejanja profila, FAQ, chata, ocenjevanja, kontaktnega obrazca, admin pregleda uporabnikov, prijav, srečanj, ocen in nastavitev algoritma. V testih smo preverili prikaz podatkov, validacijo obrazcev, pošiljanje HTTP zahtev, odziv na napake, preklapljanje tabov, osveževanje podatkov po admin akcijah ter uporabniški tok zapustitve srečanja in oddaje prijave v chatu. Tudi frontend testni sklop je trenutno avtomatiziran in ponovljiv.
+
+Ocena ustreznosti testov je **dobra za trenutno fazo projekta**, ker pokrivajo najpomembnejše poslovne tokove in večino kritičnih robnih primerov na backendu in frontendu. Testi so primerni za regresijsko preverjanje po spremembah kode, saj hitro ujamejo napake v modelih, API pogodbah in komponentni logiki. Vendar še niso popolni: trenutno še **ne pokrivajo celotnega end-to-end toka v pravem brskalniku** od registracije do zaključka srečanja, prav tako ne preverjajo uporabniške izkušnje skozi dejanski UI, večjih integracijskih scenarijev med več komponentami hkrati in nefunkcionalnih lastnosti, kot so zmogljivost, obremenitev ter različno vedenje v več brskalnikih. Zato bodo E2E testi pomemben naslednji korak in bodo dopolnili obstoječo, že razmeroma dobro pokrito avtomatizirano testno osnovo.
+
 
 ### Število vrstic kode
 
