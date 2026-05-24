@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
+import { ContactService, ContactRecord } from '../../services/contact.service';
+
 interface StatCard {
   icon: string;
   value: string | number;
@@ -160,6 +162,20 @@ interface PaginatedMeetingsResponse {
   };
 }
 
+type ContactStatus = 'new' | 'in-progress' | 'resolved';
+
+type AdminContact = ContactRecord;
+
+interface PaginatedContactsResponse {
+  success: boolean;
+  data: AdminContact[];
+  pagination: {
+    total: number;
+    page: number;
+    totalPages: number;
+  };
+}
+
 @Component({
   selector: 'app-admin',
   imports: [CommonModule, FormsModule, RouterLink],
@@ -174,9 +190,9 @@ export class AdminComponent implements OnInit {
     { icon: 'fas fa-search',         value: '...', label: 'Aktivnih iskanj' },
   ];
 
-activeTab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports' = 'users';
+activeTab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports' | 'contacts' = 'users';
 
-setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports'): void {
+setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports' | 'contacts'): void {
   this.activeTab = tab;
 
   if (tab === 'meetings' && this.meetings.length === 0) {
@@ -185,6 +201,10 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports'): voi
 
   if (tab === 'ratings' && this.ratings?.length === 0) {
     this.loadRatings?.();
+  }
+
+  if (tab === 'contacts' && this.contacts.length === 0) {
+    this.loadContacts();
   }
 }
 
@@ -236,7 +256,22 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports'): voi
   meetingStatusFilter = '';
   meetingActionInProgress: Record<string, boolean> = {};
 
-  constructor(private http: HttpClient) {}
+  contacts: AdminContact[] = [];
+  contactsLoading = false;
+  contactsError = '';
+  contactsPage = 1;
+  contactsPageSize = 20;
+  contactsTotalPages = 0;
+  contactsTotal = 0;
+  contactSearch = '';
+  contactStatusFilter: '' | ContactStatus = '';
+  selectedContact: AdminContact | null = null;
+  contactActionInProgress: Record<string, boolean> = {};
+
+  constructor(
+    private http: HttpClient,
+    private readonly contactService: ContactService
+  ) {}
 
   // selection for bulk actions
   selectedIds: Set<string> = new Set();
@@ -249,6 +284,7 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports'): voi
     this.loadReports();
     this.loadRatings();
     this.loadMeetings();
+    this.loadContacts();
   }
 
   loadReports(page = this.reportsPage): void {
@@ -368,6 +404,130 @@ setActiveTab(tab: 'weights' | 'users' | 'meetings' | 'ratings' | 'reports'): voi
       case 'resolved': return 'report-status-resolved';
       case 'rejected': return 'report-status-rejected';
       default: return '';
+    }
+  }
+
+  loadContacts(page = this.contactsPage): void {
+    this.contactsLoading = true;
+    this.contactsError = '';
+
+    const safePage = page < 1 ? 1 : page;
+
+    this.contactService.getAllContacts(
+      safePage,
+      this.contactsPageSize,
+      this.contactSearch,
+      this.contactStatusFilter || ''
+    ).subscribe({
+      next: (res) => {
+        this.contacts = res.data || [];
+        this.contactsPage = res.pagination.page;
+        this.contactsTotalPages = res.pagination.totalPages;
+        this.contactsTotal = res.pagination.total;
+        this.contactsLoading = false;
+      },
+      error: (err) => {
+        console.error('Napaka pri nalaganju kontaktnih sporočil:', err);
+        this.contactsError = 'Napaka pri nalaganju kontaktnih sporočil.';
+        this.contactsLoading = false;
+      }
+    });
+  }
+
+  searchContacts(): void {
+    this.contactsPage = 1;
+    this.loadContacts();
+  }
+
+  clearContactFilters(): void {
+    this.contactSearch = '';
+    this.contactStatusFilter = '';
+    this.contactsPage = 1;
+    this.loadContacts();
+  }
+
+  goToContactsPage(page: number): void {
+    if (page < 1 || (this.contactsTotalPages > 0 && page > this.contactsTotalPages)) return;
+    this.loadContacts(page);
+  }
+
+  updateContactStatus(contact: AdminContact, status: ContactStatus): void {
+    if (this.contactActionInProgress[contact._id]) return;
+
+    this.contactActionInProgress[contact._id] = true;
+    this.contactsError = '';
+
+    this.contactService.updateContactStatus(contact._id, status).subscribe({
+      next: () => {
+        contact.status = status;
+
+        if (this.selectedContact?._id === contact._id) {
+          this.selectedContact.status = status;
+        }
+
+        this.loadContacts(this.contactsPage);
+        this.contactActionInProgress[contact._id] = false;
+      },
+      error: (err) => {
+        console.error('Napaka pri posodabljanju kontaktnega sporočila:', err);
+        this.contactsError = 'Napaka pri posodabljanju kontaktnega sporočila.';
+        this.contactActionInProgress[contact._id] = false;
+      }
+    });
+  }
+
+  deleteContact(contact: AdminContact): void {
+    if (!confirm(`Ali želiš izbrisati kontaktno sporočilo od ${this.getContactDisplayName(contact)}?`)) {
+      return;
+    }
+
+    this.contactActionInProgress[contact._id] = true;
+    this.contactsError = '';
+
+    this.contactService.deleteContact(contact._id).subscribe({
+      next: () => {
+        if (this.selectedContact?._id === contact._id) {
+          this.closeContactModal();
+        }
+
+        this.loadContacts(this.contactsPage);
+        this.contactActionInProgress[contact._id] = false;
+      },
+      error: (err) => {
+        console.error('Napaka pri brisanju kontaktnega sporočila:', err);
+        this.contactsError = 'Napaka pri brisanju kontaktnega sporočila.';
+        this.contactActionInProgress[contact._id] = false;
+      }
+    });
+  }
+
+  openContact(contact: AdminContact): void {
+    this.selectedContact = contact;
+  }
+
+  closeContactModal(): void {
+    this.selectedContact = null;
+  }
+
+  getContactDisplayName(contact: AdminContact): string {
+    return `${contact.name || ''} ${contact.lastName || ''}`.trim() || contact.name || '—';
+  }
+
+  getContactStatusLabel(status: string): string {
+    switch (status) {
+      case 'new': return 'Novo';
+      case 'in-progress': return 'V obdelavi';
+      case 'resolved': return 'Rešeno';
+      default: return status || '—';
+    }
+  }
+
+  getContactStatusClass(status: string): string {
+    switch (status) {
+      case 'new': return 'contact-status-new';
+      case 'in-progress': return 'contact-status-in-progress';
+      case 'resolved': return 'contact-status-resolved';
+      default: return 'contact-status-unknown';
     }
   }
 

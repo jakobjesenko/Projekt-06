@@ -40,6 +40,12 @@
     </button>
     <button
       class="admin-tab-btn"
+      [class.active]="activeTab === 'contacts'"
+      (click)="setActiveTab('contacts')">
+      <i class="fas fa-envelope"></i> Kontaktna sporočila
+    </button>
+    <button
+      class="admin-tab-btn"
       [class.active]="activeTab === 'ratings'"
       (click)="setActiveTab('ratings')">
       <i class="fas fa-star"></i> Ocene
@@ -590,4 +596,202 @@
       </button>
     </div>
   </div>
+
+  <!-- Contacts Table -->
+  <div class="admin-table-container" *ngIf="activeTab === 'contacts'">
+    <h3><i class="fas fa-envelope"></i> Kontaktna sporočila</h3>
+
+    <div class="reports-filter">
+      <input
+        type="text"
+        class="form-input"
+        style="max-width: 280px;"
+        placeholder="Išči po imenu, e-pošti ali zadevi..."
+        [(ngModel)]="contactSearch"
+        (keyup.enter)="searchContacts()"
+      />
+
+      <label for="contactStatusFilter">Filter statusa:</label>
+      <select
+        id="contactStatusFilter"
+        [(ngModel)]="contactStatusFilter"
+        (change)="searchContacts()"
+        class="reports-filter-select"
+      >
+        <option value="">Vsa sporočila</option>
+        <option value="new">Novo</option>
+        <option value="in-progress">V obdelavi</option>
+        <option value="resolved">Rešeno</option>
+      </select>
+
+      <button class="btn-secondary" type="button" (click)="searchContacts()">
+        <i class="fas fa-search"></i> Išči
+      </button>
+
+      <button class="btn-secondary" type="button" (click)="clearContactFilters()">
+        <i class="fas fa-times"></i> Počisti
+      </button>
+
+      <span class="reports-count">Skupaj: {{ contactsTotal }}</span>
+    </div>
+
+    <div *ngIf="contactsLoading" class="table-status">Nalaganje kontaktnih sporočil...</div>
+    <div *ngIf="contactsError" class="table-status table-error">{{ contactsError }}</div>
+
+    <table class="admin-table" *ngIf="!contactsLoading && !contactsError && contacts.length > 0">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Pošiljatelj</th>
+          <th>E-pošta</th>
+          <th>Zadeva</th>
+          <th>Status</th>
+          <th>Akcije</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let contact of contacts">
+          <td>{{ contact.createdAt | date:'short' }}</td>
+          <td>{{ getContactDisplayName(contact) }}</td>
+          <td>{{ contact.email }}</td>
+          <td class="report-description-cell">{{ contact.subject }}</td>
+          <td>
+            <span class="contact-status" [ngClass]="getContactStatusClass(contact.status)">
+              {{ getContactStatusLabel(contact.status) }}
+            </span>
+          </td>
+          <td class="report-actions-cell">
+            <button
+              *ngIf="contact.status !== 'new'"
+              class="btn-secondary"
+              [disabled]="contactActionInProgress[contact._id]"
+              (click)="updateContactStatus(contact, 'new')"
+              title="Vrni na novo"
+            >
+              <i class="fas fa-envelope-open-text"></i> Novo
+            </button>
+            <button
+              *ngIf="contact.status !== 'in-progress'"
+              class="btn-secondary"
+              [disabled]="contactActionInProgress[contact._id]"
+              (click)="updateContactStatus(contact, 'in-progress')"
+              title="Označi kot v obdelavi"
+            >
+              <i class="fas fa-spinner"></i> V obdelavi
+            </button>
+            <button
+              *ngIf="contact.status !== 'resolved'"
+              class="activate-btn"
+              [disabled]="contactActionInProgress[contact._id]"
+              (click)="updateContactStatus(contact, 'resolved')"
+              title="Označi kot rešeno"
+            >
+              <i class="fas fa-check-circle"></i> Rešeno
+            </button>
+            <button
+              class="btn-secondary"
+              type="button"
+              (click)="openContact(contact)"
+            >
+              <i class="fas fa-eye"></i> Poglej
+            </button>
+            <button
+              class="deactivate-btn"
+              type="button"
+              [disabled]="contactActionInProgress[contact._id]"
+              (click)="deleteContact(contact)"
+            >
+              <i class="fas fa-trash"></i> Izbriši
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!contactsLoading && !contactsError && contacts.length === 0" class="table-status">
+      Ni kontaktnih sporočil za izbrane filtre.
+    </div>
+
+    <div class="admin-pagination" *ngIf="!contactsLoading && !contactsError && contactsTotalPages > 1">
+      <button
+        class="pagination-btn"
+        (click)="goToContactsPage(contactsPage - 1)"
+        [disabled]="contactsPage <= 1">
+        Prejsnja
+      </button>
+
+      <span class="pagination-info">
+        Stran {{ contactsPage }} / {{ contactsTotalPages || 1 }}
+      </span>
+
+      <button
+        class="pagination-btn"
+        (click)="goToContactsPage(contactsPage + 1)"
+        [disabled]="contactsTotalPages > 0 && contactsPage >= contactsTotalPages">
+        Naslednja
+      </button>
+    </div>
+  </div>
 </div>
+
+@if (selectedContact) {
+  <div class="contact-modal-overlay" (click)="closeContactModal()">
+    <div class="contact-modal" (click)="$event.stopPropagation()">
+      <div class="contact-modal-header">
+        <div>
+          <h3>{{ selectedContact.subject }}</h3>
+          <p>{{ getContactDisplayName(selectedContact) }} · {{ selectedContact.email }}</p>
+        </div>
+        <button type="button" class="contact-modal-close" (click)="closeContactModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="contact-modal-meta">
+        <span>
+          <strong>Status:</strong>
+          <span class="contact-status" [ngClass]="getContactStatusClass(selectedContact.status)">
+            {{ getContactStatusLabel(selectedContact.status) }}
+          </span>
+        </span>
+        <span><strong>Datum:</strong> {{ selectedContact.createdAt | date:'short' }}</span>
+      </div>
+
+      <div class="contact-message-box">
+        <p>{{ selectedContact.message }}</p>
+      </div>
+
+      <div class="contact-modal-actions">
+        <button
+          *ngIf="selectedContact.status !== 'new'"
+          class="btn-secondary"
+          type="button"
+          [disabled]="contactActionInProgress[selectedContact._id]"
+          (click)="updateContactStatus(selectedContact, 'new')"
+        >
+          <i class="fas fa-envelope-open-text"></i> Novo
+        </button>
+        <button
+          *ngIf="selectedContact.status !== 'in-progress'"
+          class="btn-secondary"
+          type="button"
+          [disabled]="contactActionInProgress[selectedContact._id]"
+          (click)="updateContactStatus(selectedContact, 'in-progress')"
+        >
+          <i class="fas fa-spinner"></i> V obdelavi
+        </button>
+        <button
+          *ngIf="selectedContact.status !== 'resolved'"
+          class="activate-btn"
+          type="button"
+          [disabled]="contactActionInProgress[selectedContact._id]"
+          (click)="updateContactStatus(selectedContact, 'resolved')"
+        >
+          <i class="fas fa-check-circle"></i> Rešeno
+        </button>
+        <button class="btn-secondary" type="button" (click)="closeContactModal()">Zapri</button>
+      </div>
+    </div>
+  </div>
+}

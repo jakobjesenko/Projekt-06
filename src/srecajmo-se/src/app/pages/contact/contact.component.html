@@ -1,56 +1,160 @@
-<div class="content-card">
-    <h1><i class="fas fa-envelope"></i> Kontaktirajte nas</h1>
-    <div class="subtitle">Veseli smo vaših vprašanj, predlogov in povratnih informacij</div>
-    
-    <form id="contactForm">
-        <div class="row">
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Ime</label>
-                <input type="text" id="firstName" class="form-input" placeholder="Vaše ime" required>
+<main class="contact-page">
+    <div class="bg-gradient"></div>
+
+    <div class="app-wrapper contact-wrapper">
+        <section class="contact-hero">
+            <div class="contact-badge">
+                <i class="fas fa-envelope"></i>
+                Kontakt
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Priimek</label>
-                <input type="text" id="lastName" class="form-input" placeholder="Vaš priimek" required>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label><i class="fas fa-envelope"></i> E-poštni naslov</label>
-            <input type="email" id="email" class="form-input" placeholder="vas@example.com" required>
-        </div>
-        
-        <div class="form-group">
-            <label><i class="fas fa-tag"></i> Zadeva</label>
-            <input type="text" id="subject" class="form-input" placeholder="Kratek opis vašega vprašanja" required>
-        </div>
-        
-        <div class="form-group">
-            <label><i class="fas fa-comment"></i> Sporočilo</label>
-            <textarea id="message" class="form-input" placeholder="Podrobno opišite vaše vprašanje ali predlog..." required maxlength="1000"></textarea>
-            <div class="char-counter">
-                <span id="charCount">0</span>/1000 znakov
-            </div>
-        </div>
-        
-        <button type="submit" id="submitBtn" class="btn-primary">
-            <i class="fas fa-paper-plane"></i> Pošlji sporočilo
-        </button>
-    </form>
-    
-    <div id="messageContainer" class="message-container"></div>
-    
-    <div class="contact-info">
-        <div class="contact-info-item">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Ljubljana, Slovenija</span>
-        </div>
-        <div class="contact-info-item">
-            <i class="fas fa-phone"></i>
-            <a href="tel:+38612345678">+386 1 234 5678</a>
-        </div>
-        <div class="contact-info-item">
-            <i class="fas fa-envelope"></i>
-            <a href="mailto:info@srecajmose.si">info&#64;srecajmose.si</a>
+            <h1>Piši nam, če kaj ne dela ali želiš predlog</h1>
+            <p>
+                Sporočilo se shrani v admin pregled in pošlje tudi obvestilo. Odgovorimo ti v najkrajšem
+                možnem času.
+            </p>
+        </section>
+
+        <div class="contact-grid">
+            <section class="contact-card">
+                <div class="contact-card-header">
+                    <h2><i class="fas fa-paper-plane"></i> Kontaktni obrazec</h2>
+                    <p>Izpolni osnovne podatke in opiši svojo težavo.</p>
+                </div>
+
+                <form class="contact-form" (ngSubmit)="submitForm(contactForm)" #contactForm="ngForm" novalidate>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="name"><i class="fas fa-user"></i> Ime</label>
+                            <input
+                                id="name"
+                                name="name"
+                                type="text"
+                                class="form-input"
+                                [(ngModel)]="name"
+                                placeholder="Tvoje ime"
+                                required
+                                maxlength="50"
+                            />
+                        </div>
+
+                        <div class="form-field">
+                            <label for="lastName"><i class="fas fa-user"></i> Priimek</label>
+                            <input
+                                id="lastName"
+                                name="lastName"
+                                type="text"
+                                class="form-input"
+                                [(ngModel)]="lastName"
+                                placeholder="Tvoj priimek"
+                                required
+                                maxlength="50"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="email"><i class="fas fa-envelope"></i> E-pošta</label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            class="form-input"
+                            [(ngModel)]="email"
+                            placeholder="ime@primer.si"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-field">
+                        <label for="subject"><i class="fas fa-tag"></i> Zadeva</label>
+                        <select
+                            id="subject"
+                            name="subject"
+                            class="form-input"
+                            [(ngModel)]="subject"
+                            required
+                        >
+                            <option value="">Izberi temo...</option>
+                            @for (option of subjectOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="message"><i class="fas fa-comment-dots"></i> Sporočilo</label>
+                        <textarea
+                            id="message"
+                            name="message"
+                            class="form-input contact-textarea"
+                            [(ngModel)]="message"
+                            placeholder="Napiši čim več koristnih podrobnosti..."
+                            required
+                            maxlength="5000"
+                            rows="7"
+                        ></textarea>
+                        <div class="contact-counter">{{ message.length }}/5000 znakov</div>
+                    </div>
+
+                    @if (success) {
+                        <div class="alert alert-success">Sporočilo je bilo uspešno poslano!</div>
+                    }
+
+                    @if (error) {
+                        <div class="alert alert-error">{{ error }}</div>
+                    }
+
+                    <div class="contact-actions">
+                        <button type="button" class="btn-secondary" (click)="goBack()">
+                            <i class="fas fa-arrow-left"></i> Nazaj
+                        </button>
+
+                        <button id="submitBtn" type="submit" class="btn-primary" [disabled]="loading || !contactForm.form.valid">
+                            @if (!loading) {
+                                <span><i class="fas fa-paper-plane"></i> Pošlji sporočilo</span>
+                            } @else {
+                                <span>Pošiljam...</span>
+                            }
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <aside class="contact-side">
+                <div class="contact-side-card">
+                    <h3><i class="fas fa-headset"></i> Kako odgovarjamo</h3>
+                    <p>
+                        Kontaktni obrazec je povezan z admin pregledom, zato se sporočilo shrani in ga lahko
+                        ekipa obdela neposredno v admin pogledu.
+                    </p>
+                </div>
+
+                <div class="contact-info-list">
+                    <div class="contact-info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>Lokacija</strong>
+                            <span>Ljubljana, Slovenija</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <strong>Telefon</strong>
+                            <a href="tel:+38612345678">+386 1 234 5678</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>E-pošta</strong>
+                            <a href="mailto:info@srecajmose.si">info&#64;srecajmose.si</a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
-</div>
+</main>

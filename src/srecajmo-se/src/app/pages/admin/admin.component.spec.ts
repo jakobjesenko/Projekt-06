@@ -5,11 +5,13 @@ import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { AdminComponent } from './admin.component';
+import { ContactService } from '../../services/contact.service';
 
 describe('AdminComponent', () => {
   let component: AdminComponent;
   let fixture: ComponentFixture<AdminComponent>;
   let httpSpy: any;
+  let contactSpy: any;
 
   const users = [
     { _id: 'u1', username: 'a', email: 'a@a', firstName: 'A', lastName: 'A', isActive: true, activeSearch: true },
@@ -22,10 +24,30 @@ describe('AdminComponent', () => {
       put: jasmine.createSpy('put').and.returnValue(of({ success: true, user: { ...users[1], isActive: true, activeSearch: true } }))
     };
 
+    contactSpy = {
+      getAllContacts: jasmine.createSpy('getAllContacts').and.returnValue(of({
+        success: true,
+        data: [],
+        pagination: { total: 0, page: 1, totalPages: 0 }
+      })),
+      updateContactStatus: jasmine.createSpy('updateContactStatus').and.returnValue(of({
+        _id: 'c1',
+        name: 'Ana',
+        lastName: 'Novak',
+        email: 'ana@example.com',
+        subject: 'Splošno vprašanje',
+        message: 'Pozdravljeni',
+        status: 'resolved',
+        createdAt: new Date().toISOString()
+      })),
+      deleteContact: jasmine.createSpy('deleteContact').and.returnValue(of(void 0))
+    };
+
     await TestBed.configureTestingModule({
       imports: [AdminComponent, RouterTestingModule],
       providers: [
-        { provide: HttpClient, useValue: httpSpy }
+        { provide: HttpClient, useValue: httpSpy },
+        { provide: ContactService, useValue: contactSpy }
       ]
     }).compileComponents();
 
@@ -37,6 +59,7 @@ describe('AdminComponent', () => {
     fixture.detectChanges();
 
     expect(httpSpy.get).toHaveBeenCalled();
+    expect(contactSpy.getAllContacts).toHaveBeenCalled();
     expect(component.users.length).toBe(2);
     expect(component.totalUsers).toBe(2);
     expect(component.stats[0].value).toBe(2);
@@ -104,6 +127,7 @@ describe('AdminComponent', () => {
   it('setActiveTab loads meetings and ratings lazily', () => {
     spyOn(component, 'loadMeetings');
     spyOn(component, 'loadRatings');
+    spyOn(component, 'loadContacts');
 
     component.setActiveTab('meetings');
     expect(component.activeTab).toBe('meetings');
@@ -112,6 +136,10 @@ describe('AdminComponent', () => {
     component.setActiveTab('ratings');
     expect(component.activeTab).toBe('ratings');
     expect(component.loadRatings).toHaveBeenCalled();
+
+    component.setActiveTab('contacts');
+    expect(component.activeTab).toBe('contacts');
+    expect(component.loadContacts).toHaveBeenCalled();
   });
 
   it('loadReports applies status filter and updates report state', () => {
@@ -217,6 +245,40 @@ describe('AdminComponent', () => {
     expect(component.ratings.length).toBe(1);
     expect(component.ratingsTotal).toBe(1);
     expect(component.ratingsLoading).toBeFalse();
+  });
+
+  it('loadContacts applies filters and updates contact state', () => {
+    const contactsResponse = {
+      success: true,
+      data: [
+        {
+          _id: 'c1',
+          name: 'Ana',
+          lastName: 'Novak',
+          email: 'ana@example.com',
+          subject: 'Težave s prijavo',
+          message: 'Ne morem se prijaviti.',
+          status: 'new',
+          createdAt: '2026-05-01T10:00:00.000Z'
+        }
+      ],
+      pagination: { total: 1, page: 2, totalPages: 3 }
+    };
+
+    contactSpy.getAllContacts.and.returnValue(of(contactsResponse));
+
+    component.contactSearch = 'prijava';
+    component.contactStatusFilter = 'new';
+    component.contactsPage = 2;
+
+    component.loadContacts();
+
+    expect(contactSpy.getAllContacts).toHaveBeenCalledWith(2, 20, 'prijava', 'new');
+    expect(component.contacts.length).toBe(1);
+    expect(component.contactsTotal).toBe(1);
+    expect(component.contactsPage).toBe(2);
+    expect(component.contactsTotalPages).toBe(3);
+    expect(component.contactsLoading).toBeFalse();
   });
 
   it('renders bulk controls and updates selected count through checkbox interaction', () => {
