@@ -9,7 +9,7 @@ Demo uporabnik: Email: ana@mail.com Geslo: password123
 
 ### Lokalni pogon in testiranje (angular build ni vključen, ker ga docker pogon sam naredi. Če testiraš lokalno brez dockerja pa sledi navodilom "Možnost 2: Lokalno prek terminala")
 
-#### Možnost edina: Ng serve v terminalu
+#### Možnost: Ng serve v terminalu
 
 ```bash
 git clone https://github.com/TPO-2025-2026/Projekt-06
@@ -20,9 +20,12 @@ npm install
 cd srecajmo-se
 npm install
 ng serve
+drug terminal
+cd Projekt-06\src
+nodemon ./server.js
 ```
 
-#### Možnost 1: Docker-ni še pripravljeno v celoti
+#### Možnost 1: Docker
 
 Docker build avtomatsko zgradi Angular aplikacijo in zažene Node.js backend.
 Dostop na **http://localhost:3000**
