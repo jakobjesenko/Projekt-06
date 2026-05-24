@@ -1747,7 +1747,7 @@ Jedro sistema je **pametna komponenta** – algoritem za oblikovanje skupin, ki 
 score = w1 * similarity_interesov + w2 * blizina_geografska + w3 * prekrivanje_casa
 ```
 
-Podobnost interesov se izračuna z Jaccard indeksom (razmerje skupnih do vseh interesov para), geografska bližina s Haversine formulo (razdalja v km med koordinatama dveh lokacij), časovno prekrivanje pa kot delež skupnih urnih blokov razpoložljivosti. Uteži `w1`, `w2`, `w3` so nastavljivi parametri; privzete vrednosti se bodo kalibrirale na podlagi podatkov iz testiranja v naslednji iteraciji.
+Podobnost interesov se izračuna z Jaccard indeksom (razmerje skupnih do vseh interesov para), geografska bližina s Haversine formulo (razdalja v km med koordinatama dveh lokacij), časovno prekrivanje pa kot delež skupnih urnih blokov razpoložljivosti. Uteži `w1`, `w2`, `w3` so nastavljivi parametri; privzete vrednosti se bodo kalibrirale na podlagi podatkov iz testiranja in uporabe.
 
 **Glavne načrtovalske odločitve in njihove utemeljitve:**
 
@@ -2184,13 +2184,29 @@ Uporabniška seja ima tri stanja: **Brez seje** (uporabnik ni prijavljen), **Akt
 
 ![Urejanje profila](gradivo/img/kajDelujeUrediProfil.png)
 
-- Potrjevanje srečanj in prikaz le-teh
+- Potrjevanje/zapustitev srečanj in prikaz le-teh
 
 ![Potrjena srečanja](gradivo/img/kajDelujePotrjenaSrecanja.png)
 
 - Pogovor (chat) znotraj potrjenega srečanja
 
 ![chat](gradivo/img/kajDelujeChat.png)
+
+- Po srečanju možnost podati oceno in komentar o srečanju
+
+![Ocena srečanja](gradivo/img/kajDelujeOcenaSrecanja.png)
+
+- Admin nadzorna plošča za pregled in upravljanje z utežmi pametne komponente, uporabniki, srečanji, prijavami in ocenami
+
+![Admin uteži](gradivo/img/kajDelujeAdminPanel1.png)
+
+![Admin uporabniki](gradivo/img/kajDelujeAdminPanel2.png)
+
+![Admin srečanja](gradivo/img/kajDelujeAdminPanel3.png)
+
+![Admin prijave](gradivo/img/kajDelujeAdminPanel4.png)
+
+![Admin ocene](gradivo/img/kajDelujeAdminPanel5.png)
 
 ### Blokovni diagram sistema
 
@@ -2215,11 +2231,60 @@ Sistem uporablja tudi zunanje storitve, predvsem e-poštni servis za verifikacij
 - Kateri so bili ključni dogodki med projektom? Vključite tudi datume.
 - Še kaj drugega?
 
+**Razvojni proces**: Iterativni razvoj po tedenskih "rezinah" (1 teden)
+
+Ekipa ne uporablja strogega Scrum procesa, ker bi vsakodnevna formalna srečanja predstavljala prevelik časovni strošek glede na druge obveznosti. Namesto tega uporabljamo lažji iterativni pristop:
+- Na začetku tedna določimo cilje tedenske rezine.
+- Med tednom člani samostojno izvajajo dogovorjene naloge.
+- Ob koncu tedna (sobota ali nedelja) izvedemo skupni pregled napredka in dogovor popravkov.
+- Če kdo naloge ne more dokončati, to pravočasno javi v Discordu, da se delo prerazporedi ali dobi pomoč.
+
+**Dobre prakse, ki bodo uporabljene na projektu so naslednje:**
+- **Verzije kode**: Git + GitHub (repositorij struktura: main, develop, feature branches)
+- **Code reviews**: Vsaka sprememba gre skozi pregled najmanj enega člana ekipe in se potrdi
+- **Dokumentacija**: Sproti pisanje komentarjev v kodi in posodabljanje README.md
+- **Sledenje nalogam**: Trenutno sprotni dogovor v ekipi; formalno orodje (npr. GitHub Projects/Trello) bomo uvedli po potrebi
+
+### Dnevnik sprememb
+
+| Datum | Motivacija | Opis spremembe | Posledica |
+|-------|------------|----------------|------------|
+| 6. 4. 2026 | Prvo testiranje z naročniki | Izdelali smo prve testne zaslonske maske (wireframe-i osnovnih tokov: registracija, vnos profila, prikaz predlogov) in jih posredovali naročnikom v pregled. | Uskladitev prioritet in zmanjšanje obsega na MVP. |
+| 8. 4. 2026 | Tehnična odločitev | Potrjena je uporaba tehnologij: Node.js, MongoDB, Angular. | Ekipa lahko začne s pripravo razvojnega okolja in osnovnih ogrodij. |
+| 10. 4. 2026 | Poenostavitev | Opustitev zahteve po avtomatičnem iskanju v ozadju za MVP. | Uporabnik mora eksplicitno klikniti "Išči skupino". Zmanjšana kompleksnost prve faze. |
+| 22. 4. 2026 | Pomanjkljiva specifikacija scoring algoritma | Med implementacijo pametne komponente smo ugotovili, da prvotna formula (Jaccard + Haversine + čas) ne deluje dobro na sintetičnih podatkih – uteži so bile poljubno izbrane. | Razširili smo definicijo algoritma: dodana je normalizacija razdalje (sigmoindna funkcija) in utež za število že izvedenih srečanj (za spodbujanje novih uporabnikov). Sprememba je podaljšala razvoj pametne komponente za 3 dni. |
+| 28. 4. 2026 | Zamik pri administratorskem vmesniku | Zaradi poznega začetka kodiranja (kot je opisano v refleksiji) nismo uspeli implementirati celotnega administratorskega vmesnika do načrtovanega roka. | Administratorska plošča je v trenutni iteraciji delno implementirana (le pregled uporabnikov). Metrike algoritma in upravljanje skupin smo prestavili v naslednjo iteracijo. |
+| 2. 5. 2026 | Poenostavitev glede na čas | Zaradi skupnega zamika pri integraciji in algoritmu smo se odločili začasno opustiti WebSocket (Socket.io) za chat v trenutni iteraciji. | Chat je v 2. iteraciji implementiran le kot simulacija prek REST API-ja (pošiljanje sporočil s periodičnim osveževanjem). Pravi chat v realnem času bo v 3. iteraciji. |
+
 ### 6.1 Usklajevanje ekipe
 
 - Kdaj in kako pogosto se je ekipa sestajala?
 - Kako ste komunicirali?
 - Kaj ste dosegli med sestanki?
+
+**Razporeditev dela:**
+- Delo razdelimo po tedenskih rezinah z jasno določenimi nalogami za vsakega člana.
+- Na začetku tedna določimo prioritete in odgovorne osebe.
+- Če kdo naloge ne more dokončati, to označi v Discordu, da se dogovorimo za pomoč ali prerazporeditev.
+- Formalnega orodja za projektno vodenje (GitHub Projects/Trello) trenutno še ne uporabljamo; odločitev bomo sprejeli kasneje.
+
+**Sestanki ekipe:**
+- **Glavni tedenski sestanek**: Enkrat tedensko, praviloma konec tedna (sobota ali nedelja), online preko Discorda.
+  - Trajanje: približno 60-90 minut.
+  - Namen: pregled opravljenega dela, določitev nalog za naslednji teden, uskladitev odprtih težav.
+- **Vmesna uskladitev po potrebi**: krajši ad-hoc klici ali sporočila v Discordu, kadar se pojavi blokada.
+
+**Cilji sestankov:**
+- Spremljanje napredka projekta
+- Razreševanje tehničnih težav in ovir
+- Usklajevanje odločitev glede arhitekture in implementacije
+- Razporeditev nalog za naslednjo tedensko rezino
+- Priprava na zagovore in predstavitve
+
+**Komunikacija:**
+- **Sprotna komunikacija**: Discord kanal (glavni komunikacijski kanal ekipe)
+- **Dokumentacija**: Markdown dokumenti v repozitoriju + po potrebi deljeni dokumenti
+- **Koda**: GitHub repository z jasnimi pull request-i in code reviews
 
 ### 6.2 Projektni načrt
 
