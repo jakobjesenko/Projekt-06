@@ -2468,11 +2468,11 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 ---
 
 
-![Ganttov diagram](./gradivo/img/Gantt123.png)
+![Ganttov diagram](./gradivo/img/Gantt4.png)
 **Ganttov diagram**
 
 
-![PERT diagram](./gradivo/img/PERT.png "PERT diagram")
+![PERT diagram](./gradivo/img/PERT4.png "PERT diagram")
 **Graf PERT**
 
 
