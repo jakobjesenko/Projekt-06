@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { ChatMessage } from './message.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,9 @@ export class SocketService {
     if (this.socket?.connected) return;
 
     const token = localStorage.getItem('jwt');
+    const socketUrl = environment.socketUrl || window.location.origin;
 
-    this.socket = io('http://localhost:3000', {
+    this.socket = io(socketUrl, {
       withCredentials: true,
       transports: ['websocket', 'polling'],
       auth: {
