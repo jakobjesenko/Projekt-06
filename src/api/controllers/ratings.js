@@ -578,8 +578,71 @@ const deleteRating = async (req, res) => {
   }
 };
 
+/**
+ * @openapi
+ * /ratings/average:
+ *  get:
+ *   summary: Returns the overall average rating
+ *   description: Computes the average of all rating values across the platform. Admin only.
+ *   tags: [Ratings]
+ *   security:
+ *    - jwt: []
+ *   responses:
+ *    '200':
+ *     description: Successfully computed average rating
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         success:
+ *          type: boolean
+ *          example: true
+ *         data:
+ *          type: object
+ *          properties:
+ *           average:
+ *            type: number
+ *            example: 4.25
+ *           count:
+ *            type: integer
+ *            example: 8
+ *    '401':
+ *     description: Forbidden - admin access only.
+ *    '500':
+ *     description: Server error
+ */
+const getRatingsAverage = async (req, res) => {
+  try {
+    const result = await Rating.aggregate([
+      {
+        $group: {
+          _id: null,
+          average: { $avg: '$rating' },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const stats = result[0] || { average: 0, count: 0 };
+    const average = stats.average ? Number(stats.average.toFixed(2)) : 0;
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        average,
+        count: stats.count,
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching ratings average:', error);
+    return res.status(500).json({ error: 'An error occurred while fetching ratings average.' });
+  }
+};
+
 export default {
   getAllRatings,
+  getRatingsAverage,
   createRating,
   updateRating,
   deleteRating,

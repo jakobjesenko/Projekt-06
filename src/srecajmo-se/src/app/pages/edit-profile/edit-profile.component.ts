@@ -12,6 +12,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { ApiService } from '../../services/api.service';
 
 declare var L: any;
 
@@ -33,7 +34,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   locationSelected = false;
   saving = false;
 
-  private readonly apiUrl = 'http://localhost:3000/api/auth';
+  private apiUrl!: string;
 
   weekdays = ['Pon', 'Tor', 'Sre', 'Čet', 'Pet', 'Sob', 'Ned'];
 
@@ -64,8 +65,11 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly router: Router,
     private readonly http: HttpClient,
+    private readonly api: ApiService,
     @Inject(PLATFORM_ID) private readonly platformId: Object
-  ) {}
+  ) {
+    this.apiUrl = this.api.url('auth');
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group(

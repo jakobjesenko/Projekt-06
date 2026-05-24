@@ -1,0 +1,94 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - main
+      - development
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
+
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        working-directory: ./src
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: "npm"
+          cache-dependency-path: ./src/package-lock.json
+
+      - name: Create .env file for tests
+        run: |
+          cat > .env << EOF
+          NAME=srecajmose
+          GESLO=${{secrets.GESLO}}
+          MONGODB_ATLAS_URI=mongodb+srv://srecajmose:${{secrets.GESLO}}@cluster0.fyfpgrm.mongodb.net/
+          MONGODB_DOCKER_URI=mongodb://${{secrets.MONGO_INITDB_ROOT_USERNAME}}:${{secrets.MONGO_INITDB_ROOT_PASSWORD}}@mongodb:27017/srecajmose?authSource=${{secrets.MONGO_INITDB_ROOT_USERNAME}}
+
+          MONGO_INITDB_ROOT_USERNAME=${{secrets.MONGO_INITDB_ROOT_USERNAME}}
+          MONGO_INITDB_ROOT_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}}
+          MONGO_INITDB_DATABASE=srecajmose
+
+
+          NODE_ENV=development
+
+          PORT=3000
+
+
+          RESEND_API_KEY=${{secrets.RESEND_API_KEY}}
+          EMAIL_FROM=ekipa@srecajmose.live
+          APP_URL=http://localhost:3000
+          BASE_URL=http://localhost:3000
+          EOF
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        if: always()
+        run: npm run test:unit
+
+      - name: Run integration tests
+        if: always()
+        run: npm run test:integration
+
+      - name: add unzip
+        if: always()
+        run: |
+          apt update
+          apt install unzip
+
+      - name: setup chrome
+        if: always()
+        uses: browser-actions/setup-chrome@v2
+        with:
+          install-dependencies: true
+
+      - name: setup angular
+        if: always()
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: "npm"
+          cache-dependency-path: ./src/srecajmo-se/package-lock.json
+
+      - name: test angular
+        if: always()
+        working-directory: ./src/srecajmo-se
+        run: |
+          npm ci
+          npm run test:ci
+        env:
+          CHROME_BIN: /opt/hostedtoolcache/setup-chrome/chrome/stable/x64/chrome

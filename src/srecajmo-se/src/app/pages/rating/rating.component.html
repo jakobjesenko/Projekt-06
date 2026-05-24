@@ -9,6 +9,7 @@
       <p>Tvoje mnenje nam veliko pomeni</p>
     </div>
 
+<<<<<<< HEAD
     <div class="group-info">
       <h3><i class="fas fa-users"></i> Skupina srečnežev</h3>
       <span class="group-badge">
@@ -56,3 +57,107 @@
 
   </div>
 </div>
+=======
+    <div *ngIf="loading" style="text-align: center; padding: 2rem;">
+      Nalaganje srečanja...
+    </div>
+
+    <ng-container *ngIf="!loading">
+      <div class="group-info">
+        <h3><i class="fas fa-users"></i> {{ groupName }}</h3>
+
+        <span class="group-badge">
+          <i class="fas fa-calendar-check"></i> {{ meetingDate || 'Datum ni določen' }}
+        </span>
+
+        <span class="group-badge">
+          <i class="fas fa-map-marker-alt"></i> {{ meetingLocation }}
+        </span>
+
+        <span class="group-badge" *ngIf="meeting">
+          Status: {{ meeting.status }}
+        </span>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <div
+        *ngIf="meeting && !canRateMeeting && !successMessage"
+        class="alert alert-error"
+      >
+        To srečanje še ni zaključeno, zato ga trenutno ne moreš oceniti.
+      </div>
+
+      <div class="stars-container">
+        <span class="stars-label">
+          <i class="fas fa-star"></i> Tvoja ocena
+        </span>
+
+        <div class="stars" (mouseleave)="clearHover()">
+          <i
+            class="fas fa-star star"
+            *ngFor="let value of [1, 2, 3, 4, 5]"
+            [class.selected]="isStarActive(value)"
+            (mouseenter)="setHover(value)"
+            (click)="setRating(value)"
+          ></i>
+        </div>
+
+        <p *ngIf="rating > 0" style="text-align: center; color: #94a3b8; margin-top: 0.5rem;">
+          Izbrana ocena: {{ rating }}/5
+        </p>
+      </div>
+
+      <div class="comment-section">
+        <label for="comment">
+          <i class="fas fa-comment"></i> Tvoj komentar (neobvezno)
+        </label>
+
+        <textarea
+          id="comment"
+          name="comment"
+          class="comment-input"
+          placeholder="Kako je bilo srečanje? Kaj ti je bilo všeč? Imaš kakšen predlog za izboljšave?..."
+          maxlength="500"
+          [(ngModel)]="comment"
+          [disabled]="submitting || !!successMessage || !canRateMeeting"
+        ></textarea>
+
+        <div class="char-counter">
+          <span>{{ commentLength }}</span>/500 znakov
+        </div>
+      </div>
+
+      <button
+        class="btn-primary"
+        type="button"
+        [disabled]="!canSubmit()"
+        (click)="submitRating()"
+      >
+        <span *ngIf="!submitting">
+          <i class="fas fa-paper-plane"></i> Pošlji oceno
+        </span>
+
+        <span *ngIf="submitting">
+          Pošiljanje...
+        </span>
+      </button>
+
+      <div class="divider">
+        <span>ali</span>
+      </div>
+
+      <button class="btn-secondary" type="button" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Nazaj
+      </button>
+    </ng-container>
+
+  </div>
+</div>
+>>>>>>> development

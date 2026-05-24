@@ -1,4 +1,5 @@
 <div class="chat-page">
+<<<<<<< HEAD
   <div class="panel chat-panel">
     <div class="chat-header">
       <button type="button" class="btn-secondary" (click)="goBack()">
@@ -121,5 +122,260 @@
         </span>
       </button>
     </form>
+=======
+  <div class="bg-gradient"></div>
+
+  <div class="app-wrapper">
+    <div class="chat-container">
+      <aside class="group-info-panel">
+        <div class="group-header">
+          <div class="group-avatar">
+            <i class="fas fa-users"></i>
+          </div>
+          <h2 class="group-name">{{ meetingName }}</h2>
+          <p class="group-subtitle">Klepet za potrjeno srecanje</p>
+          <div class="group-location">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{ meetingLocation }}</span>
+          </div>
+          <div class="group-time">
+            <i class="fas fa-calendar-alt"></i>
+            <span>{{ meetingDate }}</span>
+          </div>
+          <div class="group-meta">
+            <span class="meta-pill">Sporocila: {{ messages.length }}</span>
+            <span class="meta-pill">Status: aktiven</span>
+          </div>
+        </div>
+
+        <div class="members-section">
+          <h4><i class="fas fa-user-friends"></i> Clani skupine</h4>
+          <div class="members-list">
+            <div class="member-item" *ngFor="let member of meetingMembers">
+              <div class="member-avatar">
+                {{ getMemberInitials(member) }}
+              </div>
+              <div class="member-info">
+                <div class="member-name">{{ getMemberName(member) }}</div>
+                <div class="member-status" [ngClass]="getMemberStatusClass(member)">
+                  <i class="fas fa-circle"></i>
+                  {{ getMemberStatusText(member) }}
+                </div>
+              </div>
+              <button
+                *ngIf="canReportMember(member)"
+                type="button"
+                class="report-btn"
+                title="Prijavi uporabnika"
+                (click)="openReportModal(member)"
+              >
+                <i class="fas fa-flag"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="chat-main">
+        <div class="chat-header">
+          <div>
+            <h2><i class="fas fa-comments"></i> {{ meetingName }}</h2>
+            <p>Klepet za potrjeno srecanje</p>
+          </div>
+          <button type="button" class="btn-secondary back-button" (click)="goBack()">
+            <i class="fas fa-arrow-left"></i> Nazaj
+          </button>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-error">
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="loading" class="chat-loading">
+          Nalaganje sporocil...
+        </div>
+
+        <div
+          class="chat-window"
+          *ngIf="!loading"
+          (scroll)="onScroll($event)"
+        >
+          <div *ngIf="loadingOlder" class="older-loading">
+            Nalaganje starejsih sporocil...
+          </div>
+
+          <div *ngIf="noMoreMessages && messages.length > 0" class="older-loading">
+            Ni vec starejsih sporocil.
+          </div>
+
+          <div
+            class="chat-message"
+            *ngFor="let msg of messages"
+            [class.my-message]="isMyMessage(msg)"
+          >
+            <div class="message-meta">
+              <img
+                *ngIf="msg.userImage"
+                [src]="msg.userImage"
+                alt="Avatar"
+                class="message-avatar"
+              />
+
+              <span class="message-author">
+                {{ msg.username }}
+              </span>
+
+              <span class="message-time">
+                {{ msg.timestamp | date:'short' }}
+              </span>
+            </div>
+
+            <div class="message-bubble" *ngIf="editingMessageId !== msg._id">
+              {{ msg.message }}
+            </div>
+
+            <div class="edit-box" *ngIf="editingMessageId === msg._id">
+              <input
+                type="text"
+                name="editingText"
+                class="form-input"
+                [(ngModel)]="editingText"
+                maxlength="500"
+              />
+
+              <div class="edit-actions">
+                <button type="button" class="btn-primary" (click)="saveEdit(msg)">
+                  Shrani
+                </button>
+
+                <button type="button" class="btn-secondary" (click)="cancelEdit()">
+                  Preklici
+                </button>
+              </div>
+            </div>
+
+            <div class="message-actions" *ngIf="canModifyMessage(msg) && editingMessageId !== msg._id">
+              <button type="button" class="btn-secondary" (click)="startEdit(msg)">
+                Uredi
+              </button>
+
+              <button type="button" class="btn-secondary" (click)="deleteMessage(msg)">
+                Izbrisi
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="messages.length === 0" class="empty-chat">
+            <i class="fas fa-comment-dots"></i>
+            <h3>Ni se sporocil</h3>
+            <p>Zacni pogovor s skupino.</p>
+          </div>
+        </div>
+
+        <form class="chat-form" (ngSubmit)="sendMessage()" *ngIf="!loading">
+          <input
+            type="text"
+            name="newMessage"
+            class="form-input"
+            placeholder="Napisi sporocilo..."
+            [(ngModel)]="newMessage"
+            maxlength="500"
+            autocomplete="off"
+          />
+
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="sending || !newMessage.trim()"
+          >
+            <span *ngIf="!sending">
+              <i class="fas fa-paper-plane"></i> Poslji
+            </span>
+
+            <span *ngIf="sending">
+              Posiljanje...
+            </span>
+          </button>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <div class="report-modal-overlay" *ngIf="reportingMember" (click)="closeReportModal()">
+    <div class="report-modal" (click)="$event.stopPropagation()">
+      <div class="report-modal-header">
+        <h3><i class="fas fa-flag"></i> Prijavi uporabnika</h3>
+        <button
+          type="button"
+          class="report-close"
+          (click)="closeReportModal()"
+          [disabled]="reportSubmitting"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <p class="report-target">
+        Prijavljaš uporabnika: <strong>{{ getMemberName(reportingMember) }}</strong>
+      </p>
+
+      <div class="report-reasons">
+        <label class="report-reason-option" *ngFor="let reason of reportReasons">
+          <input
+            type="radio"
+            name="reportReason"
+            [value]="reason"
+            [(ngModel)]="reportReason"
+            [disabled]="reportSubmitting"
+          />
+          <span>{{ reason }}</span>
+        </label>
+      </div>
+
+      <label class="report-description-label" for="reportDescriptionInput">
+        Dodaten opis
+        <span *ngIf="reportReason === 'Drugo'" class="required">(obvezno)</span>
+        <span *ngIf="reportReason !== 'Drugo'" class="optional">(neobvezno)</span>
+      </label>
+      <textarea
+        id="reportDescriptionInput"
+        name="reportDescription"
+        class="report-textarea"
+        rows="4"
+        maxlength="2000"
+        placeholder="Opiši, kaj se je zgodilo..."
+        [(ngModel)]="reportDescription"
+        [disabled]="reportSubmitting"
+      ></textarea>
+
+      <div *ngIf="reportError" class="alert alert-error report-alert">
+        {{ reportError }}
+      </div>
+
+      <div *ngIf="reportSuccess" class="alert report-success">
+        {{ reportSuccess }}
+      </div>
+
+      <div class="report-actions">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="closeReportModal()"
+          [disabled]="reportSubmitting"
+        >
+          Prekliči
+        </button>
+        <button
+          type="button"
+          class="btn-primary"
+          (click)="submitReport()"
+          [disabled]="reportSubmitting || !reportReason"
+        >
+          <i class="fas fa-paper-plane"></i>
+          {{ reportSubmitting ? 'Pošiljanje...' : 'Pošlji prijavo' }}
+        </button>
+      </div>
+    </div>
+>>>>>>> development
   </div>
 </div>

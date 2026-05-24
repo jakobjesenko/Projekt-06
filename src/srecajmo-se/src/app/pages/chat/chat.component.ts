@@ -2,11 +2,42 @@ import { CommonModule, Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from '../../services/auth.service';
 import { ChatMessage, MessageService } from '../../services/message.service';
 import { SocketService } from '../../services/socket.service';
+
+interface ChatMember {
+  id: string;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+  profileImage?: string;
+  response?: 'pending' | 'accepted' | 'declined';
+  respondedAt?: string | null;
+  status?: string;
+  isActive?: boolean | null;
+}
+
+interface ChatMeeting {
+  id: string;
+  groupName: string;
+  status?: string;
+  date?: string;
+  venue?: {
+    address?: string;
+    city?: string;
+    country?: string;
+  };
+}
+
+interface ChatContextResponse {
+  success: boolean;
+  meeting: ChatMeeting;
+  members: ChatMember[];
+}
 
 @Component({
   selector: 'app-chat',
@@ -18,6 +49,9 @@ import { SocketService } from '../../services/socket.service';
 export class ChatComponent implements OnInit, OnDestroy {
   meetingId = '';
   meetingName = 'Pogovor';
+  meetingLocation = 'Lokacija ni dolocena';
+  meetingDate = 'Termin ni dolocen';
+  meetingMembers: ChatMember[] = [];
 
   messages: ChatMessage[] = [];
   newMessage = '';
@@ -32,6 +66,22 @@ export class ChatComponent implements OnInit, OnDestroy {
   editingMessageId: string | null = null;
   editingText = '';
 
+  reportingMember: ChatMember | null = null;
+  reportReason = '';
+  reportDescription = '';
+  reportSubmitting = false;
+  reportError = '';
+  reportSuccess = '';
+
+  readonly reportReasons: string[] = [
+    'Žaljiv jezik in nadlegovanje',
+    'Spam ali oglaševanje',
+    'Neprimerna vsebina ali fotografije',
+    'Lažni profil',
+    'Goljufivo vedenje',
+    'Drugo',
+  ];
+
   private newMessageSub?: Subscription;
   private updateMessageSub?: Subscription;
   private deleteMessageSub?: Subscription;
@@ -42,7 +92,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     private location: Location,
     private authService: AuthService,
     private messageService: MessageService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +114,36 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.socketService.joinMeetingRoom(this.meetingId);
 
     this.setupSocketListeners();
+    this.loadChatContext();
     this.loadMessages();
+  }
+
+  loadChatContext(): void {
+    this.http.get<ChatContextResponse>(`/api/meetings/${this.meetingId}/chat-context`, {
+      withCredentials: true
+    }).subscribe({
+      next: (response) => {
+        if (!response?.meeting) return;
+
+        this.meetingName = response.meeting.groupName || this.meetingName;
+
+        const venue = response.meeting.venue || {};
+        const locationParts = [venue.address, venue.city].filter(Boolean);
+        this.meetingLocation = locationParts.length
+          ? locationParts.join(', ')
+          : 'Lokacija ni dolocena';
+
+        this.meetingDate = response.meeting.date
+          ? new Date(response.meeting.date).toLocaleString('sl-SI')
+          : 'Termin ni dolocen';
+
+        this.meetingMembers = response.members || [];
+      },
+      error: (err) => {
+        this.errorMessage =
+          err.error?.message || 'Napaka pri nalaganju podatkov srecanja.';
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -238,6 +318,118 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.location.back();
+  }
+
+  getMemberName(member: ChatMember): string {
+    const fullName = `${member.firstName || ''} ${member.lastName || ''}`.trim();
+    return member.username || fullName || 'Uporabnik';
+  }
+
+  getMemberInitials(member: ChatMember): string {
+    const name = this.getMemberName(member).trim();
+    if (!name) return 'U';
+
+    const parts = name.split(' ').filter(Boolean);
+    const initials = parts.length >= 2
+      ? `${parts[0][0]}${parts[1][0]}`
+      : parts[0][0];
+
+    return initials.toUpperCase();
+  }
+
+  getMemberStatusText(member: ChatMember): string {
+    switch (member.response) {
+      case 'accepted':
+        return 'Aktiven';
+      case 'declined':
+        return 'Odsoten';
+      default:
+        return 'V cakanju';
+    }
+  }
+
+  canReportMember(member: ChatMember): boolean {
+    const myId = this.authService.currentUser?.id;
+    return !!myId && member.id !== myId;
+  }
+
+  openReportModal(member: ChatMember): void {
+    this.reportingMember = member;
+    this.reportReason = '';
+    this.reportDescription = '';
+    this.reportError = '';
+    this.reportSuccess = '';
+  }
+
+  closeReportModal(): void {
+    if (this.reportSubmitting) return;
+    this.reportingMember = null;
+    this.reportReason = '';
+    this.reportDescription = '';
+    this.reportError = '';
+    this.reportSuccess = '';
+  }
+
+  submitReport(): void {
+    if (!this.reportingMember || this.reportSubmitting) return;
+
+    if (!this.reportReason) {
+      this.reportError = 'Izberite razlog prijave.';
+      return;
+    }
+
+    const trimmedDescription = this.reportDescription.trim();
+
+    if (this.reportReason === 'Drugo' && trimmedDescription.length < 10) {
+      this.reportError = 'Pri razlogu "Drugo" mora opis vsebovati vsaj 10 znakov.';
+      return;
+    }
+
+    const combined = trimmedDescription
+      ? `${this.reportReason}: ${trimmedDescription}`
+      : this.reportReason;
+
+    if (combined.length < 10 || combined.length > 2000) {
+      this.reportError = 'Opis prijave mora imeti med 10 in 2000 znaki.';
+      return;
+    }
+
+    this.reportSubmitting = true;
+    this.reportError = '';
+    this.reportSuccess = '';
+
+    const payload = {
+      reportedUser: this.reportingMember.id,
+      meeting: this.meetingId,
+      description: combined,
+    };
+
+    this.http.post<{ success: boolean; data?: any; error?: string }>(
+      '/api/reports',
+      payload,
+      { withCredentials: true }
+    ).subscribe({
+      next: () => {
+        this.reportSubmitting = false;
+        this.reportSuccess = 'Prijava uspešno poslana administratorju.';
+        setTimeout(() => this.closeReportModal(), 1500);
+      },
+      error: (err) => {
+        this.reportSubmitting = false;
+        this.reportError = err.error?.error || err.error?.message || 'Napaka pri pošiljanju prijave.';
+      }
+    });
+  }
+
+  getMemberStatusClass(member: ChatMember): string {
+    switch (member.response) {
+      case 'accepted':
+        return 'member-status-active';
+      case 'declined':
+        return 'member-status-offline';
+      default:
+        return 'member-status-pending';
+    }
   }
 
   private setupSocketListeners(): void {

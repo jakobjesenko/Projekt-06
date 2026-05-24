@@ -38,9 +38,10 @@ interface ConfirmedMeeting {
   id?: string;
   groupName: string;
   members: string[];
-  memberIds?: string[];
   dateTime: string;
+  rawDate?: string;
   location: string;
+  status?: string;
 }
 
 @Component({
@@ -67,6 +68,10 @@ export class DashboardComponent implements OnInit {
   suggestions: GroupSuggestion[] = [];
   confirmedMeetings: ConfirmedMeeting[] = [];
   loadingSuggestions = false;
+  searchToggleError = '';
+
+  leavingMeetingIds = new Set<string>();
+  meetingActionError = '';
 
   /**
    * Hrani predloge, ki so trenutno v procesu sprejemanja.
@@ -269,8 +274,10 @@ export class DashboardComponent implements OnInit {
     const newState = !this.user.activeSearch;
     const endpoint = newState ? 'activate-search' : 'deactivate-search';
 
+    this.searchToggleError = '';
+
     this.http
-      .put(`/api/admin/users/${endpoint}/${userId}`, {}, { withCredentials: true })
+      .put(`/api/users/admin/${endpoint}/${userId}`, {}, { withCredentials: true })
       .subscribe({
         next: () => {
           if (!this.user) return;
@@ -285,6 +292,8 @@ export class DashboardComponent implements OnInit {
         },
         error: (err) => {
           console.error('Napaka pri spremembi iskanja:', err);
+          this.searchToggleError =
+            err?.error?.message || 'Napaka pri spremembi iskanja.';
         }
       });
   }
@@ -477,7 +486,12 @@ export class DashboardComponent implements OnInit {
             dateTime: meeting.date
               ? new Date(meeting.date).toLocaleString('sl-SI')
               : '',
-            location: meeting.venue?.address || 'Lokacija še ni določena'
+            rawDate: meeting.date,
+            location:
+              meeting.venue?.address ||
+              meeting.venue?.city ||
+              'Lokacija še ni določena',
+            status: meeting.status
           };
         });
 
@@ -502,5 +516,63 @@ export class DashboardComponent implements OnInit {
         this.confirmedMeetings = [];
       }
     });
+  }
+
+  isMeetingFinished(meeting: ConfirmedMeeting): boolean {
+    if (meeting.status === 'completed') return true;
+
+    if (!meeting.rawDate) return false;
+
+    const meetingDate = new Date(meeting.rawDate);
+
+    if (Number.isNaN(meetingDate.getTime())) {
+      return false;
+    }
+
+    return meetingDate < new Date();
+  }
+
+  leaveMeeting(meeting: ConfirmedMeeting): void {
+    if (!meeting.id || !this.user?.id) return;
+
+    const meetingId = meeting.id;
+
+    const confirmed = confirm(
+      `Ali res želiš zapustiti srečanje "${meeting.groupName}"?`
+    );
+
+    if (!confirmed) return;
+
+    this.meetingActionError = '';
+    this.leavingMeetingIds.add(meetingId);
+
+    this.http.delete<{ success: boolean; message?: string }>(
+      `/api/meetings/${meetingId}/leave`,
+      { withCredentials: true }
+    ).subscribe({
+      next: () => {
+        this.leavingMeetingIds.delete(meetingId);
+
+        this.confirmedMeetings = this.confirmedMeetings.filter(
+          (m) => m.id !== meetingId
+        );
+
+        if (this.user?.activeSearch && this.user.id) {
+          this.loadSuggestions(this.user.id);
+        }
+      },
+      error: (err) => {
+        this.leavingMeetingIds.delete(meetingId);
+
+        console.error('Napaka pri zapuščanju srečanja:', err);
+
+        this.meetingActionError =
+          err.error?.message || 'Napaka pri zapuščanju srečanja.';
+      }
+    });
+  }
+
+  isLeavingMeeting(meeting: ConfirmedMeeting): boolean {
+    return !!meeting.id && this.leavingMeetingIds.has(meeting.id);
   }
 }

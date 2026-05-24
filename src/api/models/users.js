@@ -135,6 +135,7 @@ else {
  *      type: integer
  *      description: <b>Number of strikes/warnings</b> for user
  *      minimum: 0
+ *      maximum: 3
  *      example: 0
  *     accountSecurity:
  *      type: object
@@ -286,6 +287,8 @@ const userSchema = new mongoose.Schema({
     // število opozoril uporabnika
     type: Number,
     default: 0,
+    min: 0,
+    max: 3,
   },
   accountSecurity: {
     // Potrditev e-pošte

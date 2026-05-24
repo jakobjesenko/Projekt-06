@@ -62,6 +62,10 @@
         {{ user.activeSearch ? 'Deaktiviraj iskanje' : 'Aktiviraj iskanje' }}
       </button>
 
+      <div *ngIf="searchToggleError" class="alert alert-error" style="margin-top: 0.75rem;">
+        <i class="fas fa-exclamation-triangle"></i> {{ searchToggleError }}
+      </div>
+
       <button class="btn-secondary btn-full" routerLink="/profile/edit">
         <i class="fas fa-edit"></i> Uredi profil
       </button>
@@ -166,7 +170,6 @@
               <i class="fas fa-check-circle"></i>
               {{ isSuggestionAlreadyAccepted(s) ? 'Že sprejeto' : 'Sprejmem predlog' }}
             </button>
-
           </div>
         </div>
       </ng-container>
@@ -187,6 +190,10 @@
       <div class="suggestions-header">
         <h2><i class="fas fa-check-circle"></i> Moja potrjena srečanja</h2>
         <p>Srečanja, ki si jih potrdil/a</p>
+      </div>
+
+      <div *ngIf="meetingActionError" class="alert alert-error">
+        {{ meetingActionError }}
       </div>
 
       <div class="suggestions-grid">
@@ -235,6 +242,34 @@
                 title="To srečanje še nima ID-ja za klepet"
               >
                 <i class="fas fa-comment-dots"></i> Pogovor
+              </button>
+
+              <button
+                class="btn-primary"
+                *ngIf="meeting.id && isMeetingFinished(meeting)"
+                [routerLink]="['/rating', meeting.id]"
+              >
+                <i class="fas fa-star"></i> Oceni
+              </button>
+
+              <button
+                class="btn-primary"
+                *ngIf="meeting.id && !isMeetingFinished(meeting)"
+                type="button"
+                disabled
+                title="Srečanje lahko oceniš šele po koncu"
+              >
+                <i class="fas fa-star"></i> Oceni po srečanju
+              </button>
+              <button
+                class="btn-secondary"
+                *ngIf="meeting.id"
+                type="button"
+                [disabled]="isLeavingMeeting(meeting)"
+                (click)="leaveMeeting(meeting)"
+              >
+                <i class="fas fa-sign-out-alt"></i>
+                {{ isLeavingMeeting(meeting) ? 'Zapuščam...' : 'Zapusti srečanje' }}
               </button>
             </div>
           </div>

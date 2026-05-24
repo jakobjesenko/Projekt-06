@@ -5,12 +5,16 @@ import hardcodedSeedController from '../controllers/hardcoded-seed.js';
 import { protect, restrictTo } from '../middleware/auth.js';
 
 // POST /api/db/reset - Izbriši vse podatke
-router.post('/reset', protect, restrictTo('admin'), dbController.resetDatabase);
+router.post('/reset', /*protect, restrictTo('admin'),*/ dbController.resetDatabase);
 
 // POST /api/db/import - Uvozi random generirane podatke
-router.post('/import', protect, restrictTo('admin'), dbController.importData);
+router.post('/import', /*protect, restrictTo('admin'),*/ dbController.importData);
 
 // POST /api/db/import-hardcoded - Uvozi hard-coded podatke
+<<<<<<< HEAD
 router.post('/import-hardcoded', hardcodedSeedController.importHardcodedData);
+=======
+router.post('/import-hardcoded', /*protect, restrictTo('admin'),*/ hardcodedSeedController.importHardcodedData);
+>>>>>>> development
 
 export default router;

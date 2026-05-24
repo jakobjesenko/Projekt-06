@@ -31,7 +31,7 @@ const port = normalizePort(process.env.PORT || '3000');
 
 await initDB();
 
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
   console.log(`HTTP server listening on ${port}`);
 });
 

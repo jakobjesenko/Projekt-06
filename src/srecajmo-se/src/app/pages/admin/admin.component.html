@@ -12,31 +12,205 @@
     </div>
   </div>
 
+<<<<<<< HEAD
   <!-- Users Table -->
   <div class="admin-table-container">
     <h3><i class="fas fa-users"></i> Uporabniki</h3>
 
+=======
+  <!-- Tab Navigation -->
+  <div class="admin-tabs">
+    <button
+      class="admin-tab-btn"
+      [class.active]="activeTab === 'weights'"
+      (click)="setActiveTab('weights')">
+      <i class="fas fa-sliders-h"></i> Uteži
+    </button>
+    <button
+      class="admin-tab-btn"
+      [class.active]="activeTab === 'users'"
+      (click)="setActiveTab('users')">
+      <i class="fas fa-users"></i> Uporabniki
+    </button>
+    <button
+      class="admin-tab-btn"
+      [class.active]="activeTab === 'meetings'"
+      (click)="setActiveTab('meetings')">
+      <i class="fas fa-calendar-check"></i> Srečanja
+    </button>
+    <button
+      class="admin-tab-btn"
+      [class.active]="activeTab === 'reports'"
+      (click)="setActiveTab('reports')">
+      <i class="fas fa-flag"></i> Prijave
+    </button>
+    <button
+      class="admin-tab-btn"
+      [class.active]="activeTab === 'contacts'"
+      (click)="setActiveTab('contacts')">
+      <i class="fas fa-envelope"></i> Kontaktna sporočila
+    </button>
+    <button
+      class="admin-tab-btn"
+      [class.active]="activeTab === 'ratings'"
+      (click)="setActiveTab('ratings')">
+      <i class="fas fa-star"></i> Ocene
+    </button>
+  </div>
+
+  <!-- Suggestion scoring weights -->
+  <div class="admin-table-container weights-panel" *ngIf="activeTab === 'weights'">
+    <h3><i class="fas fa-sliders-h"></i> Uteži za priporočilni algoritem</h3>
+    <p class="weights-desc">
+      Skupna formula: <code>score = w<sub>interesi</sub> · sim(interesi) + w<sub>geo</sub> · sim(lokacija) + w<sub>cas</sub> · sim(razpolozljivost)</code>.
+      Vsota uteži bo ob shranjevanju normalizirana na 1.
+    </p>
+
+    <div *ngIf="weightsLoading" class="table-status">Nalaganje uteži...</div>
+
+    <div class="weights-grid" *ngIf="!weightsLoading">
+      <label class="weight-field">
+        <span class="weight-label"><i class="fas fa-heart"></i> Interesi</span>
+        <input
+          type="number"
+          min="0"
+          max="1"
+          step="0.05"
+          [(ngModel)]="weights.interests"
+          name="interests"
+          class="weight-input" />
+      </label>
+
+      <label class="weight-field">
+        <span class="weight-label"><i class="fas fa-map-marker-alt"></i> Lokacija</span>
+        <input
+          type="number"
+          min="0"
+          max="1"
+          step="0.05"
+          [(ngModel)]="weights.geo"
+          name="geo"
+          class="weight-input" />
+      </label>
+
+      <label class="weight-field">
+        <span class="weight-label"><i class="fas fa-clock"></i> Razpolozljivost</span>
+        <input
+          type="number"
+          min="0"
+          max="1"
+          step="0.05"
+          [(ngModel)]="weights.time"
+          name="time"
+          class="weight-input" />
+      </label>
+    </div>
+
+    <div class="weights-sum" *ngIf="!weightsLoading">
+      Trenutna vsota: <strong>{{ weightsSum | number:'1.2-2' }}</strong>
+      <span *ngIf="weightsSum !== 1" class="weights-hint">(bo normalizirana na 1)</span>
+    </div>
+
+    <div class="weights-actions" *ngIf="!weightsLoading">
+      <button class="activate-btn" (click)="saveWeights()" [disabled]="weightsSaving">
+        <i class="fas fa-save"></i>
+        {{ weightsSaving ? 'Shranjujem...' : 'Shrani uteži' }}
+      </button>
+      <button class="deactivate-btn" (click)="resetWeights()" [disabled]="weightsSaving">
+        <i class="fas fa-undo"></i> Privzete vrednosti
+      </button>
+    </div>
+
+    <div *ngIf="weightsError" class="table-status table-error">{{ weightsError }}</div>
+    <div *ngIf="weightsSuccess" class="table-status weights-success">{{ weightsSuccess }}</div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="admin-table-container" *ngIf="activeTab === 'users'">
+    <h3><i class="fas fa-users"></i> Uporabniki</h3>
+
+    <div style="margin-bottom: 0.75rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+      <input
+        type="text"
+        class="form-input"
+        style="max-width: 280px;"
+        placeholder="Išči po uporabniškem imenu ali e-pošti..."
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="searchUsers()"
+      />
+
+      <select
+        class="reports-filter-select"
+        [(ngModel)]="statusFilter"
+        (change)="searchUsers()"
+      >
+        <option value="">Vsi statusi</option>
+        <option value="active">Aktivni</option>
+        <option value="blocked">Blokirani</option>
+        <option value="pending">Čakajoči</option>
+      </select>
+
+      <button class="btn-secondary" type="button" (click)="searchUsers()">
+        <i class="fas fa-search"></i> Išči
+      </button>
+
+      <button class="btn-secondary" type="button" (click)="clearSearch()">
+        <i class="fas fa-times"></i> Počisti
+      </button>
+
+      <span style="margin-left: auto; font-size: 0.9rem; color: #94a3b8;">
+        Skupaj: {{ totalUsers }}
+      </span>
+    </div>
+
+    <div style="margin-bottom: 0.5rem; display:flex; gap:0.5rem; align-items:center;">
+      <button class="btn-small" (click)="bulkActivate()">Aktiviraj izbrane</button>
+      <button class="btn-small" (click)="bulkDeactivate()">Deaktiviraj izbrane</button>
+      <span style="margin-left:auto; font-size:0.9rem; color:#94a3b8;">Izbranih: {{ selectedIds?.size || 0 }}</span>
+    </div>
+
+>>>>>>> development
     <div *ngIf="loading" class="table-status">Nalaganje...</div>
     <div *ngIf="error" class="table-status table-error">{{ error }}</div>
 
     <table class="admin-table" *ngIf="!loading && !error">
       <thead>
         <tr>
+<<<<<<< HEAD
+=======
+          <th><input type="checkbox" (change)="toggleSelectAll($event)" [checked]="users?.length && selectedIds?.size === users.length" /></th>
+>>>>>>> development
           <th>ID</th>
           <th>Uporabnik</th>
           <th>E-pošta</th>
           <th>Lokacija</th>
+<<<<<<< HEAD
+=======
+          <th>Strikes</th>
+>>>>>>> development
           <th>Status</th>
           <th>Akcije</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let user of users">
+<<<<<<< HEAD
+=======
+          <td><input type="checkbox" [checked]="selectedIds.has(user._id)" (change)="toggleSelect(user)" /></td>
+>>>>>>> development
           <td>{{ user._id }}</td>
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
           <td>{{ formatLocation(user.location) }}</td>
           <td>
+<<<<<<< HEAD
+=======
+            <span class="strikes-badge" [ngClass]="'strikes-' + (user.strikes || 0)">
+              {{ user.strikes || 0 }} / 3
+            </span>
+          </td>
+          <td>
+>>>>>>> development
             <span [class]="user.isActive ? 'status-badge-active' : 'status-badge-inactive'">
               {{ user.isActive ? 'Aktiven' : 'Deaktiviran' }}
             </span>
@@ -52,5 +226,596 @@
         </tr>
       </tbody>
     </table>
+<<<<<<< HEAD
   </div>
 </div>
+=======
+
+    <div class="admin-pagination" *ngIf="!loading && !error">
+      <button
+        class="pagination-btn"
+        (click)="goToPage(currentPage - 1)"
+        [disabled]="currentPage <= 1">
+        Prejsnja
+      </button>
+      <span class="pagination-info">
+        Stran {{ currentPage }} / {{ totalPages || 1 }}
+      </span>
+      <button
+        class="pagination-btn"
+        (click)="goToPage(currentPage + 1)"
+        [disabled]="totalPages > 0 && currentPage >= totalPages">
+        Naslednja
+      </button>
+    </div>
+  </div>
+
+  <!-- Ratings Table -->
+  <div class="admin-table-container" *ngIf="activeTab === 'ratings'">
+    <h3><i class="fas fa-star"></i> Ocene srečanj</h3>
+
+    <div style="margin-bottom: 0.75rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+      <input
+        type="text"
+        class="form-input"
+        style="max-width: 280px;"
+        placeholder="Išči po uporabniku, skupini ali komentarju"
+        [(ngModel)]="ratingSearch"
+        (keyup.enter)="searchRatings()"
+      />
+
+      <select
+        class="reports-filter-select"
+        [(ngModel)]="ratingFilter"
+        (change)="searchRatings()"
+      >
+        <option value="">Vse ocene</option>
+        <option [ngValue]="5">5 zvezdic</option>
+        <option [ngValue]="4">4 zvezdice</option>
+        <option [ngValue]="3">3 zvezdice</option>
+        <option [ngValue]="2">2 zvezdici</option>
+        <option [ngValue]="1">1 zvezdica</option>
+      </select>
+
+      <button class="btn-secondary" type="button" (click)="searchRatings()">
+        <i class="fas fa-search"></i> Išči
+      </button>
+
+      <button class="btn-secondary" type="button" (click)="clearRatingFilters()">
+        <i class="fas fa-times"></i> Počisti
+      </button>
+
+      <span style="margin-left: auto; font-size: 0.9rem; color: #94a3b8;">
+        Skupaj: {{ ratingsTotal }}
+      </span>
+    </div>
+
+    <div *ngIf="ratingsLoading" class="table-status">Nalaganje ocen...</div>
+    <div *ngIf="ratingsError" class="table-status table-error">{{ ratingsError }}</div>
+
+    <table class="admin-table" *ngIf="!ratingsLoading && !ratingsError && ratings.length > 0">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Uporabnik</th>
+          <th>Srečanje</th>
+          <th>Ocena</th>
+          <th>Komentar</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let rating of ratings">
+          <td>
+            {{ rating.createdAt ? (rating.createdAt | date:'short') : '—' }}
+          </td>
+
+          <td>
+            {{ rating.username || rating.user }}
+          </td>
+
+          <td>
+            {{ rating.groupName || rating.meeting }}
+          </td>
+
+          <td>
+            <span class="rating-stars">
+              {{ getStars(rating.rating) }}
+            </span>
+            <span style="margin-left: 0.4rem;">
+              {{ rating.rating }}/5
+            </span>
+          </td>
+
+          <td class="report-description-cell">
+            {{ rating.comment || 'Brez komentarja' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!ratingsLoading && !ratingsError && ratings.length === 0" class="table-status">
+      Ni ocen za izbrane filtre.
+    </div>
+
+    <div class="admin-pagination" *ngIf="!ratingsLoading && !ratingsError && ratingsTotalPages > 1">
+      <button
+        class="pagination-btn"
+        (click)="goToRatingsPage(ratingsPage - 1)"
+        [disabled]="ratingsPage <= 1">
+        Prejsnja
+      </button>
+
+      <span class="pagination-info">
+        Stran {{ ratingsPage }} / {{ ratingsTotalPages || 1 }}
+      </span>
+
+      <button
+        class="pagination-btn"
+        (click)="goToRatingsPage(ratingsPage + 1)"
+        [disabled]="ratingsTotalPages > 0 && ratingsPage >= ratingsTotalPages">
+        Naslednja
+      </button>
+    </div>
+  </div>  
+
+  <!-- Meetings Table -->
+  <div class="admin-table-container" *ngIf="activeTab === 'meetings'">
+    <h3><i class="fas fa-calendar-check"></i> Srečanja</h3>
+
+    <div style="margin-bottom: 0.75rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+      <input
+        type="text"
+        class="form-input"
+        style="max-width: 280px;"
+        placeholder="Išči po imenu, lokaciji ali interesih..."
+        [(ngModel)]="meetingSearch"
+        (keyup.enter)="searchMeetings()"
+      />
+
+      <select
+        class="reports-filter-select"
+        [(ngModel)]="meetingStatusFilter"
+        (change)="searchMeetings()"
+      >
+        <option value="">Vsi statusi</option>
+        <option value="draft">Osnutek</option>
+        <option value="upcoming">Prihajajoče</option>
+        <option value="completed">Končano</option>
+        <option value="cancelled">Preklicano</option>
+      </select>
+
+      <button class="btn-secondary" type="button" (click)="searchMeetings()">
+        <i class="fas fa-search"></i> Išči
+      </button>
+
+      <button class="btn-secondary" type="button" (click)="clearMeetingFilters()">
+        <i class="fas fa-times"></i> Počisti
+      </button>
+
+      <span style="margin-left: auto; font-size: 0.9rem; color: #94a3b8;">
+        Skupaj: {{ meetingsTotal }}
+      </span>
+    </div>
+
+    <div *ngIf="meetingsLoading" class="table-status">Nalaganje srečanj...</div>
+    <div *ngIf="meetingsError" class="table-status table-error">{{ meetingsError }}</div>
+
+    <table class="admin-table" *ngIf="!meetingsLoading && !meetingsError && meetings.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ime skupine</th>
+          <th>Člani</th>
+          <th>Lokacija</th>
+          <th>Datum/Čas</th>
+          <th>Ujemanje</th>
+          <th>Status</th>
+          <th>Akcije</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let meeting of meetings; let i = index">
+          <td>{{ i + 1 + ((meetingsPage - 1) * meetingsPageSize) }}</td>
+
+          <td>
+            <i class="fas fa-users"></i>
+            {{ meeting.groupName }}
+          </td>
+
+          <td>
+            {{ getMeetingMembers(meeting) }}
+          </td>
+
+          <td>
+            <i class="fas fa-map-marker-alt"></i>
+            {{ getMeetingLocation(meeting) }}
+          </td>
+
+          <td>
+            <i class="fas fa-calendar"></i>
+            {{ getMeetingDate(meeting) }}
+          </td>
+
+          <td>
+            {{ meeting.matchPercentage || 0 }}%
+          </td>
+
+          <td>
+            <span class="meeting-status" [ngClass]="getMeetingStatusClass(meeting.status)">
+              {{ getMeetingStatusLabel(meeting.status) }}
+            </span>
+          </td>
+
+          <td>
+            <button
+              class="btn-secondary"
+              *ngIf="meeting._id"
+              [routerLink]="['/chat', meeting._id]"
+            >
+              <i class="fas fa-comment-dots"></i> Pogovor
+            </button>
+
+            <button
+              class="btn-secondary"
+              *ngIf="!meeting._id"
+              type="button"
+              disabled
+              title="To srečanje še nima ID-ja za klepet"
+            >
+              <i class="fas fa-comment-dots"></i> Pogovor
+            </button>
+
+            <button
+              class="deactivate-btn"
+              type="button"
+              [disabled]="meetingActionInProgress[meeting._id]"
+              (click)="deleteMeeting(meeting)"
+            >
+              <i class="fas fa-trash"></i> Izbriši
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!meetingsLoading && !meetingsError && meetings.length === 0" class="table-status">
+      Ni srečanj za izbrane filtre.
+    </div>
+
+    <div class="admin-pagination" *ngIf="!meetingsLoading && !meetingsError && meetingsTotalPages > 1">
+      <button
+        class="pagination-btn"
+        (click)="goToMeetingsPage(meetingsPage - 1)"
+        [disabled]="meetingsPage <= 1">
+        Prejsnja
+      </button>
+
+      <span class="pagination-info">
+        Stran {{ meetingsPage }} / {{ meetingsTotalPages || 1 }}
+      </span>
+
+      <button
+        class="pagination-btn"
+        (click)="goToMeetingsPage(meetingsPage + 1)"
+        [disabled]="meetingsTotalPages > 0 && meetingsPage >= meetingsTotalPages">
+        Naslednja
+      </button>
+    </div>
+  </div>
+
+  <!-- Reports Table -->
+  <div class="admin-table-container" *ngIf="activeTab === 'reports'">
+    <h3><i class="fas fa-flag"></i> Prijave uporabnikov</h3>
+
+    <div class="reports-filter">
+      <input
+        type="text"
+        class="form-input"
+        style="max-width: 280px;"
+        placeholder="Išči po opisu prijave..."
+        [(ngModel)]="reportSearch"
+        (keyup.enter)="searchReports()"
+      />
+
+      <label for="reportStatusFilter">Filter statusa:</label>
+      <select
+        id="reportStatusFilter"
+        [(ngModel)]="reportStatusFilter"
+        (change)="onReportStatusFilterChange()"
+        class="reports-filter-select"
+      >
+        <option value="new">Nove</option>
+        <option value="in-review">V pregledu</option>
+        <option value="resolved">Potrjene</option>
+        <option value="rejected">Zavrnjene</option>
+        <option value="">Vse</option>
+      </select>
+
+      <button class="btn-secondary" type="button" (click)="searchReports()">
+        <i class="fas fa-search"></i> Išči
+      </button>
+
+      <button class="btn-secondary" type="button" (click)="clearReportFilters()">
+        <i class="fas fa-times"></i> Počisti
+      </button>
+
+      <span class="reports-count">Skupaj: {{ reportsTotal }}</span>
+    </div>
+
+    <div *ngIf="reportsLoading" class="table-status">Nalaganje prijav...</div>
+    <div *ngIf="reportsError" class="table-status table-error">{{ reportsError }}</div>
+
+    <table class="admin-table" *ngIf="!reportsLoading && !reportsError && reports.length > 0">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Prijavitelj</th>
+          <th>Prijavljeni</th>
+          <th>Strikes</th>
+          <th>Srečanje</th>
+          <th>Opis</th>
+          <th>Status</th>
+          <th>Akcije</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of reports">
+          <td>{{ report.createdAt | date:'short' }}</td>
+          <td>{{ getReportUserLabel(report.reporter) }}</td>
+          <td>{{ getReportUserLabel(report.reportedUser) }}</td>
+          <td>{{ getReportUserStrikes(report.reportedUser) }} / 3</td>
+          <td>{{ getReportMeetingLabel(report.meeting) }}</td>
+          <td class="report-description-cell">{{ report.description }}</td>
+          <td>
+            <span class="report-status" [ngClass]="getReportStatusClass(report.status)">
+              {{ getReportStatusLabel(report.status) }}
+            </span>
+          </td>
+          <td class="report-actions-cell">
+            <button
+              *ngIf="report.status !== 'resolved'"
+              class="activate-btn"
+              [disabled]="reportActionInProgress[report._id]"
+              (click)="updateReportStatus(report, 'resolved')"
+              title="Potrdi prijavo (uporabnik dobi strike)"
+            >
+              <i class="fas fa-check-circle"></i> Potrdi
+            </button>
+            <button
+              *ngIf="report.status !== 'rejected'"
+              class="deactivate-btn"
+              [disabled]="reportActionInProgress[report._id]"
+              (click)="updateReportStatus(report, 'rejected')"
+              title="Zavrni prijavo"
+            >
+              <i class="fas fa-times-circle"></i> Zavrni
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!reportsLoading && !reportsError && reports.length === 0" class="table-status">
+      Ni prijav za izbrani filter.
+    </div>
+
+    <div class="admin-pagination" *ngIf="!reportsLoading && !reportsError && reportsTotalPages > 1">
+      <button
+        class="pagination-btn"
+        (click)="goToReportsPage(reportsPage - 1)"
+        [disabled]="reportsPage <= 1">
+        Prejsnja
+      </button>
+      <span class="pagination-info">
+        Stran {{ reportsPage }} / {{ reportsTotalPages || 1 }}
+      </span>
+      <button
+        class="pagination-btn"
+        (click)="goToReportsPage(reportsPage + 1)"
+        [disabled]="reportsTotalPages > 0 && reportsPage >= reportsTotalPages">
+        Naslednja
+      </button>
+    </div>
+  </div>
+
+  <!-- Contacts Table -->
+  <div class="admin-table-container" *ngIf="activeTab === 'contacts'">
+    <h3><i class="fas fa-envelope"></i> Kontaktna sporočila</h3>
+
+    <div class="reports-filter">
+      <input
+        type="text"
+        class="form-input"
+        style="max-width: 280px;"
+        placeholder="Išči po imenu, e-pošti ali zadevi..."
+        [(ngModel)]="contactSearch"
+        (keyup.enter)="searchContacts()"
+      />
+
+      <label for="contactStatusFilter">Filter statusa:</label>
+      <select
+        id="contactStatusFilter"
+        [(ngModel)]="contactStatusFilter"
+        (change)="searchContacts()"
+        class="reports-filter-select"
+      >
+        <option value="">Vsa sporočila</option>
+        <option value="new">Novo</option>
+        <option value="in-progress">V obdelavi</option>
+        <option value="resolved">Rešeno</option>
+      </select>
+
+      <button class="btn-secondary" type="button" (click)="searchContacts()">
+        <i class="fas fa-search"></i> Išči
+      </button>
+
+      <button class="btn-secondary" type="button" (click)="clearContactFilters()">
+        <i class="fas fa-times"></i> Počisti
+      </button>
+
+      <span class="reports-count">Skupaj: {{ contactsTotal }}</span>
+    </div>
+
+    <div *ngIf="contactsLoading" class="table-status">Nalaganje kontaktnih sporočil...</div>
+    <div *ngIf="contactsError" class="table-status table-error">{{ contactsError }}</div>
+
+    <table class="admin-table" *ngIf="!contactsLoading && !contactsError && contacts.length > 0">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Pošiljatelj</th>
+          <th>E-pošta</th>
+          <th>Zadeva</th>
+          <th>Status</th>
+          <th>Akcije</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let contact of contacts">
+          <td>{{ contact.createdAt | date:'short' }}</td>
+          <td>{{ getContactDisplayName(contact) }}</td>
+          <td>{{ contact.email }}</td>
+          <td class="report-description-cell">{{ contact.subject }}</td>
+          <td>
+            <span class="contact-status" [ngClass]="getContactStatusClass(contact.status)">
+              {{ getContactStatusLabel(contact.status) }}
+            </span>
+          </td>
+          <td class="report-actions-cell">
+            <button
+              *ngIf="contact.status !== 'new'"
+              class="btn-secondary"
+              [disabled]="contactActionInProgress[contact._id]"
+              (click)="updateContactStatus(contact, 'new')"
+              title="Vrni na novo"
+            >
+              <i class="fas fa-envelope-open-text"></i> Novo
+            </button>
+            <button
+              *ngIf="contact.status !== 'in-progress'"
+              class="btn-secondary"
+              [disabled]="contactActionInProgress[contact._id]"
+              (click)="updateContactStatus(contact, 'in-progress')"
+              title="Označi kot v obdelavi"
+            >
+              <i class="fas fa-spinner"></i> V obdelavi
+            </button>
+            <button
+              *ngIf="contact.status !== 'resolved'"
+              class="activate-btn"
+              [disabled]="contactActionInProgress[contact._id]"
+              (click)="updateContactStatus(contact, 'resolved')"
+              title="Označi kot rešeno"
+            >
+              <i class="fas fa-check-circle"></i> Rešeno
+            </button>
+            <button
+              class="btn-secondary"
+              type="button"
+              (click)="openContact(contact)"
+            >
+              <i class="fas fa-eye"></i> Poglej
+            </button>
+            <button
+              class="deactivate-btn"
+              type="button"
+              [disabled]="contactActionInProgress[contact._id]"
+              (click)="deleteContact(contact)"
+            >
+              <i class="fas fa-trash"></i> Izbriši
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!contactsLoading && !contactsError && contacts.length === 0" class="table-status">
+      Ni kontaktnih sporočil za izbrane filtre.
+    </div>
+
+    <div class="admin-pagination" *ngIf="!contactsLoading && !contactsError && contactsTotalPages > 1">
+      <button
+        class="pagination-btn"
+        (click)="goToContactsPage(contactsPage - 1)"
+        [disabled]="contactsPage <= 1">
+        Prejsnja
+      </button>
+
+      <span class="pagination-info">
+        Stran {{ contactsPage }} / {{ contactsTotalPages || 1 }}
+      </span>
+
+      <button
+        class="pagination-btn"
+        (click)="goToContactsPage(contactsPage + 1)"
+        [disabled]="contactsTotalPages > 0 && contactsPage >= contactsTotalPages">
+        Naslednja
+      </button>
+    </div>
+  </div>
+</div>
+
+@if (selectedContact) {
+  <div class="contact-modal-overlay" (click)="closeContactModal()">
+    <div class="contact-modal" (click)="$event.stopPropagation()">
+      <div class="contact-modal-header">
+        <div>
+          <h3>{{ selectedContact.subject }}</h3>
+          <p>{{ getContactDisplayName(selectedContact) }} · {{ selectedContact.email }}</p>
+        </div>
+        <button type="button" class="contact-modal-close" (click)="closeContactModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="contact-modal-meta">
+        <span>
+          <strong>Status:</strong>
+          <span class="contact-status" [ngClass]="getContactStatusClass(selectedContact.status)">
+            {{ getContactStatusLabel(selectedContact.status) }}
+          </span>
+        </span>
+        <span><strong>Datum:</strong> {{ selectedContact.createdAt | date:'short' }}</span>
+      </div>
+
+      <div class="contact-message-box">
+        <p>{{ selectedContact.message }}</p>
+      </div>
+
+      <div class="contact-modal-actions">
+        <button
+          *ngIf="selectedContact.status !== 'new'"
+          class="btn-secondary"
+          type="button"
+          [disabled]="contactActionInProgress[selectedContact._id]"
+          (click)="updateContactStatus(selectedContact, 'new')"
+        >
+          <i class="fas fa-envelope-open-text"></i> Novo
+        </button>
+        <button
+          *ngIf="selectedContact.status !== 'in-progress'"
+          class="btn-secondary"
+          type="button"
+          [disabled]="contactActionInProgress[selectedContact._id]"
+          (click)="updateContactStatus(selectedContact, 'in-progress')"
+        >
+          <i class="fas fa-spinner"></i> V obdelavi
+        </button>
+        <button
+          *ngIf="selectedContact.status !== 'resolved'"
+          class="activate-btn"
+          type="button"
+          [disabled]="contactActionInProgress[selectedContact._id]"
+          (click)="updateContactStatus(selectedContact, 'resolved')"
+        >
+          <i class="fas fa-check-circle"></i> Rešeno
+        </button>
+        <button class="btn-secondary" type="button" (click)="closeContactModal()">Zapri</button>
+      </div>
+    </div>
+  </div>
+}
+>>>>>>> development

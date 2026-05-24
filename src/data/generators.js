@@ -12,17 +12,47 @@ if (process.env.NODE_ENV === 'production') {
 
 // ─── Sample data pools ────────────────────────────────────────────────────────
 
-const sampleFirst = ['Ana', 'Marko', 'Eva', 'Tim', 'Sara', 'Nika', 'Jan', 'Luka', 'Tina', 'Maja', 'Rok', 'Petra', 'Žan', 'Lea', 'Bor'];
-const sampleLast  = ['Novak', 'Kovač', 'Zupan', 'Potočnik', 'Horvat', 'Zajc', 'Kralj', 'Vidmar', 'Mlakar', 'Černe'];
+const sampleFirst = [
+  'Ana', 'Marko', 'Eva', 'Tim', 'Sara', 'Nika', 'Jan', 'Luka', 'Tina', 'Maja',
+  'Rok', 'Petra', 'Žan', 'Lea', 'Bor', 'Klara', 'Miha', 'Nina', 'Urban', 'Lucija',
+  'Matej', 'Kaja', 'Nejc', 'Alja', 'Kristjan', 'Tjaša', 'Viktor', 'Maša', 'David', 'Irena',
+  'Gregor', 'Karin', 'Andrej', 'Zala', 'Filip', 'Ajda', 'Blaž', 'Neli', 'Tilen', 'Anja',
+  'Jure', 'Vesna', 'Sandi', 'Pia', 'Boris', 'Tadeja', 'Gašper', 'Katarina', 'Mitja', 'Tina',
+  'Klemen', 'Mojca', 'Matija', 'Neža', 'Vid', 'Naja', 'Jakob', 'Ela', 'Ema', 'Lara'
+];
+const sampleLast  = [
+  'Novak', 'Kovač', 'Zupan', 'Potočnik', 'Horvat', 'Zajc', 'Kralj', 'Vidmar', 'Mlakar', 'Černe',
+  'Kranjc', 'Golob', 'Petek', 'Kolar', 'Žagar', 'Turk', 'Košir', 'Pavlin', 'Oblak', 'Kotnik',
+  'Korošec', 'Pirc', 'Knez', 'Hočevar', 'Klemenčič', 'Rozman', 'Kastelic', 'Zadravec', 'Furlan', 'Bizjak',
+  'Majcen', 'Juvan', 'Strnad', 'Udovč', 'Rupnik', 'Štrukelj', 'Kumer', 'Smodiš', 'Kos', 'Mihelič'
+];
 
 const sampleInterests = [
   'kava', 'pohodništvo', 'branje', 'glasba', 'fotografija',
   'kuhanje', 'joga', 'kolesarjenje', 'filmi', 'potovanja',
   'šah', 'board games', 'tek', 'fitnes', 'umetnost',
   'gaming', 'narava', 'ples', 'tuji jeziki', 'meditacija',
+  'ročna dela', 'plant-based', 'kampiranje', 'plesne delavnice', 'podcasti',
+  'tehnologija', 'startup scena', 'pivo', 'vino', 'kolesarske ture',
+  'družabne igre', 'escape room', 'gorski tek', 'plezanje', 'plavanje',
+  'tenis', 'košarka', 'nogomet', 'odbojka', 'smučanje',
+  'snowboard', 'wellness', 'sauna', 'mindfulness', 'travel hacks',
+  'tuj jezik', 'francoščina', 'nemščina', 'angleščina', 'španščina',
+  'zimski športi', 'poezija', 'stripi', 'knjižni klub', 'muzeji',
+  'koncerti', 'festival', 'kino', 'teater', 'stand-up',
+  'psihologija', 'meditacija', 'self-care', 'digitalno ustvarjanje', 'video produkcija',
+  'fotospotting', 'urbana raziskovanja', 'kolesarjenje po mestu', 'gaming co-op', 'retro igre'
 ];
 
-const sampleAvailability = ['ponedeljek zjutraj', 'ponedeljek zvečer', 'torek zjutraj', 'torek zvečer', 'sreda zjutraj', 'sreda zvečer', 'četrtek zjutraj', 'četrtek zvečer', 'petek zvečer', 'sobota dopoldne', 'sobota popoldne', 'sobota zvečer', 'nedelja dopoldne', 'nedelja popoldne'];
+const sampleAvailability = [
+  'ponedeljek zjutraj', 'ponedeljek popoldne', 'ponedeljek zvečer',
+  'torek zjutraj', 'torek popoldne', 'torek zvečer',
+  'sreda zjutraj', 'sreda popoldne', 'sreda zvečer',
+  'četrtek zjutraj', 'četrtek popoldne', 'četrtek zvečer',
+  'petek zjutraj', 'petek popoldne', 'petek zvečer',
+  'sobota zjutraj', 'sobota dopoldne', 'sobota popoldne', 'sobota zvečer',
+  'nedelja zjutraj', 'nedelja dopoldne', 'nedelja popoldne', 'nedelja zvečer'
+];
 
 const sampleGroupNames = [
   'Sobotni pohodniki Ljubljana',
@@ -40,6 +70,26 @@ const sampleGroupNames = [
   'Kulinarični klub',
   'Večerni šahisti',
   'Mestni sprehajalci',
+  'Pohodniki Rožnik',
+  'Kolesarski brunch',
+  'Kavica po službi',
+  'Ustvarjalni studio',
+  'Nedeljska joga',
+  'Piknik ob vodi',
+  'Kino & debate',
+  'Pohod & fotografija',
+  'Zdrav življenjski slog',
+  'Plesni večer',
+  'Gurmanska družba',
+  'Startup večer',
+  'Retro gaming night',
+  'Tek v paru',
+  'Kuharska izmenjava',
+  'Urbani raziskovalci',
+  'Sprehod po starem mestu',
+  'Pogovorni krožek',
+  'Zelenjavni navdušenci',
+  'Tea time klub'
 ];
 
 const sampleVenues = [
@@ -50,9 +100,19 @@ const sampleVenues = [
   { address: 'Cankarjevo nabrežje 15', city: 'Ljubljana', lat: 46.0490, lng: 14.5059 },
   { address: 'Čopova ulica 2', city: 'Ljubljana', lat: 46.0516, lng: 14.5063 },
   { address: 'Mestni trg 26', city: 'Ljubljana', lat: 46.0490, lng: 14.5073 },
+  { address: 'Tivolska cesta 50', city: 'Ljubljana', lat: 46.0572, lng: 14.4985 },
+  { address: 'Dunajska cesta 22', city: 'Ljubljana', lat: 46.0647, lng: 14.5060 },
+  { address: 'Barjanska cesta 18', city: 'Ljubljana', lat: 46.0311, lng: 14.5070 },
   { address: 'Gosposvetska cesta 8', city: 'Maribor', lat: 46.5547, lng: 15.6459 },
   { address: 'Glavni trg 7', city: 'Maribor', lat: 46.5570, lng: 15.6461 },
+  { address: 'Lent 8', city: 'Maribor', lat: 46.5562, lng: 15.6486 },
   { address: 'Krekov trg 1', city: 'Celje', lat: 46.2314, lng: 15.2615 },
+  { address: 'Staneta Žagarja 1', city: 'Kranj', lat: 46.2389, lng: 14.3556 },
+  { address: 'Kidričeva ulica 22', city: 'Koper', lat: 45.5486, lng: 13.7294 },
+  { address: 'Gregorčičeva ulica 2', city: 'Novo mesto', lat: 45.8031, lng: 15.1689 },
+  { address: 'Strossmayerjeva 14', city: 'Ptuj', lat: 46.4190, lng: 15.8705 },
+  { address: 'Mestni trg 12', city: 'Kranj', lat: 46.2392, lng: 14.3552 },
+  { address: 'Linhartov trg 6', city: 'Radovljica', lat: 46.3436, lng: 14.1748 }
 ];
 
 const sampleComments = [
@@ -66,6 +126,16 @@ const sampleComments = [
   'Malo premalo časa za prave pogovore.',
   'Brez komentarja',
   'Odlična lokacija, priporočam vsem!',
+  'Dobra dinamika, hitro smo se ujeli.',
+  'Naslednjič se sigurno pridružim spet.',
+  'Vse je bilo dobro organizirano.',
+  'Lepa izkušnja in prijetna družba.',
+  'Premalo časa, a super energija.',
+  'Fajn izbira teme in lokacije.',
+  'Prijetno presenečenje, hvala!',
+  'Zelo sproščeno, brez pritiska.',
+  'Lepo, da smo bili različni profili.',
+  'Super, ampak začetek je bil malo počasen.'
 ];
 
 const sampleReportDescriptions = [
@@ -77,6 +147,10 @@ const sampleReportDescriptions = [
   'Udeleženec je lažno prikazal svoje interese in cilje na profilu.',
   'Med srečanjem je prišlo do neprimernih komentarjev na osebni račun.',
   'Oseba se kljub opominom ni udeležila že tretjega zaporednega srečanja, na katero se je prijavila.',
+  'Udeleženec je med srečanjem stalno prekinjal druge in ni dopuščal pogovora.',
+  'Uporabnik je delil osebne podatke drugih brez njihovega soglasja.',
+  'Na srečanju je prišlo do neprimernega oglaševanja brez dovoljenja.',
+  'Udeleženec ni upošteval dogovorjenega termina in ni obvestil skupine.'
 ];
 
 const sampleContactSubjects = [
@@ -84,6 +158,10 @@ const sampleContactSubjects = [
   'Težave s prijavo',
   'Splošno vprašanje',
   'Drugo',
+  'Predlog izboljšave',
+  'Pritožba',
+  'Težave z obvestili',
+  'Težave z verifikacijo emaila'
 ];
 
 const sampleContactMessages = [
@@ -95,6 +173,13 @@ const sampleContactMessages = [
   'Ali je aplikacija dostopna tudi za tujce?',
   'Kako se odjavim od obvestil?',
   'Prosim za pomoč pri spremembi e-pošte.',
+  'Ne prejemam obvestil o novih srečanjih.',
+  'Predlagam več filtrov pri iskanju srečanj.',
+  'Prišlo je do napake pri potrditvi emaila.',
+  'Ali lahko spremenim uporabniško ime?',
+  'Ne morem naložiti profilne slike.',
+  'Kje lahko nastavim zasebnost profila?',
+  'Imam težave s klepetom v skupini.'
 ];
 
 // ─── Generators ───────────────────────────────────────────────────────────────
