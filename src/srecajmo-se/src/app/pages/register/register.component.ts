@@ -11,6 +11,7 @@ import {
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { ApiService } from '../../services/api.service';
 
 declare var L: any;
 
@@ -31,7 +32,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   totalSteps = 3;
   isSubmitting = false;
 
-  apiUrl = 'http://localhost:3000/api/auth/register';
+  private apiUrl = '';
 
   weekdays = ['Pon', 'Tor', 'Sre', 'Čet', 'Pet', 'Sob', 'Ned'];
 
@@ -65,8 +66,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly http: HttpClient,
+    private readonly api: ApiService,
     @Inject(PLATFORM_ID) private readonly platformId: Object
-  ) {}
+  ) {
+    this.apiUrl = this.api.url('auth/register');
+  }
 
   ngOnInit(): void {
     this.registerForm = this.fb.group(
