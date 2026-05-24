@@ -2219,6 +2219,25 @@ Sistem uporablja tudi zunanje storitve, predvsem e-poštni servis za verifikacij
 
 ### Katere teste ste izvedli in ocena ustreznosti testov
 
+V projektu smo do trenutne faze izvedli predvsem dve skupini avtomatiziranih testov: backend API teste v mapi `src/test` ter Angular unit in integration teste v `src/srecajmo-se/src/app/**/*.spec.ts`. Poleg že izvedenih testov smo pripravili in deloma implementirali tudi E2E (end-to-end) testiranje, ki predstavlja naslednji korak pri preverjanju celotnega delovanja sistema skozi dejanski uporabniški vmesnik v brskalniku.
+
+Na strani backenda smo preverjali predvsem modelno in integracijsko plast sistema. Med unit testi smo pokrili validacijo modelov za uporabnike, srečanja, sporočila, ocene, prijave, kontakte, analitiko ter pomožne storitve za JWT avtentikacijo in pošiljanje e-pošte. Testi preverjajo ključne omejitve shem, privzete vrednosti, pravilno hashiranje gesel ter robne primere, kot so podvojeni vnosi, neveljavna polja in napačni podatki. Med integracijskimi testi smo preverili glavne REST tokove za avtentikacijo, uporabnike, srečanja, sporočila, ocene, prijave, kontaktni obrazec in predloge skupin. Posebej smo testirali administratorske tokove pri obravnavi prijav, vključno z logiko strike-ov in blokado uporabnika ob tretji potrjeni prijavi. Backend testni sklop tako potrjuje pravilno delovanje ključnih endpointov in osnovnih poslovnih procesov v izoliranem in-memory MongoDB okolju.
+
+Na strani frontenda smo izvedli Angular unit in integration teste za glavne komponente uporabniškega in administratorskega dela aplikacije. Pokriti so bili tokovi registracije, prijave, ponastavitve gesla, dashboarda, urejanja profila, FAQ strani, skupinskega chata, oddaje ocen, kontaktnega obrazca ter administratorskih pregledov uporabnikov, prijav, srečanj, ocen in nastavitev algoritma pametne komponente. V testih smo preverjali pravilno validacijo obrazcev, prikaz podatkov, pošiljanje HTTP zahtev, odziv sistema na napake, preklapljanje administratorskih tabov, osveževanje podatkov po akcijah administratorja ter uporabniške tokove, kot sta zapustitev srečanja in prijava neprimernega vedenja v chatu. Frontend testni sklop je avtomatiziran, ponovljiv in primeren za regresijsko testiranje po nadaljnjem razvoju sistema.
+
+Poleg unit in integration testov smo izvedli tudi del E2E testov v pravem brskalniškem okolju. Implementirani in uspešno preverjeni so bili predvsem scenariji prijave uporabnika ter administratorskega pregleda in obravnave prijav. Pri tem smo preverili pravilno delovanje uporabniškega prijavnega toka, preusmeritev na dashboard po uspešni avtentikaciji ter administratorski tok reševanja prijav in posodabljanja statusov uporabnikov. Ostali E2E scenariji so pripravljeni v obliki testne matrike in predstavljajo osnovo za nadaljnjo implementacijo celovitih uporabniških testov.
+
+| E2E scenarij | Status | Namen | Predpogoji | Potek testa | Pričakovani rezultat |
+|---|---|---|---|---|---|
+| Registracija uporabnika | V pripravi | Preveriti celoten registracijski tok | Aplikacija je zagnana, uporabnik še nima računa | Uporabnik odpre začetno stran, izvede registracijo skozi vse 3 korake in odda obrazec | Račun je uspešno ustvarjen in uporabnik prejme potrditev ali preusmeritev na prijavo |
+| Prijava in dostop do dashboarda | Izvedeno | Preveriti prijavni tok in prehod v uporabniški del sistema | Obstaja veljaven uporabniški račun | Uporabnik vnese e-pošto in geslo ter odda prijavni obrazec | Sistem uporabnika uspešno prijavi in preusmeri na dashboard |
+| Iskanje skupine in potrditev predloga | V pripravi | Preveriti glavni tok iskanja skupin | Uporabnik je prijavljen in ima izpolnjen profil | Uporabnik sproži iskanje skupine, pregleda predlog in potrdi udeležbo | Predlog se premakne med potrjena srečanja |
+| Skupinski chat | V pripravi | Preveriti komunikacijo znotraj potrjene skupine | Uporabnik ima potrjeno srečanje | Uporabnik odpre chat, pregleda zgodovino in pošlje novo sporočilo | Sporočilo se uspešno prikaže v chatu |
+| Zapustitev srečanja | V pripravi | Preveriti odstranitev uporabnika iz skupine | Uporabnik ima potrjeno srečanje | Uporabnik izbere možnost zapustitve srečanja in potrdi akcijo | Srečanje se odstrani iz potrjenih srečanj |
+| Admin: pregled in rešitev prijave | Izvedeno | Preveriti administratorski tok obravnave prijav | Administrator je prijavljen in obstaja prijava | Administrator odpre prijavo in jo označi kot rešeno | Status prijave se posodobi, uporabniku pa se po potrebi doda strike oziroma blokada |
+
+Ocena ustreznosti izvedenih testov je za trenutno fazo razvoja dobra, saj pokrivajo večino ključnih poslovnih tokov in pomembnih robnih primerov tako na backendu kot na frontendu. Testi omogočajo učinkovito regresijsko preverjanje po spremembah kode ter hitro zaznavanje napak v modelih, API pogodbah in komponentni logiki. Delno implementirani E2E testi dodatno potrjujejo pravilno delovanje ključnih uporabniških in administratorskih scenarijev skozi dejanski uporabniški vmesnik. Kljub temu testna pokritost še ni popolna. Trenutno še niso implementirani vsi načrtovani E2E scenariji, prav tako še niso pokrite nefunkcionalne lastnosti sistema, kot so zmogljivost, obremenitveno testiranje in primerjava delovanja v različnih brskalnikih. Nadaljnja implementacija E2E testov zato predstavlja pomemben naslednji korak pri zagotavljanju kakovosti sistema.
+
 
 ### Število vrstic kode
 
@@ -2449,10 +2468,11 @@ Projekt je razdeljen na **10 aktivnosti** razporejenih čez 4 iteracije. Vsaka a
 ---
 
 
+![Ganttov diagram](./gradivo/img/Gantt123.png)
 **Ganttov diagram**
 
 
-
+![PERT diagram](./gradivo/img/PERT.png "PERT diagram")
 **Graf PERT**
 
 
