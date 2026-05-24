@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "node ./scripts/run-tests-headless.js",
+    "test:e2e": "node ./scripts/run-e2e.js",
     "serve:ssr:srecajmo-se": "node dist/srecajmo-se/server/server.mjs"
   },
   "private": true,

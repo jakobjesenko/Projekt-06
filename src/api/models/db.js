@@ -5,7 +5,7 @@ dotenv.config();
 import mongoose from "mongoose";
 
 // trenutno se veze na lokalno bazo, ce spremenis  NODE_ENV=prduciton se veze na produkcijsko bazo
-let dbURI = process.env.MONGODB_ATLAS_URI || "mongodb://127.0.0.1:27017/tpo";
+let dbURI = process.env.MONGODB_URI || process.env.MONGODB_ATLAS_URI || "mongodb://127.0.0.1:27017/tpo";
 
 if (process.env.NODE_ENV === 'production') {
   dbURI = process.env.MONGODB_ATLAS_URI;
@@ -13,8 +13,8 @@ if (process.env.NODE_ENV === 'production') {
   dbURI =
     process.env.MONGODB_DOCKER_URI ||
     'mongodb://admin:password@mongodb:27017/srecajmose?authSource=admin'; // notr gre se geslo tm med admin: in @
-} else {
-  dbURI = "mongodb://127.0.0.1:27017/tpo";
+} else if (process.env.MONGODB_URI) {
+  dbURI = process.env.MONGODB_URI;
 }
 
 console.log("📡 Connecting to database...");
