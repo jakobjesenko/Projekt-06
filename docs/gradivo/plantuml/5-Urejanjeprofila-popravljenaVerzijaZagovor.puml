@@ -1,0 +1,123 @@
+@startuml
+title Diagram zaporedja - Urejanje profila (osnovni tok) - podrobno
+
+actor "Uporabnik" as User
+boundary "ProfilnaMaska" as UI
+control "ProfilKontroler" as Controller
+entity "Uporabnik" as UserEntity
+entity "Profil" as Profile
+entity "Interes" as Interest
+entity "Lokacija" as Location
+entity "CasovniBlok" as TimeSlot
+
+User -> UI: odpre profil
+activate UI
+
+UI -> Controller: pridobiProfil(jwtŽeton)
+activate Controller
+
+Controller -> Controller: preveriJWT(jwtŽeton)
+alt JWT neveljaven
+    Controller --> UI: napaka (neavtoriziran dostop)
+    UI --> User: prikaži napako "Seja je potekla"
+    deactivate Controller
+    deactivate UI
+else JWT veljaven
+    Controller -> UserEntity: pridobiUporabnikaIzJWT(jwtŽeton)
+    activate UserEntity
+    UserEntity --> Controller: uporabnikId
+    deactivate UserEntity
+
+    Controller -> Profile: najdiProfilPoUporabnikId(uporabnikId)
+    activate Profile
+    Profile --> Controller: profilPodatki
+    deactivate Profile
+
+    Controller -> Interest: najdiIntereseZaProfil(profilId)
+    activate Interest
+    Interest --> Controller: seznamInteresov
+    deactivate Interest
+
+    Controller -> Location: najdiLokacijoZaProfil(profilId)
+    activate Location
+    Location --> Controller: lokacija
+    deactivate Location
+
+    Controller -> TimeSlot: najdiCasovneBlokeZaProfil(profilId)
+    activate TimeSlot
+    TimeSlot --> Controller: seznamCasovnihBlokov
+    deactivate TimeSlot
+
+    Controller --> UI: profilPodatki
+    deactivate Controller
+    UI --> User: prikaže profil z vsemi podatki
+
+    User -> UI: spremeni interese, lokacijo, časovno razpoložljivost
+    User -> UI: klikne "Shrani spremembe"
+
+    UI -> Controller: posodobiProfil(jwtŽeton, spremembeDTO)
+    activate Controller
+
+    Controller -> Controller: preveriJWT(jwtŽeton)
+    alt JWT neveljaven
+        Controller --> UI: napaka (neavtoriziran dostop)
+        UI --> User: prikaži napako
+        deactivate Controller
+        deactivate UI
+    else JWT veljaven
+        Controller -> Controller: validirajPodatke(spremembeDTO)
+
+        alt lokacijaSpremenjena
+            Controller -> Controller: pokličiGeokodirniAPI(novNaslov)
+            alt geokodiranje neuspešno
+                Controller --> UI: napaka (neveljavna lokacija)
+                UI --> User: prikaži napako "Lokacije ni mogoče najti"
+                deactivate Controller
+                deactivate UI
+            else geokodiranje uspešno
+                Controller -> Location: posodobiLokacijo(profilId, novNaslov, geoSirina, geoDolzina)
+                activate Location
+                Location --> Controller: posodobljeno
+                deactivate Location
+            end
+        end
+
+        alt interesiSpremenjeni
+            Controller -> Interest: izbrišiVseIntereseZaProfil(profilId)
+            activate Interest
+            Interest --> Controller: izbrisano
+            deactivate Interest
+            loop za vsak nov interes
+                Controller -> Interest: dodajInteres(profilId, nazivInteresa)
+                activate Interest
+                Interest --> Controller: dodano
+                deactivate Interest
+            end
+        end
+
+        alt casovniBlokiSpremenjeni
+            Controller -> TimeSlot: izbrišiVseCasovneBlokeZaProfil(profilId)
+            activate TimeSlot
+            TimeSlot --> Controller: izbrisano
+            deactivate TimeSlot
+            loop za vsak nov časovni blok
+                Controller -> TimeSlot: dodajCasovniBlok(profilId, dan, uraOd, uraDo)
+                activate TimeSlot
+                TimeSlot --> Controller: dodano
+                deactivate TimeSlot
+            end
+        end
+
+        Controller -> Profile: povecajVerzijoProfila(profilId)
+        activate Profile
+        Profile --> Controller: verzijaPovečana
+        deactivate Profile
+
+        Controller --> UI: posodobitevUspešna
+        deactivate Controller
+        UI --> User: prikaže potrditev "Profil uspešno posodobljen"
+        UI -> UI: osveži prikaz profila
+    end
+end
+deactivate UI
+@enduml
